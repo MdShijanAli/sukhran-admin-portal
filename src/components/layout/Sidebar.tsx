@@ -24,24 +24,10 @@ import { cn } from '@/lib/utils';
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'nav.dashboard', path: '/dashboard' },
-  { icon: LayoutDashboard, label: 'nav.cxoDashboard', path: '/dashboard/cxo' },
-  { icon: LayoutDashboard, label: 'nav.operationalDashboard', path: '/dashboard/operational' },
   { icon: Users, label: 'nav.users', path: '/users' },
   { icon: Package, label: 'nav.products', path: '/products' },
-  { icon: Package, label: 'nav.packages', path: '/packages' },
-  { icon: RefreshCw, label: 'nav.subscriptions', path: '/subscriptions' },
   { icon: ShoppingCart, label: 'nav.orders', path: '/orders' },
-  { icon: Truck, label: 'nav.delivery', path: '/delivery' },
-  { icon: DollarSign, label: 'nav.financial', path: '/financial' },
-  { icon: Gift, label: 'nav.loyalty', path: '/loyalty' },
-  { icon: HeadphonesIcon, label: 'nav.support', path: '/support' },
-  { icon: BarChart3, label: 'nav.analytics', path: '/analytics' },
-  { icon: Heart, label: 'nav.health', path: '/health' },
-  { icon: Ticket, label: 'nav.coupons', path: '/coupons' },
-  { icon: FileText, label: 'nav.content', path: '/content' },
-  { icon: UserPlus, label: 'nav.family', path: '/family' },
-  { icon: RefreshCw, label: 'nav.returns', path: '/returns' },
-  { icon: Settings, label: 'nav.settings', path: '/settings' },
+  { icon: FileText, label: 'nav.reports', path: '/reports' },
 ];
 
 export default function Sidebar() {

@@ -12,6 +12,8 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import Orders from './pages/Orders';
+import Products from './pages/Products';
+import Reports from './pages/Reports';
 import MainLayout from './components/layout/MainLayout';
 import NotFound from './pages/NotFound';
 
@@ -48,6 +50,8 @@ const App = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/users" element={<Users />} />
               <Route path="/orders" element={<Orders />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/reports" element={<Reports />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -18,7 +18,8 @@
     "content": "Content Management",
     "family": "Family Accounts",
     "returns": "Returns & Refunds",
-    "settings": "Settings"
+    "settings": "Settings",
+    "reports": "Reports"
   },
   "auth": {
     "login": "Login",
