@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { 
-  TrendingUp, 
-  DollarSign, 
-  Users, 
-  ShoppingCart, 
-  Package, 
+import {
+  TrendingUp,
+  DollarSign,
+  Users,
+  ShoppingCart,
+  Package,
   Calendar,
   Download,
   FileText
