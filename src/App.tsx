@@ -14,16 +14,18 @@ import Users from './pages/Users';
 import Orders from './pages/Orders';
 import MainLayout from './components/layout/MainLayout';
 import NotFound from './pages/NotFound';
+import Products from './pages/Products';
+import Reports from './pages/Reports';
 
 const queryClient = new QueryClient();
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  
+
   return <>{children}</>;
 };
 
@@ -54,6 +56,8 @@ const App = () => {
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="users" element={<Users />} />
               <Route path="orders" element={<Orders />} />
+              <Route path="products" element={<Products />} />
+              <Route path="reports" element={<Reports />} />
               <Route index element={<Navigate to="/dashboard" replace />} />
             </Route>
             <Route path="*" element={<NotFound />} />

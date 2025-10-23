@@ -42,6 +42,7 @@ const menuItems = [
   { icon: UserPlus, label: 'nav.family', path: '/family' },
   { icon: RefreshCw, label: 'nav.returns', path: '/returns' },
   { icon: Settings, label: 'nav.settings', path: '/settings' },
+  { icon: FileText, label: 'nav.reports', path: '/reports' },
 ];
 
 export default function Sidebar() {
