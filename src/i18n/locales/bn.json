@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "dashboard": "ড্যাশবোর্ড",
+    "cxoDashboard": "সিএক্সও ড্যাশবোর্ড",
+    "operationalDashboard": "অপারেশনাল ড্যাশবোর্ড",
+    "users": "ব্যবহারকারী",
+    "products": "পণ্য",
+    "packages": "প্যাকেজ",
+    "subscriptions": "সাবস্ক্রিপশন",
+    "orders": "অর্ডার",
+    "delivery": "ডেলিভারি",
+    "financial": "আর্থিক",
+    "loyalty": "লয়ালটি এবং রিওয়ার্ডস",
+    "support": "গ্রাহক সহায়তা",
+    "analytics": "বিশ্লেষণ",
+    "health": "স্বাস্থ্য এবং পুষ্টি",
+    "coupons": "কুপন",
+    "content": "কন্টেন্ট ম্যানেজমেন্ট",
+    "family": "পরিবারের অ্যাকাউন্ট",
+    "returns": "রিটার্ন এবং রিফান্ড",
+    "settings": "সেটিংস"
+  },
+  "auth": {
+    "login": "লগইন",
+    "email": "ইমেইল",
+    "password": "পাসওয়ার্ড",
+    "rememberMe": "আমাকে মনে রাখুন",
+    "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
+    "loginButton": "সাইন ইন করুন",
+    "welcome": "স্বাগতম",
+    "subtitle": "আপনার অ্যাডমিন অ্যাকাউন্টে সাইন ইন করুন"
+  },
+  "common": {
+    "search": "অনুসন্ধান...",
+    "filter": "ফিল্টার",
+    "export": "রপ্তানি",
+    "add": "যোগ করুন",
+    "edit": "সম্পাদনা",
+    "delete": "মুছুন",
+    "save": "সংরক্ষণ",
+    "cancel": "বাতিল",
+    "loading": "লোড হচ্ছে...",
+    "noData": "কোন ডেটা নেই"
+  },
+  "dashboard": {
+    "todayOrders": "আজকের অর্ডার",
+    "totalRevenue": "মোট আয়",
+    "activeSubscriptions": "সক্রিয় সাবস্ক্রিপশন",
+    "newUsers": "নতুন ব্যবহারকারী",
+    "pendingDeliveries": "মুলতুবি ডেলিভারি",
+    "paymentFailures": "পেমেন্ট ব্যর্থতা",
+    "revenueChart": "আয়ের ট্রেন্ড",
+    "topProducts": "শীর্ষ বিক্রয় পণ্য",
+    "subscriptionGrowth": "সাবস্ক্রিপশন বৃদ্ধি",
+    "deliveryPerformance": "ডেলিভারি পারফরম্যান্স"
+  }
+}

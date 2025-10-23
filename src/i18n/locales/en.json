@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "cxoDashboard": "CXO Dashboard",
+    "operationalDashboard": "Operational Dashboard",
+    "users": "Users",
+    "products": "Products",
+    "packages": "Packages",
+    "subscriptions": "Subscriptions",
+    "orders": "Orders",
+    "delivery": "Delivery",
+    "financial": "Financial",
+    "loyalty": "Loyalty & Rewards",
+    "support": "Customer Support",
+    "analytics": "Analytics",
+    "health": "Health & Nutrition",
+    "coupons": "Coupons",
+    "content": "Content Management",
+    "family": "Family Accounts",
+    "returns": "Returns & Refunds",
+    "settings": "Settings"
+  },
+  "auth": {
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "loginButton": "Sign In",
+    "welcome": "Welcome back",
+    "subtitle": "Sign in to your admin account"
+  },
+  "common": {
+    "search": "Search...",
+    "filter": "Filter",
+    "export": "Export",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "noData": "No data available"
+  },
+  "dashboard": {
+    "todayOrders": "Today's Orders",
+    "totalRevenue": "Total Revenue",
+    "activeSubscriptions": "Active Subscriptions",
+    "newUsers": "New Users",
+    "pendingDeliveries": "Pending Deliveries",
+    "paymentFailures": "Payment Failures",
+    "revenueChart": "Revenue Trends",
+    "topProducts": "Top Selling Products",
+    "subscriptionGrowth": "Subscription Growth",
+    "deliveryPerformance": "Delivery Performance"
+  }
+}
