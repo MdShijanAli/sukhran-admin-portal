@@ -24,12 +24,8 @@ import { cn } from '@/lib/utils';
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'nav.dashboard', path: '/dashboard' },
-  { icon: LayoutDashboard, label: 'nav.cxoDashboard', path: '/dashboard/cxo' },
-  { icon: LayoutDashboard, label: 'nav.operationalDashboard', path: '/dashboard/operational' },
   { icon: Users, label: 'nav.users', path: '/users' },
   { icon: Package, label: 'nav.products', path: '/products' },
-  { icon: Package, label: 'nav.packages', path: '/packages' },
-  { icon: RefreshCw, label: 'nav.subscriptions', path: '/subscriptions' },
   { icon: ShoppingCart, label: 'nav.orders', path: '/orders' },
   { icon: Truck, label: 'nav.delivery', path: '/delivery' },
   { icon: DollarSign, label: 'nav.financial', path: '/financial' },
