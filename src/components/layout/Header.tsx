@@ -1,5 +1,6 @@
 import { Moon, Sun, Globe, Bell, LogOut, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useThemeStore } from '@/stores/themeStore';
 import { useAuthStore } from '@/stores/authStore';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 export default function Header() {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const { theme, toggleTheme } = useThemeStore();
   const { user, logout } = useAuthStore();
 
@@ -84,9 +86,9 @@ export default function Header() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate('/profile')}>
               <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
+              <span>{t('nav.profile')}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout} className="text-destructive">
