@@ -15,6 +15,9 @@ import Orders from './pages/Orders';
 import MainLayout from './components/layout/MainLayout';
 import NotFound from './pages/NotFound';
 import Products from './pages/Products';
+import ProductCreate from './pages/ProductCreate';
+import Packages from './pages/Packages';
+import Profile from './pages/Profile';
 import Reports from './pages/Reports';
 
 const queryClient = new QueryClient();
@@ -57,6 +60,9 @@ const App = () => {
               <Route path="users" element={<Users />} />
               <Route path="orders" element={<Orders />} />
               <Route path="products" element={<Products />} />
+              <Route path="products/create" element={<ProductCreate />} />
+              <Route path="packages" element={<Packages />} />
+              <Route path="profile" element={<Profile />} />
               <Route path="reports" element={<Reports />} />
               <Route index element={<Navigate to="/dashboard" replace />} />
             </Route>

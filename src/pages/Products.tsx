@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Search, Filter, Plus, Edit, Trash2, Package } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,6 +10,7 @@ import { products } from '@/data/mockData';
 
 const Products = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredProducts = products.filter((product) =>
@@ -25,7 +27,7 @@ const Products = () => {
             Manage your product catalog and inventory
           </p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={() => navigate('/products/create')}>
           <Plus className="h-4 w-4" />
           Add Product
         </Button>
