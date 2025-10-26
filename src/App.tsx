@@ -21,6 +21,7 @@ import Profile from './pages/Profile';
 import Reports from './pages/Reports';
 import Delivery from './pages/Delivery';
 import Financial from './pages/Financial';
+import Support from './pages/Support';
 
 const queryClient = new QueryClient();
 
@@ -68,6 +69,7 @@ const App = () => {
               <Route path="reports" element={<Reports />} />
               <Route path="delivery" element={<Delivery />} />
               <Route path="financial" element={<Financial />} />
+              <Route path="support" element={<Support />} />
               <Route index element={<Navigate to="/dashboard" replace />} />
             </Route>
             <Route path="*" element={<NotFound />} />
