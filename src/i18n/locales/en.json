@@ -20,7 +20,9 @@
     "family": "Family Accounts",
     "returns": "Returns & Refunds",
     "settings": "Settings",
-    "reports": "Reports"
+    "reports": "Reports",
+    "delivery": "Delivery",
+    "financial": "Financial"
   },
   "auth": {
     "login": "Login",

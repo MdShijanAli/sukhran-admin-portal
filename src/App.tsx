@@ -19,6 +19,8 @@ import ProductCreate from './pages/ProductCreate';
 import Packages from './pages/Packages';
 import Profile from './pages/Profile';
 import Reports from './pages/Reports';
+import Delivery from './pages/Delivery';
+import Financial from './pages/Financial';
 
 const queryClient = new QueryClient();
 
@@ -64,6 +66,8 @@ const App = () => {
               <Route path="packages" element={<Packages />} />
               <Route path="profile" element={<Profile />} />
               <Route path="reports" element={<Reports />} />
+              <Route path="delivery" element={<Delivery />} />
+              <Route path="financial" element={<Financial />} />
               <Route index element={<Navigate to="/dashboard" replace />} />
             </Route>
             <Route path="*" element={<NotFound />} />
