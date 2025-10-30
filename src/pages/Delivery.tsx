@@ -1,10 +1,12 @@
-import { Package, MapPin, Clock, CheckCircle, XCircle, Truck } from 'lucide-react';
+import { Package, MapPin, Clock, CheckCircle, XCircle, Truck, Plus, Pencil, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Table,
   TableBody,
@@ -20,6 +22,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { toast } from '@/hooks/use-toast';
 
 interface Delivery {
   id: string;
@@ -93,35 +114,49 @@ export default function Delivery() {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [deliveries, setDeliveries] = useState<Delivery[]>(mockDeliveries);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isTrackingDialogOpen, setIsTrackingDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [selectedDelivery, setSelectedDelivery] = useState<Delivery | null>(null);
+  const [editingDelivery, setEditingDelivery] = useState<Delivery | null>(null);
+  const [formData, setFormData] = useState({
+    orderId: '',
+    customer: '',
+    address: '',
+    driver: '',
+    status: 'pending' as Delivery['status'],
+    scheduledTime: '',
+  });
 
   const stats = [
     {
       title: 'Pending Deliveries',
-      value: mockDeliveries.filter((d) => d.status === 'pending').length,
+      value: deliveries.filter((d) => d.status === 'pending').length,
       icon: Clock,
       color: 'text-yellow-500',
     },
     {
       title: 'In Transit',
-      value: mockDeliveries.filter((d) => d.status === 'in-transit').length,
+      value: deliveries.filter((d) => d.status === 'in-transit').length,
       icon: Truck,
       color: 'text-blue-500',
     },
     {
       title: 'Delivered Today',
-      value: mockDeliveries.filter((d) => d.status === 'delivered').length,
+      value: deliveries.filter((d) => d.status === 'delivered').length,
       icon: CheckCircle,
       color: 'text-green-500',
     },
     {
       title: 'Failed',
-      value: mockDeliveries.filter((d) => d.status === 'failed').length,
+      value: deliveries.filter((d) => d.status === 'failed').length,
       icon: XCircle,
       color: 'text-red-500',
     },
   ];
 
-  const filteredDeliveries = mockDeliveries.filter((delivery) => {
+  const filteredDeliveries = deliveries.filter((delivery) => {
     const matchesSearch =
       delivery.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
       delivery.orderId.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -129,6 +164,105 @@ export default function Delivery() {
     const matchesStatus = statusFilter === 'all' || delivery.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
+
+  const handleCreateDelivery = () => {
+    setEditingDelivery(null);
+    setFormData({
+      orderId: '',
+      customer: '',
+      address: '',
+      driver: '',
+      status: 'pending',
+      scheduledTime: '',
+    });
+    setIsCreateDialogOpen(true);
+  };
+
+  const handleEditDelivery = (delivery: Delivery) => {
+    setEditingDelivery(delivery);
+    setFormData({
+      orderId: delivery.orderId,
+      customer: delivery.customer,
+      address: delivery.address,
+      driver: delivery.driver,
+      status: delivery.status,
+      scheduledTime: delivery.scheduledTime,
+    });
+    setIsCreateDialogOpen(true);
+  };
+
+  const handleSaveDelivery = () => {
+    if (!formData.orderId || !formData.customer || !formData.address || !formData.driver || !formData.scheduledTime) {
+      toast({
+        title: 'Error',
+        description: 'Please fill in all required fields',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (editingDelivery) {
+      setDeliveries(deliveries.map(d => 
+        d.id === editingDelivery.id 
+          ? { ...d, ...formData }
+          : d
+      ));
+      toast({
+        title: 'Success',
+        description: 'Delivery updated successfully',
+      });
+    } else {
+      const newDelivery: Delivery = {
+        id: `DEL-${String(deliveries.length + 1).padStart(3, '0')}`,
+        ...formData,
+      };
+      setDeliveries([newDelivery, ...deliveries]);
+      toast({
+        title: 'Success',
+        description: 'Delivery created successfully',
+      });
+    }
+    setIsCreateDialogOpen(false);
+  };
+
+  const handleStatusChange = (deliveryId: string, newStatus: Delivery['status']) => {
+    setDeliveries(deliveries.map(d => {
+      if (d.id === deliveryId) {
+        const updated = { ...d, status: newStatus };
+        if (newStatus === 'delivered') {
+          updated.deliveredTime = new Date().toLocaleString();
+        }
+        return updated;
+      }
+      return d;
+    }));
+    toast({
+      title: 'Status Updated',
+      description: `Delivery status changed to ${statusConfig[newStatus].label}`,
+    });
+  };
+
+  const handleTrackDelivery = (delivery: Delivery) => {
+    setSelectedDelivery(delivery);
+    setIsTrackingDialogOpen(true);
+  };
+
+  const handleDeleteDelivery = (delivery: Delivery) => {
+    setSelectedDelivery(delivery);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (selectedDelivery) {
+      setDeliveries(deliveries.filter(d => d.id !== selectedDelivery.id));
+      toast({
+        title: 'Deleted',
+        description: 'Delivery deleted successfully',
+      });
+    }
+    setIsDeleteDialogOpen(false);
+    setSelectedDelivery(null);
+  };
 
   return (
     <div className="space-y-6">
@@ -153,8 +287,16 @@ export default function Delivery() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Delivery List</CardTitle>
-          <CardDescription>View and manage all delivery orders</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Delivery List</CardTitle>
+              <CardDescription>View and manage all delivery orders</CardDescription>
+            </div>
+            <Button onClick={handleCreateDelivery}>
+              <Plus className="h-4 w-4 mr-2" />
+              Create Delivery
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="flex items-center gap-4 mb-4">
@@ -206,16 +348,46 @@ export default function Delivery() {
                       <TableCell>{delivery.driver}</TableCell>
                       <TableCell>{delivery.scheduledTime}</TableCell>
                       <TableCell>
-                        <Badge variant={config.variant} className="gap-1">
-                          <StatusIcon className="h-3 w-3" />
-                          {config.label}
-                        </Badge>
+                        <Select
+                          value={delivery.status}
+                          onValueChange={(value) => handleStatusChange(delivery.id, value as Delivery['status'])}
+                        >
+                          <SelectTrigger className="w-[140px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="pending">Pending</SelectItem>
+                            <SelectItem value="assigned">Assigned</SelectItem>
+                            <SelectItem value="in-transit">In Transit</SelectItem>
+                            <SelectItem value="delivered">Delivered</SelectItem>
+                            <SelectItem value="failed">Failed</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </TableCell>
                       <TableCell>
-                        <Button variant="ghost" size="sm">
-                          <MapPin className="h-4 w-4 mr-1" />
-                          Track
-                        </Button>
+                        <div className="flex items-center gap-2">
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => handleTrackDelivery(delivery)}
+                          >
+                            <MapPin className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => handleEditDelivery(delivery)}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => handleDeleteDelivery(delivery)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   );
@@ -225,6 +397,192 @@ export default function Delivery() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Create/Edit Delivery Dialog */}
+      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{editingDelivery ? 'Edit Delivery' : 'Create New Delivery'}</DialogTitle>
+            <DialogDescription>
+              {editingDelivery ? 'Update delivery details' : 'Add a new delivery to the system'}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="orderId">Order ID *</Label>
+                <Input
+                  id="orderId"
+                  value={formData.orderId}
+                  onChange={(e) => setFormData({ ...formData, orderId: e.target.value })}
+                  placeholder="ORD-2024-001"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="customer">Customer Name *</Label>
+                <Input
+                  id="customer"
+                  value={formData.customer}
+                  onChange={(e) => setFormData({ ...formData, customer: e.target.value })}
+                  placeholder="John Doe"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="address">Delivery Address *</Label>
+              <Textarea
+                id="address"
+                value={formData.address}
+                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                placeholder="House 12, Road 5, Dhanmondi, Dhaka"
+                rows={2}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="driver">Driver Name *</Label>
+                <Input
+                  id="driver"
+                  value={formData.driver}
+                  onChange={(e) => setFormData({ ...formData, driver: e.target.value })}
+                  placeholder="Karim Rahman"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="scheduledTime">Scheduled Time *</Label>
+                <Input
+                  id="scheduledTime"
+                  value={formData.scheduledTime}
+                  onChange={(e) => setFormData({ ...formData, scheduledTime: e.target.value })}
+                  placeholder="2024-01-20 09:00 AM"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="status">Status</Label>
+              <Select
+                value={formData.status}
+                onValueChange={(value) => setFormData({ ...formData, status: value as Delivery['status'] })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="assigned">Assigned</SelectItem>
+                  <SelectItem value="in-transit">In Transit</SelectItem>
+                  <SelectItem value="delivered">Delivered</SelectItem>
+                  <SelectItem value="failed">Failed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveDelivery}>
+              {editingDelivery ? 'Update' : 'Create'} Delivery
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Tracking Dialog */}
+      <Dialog open={isTrackingDialogOpen} onOpenChange={setIsTrackingDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Track Delivery</DialogTitle>
+            <DialogDescription>Real-time delivery tracking information</DialogDescription>
+          </DialogHeader>
+          {selectedDelivery && (
+            <div className="space-y-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Delivery ID</p>
+                  <p className="font-medium">{selectedDelivery.id}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Order ID</p>
+                  <p className="font-medium">{selectedDelivery.orderId}</p>
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Customer</p>
+                <p className="font-medium">{selectedDelivery.customer}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Delivery Address</p>
+                <p className="font-medium">{selectedDelivery.address}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Driver</p>
+                  <p className="font-medium">{selectedDelivery.driver}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Status</p>
+                  <Badge variant={statusConfig[selectedDelivery.status].variant}>
+                    {statusConfig[selectedDelivery.status].label}
+                  </Badge>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Scheduled</p>
+                  <p className="font-medium">{selectedDelivery.scheduledTime}</p>
+                </div>
+                {selectedDelivery.deliveredTime && (
+                  <div>
+                    <p className="text-sm text-muted-foreground">Delivered</p>
+                    <p className="font-medium">{selectedDelivery.deliveredTime}</p>
+                  </div>
+                )}
+              </div>
+              <div className="border-t pt-4">
+                <p className="text-sm font-medium mb-2">Tracking Timeline</p>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <div className={`h-2 w-2 rounded-full ${selectedDelivery.status === 'pending' || selectedDelivery.status === 'assigned' || selectedDelivery.status === 'in-transit' || selectedDelivery.status === 'delivered' ? 'bg-primary' : 'bg-muted'}`} />
+                    <p className="text-sm">Order Placed</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className={`h-2 w-2 rounded-full ${selectedDelivery.status === 'assigned' || selectedDelivery.status === 'in-transit' || selectedDelivery.status === 'delivered' ? 'bg-primary' : 'bg-muted'}`} />
+                    <p className="text-sm">Driver Assigned</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className={`h-2 w-2 rounded-full ${selectedDelivery.status === 'in-transit' || selectedDelivery.status === 'delivered' ? 'bg-primary' : 'bg-muted'}`} />
+                    <p className="text-sm">Out for Delivery</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className={`h-2 w-2 rounded-full ${selectedDelivery.status === 'delivered' ? 'bg-primary' : 'bg-muted'}`} />
+                    <p className="text-sm">Delivered</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button onClick={() => setIsTrackingDialogOpen(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Delivery</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete delivery {selectedDelivery?.id}? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
