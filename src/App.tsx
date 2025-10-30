@@ -22,6 +22,8 @@ import Reports from './pages/Reports';
 import Delivery from './pages/Delivery';
 import Financial from './pages/Financial';
 import Support from './pages/Support';
+import Coupons from './pages/Coupons';
+import Returns from './pages/Returns';
 
 const queryClient = new QueryClient();
 
@@ -70,6 +72,8 @@ const App = () => {
               <Route path="delivery" element={<Delivery />} />
               <Route path="financial" element={<Financial />} />
               <Route path="support" element={<Support />} />
+              <Route path="coupons" element={<Coupons />} />
+              <Route path="returns" element={<Returns />} />
               <Route index element={<Navigate to="/dashboard" replace />} />
             </Route>
             <Route path="*" element={<NotFound />} />
