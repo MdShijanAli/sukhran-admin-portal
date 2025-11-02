@@ -24,6 +24,7 @@ import Financial from './pages/Financial';
 import Support from './pages/Support';
 import Coupons from './pages/Coupons';
 import Returns from './pages/Returns';
+import Settings from './pages/Settings';
 
 const queryClient = new QueryClient();
 
@@ -74,6 +75,7 @@ const App = () => {
               <Route path="support" element={<Support />} />
               <Route path="coupons" element={<Coupons />} />
               <Route path="returns" element={<Returns />} />
+              <Route path="settings" element={<Settings />} />
               <Route index element={<Navigate to="/dashboard" replace />} />
             </Route>
             <Route path="*" element={<NotFound />} />
