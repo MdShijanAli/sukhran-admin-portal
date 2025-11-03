@@ -1,5 +1,4 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createStore } from "./createStore";
 
 interface ThemeState {
   theme: "light" | "dark";
@@ -9,30 +8,24 @@ interface ThemeState {
   setLanguage: (language: "en" | "bn") => void;
 }
 
-export const useThemeStore = create<ThemeState>()(
-  persist(
-    (set) => ({
-      theme: "light",
-      language: "en",
-      toggleTheme: () =>
-        set((state) => {
-          const newTheme = state.theme === "light" ? "dark" : "light";
-          document.documentElement.classList.toggle(
-            "dark",
-            newTheme === "dark"
-          );
-          return { theme: newTheme };
-        }),
-      setTheme: (theme) => {
-        document.documentElement.classList.toggle("dark", theme === "dark");
-        set({ theme });
-      },
-      setLanguage: (language) => {
-        set({ language });
-      },
-    }),
-    {
-      name: "theme-storage",
-    }
-  )
+export const useThemeStore = createStore<ThemeState>(
+  (set) => ({
+    theme: "light",
+    language: "en",
+    toggleTheme: () =>
+      set((state) => {
+        const newTheme = state.theme === "light" ? "dark" : "light";
+        document.documentElement.classList.toggle("dark", newTheme === "dark");
+        return { theme: newTheme };
+      }),
+    setTheme: (theme) => {
+      document.documentElement.classList.toggle("dark", theme === "dark");
+      set({ theme });
+    },
+    setLanguage: (language) => {
+      set({ language });
+    },
+  }),
+  "theme-storage",
+  true
 );
