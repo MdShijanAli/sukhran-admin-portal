@@ -1,8 +1,8 @@
-import { Outlet } from 'react-router-dom';
-import Sidebar from './Sidebar';
-import Header from './Header';
-import { useSidebarStore } from '@/stores/sidebarStore';
-import { cn } from '@/lib/utils';
+import { Outlet } from "react-router-dom";
+import Sidebar from "./Sidebar";
+import Header from "./Header";
+import { useSidebarStore } from "@/stores/sidebarStore";
+import { cn } from "@/lib/utils";
 
 export default function MainLayout() {
   const { isCollapsed } = useSidebarStore();
@@ -12,12 +12,12 @@ export default function MainLayout() {
       <Sidebar />
       <div
         className={cn(
-          'transition-all duration-300',
-          isCollapsed ? 'ml-16' : 'ml-64'
+          "transition-all duration-300",
+          isCollapsed ? "ml-16" : "ml-64"
         )}
       >
         <Header />
-        <main className="p-6">
+        <main className={`${isCollapsed ? "p-6" : "p-3"}`}>
           <Outlet />
         </main>
       </div>
