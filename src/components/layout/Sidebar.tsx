@@ -53,7 +53,7 @@ export default function Sidebar() {
     <aside
       className={cn(
         "fixed left-0 top-0 z-40 h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300",
-        isCollapsed ? "w-16" : "w-64"
+        isCollapsed ? "w-18" : "w-64"
       )}
     >
       <div className="flex h-full flex-col">
@@ -63,16 +63,14 @@ export default function Sidebar() {
             isCollapsed ? "h-16 border-b" : "h-32"
           } items-center justify-between border-sidebar-border px-4`}
         >
-          {!isCollapsed && (
-            <img
-              src="/Skr-eng.png"
-              alt="Shukran Admin Portal"
-              className="h-28 mx-auto w-100"
-            />
-          )}
+          <img
+            src="/Skr-eng.png"
+            alt="Shukran Admin Portal"
+            className={`mx-auto ${isCollapsed ? "w-10" : "h-28 w-100"}`}
+          />
           <button
             onClick={toggleSidebar}
-            className="absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-lg p-2 bg-sidebar-accent transition-colors"
+            className="absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-lg p-1 bg-sidebar-accent transition-colors"
           >
             {isCollapsed ? (
               <ChevronRight className="h-5 w-5 text-sidebar-foreground" />

@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here.
 All colors MUST be HSL.
 */
 
@@ -123,6 +123,31 @@ All colors MUST be HSL.
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-semibold;
+  }
+
+  /* Custom thin scrollbar for the entire website */
+  ::-webkit-scrollbar {
+    width: 1px;
+    height: 1px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--sidebar-accent));
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--sidebar-accent) / 0.8);
+  }
+
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--sidebar-accent)) transparent;
   }
 }
 
