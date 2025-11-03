@@ -74,7 +74,9 @@ export default function Sidebar() {
           />
           <button
             onClick={toggleSidebar}
-            className="absolute top-1/2 -right-4 transform -translate-y-1/2 rounded-lg p-1 bg-sidebar-accent transition-colors"
+            className={`absolute ${
+              isCollapsed ? "top-1/2" : "top-8"
+            } -right-4 transform -translate-y-1/2 rounded-lg p-1 bg-sidebar-accent transition-colors`}
           >
             {isCollapsed ? (
               <ChevronRight className="h-5 w-5 text-sidebar-foreground" />
