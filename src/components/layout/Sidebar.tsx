@@ -23,6 +23,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { useSidebarStore } from "@/stores/sidebarStore";
 import { cn } from "@/lib/utils";
+import { useThemeStore } from "@/stores/themeStore";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "nav.dashboard", path: "/dashboard" },
@@ -48,6 +49,7 @@ const menuItems = [
 export default function Sidebar() {
   const { t } = useTranslation();
   const { isCollapsed, toggleSidebar } = useSidebarStore();
+  const { language } = useThemeStore();
 
   return (
     <aside
@@ -64,7 +66,9 @@ export default function Sidebar() {
           } items-center justify-between border-sidebar-border px-4`}
         >
           <img
-            src="/Skr-eng.png"
+            src={
+              language === "en" ? "/images/Skr-eng.png" : "/images/Skr-bng.png"
+            }
             alt="Shukran Admin Portal"
             className={`mx-auto ${isCollapsed ? "w-10" : "h-28 w-100"}`}
           />
