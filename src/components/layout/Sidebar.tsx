@@ -17,6 +17,8 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
+  Shield,
+  Bell,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useSidebarStore } from '@/stores/sidebarStore';
@@ -37,6 +39,8 @@ const menuItems = [
   { icon: FileText, label: 'nav.content', path: '/content' },
   { icon: UserPlus, label: 'nav.family', path: '/family' },
   { icon: RefreshCw, label: 'nav.returns', path: '/returns' },
+  { icon: Shield, label: 'nav.roles', path: '/role-management' },
+  { icon: Bell, label: 'nav.notifications', path: '/notifications' },
   { icon: Settings, label: 'nav.settings', path: '/settings' },
   { icon: FileText, label: 'nav.reports', path: '/reports' },
 ];

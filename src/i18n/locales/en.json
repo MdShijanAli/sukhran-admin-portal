@@ -19,10 +19,10 @@
     "content": "Content Management",
     "family": "Family Accounts",
     "returns": "Returns & Refunds",
+    "roles": "Role Management",
+    "notifications": "Notifications",
     "settings": "Settings",
-    "reports": "Reports",
-    "delivery": "Delivery",
-    "financial": "Financial"
+    "reports": "Reports"
   },
   "auth": {
     "login": "Login",

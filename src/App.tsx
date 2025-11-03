@@ -25,6 +25,8 @@ import Support from './pages/Support';
 import Coupons from './pages/Coupons';
 import Returns from './pages/Returns';
 import Settings from './pages/Settings';
+import RoleManagement from './pages/RoleManagement';
+import Notifications from './pages/Notifications';
 
 const queryClient = new QueryClient();
 
@@ -75,6 +77,8 @@ const App = () => {
               <Route path="support" element={<Support />} />
               <Route path="coupons" element={<Coupons />} />
               <Route path="returns" element={<Returns />} />
+              <Route path="role-management" element={<RoleManagement />} />
+              <Route path="notifications" element={<Notifications />} />
               <Route path="settings" element={<Settings />} />
               <Route index element={<Navigate to="/dashboard" replace />} />
             </Route>
