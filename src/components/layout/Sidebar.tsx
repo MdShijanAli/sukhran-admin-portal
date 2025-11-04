@@ -19,6 +19,7 @@ import {
   ChevronRight,
   Shield,
   Bell,
+  Coins,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useSidebarStore } from "@/stores/sidebarStore";
@@ -33,7 +34,7 @@ const menuItems = [
   { icon: ShoppingCart, label: "nav.orders", path: "/orders" },
   { icon: Truck, label: "nav.delivery", path: "/delivery" },
   { icon: DollarSign, label: "nav.financial", path: "/financial" },
-  { icon: Heart, label: "nav.loyalty", path: "/loyalty" },
+  { icon: Coins, label: "nav.loyaltyRewards", path: "/loyalty-rewards" },
   { icon: HeadphonesIcon, label: "nav.support", path: "/support" },
   { icon: BarChart3, label: "nav.analytics", path: "/analytics" },
   { icon: Ticket, label: "nav.coupons", path: "/coupons" },
