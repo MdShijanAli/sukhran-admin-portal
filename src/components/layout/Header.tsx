@@ -10,7 +10,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useThemeStore } from "@/stores/themeStore";
 import { useAuthStore } from "@/stores/authStore";
 import { Button } from "@/components/ui/button";
@@ -198,7 +198,9 @@ export default function Header() {
             </ScrollArea>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-center justify-center cursor-pointer">
-              View All Notifications
+              <NavLink to="/notifications" className="w-full">
+                View All Notifications
+              </NavLink>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
