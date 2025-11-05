@@ -28,6 +28,7 @@ import Settings from './pages/Settings';
 import RoleManagement from './pages/RoleManagement';
 import Notifications from './pages/Notifications';
 import LoyaltyRewards from './pages/LoyaltyRewards';
+import Family from './pages/Family';
 
 const queryClient = new QueryClient();
 
@@ -79,6 +80,7 @@ const App = () => {
               <Route path="coupons" element={<Coupons />} />
               <Route path="returns" element={<Returns />} />
               <Route path="loyalty-rewards" element={<LoyaltyRewards />} />
+              <Route path="family" element={<Family />} />
               <Route path="role-management" element={<RoleManagement />} />
               <Route path="notifications" element={<Notifications />} />
               <Route path="settings" element={<Settings />} />
