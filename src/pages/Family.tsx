@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Users,
   UserPlus,
@@ -16,16 +16,16 @@ import {
   CheckCircle2,
   XCircle,
   AlertCircle,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -33,13 +33,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -47,19 +47,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Switch } from '@/components/ui/switch';
-import { useToast } from '@/hooks/use-toast';
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/use-toast";
 
 interface FamilyMember {
   id: string;
@@ -73,7 +73,7 @@ interface FamilyMember {
     canViewOrders: boolean;
     canManageAccount: boolean;
   };
-  status: 'active' | 'inactive' | 'suspended';
+  status: "active" | "inactive" | "suspended";
   createdAt: string;
   lastActive: string;
   totalOrders: number;
@@ -89,159 +89,176 @@ interface FamilyAccount {
   members: FamilyMember[];
   totalOrders: number;
   totalSpent: number;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
   createdAt: string;
 }
 
 const mockFamilyAccounts: FamilyAccount[] = [
   {
-    id: '1',
-    mainCustomerId: 'C001',
-    mainCustomerName: 'John Doe',
-    mainCustomerEmail: 'john.doe@example.com',
+    id: "1",
+    mainCustomerId: "C001",
+    mainCustomerName: "John Doe",
+    mainCustomerEmail: "john.doe@example.com",
     memberCount: 3,
     members: [
       {
-        id: 'M001',
-        name: 'Jane Doe',
-        email: 'jane.doe@example.com',
-        phone: '+1234567890',
-        relation: 'Spouse',
+        id: "M001",
+        name: "Jane Doe",
+        email: "jane.doe@example.com",
+        phone: "+1234567890",
+        relation: "Spouse",
         permissions: {
           canPlaceOrders: true,
           canMakePayments: true,
           canViewOrders: true,
           canManageAccount: false,
         },
-        status: 'active',
-        createdAt: '2024-01-15',
-        lastActive: '2024-03-10',
+        status: "active",
+        createdAt: "2024-01-15",
+        lastActive: "2024-03-10",
         totalOrders: 12,
         totalSpent: 1250.0,
       },
       {
-        id: 'M002',
-        name: 'Jimmy Doe',
-        email: 'jimmy.doe@example.com',
-        phone: '+1234567891',
-        relation: 'Son',
+        id: "M002",
+        name: "Jimmy Doe",
+        email: "jimmy.doe@example.com",
+        phone: "+1234567891",
+        relation: "Son",
         permissions: {
           canPlaceOrders: true,
           canMakePayments: false,
           canViewOrders: true,
           canManageAccount: false,
         },
-        status: 'active',
-        createdAt: '2024-02-01',
-        lastActive: '2024-03-08',
+        status: "active",
+        createdAt: "2024-02-01",
+        lastActive: "2024-03-08",
         totalOrders: 5,
         totalSpent: 450.0,
       },
       {
-        id: 'M003',
-        name: 'Sarah Doe',
-        email: 'sarah.doe@example.com',
-        phone: '+1234567892',
-        relation: 'Daughter',
+        id: "M003",
+        name: "Sarah Doe",
+        email: "sarah.doe@example.com",
+        phone: "+1234567892",
+        relation: "Daughter",
         permissions: {
           canPlaceOrders: true,
           canMakePayments: false,
           canViewOrders: false,
           canManageAccount: false,
         },
-        status: 'inactive',
-        createdAt: '2024-02-15',
-        lastActive: '2024-02-20',
+        status: "inactive",
+        createdAt: "2024-02-15",
+        lastActive: "2024-02-20",
         totalOrders: 2,
         totalSpent: 120.0,
       },
     ],
     totalOrders: 19,
     totalSpent: 1820.0,
-    status: 'active',
-    createdAt: '2024-01-15',
+    status: "active",
+    createdAt: "2024-01-15",
   },
   {
-    id: '2',
-    mainCustomerId: 'C002',
-    mainCustomerName: 'Alice Smith',
-    mainCustomerEmail: 'alice.smith@example.com',
+    id: "2",
+    mainCustomerId: "C002",
+    mainCustomerName: "Alice Smith",
+    mainCustomerEmail: "alice.smith@example.com",
     memberCount: 2,
     members: [
       {
-        id: 'M004',
-        name: 'Bob Smith',
-        email: 'bob.smith@example.com',
-        phone: '+1234567893',
-        relation: 'Spouse',
+        id: "M004",
+        name: "Bob Smith",
+        email: "bob.smith@example.com",
+        phone: "+1234567893",
+        relation: "Spouse",
         permissions: {
           canPlaceOrders: true,
           canMakePayments: true,
           canViewOrders: true,
           canManageAccount: true,
         },
-        status: 'active',
-        createdAt: '2024-01-20',
-        lastActive: '2024-03-11',
+        status: "active",
+        createdAt: "2024-01-20",
+        lastActive: "2024-03-11",
         totalOrders: 8,
         totalSpent: 980.0,
       },
       {
-        id: 'M005',
-        name: 'Charlie Smith',
-        email: 'charlie.smith@example.com',
-        phone: '+1234567894',
-        relation: 'Son',
+        id: "M005",
+        name: "Charlie Smith",
+        email: "charlie.smith@example.com",
+        phone: "+1234567894",
+        relation: "Son",
         permissions: {
           canPlaceOrders: true,
           canMakePayments: false,
           canViewOrders: true,
           canManageAccount: false,
         },
-        status: 'active',
-        createdAt: '2024-02-10',
-        lastActive: '2024-03-09',
+        status: "active",
+        createdAt: "2024-02-10",
+        lastActive: "2024-03-09",
         totalOrders: 3,
         totalSpent: 340.0,
       },
     ],
     totalOrders: 11,
     totalSpent: 1320.0,
-    status: 'active',
-    createdAt: '2024-01-20',
+    status: "active",
+    createdAt: "2024-01-20",
   },
 ];
 
 export default function Family() {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const [familyAccounts, setFamilyAccounts] = useState<FamilyAccount[]>(mockFamilyAccounts);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [selectedAccount, setSelectedAccount] = useState<FamilyAccount | null>(null);
-  const [selectedMember, setSelectedMember] = useState<FamilyMember | null>(null);
+  const [familyAccounts, setFamilyAccounts] =
+    useState<FamilyAccount[]>(mockFamilyAccounts);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [selectedAccount, setSelectedAccount] = useState<FamilyAccount | null>(
+    null
+  );
+  const [selectedMember, setSelectedMember] = useState<FamilyMember | null>(
+    null
+  );
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [isEditMemberDialogOpen, setIsEditMemberDialogOpen] = useState(false);
-  const [isDeleteMemberDialogOpen, setIsDeleteMemberDialogOpen] = useState(false);
+  const [isDeleteMemberDialogOpen, setIsDeleteMemberDialogOpen] =
+    useState(false);
   const [isAddMemberDialogOpen, setIsAddMemberDialogOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<FamilyMember | null>(null);
 
   const filteredAccounts = familyAccounts.filter((account) => {
     const matchesSearch =
-      account.mainCustomerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      account.mainCustomerEmail.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      account.mainCustomerName
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      account.mainCustomerEmail
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
       account.mainCustomerId.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterStatus === 'all' || account.status === filterStatus;
+    const matchesFilter =
+      filterStatus === "all" || account.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
 
   const totalFamilyAccounts = familyAccounts.length;
-  const totalMembers = familyAccounts.reduce((sum, acc) => sum + acc.memberCount, 0);
-  const activeMembers = familyAccounts.reduce(
-    (sum, acc) => sum + acc.members.filter((m) => m.status === 'active').length,
+  const totalMembers = familyAccounts.reduce(
+    (sum, acc) => sum + acc.memberCount,
     0
   );
-  const totalRevenue = familyAccounts.reduce((sum, acc) => sum + acc.totalSpent, 0);
+  const activeMembers = familyAccounts.reduce(
+    (sum, acc) => sum + acc.members.filter((m) => m.status === "active").length,
+    0
+  );
+  const totalRevenue = familyAccounts.reduce(
+    (sum, acc) => sum + acc.totalSpent,
+    0
+  );
 
   const handleViewAccount = (account: FamilyAccount) => {
     setSelectedAccount(account);
@@ -263,20 +280,20 @@ export default function Family() {
   const handleAddMember = (account: FamilyAccount) => {
     setSelectedAccount(account);
     setEditingMember({
-      id: '',
-      name: '',
-      email: '',
-      phone: '',
-      relation: '',
+      id: "",
+      name: "",
+      email: "",
+      phone: "",
+      relation: "",
       permissions: {
         canPlaceOrders: false,
         canMakePayments: false,
         canViewOrders: false,
         canManageAccount: false,
       },
-      status: 'active',
-      createdAt: new Date().toISOString().split('T')[0],
-      lastActive: new Date().toISOString().split('T')[0],
+      status: "active",
+      createdAt: new Date().toISOString().split("T")[0],
+      lastActive: new Date().toISOString().split("T")[0],
       totalOrders: 0,
       totalSpent: 0,
     });
@@ -288,9 +305,13 @@ export default function Family() {
 
     const updatedAccounts = familyAccounts.map((account) => {
       if (account.id === selectedAccount.id) {
-        const memberExists = account.members.some((m) => m.id === editingMember.id);
+        const memberExists = account.members.some(
+          (m) => m.id === editingMember.id
+        );
         const updatedMembers = memberExists
-          ? account.members.map((m) => (m.id === editingMember.id ? editingMember : m))
+          ? account.members.map((m) =>
+              m.id === editingMember.id ? editingMember : m
+            )
           : [...account.members, { ...editingMember, id: `M${Date.now()}` }];
 
         return {
@@ -306,8 +327,10 @@ export default function Family() {
     setIsEditMemberDialogOpen(false);
     setIsAddMemberDialogOpen(false);
     toast({
-      title: 'Success',
-      description: `Family member ${editingMember.id ? 'updated' : 'added'} successfully`,
+      title: "Success",
+      description: `Family member ${
+        editingMember.id ? "updated" : "added"
+      } successfully`,
     });
   };
 
@@ -316,7 +339,9 @@ export default function Family() {
 
     const updatedAccounts = familyAccounts.map((account) => {
       if (account.id === selectedAccount.id) {
-        const updatedMembers = account.members.filter((m) => m.id !== selectedMember.id);
+        const updatedMembers = account.members.filter(
+          (m) => m.id !== selectedMember.id
+        );
         return {
           ...account,
           members: updatedMembers,
@@ -329,33 +354,37 @@ export default function Family() {
     setFamilyAccounts(updatedAccounts);
     setIsDeleteMemberDialogOpen(false);
     toast({
-      title: 'Success',
-      description: 'Family member removed successfully',
+      title: "Success",
+      description: "Family member removed successfully",
     });
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, 'default' | 'secondary' | 'destructive'> = {
-      active: 'default',
-      inactive: 'secondary',
-      suspended: 'destructive',
+    const variants: Record<string, "default" | "secondary" | "destructive"> = {
+      active: "default",
+      inactive: "secondary",
+      suspended: "destructive",
     };
-    return <Badge variant={variants[status] || 'default'}>{status}</Badge>;
+    return <Badge variant={variants[status] || "default"}>{status}</Badge>;
   };
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold">{t('nav.family')}</h1>
-        <p className="text-muted-foreground">Manage family accounts and members</p>
+        <h1 className="text-3xl font-bold">{t("nav.family")}</h1>
+        <p className="text-muted-foreground">
+          Manage family accounts and members
+        </p>
       </div>
 
       {/* Statistics */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Family Accounts</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total Family Accounts
+            </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -373,7 +402,9 @@ export default function Family() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Members</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Active Members
+            </CardTitle>
             <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -442,7 +473,9 @@ export default function Family() {
               <TableBody>
                 {filteredAccounts.map((account) => (
                   <TableRow key={account.id}>
-                    <TableCell className="font-medium">{account.mainCustomerId}</TableCell>
+                    <TableCell className="font-medium">
+                      {account.mainCustomerId}
+                    </TableCell>
                     <TableCell>{account.mainCustomerName}</TableCell>
                     <TableCell>{account.mainCustomerEmail}</TableCell>
                     <TableCell>{account.memberCount}</TableCell>
@@ -458,11 +491,15 @@ export default function Family() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => handleViewAccount(account)}>
+                          <DropdownMenuItem
+                            onClick={() => handleViewAccount(account)}
+                          >
                             <Eye className="mr-2 h-4 w-4" />
                             View Members
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleAddMember(account)}>
+                          <DropdownMenuItem
+                            onClick={() => handleAddMember(account)}
+                          >
                             <UserPlus className="mr-2 h-4 w-4" />
                             Add Member
                           </DropdownMenuItem>
@@ -481,7 +518,9 @@ export default function Family() {
       <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Family Members - {selectedAccount?.mainCustomerName}</DialogTitle>
+            <DialogTitle>
+              Family Members - {selectedAccount?.mainCustomerName}
+            </DialogTitle>
             <DialogDescription>
               Manage family members for {selectedAccount?.mainCustomerEmail}
             </DialogDescription>
@@ -492,7 +531,10 @@ export default function Family() {
                 <p className="text-sm text-muted-foreground">
                   Total Members: {selectedAccount.memberCount}
                 </p>
-                <Button onClick={() => handleAddMember(selectedAccount)} size="sm">
+                <Button
+                  onClick={() => handleAddMember(selectedAccount)}
+                  size="sm"
+                >
                   <UserPlus className="h-4 w-4 mr-2" />
                   Add Member
                 </Button>
@@ -513,7 +555,9 @@ export default function Family() {
                   <TableBody>
                     {selectedAccount.members.map((member) => (
                       <TableRow key={member.id}>
-                        <TableCell className="font-medium">{member.name}</TableCell>
+                        <TableCell className="font-medium">
+                          {member.name}
+                        </TableCell>
                         <TableCell>{member.email}</TableCell>
                         <TableCell>{member.relation}</TableCell>
                         <TableCell>{member.totalOrders}</TableCell>
@@ -528,13 +572,17 @@ export default function Family() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               <DropdownMenuItem
-                                onClick={() => handleEditMember(selectedAccount, member)}
+                                onClick={() =>
+                                  handleEditMember(selectedAccount, member)
+                                }
                               >
                                 <Edit className="mr-2 h-4 w-4" />
                                 Edit
                               </DropdownMenuItem>
                               <DropdownMenuItem
-                                onClick={() => handleDeleteMember(selectedAccount, member)}
+                                onClick={() =>
+                                  handleDeleteMember(selectedAccount, member)
+                                }
                                 className="text-destructive"
                               >
                                 <Trash2 className="mr-2 h-4 w-4" />
@@ -564,10 +612,12 @@ export default function Family() {
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>
-              {editingMember?.id ? 'Edit Family Member' : 'Add Family Member'}
+              {editingMember?.id ? "Edit Family Member" : "Add Family Member"}
             </DialogTitle>
             <DialogDescription>
-              {editingMember?.id ? 'Update member details and permissions' : 'Add a new family member'}
+              {editingMember?.id
+                ? "Update member details and permissions"
+                : "Add a new family member"}
             </DialogDescription>
           </DialogHeader>
           {editingMember && (
@@ -584,7 +634,10 @@ export default function Family() {
                       <Input
                         value={editingMember.name}
                         onChange={(e) =>
-                          setEditingMember({ ...editingMember, name: e.target.value })
+                          setEditingMember({
+                            ...editingMember,
+                            name: e.target.value,
+                          })
                         }
                       />
                     </div>
@@ -594,7 +647,10 @@ export default function Family() {
                         type="email"
                         value={editingMember.email}
                         onChange={(e) =>
-                          setEditingMember({ ...editingMember, email: e.target.value })
+                          setEditingMember({
+                            ...editingMember,
+                            email: e.target.value,
+                          })
                         }
                       />
                     </div>
@@ -603,7 +659,10 @@ export default function Family() {
                       <Input
                         value={editingMember.phone}
                         onChange={(e) =>
-                          setEditingMember({ ...editingMember, phone: e.target.value })
+                          setEditingMember({
+                            ...editingMember,
+                            phone: e.target.value,
+                          })
                         }
                       />
                     </div>
@@ -612,7 +671,10 @@ export default function Family() {
                       <Select
                         value={editingMember.relation}
                         onValueChange={(value) =>
-                          setEditingMember({ ...editingMember, relation: value })
+                          setEditingMember({
+                            ...editingMember,
+                            relation: value,
+                          })
                         }
                       >
                         <SelectTrigger>
@@ -662,7 +724,10 @@ export default function Family() {
                         onCheckedChange={(checked) =>
                           setEditingMember({
                             ...editingMember,
-                            permissions: { ...editingMember.permissions, canPlaceOrders: checked },
+                            permissions: {
+                              ...editingMember.permissions,
+                              canPlaceOrders: checked,
+                            },
                           })
                         }
                       />
@@ -679,7 +744,10 @@ export default function Family() {
                         onCheckedChange={(checked) =>
                           setEditingMember({
                             ...editingMember,
-                            permissions: { ...editingMember.permissions, canMakePayments: checked },
+                            permissions: {
+                              ...editingMember.permissions,
+                              canMakePayments: checked,
+                            },
                           })
                         }
                       />
@@ -696,7 +764,10 @@ export default function Family() {
                         onCheckedChange={(checked) =>
                           setEditingMember({
                             ...editingMember,
-                            permissions: { ...editingMember.permissions, canViewOrders: checked },
+                            permissions: {
+                              ...editingMember.permissions,
+                              canViewOrders: checked,
+                            },
                           })
                         }
                       />
@@ -742,17 +813,23 @@ export default function Family() {
       </Dialog>
 
       {/* Delete Member Dialog */}
-      <Dialog open={isDeleteMemberDialogOpen} onOpenChange={setIsDeleteMemberDialogOpen}>
+      <Dialog
+        open={isDeleteMemberDialogOpen}
+        onOpenChange={setIsDeleteMemberDialogOpen}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Remove Family Member</DialogTitle>
             <DialogDescription>
-              Are you sure you want to remove {selectedMember?.name} from this family account? This
-              action cannot be undone.
+              Are you sure you want to remove {selectedMember?.name} from this
+              family account? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDeleteMemberDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteMemberDialogOpen(false)}
+            >
               Cancel
             </Button>
             <Button variant="destructive" onClick={handleConfirmDeleteMember}>

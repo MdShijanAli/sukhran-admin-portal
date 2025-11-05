@@ -1,10 +1,18 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Search, Filter, RotateCcw, DollarSign, CheckCircle, XCircle, Clock } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  Search,
+  Filter,
+  RotateCcw,
+  DollarSign,
+  CheckCircle,
+  XCircle,
+  Clock,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -12,7 +20,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -20,17 +28,17 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
 interface Return {
   id: string;
@@ -42,7 +50,7 @@ interface Return {
   amount: number;
   reason: string;
   requestDate: string;
-  status: 'pending' | 'approved' | 'rejected' | 'refunded';
+  status: "pending" | "approved" | "rejected" | "refunded";
   notes?: string;
   refundMethod?: string;
 }
@@ -50,113 +58,123 @@ interface Return {
 const Returns = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedReturn, setSelectedReturn] = useState<Return | null>(null);
-  const [actionType, setActionType] = useState<'approve' | 'reject' | 'refund' | null>(null);
-  const [notes, setNotes] = useState('');
-  const [refundMethod, setRefundMethod] = useState('original');
+  const [actionType, setActionType] = useState<
+    "approve" | "reject" | "refund" | null
+  >(null);
+  const [notes, setNotes] = useState("");
+  const [refundMethod, setRefundMethod] = useState("original");
 
   const [returns, setReturns] = useState<Return[]>([
     {
-      id: '1',
-      orderId: 'ORD-2024-001',
-      customer: 'John Doe',
-      email: 'john@example.com',
-      product: 'Wireless Headphones',
+      id: "1",
+      orderId: "ORD-2024-001",
+      customer: "John Doe",
+      email: "john@example.com",
+      product: "Wireless Headphones",
       quantity: 1,
       amount: 129.99,
-      reason: 'Product defective - not charging properly',
-      requestDate: '2024-01-15',
-      status: 'pending',
+      reason: "Product defective - not charging properly",
+      requestDate: "2024-01-15",
+      status: "pending",
     },
     {
-      id: '2',
-      orderId: 'ORD-2024-002',
-      customer: 'Jane Smith',
-      email: 'jane@example.com',
-      product: 'Smart Watch',
+      id: "2",
+      orderId: "ORD-2024-002",
+      customer: "Jane Smith",
+      email: "jane@example.com",
+      product: "Smart Watch",
       quantity: 1,
       amount: 299.99,
-      reason: 'Changed mind - prefer different color',
-      requestDate: '2024-01-14',
-      status: 'approved',
-      notes: 'Customer preferred black instead of white',
+      reason: "Changed mind - prefer different color",
+      requestDate: "2024-01-14",
+      status: "approved",
+      notes: "Customer preferred black instead of white",
     },
     {
-      id: '3',
-      orderId: 'ORD-2024-003',
-      customer: 'Mike Johnson',
-      email: 'mike@example.com',
-      product: 'Laptop Bag',
+      id: "3",
+      orderId: "ORD-2024-003",
+      customer: "Mike Johnson",
+      email: "mike@example.com",
+      product: "Laptop Bag",
       quantity: 2,
       amount: 89.98,
-      reason: 'Wrong size ordered',
-      requestDate: '2024-01-13',
-      status: 'refunded',
-      refundMethod: 'original',
-      notes: 'Refund processed to original payment method',
+      reason: "Wrong size ordered",
+      requestDate: "2024-01-13",
+      status: "refunded",
+      refundMethod: "original",
+      notes: "Refund processed to original payment method",
     },
     {
-      id: '4',
-      orderId: 'ORD-2024-004',
-      customer: 'Sarah Wilson',
-      email: 'sarah@example.com',
-      product: 'Bluetooth Speaker',
+      id: "4",
+      orderId: "ORD-2024-004",
+      customer: "Sarah Wilson",
+      email: "sarah@example.com",
+      product: "Bluetooth Speaker",
       quantity: 1,
       amount: 79.99,
-      reason: 'Product not as described in listing',
-      requestDate: '2024-01-12',
-      status: 'rejected',
-      notes: 'Product matches description, return not accepted',
+      reason: "Product not as described in listing",
+      requestDate: "2024-01-12",
+      status: "rejected",
+      notes: "Product matches description, return not accepted",
     },
   ]);
 
   const stats = {
     total: returns.length,
-    pending: returns.filter(r => r.status === 'pending').length,
-    approved: returns.filter(r => r.status === 'approved').length,
-    refunded: returns.filter(r => r.status === 'refunded').length,
-    totalAmount: returns.filter(r => r.status === 'refunded').reduce((sum, r) => sum + r.amount, 0),
+    pending: returns.filter((r) => r.status === "pending").length,
+    approved: returns.filter((r) => r.status === "approved").length,
+    refunded: returns.filter((r) => r.status === "refunded").length,
+    totalAmount: returns
+      .filter((r) => r.status === "refunded")
+      .reduce((sum, r) => sum + r.amount, 0),
   };
 
-  const filteredReturns = returns.filter(ret => {
-    const matchesSearch = ret.orderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         ret.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         ret.product.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || ret.status === statusFilter;
+  const filteredReturns = returns.filter((ret) => {
+    const matchesSearch =
+      ret.orderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      ret.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      ret.product.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === "all" || ret.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
-  const handleOpenDialog = (returnItem: Return, action: 'approve' | 'reject' | 'refund') => {
+  const handleOpenDialog = (
+    returnItem: Return,
+    action: "approve" | "reject" | "refund"
+  ) => {
     setSelectedReturn(returnItem);
     setActionType(action);
-    setNotes('');
-    setRefundMethod('original');
+    setNotes("");
+    setRefundMethod("original");
     setIsDialogOpen(true);
   };
 
   const handleAction = () => {
     if (!selectedReturn || !actionType) return;
 
-    setReturns(returns.map(r => {
-      if (r.id === selectedReturn.id) {
-        const updates: Partial<Return> = { notes };
-        
-        if (actionType === 'approve') {
-          updates.status = 'approved';
-        } else if (actionType === 'reject') {
-          updates.status = 'rejected';
-        } else if (actionType === 'refund') {
-          updates.status = 'refunded';
-          updates.refundMethod = refundMethod;
+    setReturns(
+      returns.map((r) => {
+        if (r.id === selectedReturn.id) {
+          const updates: Partial<Return> = { notes };
+
+          if (actionType === "approve") {
+            updates.status = "approved";
+          } else if (actionType === "reject") {
+            updates.status = "rejected";
+          } else if (actionType === "refund") {
+            updates.status = "refunded";
+            updates.refundMethod = refundMethod;
+          }
+
+          return { ...r, ...updates };
         }
-        
-        return { ...r, ...updates };
-      }
-      return r;
-    }));
+        return r;
+      })
+    );
 
     toast({
       title: `Return ${actionType}d successfully`,
@@ -168,10 +186,10 @@ const Returns = () => {
 
   const getStatusBadge = (status: string) => {
     const config = {
-      pending: { variant: 'secondary' as const, icon: Clock },
-      approved: { variant: 'default' as const, icon: CheckCircle },
-      rejected: { variant: 'destructive' as const, icon: XCircle },
-      refunded: { variant: 'outline' as const, icon: DollarSign },
+      pending: { variant: "secondary" as const, icon: Clock },
+      approved: { variant: "default" as const, icon: CheckCircle },
+      rejected: { variant: "destructive" as const, icon: XCircle },
+      refunded: { variant: "outline" as const, icon: DollarSign },
     };
 
     const { variant, icon: Icon } = config[status as keyof typeof config];
@@ -184,7 +202,7 @@ const Returns = () => {
   };
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Returns & Refunds</h1>
       </div>
@@ -228,11 +246,15 @@ const Returns = () => {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Refunded</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total Refunded
+            </CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${stats.totalAmount.toFixed(2)}</div>
+            <div className="text-2xl font-bold">
+              ${stats.totalAmount.toFixed(2)}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -283,45 +305,56 @@ const Returns = () => {
             <TableBody>
               {filteredReturns.map((returnItem) => (
                 <TableRow key={returnItem.id}>
-                  <TableCell className="font-medium">{returnItem.orderId}</TableCell>
+                  <TableCell className="font-medium">
+                    {returnItem.orderId}
+                  </TableCell>
                   <TableCell>
                     <div>
                       <div className="font-medium">{returnItem.customer}</div>
-                      <div className="text-sm text-muted-foreground">{returnItem.email}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {returnItem.email}
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell>{returnItem.product}</TableCell>
                   <TableCell>{returnItem.quantity}</TableCell>
                   <TableCell>${returnItem.amount.toFixed(2)}</TableCell>
-                  <TableCell className="max-w-[200px] truncate" title={returnItem.reason}>
+                  <TableCell
+                    className="max-w-[200px] truncate"
+                    title={returnItem.reason}
+                  >
                     {returnItem.reason}
                   </TableCell>
                   <TableCell>{returnItem.requestDate}</TableCell>
                   <TableCell>{getStatusBadge(returnItem.status)}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
-                      {returnItem.status === 'pending' && (
+                      {returnItem.status === "pending" && (
                         <>
                           <Button
                             size="sm"
                             variant="default"
-                            onClick={() => handleOpenDialog(returnItem, 'approve')}
+                            onClick={() =>
+                              handleOpenDialog(returnItem, "approve")
+                            }
                           >
                             Approve
                           </Button>
                           <Button
                             size="sm"
                             variant="destructive"
-                            onClick={() => handleOpenDialog(returnItem, 'reject')}
+                            onClick={() =>
+                              handleOpenDialog(returnItem, "reject")
+                            }
                           >
                             Reject
                           </Button>
                         </>
                       )}
-                      {returnItem.status === 'approved' && (
+                      {returnItem.status === "approved" && (
                         <Button
                           size="sm"
-                          onClick={() => handleOpenDialog(returnItem, 'refund')}
+                          onClick={() => handleOpenDialog(returnItem, "refund")}
                         >
                           Process Refund
                         </Button>
@@ -348,24 +381,34 @@ const Returns = () => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {actionType === 'approve' && 'Approve Return Request'}
-              {actionType === 'reject' && 'Reject Return Request'}
-              {actionType === 'refund' && 'Process Refund'}
+              {actionType === "approve" && "Approve Return Request"}
+              {actionType === "reject" && "Reject Return Request"}
+              {actionType === "refund" && "Process Refund"}
             </DialogTitle>
             <DialogDescription>
               {selectedReturn && (
                 <div className="space-y-2 text-sm">
-                  <div><strong>Order:</strong> {selectedReturn.orderId}</div>
-                  <div><strong>Customer:</strong> {selectedReturn.customer}</div>
-                  <div><strong>Product:</strong> {selectedReturn.product}</div>
-                  <div><strong>Amount:</strong> ${selectedReturn.amount.toFixed(2)}</div>
-                  <div><strong>Reason:</strong> {selectedReturn.reason}</div>
+                  <div>
+                    <strong>Order:</strong> {selectedReturn.orderId}
+                  </div>
+                  <div>
+                    <strong>Customer:</strong> {selectedReturn.customer}
+                  </div>
+                  <div>
+                    <strong>Product:</strong> {selectedReturn.product}
+                  </div>
+                  <div>
+                    <strong>Amount:</strong> ${selectedReturn.amount.toFixed(2)}
+                  </div>
+                  <div>
+                    <strong>Reason:</strong> {selectedReturn.reason}
+                  </div>
                 </div>
               )}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            {actionType === 'refund' && (
+            {actionType === "refund" && (
               <div className="space-y-2">
                 <Label htmlFor="refundMethod">Refund Method</Label>
                 <Select value={refundMethod} onValueChange={setRefundMethod}>
@@ -373,7 +416,9 @@ const Returns = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="original">Original Payment Method</SelectItem>
+                    <SelectItem value="original">
+                      Original Payment Method
+                    </SelectItem>
                     <SelectItem value="store_credit">Store Credit</SelectItem>
                     <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
                   </SelectContent>
@@ -396,7 +441,8 @@ const Returns = () => {
               Cancel
             </Button>
             <Button onClick={handleAction}>
-              Confirm {actionType?.charAt(0).toUpperCase()}{actionType?.slice(1)}
+              Confirm {actionType?.charAt(0).toUpperCase()}
+              {actionType?.slice(1)}
             </Button>
           </DialogFooter>
         </DialogContent>
