@@ -1,23 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -42,22 +26,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import {
-  Search,
-  Filter,
-  UserPlus,
-  MoreHorizontal,
-  Eye,
-  Edit,
-  Trash2,
-  X,
-  Plus,
-} from "lucide-react";
+import { Filter, MoreHorizontal, Eye, Edit, Trash2, Plus } from "lucide-react";
 import { users as initialUsers } from "@/data/mockData";
 import { toast } from "@/hooks/use-toast";
 import { BaseTableList, Column } from "@/components/table";
-import FormModal from "./modal/FormModal";
-import DeleteModal from "@/components/modals/DeleteModal";
+import { FormModal, ViewModal } from "./modal";
+import { DeleteModal } from "@/components/modals";
 
 interface User {
   id: string;
@@ -308,84 +282,12 @@ export default function Users() {
         editData={editingUser}
       />
 
-      {/* View User Dialog */}
-      <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>User Details</DialogTitle>
-            <DialogDescription>
-              Complete information about this user
-            </DialogDescription>
-          </DialogHeader>
-          {viewingUser && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-muted-foreground">Name</Label>
-                  <p className="font-medium">{viewingUser.name}</p>
-                </div>
-                <div>
-                  <Label className="text-muted-foreground">Email</Label>
-                  <p className="font-medium">{viewingUser.email}</p>
-                </div>
-                <div>
-                  <Label className="text-muted-foreground">Phone</Label>
-                  <p className="font-medium">{viewingUser.phone}</p>
-                </div>
-                <div>
-                  <Label className="text-muted-foreground">Location</Label>
-                  <p className="font-medium">{viewingUser.location}</p>
-                </div>
-                <div>
-                  <Label className="text-muted-foreground">Status</Label>
-                  <div className="mt-1">
-                    <Badge
-                      variant={
-                        viewingUser.status === "active"
-                          ? "default"
-                          : "secondary"
-                      }
-                    >
-                      {viewingUser.status}
-                    </Badge>
-                  </div>
-                </div>
-                <div>
-                  <Label className="text-muted-foreground">Subscription</Label>
-                  <div className="mt-1">
-                    <Badge
-                      variant={
-                        viewingUser.subscriptionStatus === "active"
-                          ? "default"
-                          : "outline"
-                      }
-                    >
-                      {viewingUser.subscriptionStatus}
-                    </Badge>
-                  </div>
-                </div>
-                <div>
-                  <Label className="text-muted-foreground">
-                    Loyalty Points
-                  </Label>
-                  <p className="font-medium">{viewingUser.loyaltyPoints}</p>
-                </div>
-                <div>
-                  <Label className="text-muted-foreground">Total Orders</Label>
-                  <p className="font-medium">{viewingUser.totalOrders}</p>
-                </div>
-                <div>
-                  <Label className="text-muted-foreground">Join Date</Label>
-                  <p className="font-medium">{viewingUser.joinDate}</p>
-                </div>
-              </div>
-            </div>
-          )}
-          <DialogFooter>
-            <Button onClick={() => setShowViewDialog(false)}>Close</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* View User Modal */}
+      <ViewModal
+        open={showViewDialog}
+        onClose={() => setShowViewDialog(false)}
+        user={viewingUser}
+      />
 
       {/* Delete Confirmation Dialog */}
       <DeleteModal
