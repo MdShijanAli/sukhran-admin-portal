@@ -96,14 +96,20 @@ export function BaseModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={`${sizeClasses[size]} ${className || ""}`}>
-        <DialogHeader>
+      <DialogContent
+        className={`${sizeClasses[size]} ${
+          className || ""
+        } flex flex-col max-h-[90vh]`}
+      >
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
 
-        <div className="py-4">{children}</div>
+        <div className="px-4 py-2 overflow-y-auto flex-1 min-h-0">
+          {children}
+        </div>
 
-        <DialogFooter>
+        <DialogFooter className="flex-shrink-0">
           {customActions}
           {showCloseButton && (
             <Button

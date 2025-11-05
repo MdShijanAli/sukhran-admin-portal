@@ -62,11 +62,10 @@ export default function DeliveryTrackingModal({
       open={open}
       onOpenChange={onClose}
       title="Track Delivery"
-      description="Real-time delivery tracking information"
       showCloseButton={true}
       closeButtonText="Close"
       showSubmitButton={false}
-      size="md"
+      size="lg"
     >
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
