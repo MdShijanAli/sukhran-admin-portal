@@ -1,60 +1,36 @@
 import React, { ReactNode } from "react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { BaseModal } from "./BaseModal";
 
 export interface DeleteModalProps {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onClose: (open: boolean) => void;
   title?: string;
   description?: string | ReactNode;
-  itemName?: string;
   onConfirm: () => void;
   isDeleting?: boolean;
-  cancelButtonText?: string;
-  deleteButtonText?: string;
 }
 
-export function DeleteModal({
+export default function DeleteModal({
   open,
-  onOpenChange,
-  title = "Delete Item",
+  onClose,
+  title = "Are you sure?",
   description,
-  itemName,
   onConfirm,
   isDeleting = false,
-  cancelButtonText = "Cancel",
-  deleteButtonText = "Delete",
 }: DeleteModalProps) {
-  const defaultDescription = itemName
-    ? `Are you sure you want to delete ${itemName}? This action cannot be undone.`
-    : "Are you sure you want to delete this item? This action cannot be undone.";
-
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>
-            {description || defaultDescription}
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>
-            {cancelButtonText}
-          </AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm} disabled={isDeleting}>
-            {isDeleting ? "Deleting..." : deleteButtonText}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <BaseModal
+      open={open}
+      onOpenChange={onClose}
+      title={title}
+      onSubmit={onConfirm}
+      isSubmitting={isDeleting}
+      submitButtonText="Delete"
+      submitButtonVariant="destructive"
+      closeButtonText="Cancel"
+      size="md"
+    >
+      <p className="text-sm text-muted-foreground">{description}</p>
+    </BaseModal>
   );
 }

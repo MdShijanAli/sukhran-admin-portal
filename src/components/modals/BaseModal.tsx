@@ -2,7 +2,6 @@ import React, { ReactNode } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -16,7 +15,6 @@ export interface BaseModalProps {
 
   // Header
   title: string;
-  description?: string;
 
   // Content
   children: ReactNode;
@@ -67,7 +65,6 @@ export function BaseModal({
   open,
   onOpenChange,
   title,
-  description,
   children,
   showCloseButton = true,
   closeButtonText = "Cancel",
@@ -102,7 +99,6 @@ export function BaseModal({
       <DialogContent className={`${sizeClasses[size]} ${className || ""}`}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
 
         <div className="py-4">{children}</div>

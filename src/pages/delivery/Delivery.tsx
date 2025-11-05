@@ -33,6 +33,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import FormModal from "./modal/FormModal";
 import TrackingModal from "./modal/TrackingModal";
+import DeleteModal from "@/components/modals/DeleteModal";
 
 interface Delivery {
   id: string;
@@ -370,26 +371,13 @@ export default function Delivery() {
       />
 
       {/* Delete Confirmation Dialog */}
-      <AlertDialog
+      <DeleteModal
         open={isDeleteDialogOpen}
-        onOpenChange={setIsDeleteDialogOpen}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Delivery</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete delivery {selectedDelivery?.id}?
-              This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete}>
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        onClose={setIsDeleteDialogOpen}
+        title="Delete Delivery"
+        description={`Are you sure you want to delete delivery ${selectedDelivery?.id}? This action cannot be undone.`}
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 }
