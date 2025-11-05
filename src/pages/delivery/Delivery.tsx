@@ -10,7 +10,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BaseTableList, Column } from "@/components/table";
 import {
@@ -24,7 +23,6 @@ import { toast } from "@/hooks/use-toast";
 import FormModal from "./modal/FormModal";
 import TrackingModal from "./modal/TrackingModal";
 import DeleteModal from "@/components/modals/DeleteModal";
-import { useTranslation } from "react-i18next";
 
 interface Delivery {
   id: string;
@@ -103,7 +101,6 @@ const statusConfig = {
 };
 
 export default function Delivery() {
-  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [deliveries, setDeliveries] = useState<Delivery[]>(mockDeliveries);
@@ -290,7 +287,6 @@ export default function Delivery() {
 
   return (
     <div>
-      {/* Table with BaseTableList */}
       <BaseTableList
         title="Delivery List"
         description="View and manage all delivery orders"

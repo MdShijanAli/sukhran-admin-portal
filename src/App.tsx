@@ -11,7 +11,7 @@ import "@/i18n/config";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
-import Orders from "./pages/Orders";
+import Orders from "./pages/orders/Orders";
 import MainLayout from "./components/layout/MainLayout";
 import NotFound from "./pages/NotFound";
 import Products from "./pages/Products";

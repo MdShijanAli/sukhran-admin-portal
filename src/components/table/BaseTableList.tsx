@@ -40,6 +40,7 @@ export interface BaseTableListProps<T> {
   title: string;
   description?: string;
   headerActions?: ActionButton[];
+  headerSlots?: ReactNode;
 
   // Search
   searchPlaceholder?: string;
@@ -75,7 +76,7 @@ export interface BaseTableListProps<T> {
   summaryLists?: Array<{
     title: string;
     color: string;
-    icon: React.ComponentType<{ className?: string }>;
+    icon?: React.ComponentType<{ className?: string }>;
     value: string | number;
   }>;
 }
@@ -84,6 +85,7 @@ export function BaseTableList<T>({
   title,
   description,
   headerActions,
+  headerSlots,
   searchPlaceholder = "Search...",
   searchValue,
   onSearchChange,
@@ -145,6 +147,7 @@ export function BaseTableList<T>({
                 })}
               </div>
             )}
+            {headerSlots}
           </div>
         </CardHeader>
         <CardContent>
