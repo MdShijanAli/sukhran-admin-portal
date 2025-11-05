@@ -20,20 +20,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { toast } from "@/hooks/use-toast";
 import FormModal from "./modal/FormModal";
 import TrackingModal from "./modal/TrackingModal";
 import DeleteModal from "@/components/modals/DeleteModal";
+import { useTranslation } from "react-i18next";
 
 interface Delivery {
   id: string;
@@ -112,6 +103,7 @@ const statusConfig = {
 };
 
 export default function Delivery() {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [deliveries, setDeliveries] = useState<Delivery[]>(mockDeliveries);
@@ -297,30 +289,7 @@ export default function Delivery() {
   ];
 
   return (
-    <div className="space-y-6">
-      {/* <div>
-        <h1 className="text-3xl font-bold tracking-tight">
-          {t("nav.delivery")}
-        </h1>
-        <p className="text-muted-foreground">Manage and track all deliveries</p>
-      </div> */}
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.title}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {stat.title}
-              </CardTitle>
-              <stat.icon className={`h-4 w-4 ${stat.color}`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
+    <div>
       {/* Table with BaseTableList */}
       <BaseTableList
         title="Delivery List"
@@ -356,6 +325,7 @@ export default function Delivery() {
         data={filteredDeliveries}
         emptyMessage="No deliveries found"
         getRowKey={(delivery) => delivery.id}
+        summaryLists={stats}
       />
 
       {/* Create/Edit Delivery Form Modal */}

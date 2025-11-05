@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useTranslation } from "react-i18next";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ShoppingCart,
   DollarSign,
@@ -8,7 +8,7 @@ import {
   TrendingDown,
   Package,
   AlertCircle,
-} from 'lucide-react';
+} from "lucide-react";
 import {
   LineChart,
   Line,
@@ -20,8 +20,8 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
-} from 'recharts';
-import { dashboardStats, revenueData, topProducts } from '@/data/mockData';
+} from "recharts";
+import { dashboardStats, revenueData, topProducts } from "@/data/mockData";
 
 export default function Dashboard() {
   const { t } = useTranslation();
@@ -37,7 +37,7 @@ export default function Dashboard() {
     value: string | number;
     change?: number;
     icon: any;
-    trend?: 'up' | 'down';
+    trend?: "up" | "down";
   }) => (
     <Card className="shadow-card hover:shadow-elegant transition-all duration-300">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -50,20 +50,22 @@ export default function Dashboard() {
         <div className="text-2xl font-bold">{value}</div>
         {change !== undefined && (
           <div className="flex items-center gap-1 mt-1">
-            {trend === 'up' ? (
+            {trend === "up" ? (
               <TrendingUp className="h-4 w-4 text-success" />
             ) : (
               <TrendingDown className="h-4 w-4 text-destructive" />
             )}
             <span
               className={`text-xs font-medium ${
-                trend === 'up' ? 'text-success' : 'text-destructive'
+                trend === "up" ? "text-success" : "text-destructive"
               }`}
             >
-              {change > 0 ? '+' : ''}
+              {change > 0 ? "+" : ""}
               {change}%
             </span>
-            <span className="text-xs text-muted-foreground ml-1">vs last week</span>
+            <span className="text-xs text-muted-foreground ml-1">
+              vs last week
+            </span>
           </div>
         )}
       </CardContent>
@@ -71,7 +73,7 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className=" animate-fade-in">
       <div>
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <p className="text-muted-foreground mt-1">
@@ -82,28 +84,28 @@ export default function Dashboard() {
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
-          title={t('dashboard.todayOrders')}
+          title={t("dashboard.todayOrders")}
           value={dashboardStats.todayOrders.count}
           change={dashboardStats.todayOrders.change}
           icon={ShoppingCart}
           trend="up"
         />
         <StatCard
-          title={t('dashboard.totalRevenue')}
+          title={t("dashboard.totalRevenue")}
           value={`৳${dashboardStats.revenue.amount.toLocaleString()}`}
           change={dashboardStats.revenue.change}
           icon={DollarSign}
           trend="up"
         />
         <StatCard
-          title={t('dashboard.activeSubscriptions')}
+          title={t("dashboard.activeSubscriptions")}
           value={dashboardStats.activeSubscriptions.count}
           change={-1.2}
           icon={Package}
           trend="down"
         />
         <StatCard
-          title={t('dashboard.newUsers')}
+          title={t("dashboard.newUsers")}
           value={dashboardStats.newUsers.count}
           change={dashboardStats.newUsers.change}
           icon={Users}
@@ -115,7 +117,7 @@ export default function Dashboard() {
       <div className="grid gap-4 md:grid-cols-2">
         <Card className="shadow-card">
           <CardHeader>
-            <CardTitle>{t('dashboard.revenueChart')}</CardTitle>
+            <CardTitle>{t("dashboard.revenueChart")}</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -125,9 +127,9 @@ export default function Dashboard() {
                 <YAxis className="text-xs" />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px',
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
                   }}
                 />
                 <Legend />
@@ -152,22 +154,32 @@ export default function Dashboard() {
 
         <Card className="shadow-card">
           <CardHeader>
-            <CardTitle>{t('dashboard.topProducts')}</CardTitle>
+            <CardTitle>{t("dashboard.topProducts")}</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={topProducts}>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                <XAxis dataKey="name" className="text-xs" angle={-45} textAnchor="end" height={100} />
+                <XAxis
+                  dataKey="name"
+                  className="text-xs"
+                  angle={-45}
+                  textAnchor="end"
+                  height={100}
+                />
                 <YAxis className="text-xs" />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px',
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
                   }}
                 />
-                <Bar dataKey="sales" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
+                <Bar
+                  dataKey="sales"
+                  fill="hsl(var(--primary))"
+                  radius={[8, 8, 0, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -182,7 +194,9 @@ export default function Dashboard() {
             <CardTitle className="text-base">Pending Deliveries</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{dashboardStats.pendingDeliveries.count}</p>
+            <p className="text-2xl font-bold">
+              {dashboardStats.pendingDeliveries.count}
+            </p>
             <p className="text-sm text-muted-foreground mt-1">
               Orders waiting for delivery assignment
             </p>
@@ -195,7 +209,9 @@ export default function Dashboard() {
             <CardTitle className="text-base">Payment Failures</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{dashboardStats.paymentFailures.count}</p>
+            <p className="text-2xl font-bold">
+              {dashboardStats.paymentFailures.count}
+            </p>
             <p className="text-sm text-muted-foreground mt-1">
               Failed transactions requiring attention
             </p>

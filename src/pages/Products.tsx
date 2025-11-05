@@ -1,39 +1,65 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { Search, Filter, Plus, Edit, Trash2, Package } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { toast } from '@/hooks/use-toast';
-import { products as initialProducts } from '@/data/mockData';
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { Search, Filter, Plus, Edit, Trash2, Package } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from "@/hooks/use-toast";
+import { products as initialProducts } from "@/data/mockData";
 
 const Products = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [productsList, setProductsList] = useState(initialProducts);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [filterCategory, setFilterCategory] = useState<string>('all');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterCategory, setFilterCategory] = useState<string>("all");
+  const [filterStatus, setFilterStatus] = useState<string>("all");
 
   const filteredProducts = productsList.filter((product) => {
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = filterCategory === 'all' || product.category === filterCategory;
-    const matchesStatus = filterStatus === 'all' || product.status === filterStatus;
+    const matchesSearch = product.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      filterCategory === "all" || product.category === filterCategory;
+    const matchesStatus =
+      filterStatus === "all" || product.status === filterStatus;
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
-  const categories = Array.from(new Set(productsList.map(p => p.category)));
+  const categories = Array.from(new Set(productsList.map((p) => p.category)));
 
   const handleEditClick = (product: any) => {
     setSelectedProduct({ ...product });
@@ -47,9 +73,11 @@ const Products = () => {
 
   const handleSaveEdit = () => {
     if (selectedProduct) {
-      setProductsList(productsList.map(p => 
-        p.id === selectedProduct.id ? selectedProduct : p
-      ));
+      setProductsList(
+        productsList.map((p) =>
+          p.id === selectedProduct.id ? selectedProduct : p
+        )
+      );
       toast({
         title: "Product Updated",
         description: "Product has been updated successfully.",
@@ -61,7 +89,7 @@ const Products = () => {
 
   const handleConfirmDelete = () => {
     if (selectedProduct) {
-      setProductsList(productsList.filter(p => p.id !== selectedProduct.id));
+      setProductsList(productsList.filter((p) => p.id !== selectedProduct.id));
       toast({
         title: "Product Deleted",
         description: "Product has been deleted successfully.",
@@ -73,21 +101,23 @@ const Products = () => {
   };
 
   const handleClearFilters = () => {
-    setFilterCategory('all');
-    setFilterStatus('all');
+    setFilterCategory("all");
+    setFilterStatus("all");
   };
 
   return (
-    <div className="space-y-6">
+    <div className="">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t('nav.products')}</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            {t("nav.products")}
+          </h1>
           <p className="text-muted-foreground mt-1">
             Manage your product catalog and inventory
           </p>
         </div>
-        <Button className="gap-2" onClick={() => navigate('/products/create')}>
+        <Button className="gap-2" onClick={() => navigate("/products/create")}>
           <Plus className="h-4 w-4" />
           Add Product
         </Button>
@@ -100,18 +130,27 @@ const Products = () => {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder={t('common.search')}
+                placeholder={t("common.search")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9"
               />
             </div>
-            <Button variant="outline" className="gap-2" onClick={() => setIsFilterOpen(!isFilterOpen)}>
+            <Button
+              variant="outline"
+              className="gap-2"
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+            >
               <Filter className="h-4 w-4" />
-              {t('common.filter')}
-              {(filterCategory !== 'all' || filterStatus !== 'all') && (
+              {t("common.filter")}
+              {(filterCategory !== "all" || filterStatus !== "all") && (
                 <Badge variant="secondary" className="ml-1">
-                  {[filterCategory !== 'all' && '1', filterStatus !== 'all' && '1'].filter(Boolean).length}
+                  {
+                    [
+                      filterCategory !== "all" && "1",
+                      filterStatus !== "all" && "1",
+                    ].filter(Boolean).length
+                  }
                 </Badge>
               )}
             </Button>
@@ -133,14 +172,19 @@ const Products = () => {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label>Category</Label>
-                  <Select value={filterCategory} onValueChange={setFilterCategory}>
+                  <Select
+                    value={filterCategory}
+                    onValueChange={setFilterCategory}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Categories</SelectItem>
-                      {categories.map(cat => (
-                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                      {categories.map((cat) => (
+                        <SelectItem key={cat} value={cat}>
+                          {cat}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -181,7 +225,9 @@ const Products = () => {
                 />
                 <Badge
                   className="absolute right-2 top-2"
-                  variant={product.status === 'active' ? 'default' : 'secondary'}
+                  variant={
+                    product.status === "active" ? "default" : "secondary"
+                  }
                 >
                   {product.status}
                 </Badge>
@@ -208,7 +254,9 @@ const Products = () => {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-medium">Stock: {product.stock}</p>
+                    <p className="text-sm font-medium">
+                      Stock: {product.stock}
+                    </p>
                     <div className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Package className="h-3 w-3" />
                       {product.unit}
@@ -222,18 +270,18 @@ const Products = () => {
 
                 {/* Action Buttons */}
                 <div className="flex gap-2 pt-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    variant="outline"
+                    size="sm"
                     className="flex-1 gap-1"
                     onClick={() => handleEditClick(product)}
                   >
                     <Edit className="h-3 w-3" />
                     Edit
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    variant="outline"
+                    size="sm"
                     className="gap-1"
                     onClick={() => handleDeleteClick(product)}
                   >
@@ -264,9 +312,7 @@ const Products = () => {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Product</DialogTitle>
-            <DialogDescription>
-              Update product information
-            </DialogDescription>
+            <DialogDescription>Update product information</DialogDescription>
           </DialogHeader>
           {selectedProduct && (
             <div className="space-y-4">
@@ -276,7 +322,12 @@ const Products = () => {
                   <Input
                     id="name"
                     value={selectedProduct.name}
-                    onChange={(e) => setSelectedProduct({...selectedProduct, name: e.target.value})}
+                    onChange={(e) =>
+                      setSelectedProduct({
+                        ...selectedProduct,
+                        name: e.target.value,
+                      })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -284,7 +335,12 @@ const Products = () => {
                   <Input
                     id="category"
                     value={selectedProduct.category}
-                    onChange={(e) => setSelectedProduct({...selectedProduct, category: e.target.value})}
+                    onChange={(e) =>
+                      setSelectedProduct({
+                        ...selectedProduct,
+                        category: e.target.value,
+                      })
+                    }
                   />
                 </div>
               </div>
@@ -295,7 +351,12 @@ const Products = () => {
                     id="price"
                     type="number"
                     value={selectedProduct.price}
-                    onChange={(e) => setSelectedProduct({...selectedProduct, price: parseFloat(e.target.value)})}
+                    onChange={(e) =>
+                      setSelectedProduct({
+                        ...selectedProduct,
+                        price: parseFloat(e.target.value),
+                      })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -304,7 +365,12 @@ const Products = () => {
                     id="stock"
                     type="number"
                     value={selectedProduct.stock}
-                    onChange={(e) => setSelectedProduct({...selectedProduct, stock: parseInt(e.target.value)})}
+                    onChange={(e) =>
+                      setSelectedProduct({
+                        ...selectedProduct,
+                        stock: parseInt(e.target.value),
+                      })
+                    }
                   />
                 </div>
                 <div className="space-y-2">
@@ -312,15 +378,22 @@ const Products = () => {
                   <Input
                     id="unit"
                     value={selectedProduct.unit}
-                    onChange={(e) => setSelectedProduct({...selectedProduct, unit: e.target.value})}
+                    onChange={(e) =>
+                      setSelectedProduct({
+                        ...selectedProduct,
+                        unit: e.target.value,
+                      })
+                    }
                   />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="status">Status</Label>
-                <Select 
-                  value={selectedProduct.status} 
-                  onValueChange={(value) => setSelectedProduct({...selectedProduct, status: value})}
+                <Select
+                  value={selectedProduct.status}
+                  onValueChange={(value) =>
+                    setSelectedProduct({ ...selectedProduct, status: value })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -336,7 +409,12 @@ const Products = () => {
                 <Textarea
                   id="description"
                   value={selectedProduct.description}
-                  onChange={(e) => setSelectedProduct({...selectedProduct, description: e.target.value})}
+                  onChange={(e) =>
+                    setSelectedProduct({
+                      ...selectedProduct,
+                      description: e.target.value,
+                    })
+                  }
                   rows={3}
                 />
               </div>
@@ -345,29 +423,39 @@ const Products = () => {
                 <Input
                   id="image"
                   value={selectedProduct.image}
-                  onChange={(e) => setSelectedProduct({...selectedProduct, image: e.target.value})}
+                  onChange={(e) =>
+                    setSelectedProduct({
+                      ...selectedProduct,
+                      image: e.target.value,
+                    })
+                  }
                 />
               </div>
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditDialogOpen(false)}
+            >
               Cancel
             </Button>
-            <Button onClick={handleSaveEdit}>
-              Save Changes
-            </Button>
+            <Button onClick={handleSaveEdit}>Save Changes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Delete Confirmation Dialog */}
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete "{selectedProduct?.name}". This action cannot be undone.
+              This will permanently delete "{selectedProduct?.name}". This
+              action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -369,7 +369,7 @@ export default function Family() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold">{t("nav.family")}</h1>

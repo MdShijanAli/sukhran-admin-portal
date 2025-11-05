@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -17,13 +17,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Search, Filter, Download, MoreHorizontal } from 'lucide-react';
-import { orders } from '@/data/mockData';
+} from "@/components/ui/table";
+import { Search, Filter, Download, MoreHorizontal } from "lucide-react";
+import { orders } from "@/data/mockData";
 
 export default function Orders() {
   const { t } = useTranslation();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   const filteredOrders = orders.filter(
     (order) =>
@@ -33,38 +33,38 @@ export default function Orders() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending':
-        return 'bg-warning/10 text-warning border-warning/20';
-      case 'processing':
-        return 'bg-primary/10 text-primary border-primary/20';
-      case 'delivered':
-        return 'bg-success/10 text-success border-success/20';
+      case "pending":
+        return "bg-warning/10 text-warning border-warning/20";
+      case "processing":
+        return "bg-primary/10 text-primary border-primary/20";
+      case "delivered":
+        return "bg-success/10 text-success border-success/20";
       default:
-        return 'bg-muted text-muted-foreground';
+        return "bg-muted text-muted-foreground";
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return new Date(dateString).toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className=" animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">{t('nav.orders')}</h1>
+          <h1 className="text-3xl font-bold">{t("nav.orders")}</h1>
           <p className="text-muted-foreground mt-1">
             Track and manage all customer orders
           </p>
         </div>
         <Button variant="outline" className="shadow-card">
           <Download className="mr-2 h-4 w-4" />
-          {t('common.export')}
+          {t("common.export")}
         </Button>
       </div>
 
@@ -87,7 +87,7 @@ export default function Orders() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-warning">
-              {orders.filter((o) => o.status === 'pending').length}
+              {orders.filter((o) => o.status === "pending").length}
             </div>
           </CardContent>
         </Card>
@@ -99,7 +99,7 @@ export default function Orders() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-primary">
-              {orders.filter((o) => o.status === 'processing').length}
+              {orders.filter((o) => o.status === "processing").length}
             </div>
           </CardContent>
         </Card>
@@ -111,7 +111,7 @@ export default function Orders() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-success">
-              {orders.filter((o) => o.status === 'delivered').length}
+              {orders.filter((o) => o.status === "delivered").length}
             </div>
           </CardContent>
         </Card>
@@ -135,7 +135,7 @@ export default function Orders() {
             </div>
             <Button variant="outline">
               <Filter className="mr-2 h-4 w-4" />
-              {t('common.filter')}
+              {t("common.filter")}
             </Button>
           </div>
 
@@ -169,7 +169,9 @@ export default function Orders() {
                     <TableCell className="max-w-[200px] truncate">
                       {order.items}
                     </TableCell>
-                    <TableCell className="font-medium">৳{order.total}</TableCell>
+                    <TableCell className="font-medium">
+                      ৳{order.total}
+                    </TableCell>
                     <TableCell>
                       <Badge variant="outline">{order.paymentMethod}</Badge>
                     </TableCell>
@@ -183,7 +185,9 @@ export default function Orders() {
                     </TableCell>
                     <TableCell>
                       {order.deliveryAgent || (
-                        <span className="text-muted-foreground">Unassigned</span>
+                        <span className="text-muted-foreground">
+                          Unassigned
+                        </span>
                       )}
                     </TableCell>
                     <TableCell className="text-right">

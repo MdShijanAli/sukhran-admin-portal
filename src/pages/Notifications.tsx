@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Table,
   TableBody,
@@ -7,18 +7,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,16 +28,16 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+} from "@/components/ui/alert-dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import {
   Search,
   Plus,
@@ -48,16 +48,16 @@ import {
   MessageSquare,
   AlertCircle,
   CheckCircle,
-} from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface Notification {
   id: string;
   title: string;
   message: string;
-  type: 'info' | 'success' | 'warning' | 'error';
-  channel: 'email' | 'push' | 'sms' | 'in-app';
-  status: 'sent' | 'pending' | 'failed';
+  type: "info" | "success" | "warning" | "error";
+  channel: "email" | "push" | "sms" | "in-app";
+  status: "sent" | "pending" | "failed";
   sentDate: string;
   recipient: string;
   isActive: boolean;
@@ -65,54 +65,56 @@ interface Notification {
 
 const mockNotifications: Notification[] = [
   {
-    id: '1',
-    title: 'Order Confirmation',
-    message: 'Your order #12345 has been confirmed',
-    type: 'success',
-    channel: 'email',
-    status: 'sent',
-    sentDate: '2024-01-15 10:30',
-    recipient: 'customer@example.com',
+    id: "1",
+    title: "Order Confirmation",
+    message: "Your order #12345 has been confirmed",
+    type: "success",
+    channel: "email",
+    status: "sent",
+    sentDate: "2024-01-15 10:30",
+    recipient: "customer@example.com",
     isActive: true,
   },
   {
-    id: '2',
-    title: 'Payment Failed',
-    message: 'Payment for order #12346 failed. Please update payment method.',
-    type: 'error',
-    channel: 'push',
-    status: 'sent',
-    sentDate: '2024-01-16 14:20',
-    recipient: 'user@example.com',
+    id: "2",
+    title: "Payment Failed",
+    message: "Payment for order #12346 failed. Please update payment method.",
+    type: "error",
+    channel: "push",
+    status: "sent",
+    sentDate: "2024-01-16 14:20",
+    recipient: "user@example.com",
     isActive: true,
   },
   {
-    id: '3',
-    title: 'Delivery Update',
-    message: 'Your package is out for delivery',
-    type: 'info',
-    channel: 'sms',
-    status: 'pending',
-    sentDate: '2024-01-17 09:15',
-    recipient: '+1234567890',
+    id: "3",
+    title: "Delivery Update",
+    message: "Your package is out for delivery",
+    type: "info",
+    channel: "sms",
+    status: "pending",
+    sentDate: "2024-01-17 09:15",
+    recipient: "+1234567890",
     isActive: true,
   },
 ];
 
 export default function Notifications() {
   const { t } = useTranslation();
-  const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [notifications, setNotifications] =
+    useState<Notification[]>(mockNotifications);
+  const [searchQuery, setSearchQuery] = useState("");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
+  const [selectedNotification, setSelectedNotification] =
+    useState<Notification | null>(null);
   const [formData, setFormData] = useState({
-    title: '',
-    message: '',
-    type: 'info' as 'info' | 'success' | 'warning' | 'error',
-    channel: 'email' as 'email' | 'push' | 'sms' | 'in-app',
-    recipient: '',
+    title: "",
+    message: "",
+    type: "info" as "info" | "success" | "warning" | "error",
+    channel: "email" as "email" | "push" | "sms" | "in-app",
+    recipient: "",
     isActive: true,
   });
 
@@ -125,11 +127,11 @@ export default function Notifications() {
 
   const handleCreateNotification = () => {
     setFormData({
-      title: '',
-      message: '',
-      type: 'info',
-      channel: 'email',
-      recipient: '',
+      title: "",
+      message: "",
+      type: "info",
+      channel: "email",
+      recipient: "",
       isActive: true,
     });
     setIsCreateDialogOpen(true);
@@ -161,26 +163,32 @@ export default function Notifications() {
             ? {
                 ...notif,
                 ...formData,
-                sentDate: new Date().toISOString().split('T')[0] + ' ' + new Date().toTimeString().split(' ')[0].slice(0, 5),
+                sentDate:
+                  new Date().toISOString().split("T")[0] +
+                  " " +
+                  new Date().toTimeString().split(" ")[0].slice(0, 5),
               }
             : notif
         )
       );
       toast({
-        title: 'Success',
-        description: 'Notification updated successfully',
+        title: "Success",
+        description: "Notification updated successfully",
       });
     } else {
       const newNotification: Notification = {
         id: Math.random().toString(36).substr(2, 9),
         ...formData,
-        status: 'pending',
-        sentDate: new Date().toISOString().split('T')[0] + ' ' + new Date().toTimeString().split(' ')[0].slice(0, 5),
+        status: "pending",
+        sentDate:
+          new Date().toISOString().split("T")[0] +
+          " " +
+          new Date().toTimeString().split(" ")[0].slice(0, 5),
       };
       setNotifications([newNotification, ...notifications]);
       toast({
-        title: 'Success',
-        description: 'Notification created successfully',
+        title: "Success",
+        description: "Notification created successfully",
       });
     }
     setIsCreateDialogOpen(false);
@@ -190,10 +198,12 @@ export default function Notifications() {
 
   const confirmDelete = () => {
     if (selectedNotification) {
-      setNotifications(notifications.filter((notif) => notif.id !== selectedNotification.id));
+      setNotifications(
+        notifications.filter((notif) => notif.id !== selectedNotification.id)
+      );
       toast({
-        title: 'Success',
-        description: 'Notification deleted successfully',
+        title: "Success",
+        description: "Notification deleted successfully",
       });
     }
     setIsDeleteDialogOpen(false);
@@ -207,46 +217,46 @@ export default function Notifications() {
       )
     );
     toast({
-      title: 'Success',
-      description: 'Notification status updated',
+      title: "Success",
+      description: "Notification status updated",
     });
   };
 
   const getTypeBadgeVariant = (type: string) => {
     switch (type) {
-      case 'success':
-        return 'default';
-      case 'error':
-        return 'destructive';
-      case 'warning':
-        return 'secondary';
+      case "success":
+        return "default";
+      case "error":
+        return "destructive";
+      case "warning":
+        return "secondary";
       default:
-        return 'outline';
+        return "outline";
     }
   };
 
   const getStatusBadgeVariant = (status: string) => {
     switch (status) {
-      case 'sent':
-        return 'default';
-      case 'pending':
-        return 'secondary';
-      case 'failed':
-        return 'destructive';
+      case "sent":
+        return "default";
+      case "pending":
+        return "secondary";
+      case "failed":
+        return "destructive";
       default:
-        return 'outline';
+        return "outline";
     }
   };
 
   const getChannelIcon = (channel: string) => {
     switch (channel) {
-      case 'email':
+      case "email":
         return <Mail className="h-3 w-3 mr-1" />;
-      case 'push':
+      case "push":
         return <Bell className="h-3 w-3 mr-1" />;
-      case 'sms':
+      case "sms":
         return <MessageSquare className="h-3 w-3 mr-1" />;
-      case 'in-app':
+      case "in-app":
         return <AlertCircle className="h-3 w-3 mr-1" />;
       default:
         return null;
@@ -254,7 +264,7 @@ export default function Notifications() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Notifications</h1>
@@ -297,15 +307,22 @@ export default function Notifications() {
           <TableBody>
             {filteredNotifications.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                <TableCell
+                  colSpan={8}
+                  className="text-center py-8 text-muted-foreground"
+                >
                   No notifications found
                 </TableCell>
               </TableRow>
             ) : (
               filteredNotifications.map((notification) => (
                 <TableRow key={notification.id}>
-                  <TableCell className="font-medium">{notification.title}</TableCell>
-                  <TableCell className="max-w-xs truncate">{notification.message}</TableCell>
+                  <TableCell className="font-medium">
+                    {notification.title}
+                  </TableCell>
+                  <TableCell className="max-w-xs truncate">
+                    {notification.message}
+                  </TableCell>
                   <TableCell>
                     <Badge variant={getTypeBadgeVariant(notification.type)}>
                       {notification.type}
@@ -326,7 +343,9 @@ export default function Notifications() {
                   <TableCell>
                     <Switch
                       checked={notification.isActive}
-                      onCheckedChange={() => toggleNotificationStatus(notification.id)}
+                      onCheckedChange={() =>
+                        toggleNotificationStatus(notification.id)
+                      }
                     />
                   </TableCell>
                   <TableCell className="text-right">
@@ -365,7 +384,9 @@ export default function Notifications() {
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>
-              {selectedNotification ? 'Edit Notification' : 'Create Notification'}
+              {selectedNotification
+                ? "Edit Notification"
+                : "Create Notification"}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
@@ -374,7 +395,9 @@ export default function Notifications() {
               <Input
                 id="title"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
                 placeholder="Enter notification title"
               />
             </div>
@@ -383,7 +406,9 @@ export default function Notifications() {
               <Textarea
                 id="message"
                 value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, message: e.target.value })
+                }
                 placeholder="Enter notification message"
                 rows={4}
               />
@@ -394,7 +419,10 @@ export default function Notifications() {
                 <Select
                   value={formData.type}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, type: value as 'info' | 'success' | 'warning' | 'error' })
+                    setFormData({
+                      ...formData,
+                      type: value as "info" | "success" | "warning" | "error",
+                    })
                   }
                 >
                   <SelectTrigger>
@@ -413,7 +441,10 @@ export default function Notifications() {
                 <Select
                   value={formData.channel}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, channel: value as 'email' | 'push' | 'sms' | 'in-app' })
+                    setFormData({
+                      ...formData,
+                      channel: value as "email" | "push" | "sms" | "in-app",
+                    })
                   }
                 >
                   <SelectTrigger>
@@ -433,7 +464,9 @@ export default function Notifications() {
               <Input
                 id="recipient"
                 value={formData.recipient}
-                onChange={(e) => setFormData({ ...formData, recipient: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, recipient: e.target.value })
+                }
                 placeholder="Enter recipient (email, phone, or user ID)"
               />
             </div>
@@ -441,7 +474,9 @@ export default function Notifications() {
               <Switch
                 id="isActive"
                 checked={formData.isActive}
-                onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
+                onCheckedChange={(checked) =>
+                  setFormData({ ...formData, isActive: checked })
+                }
               />
               <Label htmlFor="isActive">Active</Label>
             </div>
@@ -457,24 +492,30 @@ export default function Notifications() {
               Cancel
             </Button>
             <Button onClick={handleSaveNotification}>
-              {selectedNotification ? 'Save Changes' : 'Create'}
+              {selectedNotification ? "Save Changes" : "Create"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Delete Confirmation Dialog */}
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Notification</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this notification? This action cannot be undone.
+              Are you sure you want to delete this notification? This action
+              cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete}>Delete</AlertDialogAction>
+            <AlertDialogAction onClick={confirmDelete}>
+              Delete
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

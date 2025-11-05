@@ -1,38 +1,52 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { 
-  Building2, 
-  Bell, 
-  Settings2, 
-  CreditCard, 
-  Mail, 
-  Globe, 
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Building2,
+  Bell,
+  Settings2,
+  CreditCard,
+  Mail,
+  Globe,
   Truck,
   ShoppingCart,
   Clock,
-  DollarSign
-} from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+  DollarSign,
+} from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 export default function Settings() {
   const { t } = useTranslation();
 
   // Business Settings
-  const [businessName, setBusinessName] = useState('My E-Commerce Store');
-  const [businessEmail, setBusinessEmail] = useState('business@example.com');
-  const [businessPhone, setBusinessPhone] = useState('+880 1712-345678');
-  const [businessAddress, setBusinessAddress] = useState('123 Main Street, Dhaka');
-  const [taxId, setTaxId] = useState('TAX123456');
-  const [currency, setCurrency] = useState('BDT');
-  const [timezone, setTimezone] = useState('Asia/Dhaka');
+  const [businessName, setBusinessName] = useState("My E-Commerce Store");
+  const [businessEmail, setBusinessEmail] = useState("business@example.com");
+  const [businessPhone, setBusinessPhone] = useState("+880 1712-345678");
+  const [businessAddress, setBusinessAddress] = useState(
+    "123 Main Street, Dhaka"
+  );
+  const [taxId, setTaxId] = useState("TAX123456");
+  const [currency, setCurrency] = useState("BDT");
+  const [timezone, setTimezone] = useState("Asia/Dhaka");
 
   // Notification Settings
   const [emailNotifications, setEmailNotifications] = useState(true);
@@ -49,28 +63,29 @@ export default function Settings() {
   const [allowGuestCheckout, setAllowGuestCheckout] = useState(true);
   const [enableReviews, setEnableReviews] = useState(true);
   const [enableWishlist, setEnableWishlist] = useState(true);
-  const [lowStockThreshold, setLowStockThreshold] = useState('10');
-  const [orderPrefix, setOrderPrefix] = useState('ORD-');
+  const [lowStockThreshold, setLowStockThreshold] = useState("10");
+  const [orderPrefix, setOrderPrefix] = useState("ORD-");
 
   // Payment Settings
-  const [paymentGateway, setPaymentGateway] = useState('stripe');
+  const [paymentGateway, setPaymentGateway] = useState("stripe");
   const [enableCOD, setEnableCOD] = useState(true);
   const [enableBankTransfer, setEnableBankTransfer] = useState(true);
-  const [minOrderAmount, setMinOrderAmount] = useState('100');
+  const [minOrderAmount, setMinOrderAmount] = useState("100");
 
   // Shipping Settings
-  const [freeShippingThreshold, setFreeShippingThreshold] = useState('1000');
-  const [standardShippingCost, setStandardShippingCost] = useState('60');
-  const [expressShippingCost, setExpressShippingCost] = useState('150');
-  const [defaultShippingMethod, setDefaultShippingMethod] = useState('standard');
+  const [freeShippingThreshold, setFreeShippingThreshold] = useState("1000");
+  const [standardShippingCost, setStandardShippingCost] = useState("60");
+  const [expressShippingCost, setExpressShippingCost] = useState("150");
+  const [defaultShippingMethod, setDefaultShippingMethod] =
+    useState("standard");
 
   // Email Settings
-  const [smtpHost, setSmtpHost] = useState('smtp.gmail.com');
-  const [smtpPort, setSmtpPort] = useState('587');
-  const [smtpUsername, setSmtpUsername] = useState('');
-  const [smtpPassword, setSmtpPassword] = useState('');
-  const [fromEmail, setFromEmail] = useState('noreply@example.com');
-  const [fromName, setFromName] = useState('My Store');
+  const [smtpHost, setSmtpHost] = useState("smtp.gmail.com");
+  const [smtpPort, setSmtpPort] = useState("587");
+  const [smtpUsername, setSmtpUsername] = useState("");
+  const [smtpPassword, setSmtpPassword] = useState("");
+  const [fromEmail, setFromEmail] = useState("noreply@example.com");
+  const [fromName, setFromName] = useState("My Store");
 
   const handleSaveBusinessSettings = () => {
     toast({
@@ -122,7 +137,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="space-y-6 max-w-6xl">
+    <div className=" max-w-6xl">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
         <p className="text-muted-foreground mt-1">
@@ -203,7 +218,7 @@ export default function Settings() {
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="businessAddress">Business Address</Label>
                 <Textarea
@@ -222,7 +237,9 @@ export default function Settings() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="BDT">BDT - Bangladeshi Taka</SelectItem>
+                      <SelectItem value="BDT">
+                        BDT - Bangladeshi Taka
+                      </SelectItem>
                       <SelectItem value="USD">USD - US Dollar</SelectItem>
                       <SelectItem value="EUR">EUR - Euro</SelectItem>
                       <SelectItem value="GBP">GBP - British Pound</SelectItem>
@@ -236,10 +253,16 @@ export default function Settings() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Asia/Dhaka">Asia/Dhaka (GMT+6)</SelectItem>
+                      <SelectItem value="Asia/Dhaka">
+                        Asia/Dhaka (GMT+6)
+                      </SelectItem>
                       <SelectItem value="UTC">UTC (GMT+0)</SelectItem>
-                      <SelectItem value="America/New_York">America/New York (EST)</SelectItem>
-                      <SelectItem value="Europe/London">Europe/London (GMT)</SelectItem>
+                      <SelectItem value="America/New_York">
+                        America/New York (EST)
+                      </SelectItem>
+                      <SelectItem value="Europe/London">
+                        Europe/London (GMT)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -264,7 +287,7 @@ export default function Settings() {
                 Choose what notifications you want to receive
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label>Email Notifications</Label>
@@ -362,7 +385,7 @@ export default function Settings() {
                 Configure system behavior and preferences
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
@@ -482,11 +505,16 @@ export default function Settings() {
                 Configure payment methods and gateways
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="">
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="paymentGateway">Primary Payment Gateway</Label>
-                  <Select value={paymentGateway} onValueChange={setPaymentGateway}>
+                  <Label htmlFor="paymentGateway">
+                    Primary Payment Gateway
+                  </Label>
+                  <Select
+                    value={paymentGateway}
+                    onValueChange={setPaymentGateway}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -506,10 +534,7 @@ export default function Settings() {
                       Allow customers to pay with cash on delivery
                     </p>
                   </div>
-                  <Switch
-                    checked={enableCOD}
-                    onCheckedChange={setEnableCOD}
-                  />
+                  <Switch checked={enableCOD} onCheckedChange={setEnableCOD} />
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -526,7 +551,9 @@ export default function Settings() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="minOrderAmount">Minimum Order Amount (৳)</Label>
+                  <Label htmlFor="minOrderAmount">
+                    Minimum Order Amount (৳)
+                  </Label>
                   <Input
                     id="minOrderAmount"
                     type="number"
@@ -557,8 +584,13 @@ export default function Settings() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="defaultShippingMethod">Default Shipping Method</Label>
-                <Select value={defaultShippingMethod} onValueChange={setDefaultShippingMethod}>
+                <Label htmlFor="defaultShippingMethod">
+                  Default Shipping Method
+                </Label>
+                <Select
+                  value={defaultShippingMethod}
+                  onValueChange={setDefaultShippingMethod}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -572,7 +604,9 @@ export default function Settings() {
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="standardShippingCost">Standard Shipping Cost (৳)</Label>
+                  <Label htmlFor="standardShippingCost">
+                    Standard Shipping Cost (৳)
+                  </Label>
                   <Input
                     id="standardShippingCost"
                     type="number"
@@ -581,7 +615,9 @@ export default function Settings() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="expressShippingCost">Express Shipping Cost (৳)</Label>
+                  <Label htmlFor="expressShippingCost">
+                    Express Shipping Cost (৳)
+                  </Label>
                   <Input
                     id="expressShippingCost"
                     type="number"
@@ -592,7 +628,9 @@ export default function Settings() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="freeShippingThreshold">Free Shipping Threshold (৳)</Label>
+                <Label htmlFor="freeShippingThreshold">
+                  Free Shipping Threshold (৳)
+                </Label>
                 <Input
                   id="freeShippingThreshold"
                   type="number"

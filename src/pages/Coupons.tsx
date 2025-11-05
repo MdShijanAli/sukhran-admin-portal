@@ -212,7 +212,7 @@ const Coupons = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Coupon Management</h1>
         <Button onClick={() => handleOpenDialog()}>

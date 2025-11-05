@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import {
   TrendingUp,
   DollarSign,
@@ -7,11 +7,17 @@ import {
   Package,
   Calendar,
   Download,
-  FileText
-} from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { reportTypes } from '@/data/mockData';
+  FileText,
+} from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { reportTypes } from "@/data/mockData";
 
 const iconMap = {
   TrendingUp,
@@ -26,16 +32,18 @@ const Reports = () => {
   const { t } = useTranslation();
 
   const handleGenerateReport = (reportId: string) => {
-    console.log('Generating report:', reportId);
+    console.log("Generating report:", reportId);
     // Report generation logic here
   };
 
   return (
-    <div className="space-y-6">
+    <div className="">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Reports & Analytics</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Reports & Analytics
+          </h1>
           <p className="text-muted-foreground mt-1">
             Generate and export detailed business reports
           </p>
@@ -55,7 +63,9 @@ const Reports = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">142</div>
-            <p className="text-xs text-muted-foreground">Generated this month</p>
+            <p className="text-xs text-muted-foreground">
+              Generated this month
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -65,7 +75,9 @@ const Reports = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground">Auto-generated reports</p>
+            <p className="text-xs text-muted-foreground">
+              Auto-generated reports
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -97,7 +109,10 @@ const Reports = () => {
           {reportTypes.map((report) => {
             const IconComponent = iconMap[report.icon as keyof typeof iconMap];
             return (
-              <Card key={report.id} className="group hover:shadow-lg transition-all">
+              <Card
+                key={report.id}
+                className="group hover:shadow-lg transition-all"
+              >
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">

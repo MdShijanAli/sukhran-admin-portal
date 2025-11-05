@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Table,
   TableBody,
@@ -7,17 +7,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,20 +27,34 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+} from "@/components/ui/alert-dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, UserPlus, Edit, Trash2, Shield, Settings, Lock } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Search,
+  UserPlus,
+  Edit,
+  Trash2,
+  Shield,
+  Settings,
+  Lock,
+} from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface Permission {
   id: string;
@@ -59,66 +73,177 @@ interface Role {
 
 const availablePermissions: Permission[] = [
   // User Management
-  { id: 'user_view', name: 'View Users', description: 'Can view user list and details', category: 'Users' },
-  { id: 'user_create', name: 'Create Users', description: 'Can create new users', category: 'Users' },
-  { id: 'user_edit', name: 'Edit Users', description: 'Can edit user information', category: 'Users' },
-  { id: 'user_delete', name: 'Delete Users', description: 'Can delete users', category: 'Users' },
-  
+  {
+    id: "user_view",
+    name: "View Users",
+    description: "Can view user list and details",
+    category: "Users",
+  },
+  {
+    id: "user_create",
+    name: "Create Users",
+    description: "Can create new users",
+    category: "Users",
+  },
+  {
+    id: "user_edit",
+    name: "Edit Users",
+    description: "Can edit user information",
+    category: "Users",
+  },
+  {
+    id: "user_delete",
+    name: "Delete Users",
+    description: "Can delete users",
+    category: "Users",
+  },
+
   // Product Management
-  { id: 'product_view', name: 'View Products', description: 'Can view product list', category: 'Products' },
-  { id: 'product_create', name: 'Create Products', description: 'Can create new products', category: 'Products' },
-  { id: 'product_edit', name: 'Edit Products', description: 'Can edit product information', category: 'Products' },
-  { id: 'product_delete', name: 'Delete Products', description: 'Can delete products', category: 'Products' },
-  
+  {
+    id: "product_view",
+    name: "View Products",
+    description: "Can view product list",
+    category: "Products",
+  },
+  {
+    id: "product_create",
+    name: "Create Products",
+    description: "Can create new products",
+    category: "Products",
+  },
+  {
+    id: "product_edit",
+    name: "Edit Products",
+    description: "Can edit product information",
+    category: "Products",
+  },
+  {
+    id: "product_delete",
+    name: "Delete Products",
+    description: "Can delete products",
+    category: "Products",
+  },
+
   // Order Management
-  { id: 'order_view', name: 'View Orders', description: 'Can view order list', category: 'Orders' },
-  { id: 'order_edit', name: 'Edit Orders', description: 'Can edit order status', category: 'Orders' },
-  { id: 'order_delete', name: 'Delete Orders', description: 'Can delete orders', category: 'Orders' },
-  
+  {
+    id: "order_view",
+    name: "View Orders",
+    description: "Can view order list",
+    category: "Orders",
+  },
+  {
+    id: "order_edit",
+    name: "Edit Orders",
+    description: "Can edit order status",
+    category: "Orders",
+  },
+  {
+    id: "order_delete",
+    name: "Delete Orders",
+    description: "Can delete orders",
+    category: "Orders",
+  },
+
   // Financial
-  { id: 'financial_view', name: 'View Financial', description: 'Can view financial reports', category: 'Financial' },
-  { id: 'financial_manage', name: 'Manage Financial', description: 'Can manage financial settings', category: 'Financial' },
-  
+  {
+    id: "financial_view",
+    name: "View Financial",
+    description: "Can view financial reports",
+    category: "Financial",
+  },
+  {
+    id: "financial_manage",
+    name: "Manage Financial",
+    description: "Can manage financial settings",
+    category: "Financial",
+  },
+
   // Delivery
-  { id: 'delivery_view', name: 'View Deliveries', description: 'Can view delivery list', category: 'Delivery' },
-  { id: 'delivery_manage', name: 'Manage Deliveries', description: 'Can manage delivery status', category: 'Delivery' },
-  
+  {
+    id: "delivery_view",
+    name: "View Deliveries",
+    description: "Can view delivery list",
+    category: "Delivery",
+  },
+  {
+    id: "delivery_manage",
+    name: "Manage Deliveries",
+    description: "Can manage delivery status",
+    category: "Delivery",
+  },
+
   // Reports
-  { id: 'reports_view', name: 'View Reports', description: 'Can view all reports', category: 'Reports' },
-  { id: 'reports_export', name: 'Export Reports', description: 'Can export reports', category: 'Reports' },
-  
+  {
+    id: "reports_view",
+    name: "View Reports",
+    description: "Can view all reports",
+    category: "Reports",
+  },
+  {
+    id: "reports_export",
+    name: "Export Reports",
+    description: "Can export reports",
+    category: "Reports",
+  },
+
   // Settings
-  { id: 'settings_view', name: 'View Settings', description: 'Can view settings', category: 'Settings' },
-  { id: 'settings_edit', name: 'Edit Settings', description: 'Can modify system settings', category: 'Settings' },
-  
+  {
+    id: "settings_view",
+    name: "View Settings",
+    description: "Can view settings",
+    category: "Settings",
+  },
+  {
+    id: "settings_edit",
+    name: "Edit Settings",
+    description: "Can modify system settings",
+    category: "Settings",
+  },
+
   // Roles & Permissions
-  { id: 'role_view', name: 'View Roles', description: 'Can view roles', category: 'Roles' },
-  { id: 'role_manage', name: 'Manage Roles', description: 'Can create, edit, delete roles', category: 'Roles' },
+  {
+    id: "role_view",
+    name: "View Roles",
+    description: "Can view roles",
+    category: "Roles",
+  },
+  {
+    id: "role_manage",
+    name: "Manage Roles",
+    description: "Can create, edit, delete roles",
+    category: "Roles",
+  },
 ];
 
 const mockRoles: Role[] = [
   {
-    id: '1',
-    name: 'Admin',
-    description: 'Full system access with all permissions',
-    permissionIds: availablePermissions.map(p => p.id),
+    id: "1",
+    name: "Admin",
+    description: "Full system access with all permissions",
+    permissionIds: availablePermissions.map((p) => p.id),
     userCount: 5,
   },
   {
-    id: '2',
-    name: 'Moderator',
-    description: 'Can manage products, orders, and deliveries',
+    id: "2",
+    name: "Moderator",
+    description: "Can manage products, orders, and deliveries",
     permissionIds: [
-      'user_view', 'product_view', 'product_create', 'product_edit',
-      'order_view', 'order_edit', 'delivery_view', 'delivery_manage'
+      "user_view",
+      "product_view",
+      "product_create",
+      "product_edit",
+      "order_view",
+      "order_edit",
+      "delivery_view",
+      "delivery_manage",
     ],
     userCount: 12,
   },
   {
-    id: '3',
-    name: 'User',
-    description: 'Basic viewing permissions only',
-    permissionIds: ['product_view', 'order_view'],
+    id: "3",
+    name: "User",
+    description: "Basic viewing permissions only",
+    permissionIds: ["product_view", "order_view"],
     userCount: 143,
   },
 ];
@@ -127,35 +252,35 @@ interface UserRole {
   id: string;
   userName: string;
   email: string;
-  role: 'admin' | 'moderator' | 'user';
+  role: "admin" | "moderator" | "user";
   assignedDate: string;
   assignedBy: string;
 }
 
 const mockUserRoles: UserRole[] = [
   {
-    id: '1',
-    userName: 'John Doe',
-    email: 'john@example.com',
-    role: 'admin',
-    assignedDate: '2024-01-15',
-    assignedBy: 'System',
+    id: "1",
+    userName: "John Doe",
+    email: "john@example.com",
+    role: "admin",
+    assignedDate: "2024-01-15",
+    assignedBy: "System",
   },
   {
-    id: '2',
-    userName: 'Jane Smith',
-    email: 'jane@example.com',
-    role: 'moderator',
-    assignedDate: '2024-02-20',
-    assignedBy: 'John Doe',
+    id: "2",
+    userName: "Jane Smith",
+    email: "jane@example.com",
+    role: "moderator",
+    assignedDate: "2024-02-20",
+    assignedBy: "John Doe",
   },
   {
-    id: '3',
-    userName: 'Bob Wilson',
-    email: 'bob@example.com',
-    role: 'user',
-    assignedDate: '2024-03-10',
-    assignedBy: 'Jane Smith',
+    id: "3",
+    userName: "Bob Wilson",
+    email: "bob@example.com",
+    role: "user",
+    assignedDate: "2024-03-10",
+    assignedBy: "Jane Smith",
   },
 ];
 
@@ -163,22 +288,24 @@ export default function RoleManagement() {
   const { t } = useTranslation();
   const [roles, setRoles] = useState<Role[]>(mockRoles);
   const [userRoles, setUserRoles] = useState<UserRole[]>(mockUserRoles);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
   const [isDeleteRoleDialogOpen, setIsDeleteRoleDialogOpen] = useState(false);
-  const [selectedUserRole, setSelectedUserRole] = useState<UserRole | null>(null);
+  const [selectedUserRole, setSelectedUserRole] = useState<UserRole | null>(
+    null
+  );
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [formData, setFormData] = useState({
-    userName: '',
-    email: '',
-    role: 'user' as 'admin' | 'moderator' | 'user',
+    userName: "",
+    email: "",
+    role: "user" as "admin" | "moderator" | "user",
   });
   const [roleFormData, setRoleFormData] = useState({
-    name: '',
-    description: '',
+    name: "",
+    description: "",
     permissionIds: [] as string[],
   });
 
@@ -190,7 +317,7 @@ export default function RoleManagement() {
   );
 
   const handleAssignRole = () => {
-    setFormData({ userName: '', email: '', role: 'user' });
+    setFormData({ userName: "", email: "", role: "user" });
     setIsAssignDialogOpen(true);
   };
 
@@ -214,25 +341,29 @@ export default function RoleManagement() {
       setUserRoles(
         userRoles.map((ur) =>
           ur.id === selectedUserRole.id
-            ? { ...ur, ...formData, assignedDate: new Date().toISOString().split('T')[0] }
+            ? {
+                ...ur,
+                ...formData,
+                assignedDate: new Date().toISOString().split("T")[0],
+              }
             : ur
         )
       );
       toast({
-        title: 'Success',
-        description: 'Role updated successfully',
+        title: "Success",
+        description: "Role updated successfully",
       });
     } else {
       const newUserRole: UserRole = {
         id: Math.random().toString(36).substr(2, 9),
         ...formData,
-        assignedDate: new Date().toISOString().split('T')[0],
-        assignedBy: 'Current User',
+        assignedDate: new Date().toISOString().split("T")[0],
+        assignedBy: "Current User",
       };
       setUserRoles([...userRoles, newUserRole]);
       toast({
-        title: 'Success',
-        description: 'Role assigned successfully',
+        title: "Success",
+        description: "Role assigned successfully",
       });
     }
     setIsAssignDialogOpen(false);
@@ -244,8 +375,8 @@ export default function RoleManagement() {
     if (selectedUserRole) {
       setUserRoles(userRoles.filter((ur) => ur.id !== selectedUserRole.id));
       toast({
-        title: 'Success',
-        description: 'Role removed successfully',
+        title: "Success",
+        description: "Role removed successfully",
       });
     }
     setIsDeleteDialogOpen(false);
@@ -254,7 +385,7 @@ export default function RoleManagement() {
 
   const handleCreateRole = () => {
     setSelectedRole(null);
-    setRoleFormData({ name: '', description: '', permissionIds: [] });
+    setRoleFormData({ name: "", description: "", permissionIds: [] });
     setIsRoleDialogOpen(true);
   };
 
@@ -281,8 +412,8 @@ export default function RoleManagement() {
         )
       );
       toast({
-        title: 'Success',
-        description: 'Role updated successfully',
+        title: "Success",
+        description: "Role updated successfully",
       });
     } else {
       const newRole: Role = {
@@ -292,8 +423,8 @@ export default function RoleManagement() {
       };
       setRoles([...roles, newRole]);
       toast({
-        title: 'Success',
-        description: 'Role created successfully',
+        title: "Success",
+        description: "Role created successfully",
       });
     }
     setIsRoleDialogOpen(false);
@@ -304,8 +435,8 @@ export default function RoleManagement() {
     if (selectedRole) {
       setRoles(roles.filter((r) => r.id !== selectedRole.id));
       toast({
-        title: 'Success',
-        description: 'Role deleted successfully',
+        title: "Success",
+        description: "Role deleted successfully",
       });
     }
     setIsDeleteRoleDialogOpen(false);
@@ -323,12 +454,12 @@ export default function RoleManagement() {
 
   const getRoleBadgeVariant = (role: string) => {
     switch (role) {
-      case 'admin':
-        return 'destructive';
-      case 'moderator':
-        return 'default';
+      case "admin":
+        return "destructive";
+      case "moderator":
+        return "default";
       default:
-        return 'secondary';
+        return "secondary";
     }
   };
 
@@ -344,7 +475,7 @@ export default function RoleManagement() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Role Management</h1>
@@ -354,7 +485,7 @@ export default function RoleManagement() {
         </div>
       </div>
 
-      <Tabs defaultValue="users" className="space-y-6">
+      <Tabs defaultValue="users" className="">
         <TabsList>
           <TabsTrigger value="users" className="gap-2">
             <UserPlus className="h-4 w-4" />
@@ -366,7 +497,7 @@ export default function RoleManagement() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="users" className="space-y-6">
+        <TabsContent value="users" className="">
           <div className="flex items-center justify-between">
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -384,64 +515,69 @@ export default function RoleManagement() {
           </div>
 
           <div className="rounded-lg border bg-card">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>User Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Assigned Date</TableHead>
-              <TableHead>Assigned By</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredUserRoles.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                  No user roles found
-                </TableCell>
-              </TableRow>
-            ) : (
-              filteredUserRoles.map((userRole) => (
-                <TableRow key={userRole.id}>
-                  <TableCell className="font-medium">{userRole.userName}</TableCell>
-                  <TableCell>{userRole.email}</TableCell>
-                  <TableCell>
-                    <Badge variant={getRoleBadgeVariant(userRole.role)}>
-                      <Shield className="h-3 w-3 mr-1" />
-                      {userRole.role}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{userRole.assignedDate}</TableCell>
-                  <TableCell>{userRole.assignedBy}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleEditUserRole(userRole)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDeleteUserRole(userRole)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>User Name</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead>Assigned Date</TableHead>
+                  <TableHead>Assigned By</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredUserRoles.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={6}
+                      className="text-center py-8 text-muted-foreground"
+                    >
+                      No user roles found
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredUserRoles.map((userRole) => (
+                    <TableRow key={userRole.id}>
+                      <TableCell className="font-medium">
+                        {userRole.userName}
+                      </TableCell>
+                      <TableCell>{userRole.email}</TableCell>
+                      <TableCell>
+                        <Badge variant={getRoleBadgeVariant(userRole.role)}>
+                          <Shield className="h-3 w-3 mr-1" />
+                          {userRole.role}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{userRole.assignedDate}</TableCell>
+                      <TableCell>{userRole.assignedBy}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleEditUserRole(userRole)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteUserRole(userRole)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
           </div>
         </TabsContent>
 
-        <TabsContent value="roles" className="space-y-6">
+        <TabsContent value="roles" className="">
           <div className="flex items-center justify-end">
             <Button onClick={handleCreateRole} className="gap-2">
               <Shield className="h-4 w-4" />
@@ -470,7 +606,9 @@ export default function RoleManagement() {
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Permissions</span>
-                    <Badge variant="secondary">{role.permissionIds.length}</Badge>
+                    <Badge variant="secondary">
+                      {role.permissionIds.length}
+                    </Badge>
                   </div>
                   <div className="flex gap-2 pt-2">
                     <Button
@@ -509,7 +647,9 @@ export default function RoleManagement() {
               <Input
                 id="userName"
                 value={formData.userName}
-                onChange={(e) => setFormData({ ...formData, userName: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, userName: e.target.value })
+                }
                 placeholder="Enter user name"
               />
             </div>
@@ -519,7 +659,9 @@ export default function RoleManagement() {
                 id="email"
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 placeholder="Enter email"
               />
             </div>
@@ -528,7 +670,10 @@ export default function RoleManagement() {
               <Select
                 value={formData.role}
                 onValueChange={(value) =>
-                  setFormData({ ...formData, role: value as 'admin' | 'moderator' | 'user' })
+                  setFormData({
+                    ...formData,
+                    role: value as "admin" | "moderator" | "user",
+                  })
                 }
               >
                 <SelectTrigger>
@@ -543,7 +688,10 @@ export default function RoleManagement() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAssignDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsAssignDialogOpen(false)}
+            >
               Cancel
             </Button>
             <Button onClick={handleSaveRole}>Assign Role</Button>
@@ -563,7 +711,9 @@ export default function RoleManagement() {
               <Input
                 id="editUserName"
                 value={formData.userName}
-                onChange={(e) => setFormData({ ...formData, userName: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, userName: e.target.value })
+                }
                 placeholder="Enter user name"
               />
             </div>
@@ -573,7 +723,9 @@ export default function RoleManagement() {
                 id="editEmail"
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 placeholder="Enter email"
               />
             </div>
@@ -582,7 +734,10 @@ export default function RoleManagement() {
               <Select
                 value={formData.role}
                 onValueChange={(value) =>
-                  setFormData({ ...formData, role: value as 'admin' | 'moderator' | 'user' })
+                  setFormData({
+                    ...formData,
+                    role: value as "admin" | "moderator" | "user",
+                  })
                 }
               >
                 <SelectTrigger>
@@ -597,7 +752,10 @@ export default function RoleManagement() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditDialogOpen(false)}
+            >
               Cancel
             </Button>
             <Button onClick={handleSaveRole}>Save Changes</Button>
@@ -611,10 +769,10 @@ export default function RoleManagement() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Lock className="h-5 w-5" />
-              {selectedRole ? 'Edit Role' : 'Create Role'}
+              {selectedRole ? "Edit Role" : "Create Role"}
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-6">
+          <div className="">
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="roleName">Role Name</Label>
@@ -633,7 +791,10 @@ export default function RoleManagement() {
                   id="roleDescription"
                   value={roleFormData.description}
                   onChange={(e) =>
-                    setRoleFormData({ ...roleFormData, description: e.target.value })
+                    setRoleFormData({
+                      ...roleFormData,
+                      description: e.target.value,
+                    })
                   }
                   placeholder="Brief description of the role"
                 />
@@ -647,84 +808,104 @@ export default function RoleManagement() {
                   {roleFormData.permissionIds.length} selected
                 </Badge>
               </div>
-              <div className="space-y-6">
-                {Object.entries(groupPermissionsByCategory()).map(([category, permissions]) => (
-                  <div key={category} className="space-y-3">
-                    <h4 className="font-medium text-sm flex items-center gap-2">
-                      <Shield className="h-4 w-4" />
-                      {category}
-                    </h4>
-                    <div className="grid gap-3 ml-6">
-                      {permissions.map((permission) => (
-                        <div
-                          key={permission.id}
-                          className="flex items-start space-x-3 rounded-lg border p-3 hover:bg-accent/50 transition-colors"
-                        >
-                          <Checkbox
-                            id={permission.id}
-                            checked={roleFormData.permissionIds.includes(permission.id)}
-                            onCheckedChange={() => togglePermission(permission.id)}
-                          />
-                          <div className="flex-1 space-y-1">
-                            <Label
-                              htmlFor={permission.id}
-                              className="text-sm font-medium leading-none cursor-pointer"
-                            >
-                              {permission.name}
-                            </Label>
-                            <p className="text-sm text-muted-foreground">
-                              {permission.description}
-                            </p>
+              <div className="">
+                {Object.entries(groupPermissionsByCategory()).map(
+                  ([category, permissions]) => (
+                    <div key={category} className="space-y-3">
+                      <h4 className="font-medium text-sm flex items-center gap-2">
+                        <Shield className="h-4 w-4" />
+                        {category}
+                      </h4>
+                      <div className="grid gap-3 ml-6">
+                        {permissions.map((permission) => (
+                          <div
+                            key={permission.id}
+                            className="flex items-start space-x-3 rounded-lg border p-3 hover:bg-accent/50 transition-colors"
+                          >
+                            <Checkbox
+                              id={permission.id}
+                              checked={roleFormData.permissionIds.includes(
+                                permission.id
+                              )}
+                              onCheckedChange={() =>
+                                togglePermission(permission.id)
+                              }
+                            />
+                            <div className="flex-1 space-y-1">
+                              <Label
+                                htmlFor={permission.id}
+                                className="text-sm font-medium leading-none cursor-pointer"
+                              >
+                                {permission.name}
+                              </Label>
+                              <p className="text-sm text-muted-foreground">
+                                {permission.description}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                )}
               </div>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsRoleDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsRoleDialogOpen(false)}
+            >
               Cancel
             </Button>
             <Button onClick={handleSaveRolePermissions}>
-              {selectedRole ? 'Save Changes' : 'Create Role'}
+              {selectedRole ? "Save Changes" : "Create Role"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Delete User Role Dialog */}
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Remove Role</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to remove the role from {selectedUserRole?.userName}? This
-              action cannot be undone.
+              Are you sure you want to remove the role from{" "}
+              {selectedUserRole?.userName}? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete}>Remove</AlertDialogAction>
+            <AlertDialogAction onClick={confirmDelete}>
+              Remove
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
       {/* Delete Role Dialog */}
-      <AlertDialog open={isDeleteRoleDialogOpen} onOpenChange={setIsDeleteRoleDialogOpen}>
+      <AlertDialog
+        open={isDeleteRoleDialogOpen}
+        onOpenChange={setIsDeleteRoleDialogOpen}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Role</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete the "{selectedRole?.name}" role? This will affect{' '}
-              {selectedRole?.userCount} user(s). This action cannot be undone.
+              Are you sure you want to delete the "{selectedRole?.name}" role?
+              This will affect {selectedRole?.userCount} user(s). This action
+              cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDeleteRole}>Delete</AlertDialogAction>
+            <AlertDialogAction onClick={confirmDeleteRole}>
+              Delete
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

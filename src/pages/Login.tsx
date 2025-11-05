@@ -1,20 +1,20 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useAuthStore } from '@/stores/authStore';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { toast } from 'sonner';
-import { Lock, Mail } from 'lucide-react';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useAuthStore } from "@/stores/authStore";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
+import { Lock, Mail } from "lucide-react";
 
 export default function Login() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -25,13 +25,13 @@ export default function Login() {
     try {
       const success = await login(email, password);
       if (success) {
-        toast.success('Login successful!');
-        navigate('/dashboard');
+        toast.success("Login successful!");
+        navigate("/dashboard");
       } else {
-        toast.error('Invalid credentials');
+        toast.error("Invalid credentials");
       }
     } catch (error) {
-      toast.error('An error occurred');
+      toast.error("An error occurred");
     } finally {
       setLoading(false);
     }
@@ -73,13 +73,13 @@ export default function Login() {
       <div className="flex w-full lg:w-1/2 items-center justify-center p-8">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold">{t('auth.welcome')}</h2>
-            <p className="mt-2 text-muted-foreground">{t('auth.subtitle')}</p>
+            <h2 className="text-3xl font-bold">{t("auth.welcome")}</h2>
+            <p className="mt-2 text-muted-foreground">{t("auth.subtitle")}</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="">
             <div className="space-y-2">
-              <Label htmlFor="email">{t('auth.email')}</Label>
+              <Label htmlFor="email">{t("auth.email")}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
                 <Input
@@ -95,7 +95,7 @@ export default function Login() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">{t('auth.password')}</Label>
+              <Label htmlFor="password">{t("auth.password")}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
                 <Input
@@ -115,19 +115,21 @@ export default function Login() {
                 <Checkbox
                   id="remember"
                   checked={rememberMe}
-                  onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                  onCheckedChange={(checked) =>
+                    setRememberMe(checked as boolean)
+                  }
                 />
                 <Label htmlFor="remember" className="text-sm cursor-pointer">
-                  {t('auth.rememberMe')}
+                  {t("auth.rememberMe")}
                 </Label>
               </div>
               <a href="#" className="text-sm text-primary hover:underline">
-                {t('auth.forgotPassword')}
+                {t("auth.forgotPassword")}
               </a>
             </div>
 
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? t('common.loading') : t('auth.loginButton')}
+              {loading ? t("common.loading") : t("auth.loginButton")}
             </Button>
           </form>
 

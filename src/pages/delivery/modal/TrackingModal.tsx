@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { BaseModal } from "@/components/modals";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, Package, Truck, XCircle } from "lucide-react";
@@ -45,8 +44,6 @@ export default function DeliveryTrackingModal({
   open,
   onClose,
 }: DeliveryTrackingModalProps) {
-  const { t } = useTranslation();
-
   const delivery: Delivery = {
     id: "DEL-001",
     orderId: "ORD-2024-001",

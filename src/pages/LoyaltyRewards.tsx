@@ -1,17 +1,17 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -19,13 +19,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs';
+} from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -33,14 +28,14 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Coins,
   Settings,
@@ -51,8 +46,8 @@ import {
   Save,
   Users,
   DollarSign,
-} from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface RewardSettings {
   earningRate: number; // coins per dollar spent
@@ -70,7 +65,7 @@ interface Transaction {
   id: string;
   userId: string;
   userName: string;
-  type: 'earned' | 'redeemed' | 'bonus' | 'expired';
+  type: "earned" | "redeemed" | "bonus" | "expired";
   amount: number;
   orderId?: string;
   description: string;
@@ -89,7 +84,7 @@ interface UserBalance {
 
 export default function LoyaltyRewards() {
   const { t } = useTranslation();
-  
+
   // Reward Settings State
   const [settings, setSettings] = useState<RewardSettings>({
     earningRate: 10, // 10 coins per $1
@@ -109,96 +104,102 @@ export default function LoyaltyRewards() {
   // Mock Data
   const [transactions] = useState<Transaction[]>([
     {
-      id: 'txn1',
-      userId: 'user1',
-      userName: 'John Doe',
-      type: 'earned',
+      id: "txn1",
+      userId: "user1",
+      userName: "John Doe",
+      type: "earned",
       amount: 500,
-      orderId: 'ORD-001',
-      description: 'Purchase - Order #ORD-001',
-      date: '2024-01-15',
+      orderId: "ORD-001",
+      description: "Purchase - Order #ORD-001",
+      date: "2024-01-15",
     },
     {
-      id: 'txn2',
-      userId: 'user2',
-      userName: 'Jane Smith',
-      type: 'redeemed',
+      id: "txn2",
+      userId: "user2",
+      userName: "Jane Smith",
+      type: "redeemed",
       amount: -200,
-      orderId: 'ORD-002',
-      description: 'Redeemed on Order #ORD-002',
-      date: '2024-01-14',
+      orderId: "ORD-002",
+      description: "Redeemed on Order #ORD-002",
+      date: "2024-01-14",
     },
     {
-      id: 'txn3',
-      userId: 'user1',
-      userName: 'John Doe',
-      type: 'bonus',
+      id: "txn3",
+      userId: "user1",
+      userName: "John Doe",
+      type: "bonus",
       amount: 100,
-      description: 'Welcome Bonus',
-      date: '2024-01-10',
+      description: "Welcome Bonus",
+      date: "2024-01-10",
     },
     {
-      id: 'txn4',
-      userId: 'user3',
-      userName: 'Bob Wilson',
-      type: 'earned',
+      id: "txn4",
+      userId: "user3",
+      userName: "Bob Wilson",
+      type: "earned",
       amount: 750,
-      orderId: 'ORD-003',
-      description: 'Purchase - Order #ORD-003',
-      date: '2024-01-13',
+      orderId: "ORD-003",
+      description: "Purchase - Order #ORD-003",
+      date: "2024-01-13",
     },
   ]);
 
   const [userBalances] = useState<UserBalance[]>([
     {
-      userId: 'user1',
-      userName: 'John Doe',
-      email: 'john@example.com',
+      userId: "user1",
+      userName: "John Doe",
+      email: "john@example.com",
       totalEarned: 2500,
       totalRedeemed: 500,
       currentBalance: 2000,
-      lastActivity: '2024-01-15',
+      lastActivity: "2024-01-15",
     },
     {
-      userId: 'user2',
-      userName: 'Jane Smith',
-      email: 'jane@example.com',
+      userId: "user2",
+      userName: "Jane Smith",
+      email: "jane@example.com",
       totalEarned: 1800,
       totalRedeemed: 800,
       currentBalance: 1000,
-      lastActivity: '2024-01-14',
+      lastActivity: "2024-01-14",
     },
     {
-      userId: 'user3',
-      userName: 'Bob Wilson',
-      email: 'bob@example.com',
+      userId: "user3",
+      userName: "Bob Wilson",
+      email: "bob@example.com",
       totalEarned: 3200,
       totalRedeemed: 200,
       currentBalance: 3000,
-      lastActivity: '2024-01-13',
+      lastActivity: "2024-01-13",
     },
   ]);
 
   const [showAdjustmentDialog, setShowAdjustmentDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserBalance | null>(null);
-  const [adjustmentAmount, setAdjustmentAmount] = useState('');
-  const [adjustmentReason, setAdjustmentReason] = useState('');
+  const [adjustmentAmount, setAdjustmentAmount] = useState("");
+  const [adjustmentReason, setAdjustmentReason] = useState("");
 
   // Statistics
   const totalCoinsInCirculation = userBalances.reduce(
     (sum, user) => sum + user.currentBalance,
     0
   );
-  const totalCoinsEarned = userBalances.reduce((sum, user) => sum + user.totalEarned, 0);
-  const totalCoinsRedeemed = userBalances.reduce((sum, user) => sum + user.totalRedeemed, 0);
+  const totalCoinsEarned = userBalances.reduce(
+    (sum, user) => sum + user.totalEarned,
+    0
+  );
+  const totalCoinsRedeemed = userBalances.reduce(
+    (sum, user) => sum + user.totalRedeemed,
+    0
+  );
   const activeUsers = userBalances.length;
 
   const handleSaveSettings = () => {
     setSettings(tempSettings);
     setEditingSettings(false);
     toast({
-      title: 'Success',
-      description: 'Reward settings updated successfully',
+      title: "Success",
+      description: "Reward settings updated successfully",
     });
   };
 
@@ -209,41 +210,41 @@ export default function LoyaltyRewards() {
 
   const handleAdjustBalance = (user: UserBalance) => {
     setSelectedUser(user);
-    setAdjustmentAmount('');
-    setAdjustmentReason('');
+    setAdjustmentAmount("");
+    setAdjustmentReason("");
     setShowAdjustmentDialog(true);
   };
 
   const handleSaveAdjustment = () => {
     if (!adjustmentAmount || !adjustmentReason) {
       toast({
-        title: 'Error',
-        description: 'Please fill in all fields',
-        variant: 'destructive',
+        title: "Error",
+        description: "Please fill in all fields",
+        variant: "destructive",
       });
       return;
     }
 
     toast({
-      title: 'Success',
+      title: "Success",
       description: `Balance adjusted for ${selectedUser?.userName}`,
     });
     setShowAdjustmentDialog(false);
   };
 
-  const getTransactionBadge = (type: Transaction['type']) => {
+  const getTransactionBadge = (type: Transaction["type"]) => {
     const variants = {
-      earned: 'default',
-      redeemed: 'secondary',
-      bonus: 'default',
-      expired: 'destructive',
+      earned: "default",
+      redeemed: "secondary",
+      bonus: "default",
+      expired: "destructive",
     } as const;
 
     return <Badge variant={variants[type]}>{type}</Badge>;
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className=" animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Loyalty & Rewards</h1>
@@ -252,8 +253,11 @@ export default function LoyaltyRewards() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant={settings.isActive ? 'default' : 'secondary'} className="px-3 py-1">
-            {settings.isActive ? 'Active' : 'Inactive'}
+          <Badge
+            variant={settings.isActive ? "default" : "secondary"}
+            className="px-3 py-1"
+          >
+            {settings.isActive ? "Active" : "Inactive"}
           </Badge>
         </div>
       </div>
@@ -262,13 +266,18 @@ export default function LoyaltyRewards() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Coins in Circulation</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total Coins in Circulation
+            </CardTitle>
             <Coins className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalCoinsInCirculation.toLocaleString()}</div>
+            <div className="text-2xl font-bold">
+              {totalCoinsInCirculation.toLocaleString()}
+            </div>
             <p className="text-xs text-muted-foreground mt-1">
-              ${(totalCoinsInCirculation * settings.redemptionRate).toFixed(2)} value
+              ${(totalCoinsInCirculation * settings.redemptionRate).toFixed(2)}{" "}
+              value
             </p>
           </CardContent>
         </Card>
@@ -279,18 +288,24 @@ export default function LoyaltyRewards() {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalCoinsEarned.toLocaleString()}</div>
+            <div className="text-2xl font-bold">
+              {totalCoinsEarned.toLocaleString()}
+            </div>
             <p className="text-xs text-muted-foreground mt-1">All time</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Redeemed</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total Redeemed
+            </CardTitle>
             <Gift className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalCoinsRedeemed.toLocaleString()}</div>
+            <div className="text-2xl font-bold">
+              {totalCoinsRedeemed.toLocaleString()}
+            </div>
             <p className="text-xs text-muted-foreground mt-1">
               ${(totalCoinsRedeemed * settings.redemptionRate).toFixed(2)} value
             </p>
@@ -304,7 +319,9 @@ export default function LoyaltyRewards() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{activeUsers}</div>
-            <p className="text-xs text-muted-foreground mt-1">With reward balance</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              With reward balance
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -354,7 +371,7 @@ export default function LoyaltyRewards() {
                 )}
               </div>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="">
               {/* System Status */}
               <div className="flex items-center justify-between p-4 border rounded-lg">
                 <div>
@@ -364,7 +381,9 @@ export default function LoyaltyRewards() {
                   </p>
                 </div>
                 <Switch
-                  checked={editingSettings ? tempSettings.isActive : settings.isActive}
+                  checked={
+                    editingSettings ? tempSettings.isActive : settings.isActive
+                  }
                   onCheckedChange={(checked) =>
                     editingSettings &&
                     setTempSettings({ ...tempSettings, isActive: checked })
@@ -384,7 +403,11 @@ export default function LoyaltyRewards() {
                     <Label>Coins Per Dollar Spent</Label>
                     <Input
                       type="number"
-                      value={editingSettings ? tempSettings.earningRate : settings.earningRate}
+                      value={
+                        editingSettings
+                          ? tempSettings.earningRate
+                          : settings.earningRate
+                      }
                       onChange={(e) =>
                         editingSettings &&
                         setTempSettings({
@@ -403,7 +426,11 @@ export default function LoyaltyRewards() {
                     <Label>Welcome Bonus Coins</Label>
                     <Input
                       type="number"
-                      value={editingSettings ? tempSettings.welcomeBonus : settings.welcomeBonus}
+                      value={
+                        editingSettings
+                          ? tempSettings.welcomeBonus
+                          : settings.welcomeBonus
+                      }
                       onChange={(e) =>
                         editingSettings &&
                         setTempSettings({
@@ -422,7 +449,11 @@ export default function LoyaltyRewards() {
                     <Label>Birthday Bonus Coins</Label>
                     <Input
                       type="number"
-                      value={editingSettings ? tempSettings.birthdayBonus : settings.birthdayBonus}
+                      value={
+                        editingSettings
+                          ? tempSettings.birthdayBonus
+                          : settings.birthdayBonus
+                      }
                       onChange={(e) =>
                         editingSettings &&
                         setTempSettings({
@@ -441,7 +472,11 @@ export default function LoyaltyRewards() {
                     <Label>Referral Bonus Coins</Label>
                     <Input
                       type="number"
-                      value={editingSettings ? tempSettings.referralBonus : settings.referralBonus}
+                      value={
+                        editingSettings
+                          ? tempSettings.referralBonus
+                          : settings.referralBonus
+                      }
                       onChange={(e) =>
                         editingSettings &&
                         setTempSettings({
@@ -471,7 +506,9 @@ export default function LoyaltyRewards() {
                       type="number"
                       step="0.001"
                       value={
-                        editingSettings ? tempSettings.redemptionRate : settings.redemptionRate
+                        editingSettings
+                          ? tempSettings.redemptionRate
+                          : settings.redemptionRate
                       }
                       onChange={(e) =>
                         editingSettings &&
@@ -538,7 +575,9 @@ export default function LoyaltyRewards() {
                     <Input
                       type="number"
                       value={
-                        editingSettings ? tempSettings.coinExpiryDays : settings.coinExpiryDays
+                        editingSettings
+                          ? tempSettings.coinExpiryDays
+                          : settings.coinExpiryDays
                       }
                       onChange={(e) =>
                         editingSettings &&
@@ -561,12 +600,17 @@ export default function LoyaltyRewards() {
                 <h4 className="font-medium mb-2">Example Calculation</h4>
                 <div className="space-y-1 text-sm">
                   <p>
-                    • Purchase of $100 = {settings.earningRate * 100} coins earned
+                    • Purchase of $100 = {settings.earningRate * 100} coins
+                    earned
                   </p>
                   <p>
                     • {settings.earningRate * 100} coins = $
-                    {(settings.earningRate * 100 * settings.redemptionRate).toFixed(2)} redemption
-                    value
+                    {(
+                      settings.earningRate *
+                      100 *
+                      settings.redemptionRate
+                    ).toFixed(2)}{" "}
+                    redemption value
                   </p>
                   <p>
                     • On a $50 order, max redemption: $
@@ -584,7 +628,9 @@ export default function LoyaltyRewards() {
           <Card>
             <CardHeader>
               <CardTitle>User Coin Balances</CardTitle>
-              <CardDescription>View and manage user reward balances</CardDescription>
+              <CardDescription>
+                View and manage user reward balances
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="rounded-md border">
@@ -603,7 +649,9 @@ export default function LoyaltyRewards() {
                   <TableBody>
                     {userBalances.map((user) => (
                       <TableRow key={user.userId}>
-                        <TableCell className="font-medium">{user.userName}</TableCell>
+                        <TableCell className="font-medium">
+                          {user.userName}
+                        </TableCell>
                         <TableCell>{user.email}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-1">
@@ -613,8 +661,12 @@ export default function LoyaltyRewards() {
                             </span>
                           </div>
                         </TableCell>
-                        <TableCell>{user.totalEarned.toLocaleString()}</TableCell>
-                        <TableCell>{user.totalRedeemed.toLocaleString()}</TableCell>
+                        <TableCell>
+                          {user.totalEarned.toLocaleString()}
+                        </TableCell>
+                        <TableCell>
+                          {user.totalRedeemed.toLocaleString()}
+                        </TableCell>
                         <TableCell>{user.lastActivity}</TableCell>
                         <TableCell className="text-right">
                           <Button
@@ -639,7 +691,9 @@ export default function LoyaltyRewards() {
           <Card>
             <CardHeader>
               <CardTitle>Transaction History</CardTitle>
-              <CardDescription>All reward coin transactions across users</CardDescription>
+              <CardDescription>
+                All reward coin transactions across users
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="rounded-md border">
@@ -658,20 +712,24 @@ export default function LoyaltyRewards() {
                     {transactions.map((txn) => (
                       <TableRow key={txn.id}>
                         <TableCell>{txn.date}</TableCell>
-                        <TableCell className="font-medium">{txn.userName}</TableCell>
+                        <TableCell className="font-medium">
+                          {txn.userName}
+                        </TableCell>
                         <TableCell>{getTransactionBadge(txn.type)}</TableCell>
                         <TableCell>
                           <span
                             className={
-                              txn.amount > 0 ? 'text-green-600 font-semibold' : 'text-red-600 font-semibold'
+                              txn.amount > 0
+                                ? "text-green-600 font-semibold"
+                                : "text-red-600 font-semibold"
                             }
                           >
-                            {txn.amount > 0 ? '+' : ''}
+                            {txn.amount > 0 ? "+" : ""}
                             {txn.amount}
                           </span>
                         </TableCell>
                         <TableCell>{txn.description}</TableCell>
-                        <TableCell>{txn.orderId || '-'}</TableCell>
+                        <TableCell>{txn.orderId || "-"}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -683,7 +741,10 @@ export default function LoyaltyRewards() {
       </Tabs>
 
       {/* Adjust Balance Dialog */}
-      <Dialog open={showAdjustmentDialog} onOpenChange={setShowAdjustmentDialog}>
+      <Dialog
+        open={showAdjustmentDialog}
+        onOpenChange={setShowAdjustmentDialog}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Adjust User Balance</DialogTitle>
@@ -695,7 +756,9 @@ export default function LoyaltyRewards() {
             <div className="space-y-4">
               <div className="p-4 bg-muted rounded-lg">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-muted-foreground">Current Balance:</span>
+                  <span className="text-sm text-muted-foreground">
+                    Current Balance:
+                  </span>
                   <span className="font-semibold flex items-center gap-1">
                     <Coins className="h-4 w-4" />
                     {selectedUser.currentBalance}
@@ -718,13 +781,20 @@ export default function LoyaltyRewards() {
 
               <div className="space-y-2">
                 <Label>Reason</Label>
-                <Select value={adjustmentReason} onValueChange={setAdjustmentReason}>
+                <Select
+                  value={adjustmentReason}
+                  onValueChange={setAdjustmentReason}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select reason" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="compensation">Customer Compensation</SelectItem>
-                    <SelectItem value="correction">Balance Correction</SelectItem>
+                    <SelectItem value="compensation">
+                      Customer Compensation
+                    </SelectItem>
+                    <SelectItem value="correction">
+                      Balance Correction
+                    </SelectItem>
                     <SelectItem value="promotion">Promotional Bonus</SelectItem>
                     <SelectItem value="penalty">Penalty/Deduction</SelectItem>
                     <SelectItem value="other">Other</SelectItem>
@@ -735,9 +805,11 @@ export default function LoyaltyRewards() {
               {adjustmentAmount && (
                 <div className="p-4 bg-primary/10 rounded-lg">
                   <p className="text-sm">
-                    New balance will be:{' '}
+                    New balance will be:{" "}
                     <span className="font-semibold">
-                      {selectedUser.currentBalance + parseInt(adjustmentAmount || '0')} coins
+                      {selectedUser.currentBalance +
+                        parseInt(adjustmentAmount || "0")}{" "}
+                      coins
                     </span>
                   </p>
                 </div>
@@ -745,7 +817,10 @@ export default function LoyaltyRewards() {
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAdjustmentDialog(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowAdjustmentDialog(false)}
+            >
               Cancel
             </Button>
             <Button onClick={handleSaveAdjustment}>Confirm Adjustment</Button>
