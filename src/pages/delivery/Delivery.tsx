@@ -9,13 +9,10 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BaseTableList, Column } from "@/components/table";
-import { DeleteModal } from "@/components/modals";
-import { DeliveryFormModal, DeliveryTrackingModal } from "./delivery/modal";
 import {
   Select,
   SelectContent,
@@ -23,7 +20,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { toast } from "@/hooks/use-toast";
+import FormModal from "./modal/FormModal";
+import TrackingModal from "./modal/TrackingModal";
 
 interface Delivery {
   id: string;
@@ -102,7 +111,6 @@ const statusConfig = {
 };
 
 export default function Delivery() {
-  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [deliveries, setDeliveries] = useState<Delivery[]>(mockDeliveries);
@@ -112,15 +120,6 @@ export default function Delivery() {
   const [selectedDelivery, setSelectedDelivery] = useState<Delivery | null>(
     null
   );
-  const [editingDelivery, setEditingDelivery] = useState<Delivery | null>(null);
-  const [formData, setFormData] = useState({
-    orderId: "",
-    customer: "",
-    address: "",
-    driver: "",
-    status: "pending" as Delivery["status"],
-    scheduledTime: "",
-  });
 
   const stats = [
     {
@@ -160,69 +159,11 @@ export default function Delivery() {
   });
 
   const handleCreateDelivery = () => {
-    setEditingDelivery(null);
-    setFormData({
-      orderId: "",
-      customer: "",
-      address: "",
-      driver: "",
-      status: "pending",
-      scheduledTime: "",
-    });
     setIsCreateDialogOpen(true);
   };
 
   const handleEditDelivery = (delivery: Delivery) => {
-    setEditingDelivery(delivery);
-    setFormData({
-      orderId: delivery.orderId,
-      customer: delivery.customer,
-      address: delivery.address,
-      driver: delivery.driver,
-      status: delivery.status,
-      scheduledTime: delivery.scheduledTime,
-    });
     setIsCreateDialogOpen(true);
-  };
-
-  const handleSaveDelivery = () => {
-    if (
-      !formData.orderId ||
-      !formData.customer ||
-      !formData.address ||
-      !formData.driver ||
-      !formData.scheduledTime
-    ) {
-      toast({
-        title: "Error",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (editingDelivery) {
-      setDeliveries(
-        deliveries.map((d) =>
-          d.id === editingDelivery.id ? { ...d, ...formData } : d
-        )
-      );
-      toast({
-        title: "Success",
-        description: "Delivery updated successfully",
-      });
-    } else {
-      const newDelivery: Delivery = {
-        id: `DEL-${String(deliveries.length + 1).padStart(3, "0")}`,
-        ...formData,
-      };
-      setDeliveries([newDelivery, ...deliveries]);
-      toast({
-        title: "Success",
-        description: "Delivery created successfully",
-      });
-    }
-    setIsCreateDialogOpen(false);
   };
 
   const handleStatusChange = (
@@ -416,32 +357,39 @@ export default function Delivery() {
         getRowKey={(delivery) => delivery.id}
       />
 
-      {/* Create/Edit Delivery Modal */}
-      <DeliveryFormModal
+      {/* Create/Edit Delivery Form Modal */}
+      <FormModal
         open={isCreateDialogOpen}
-        onOpenChange={setIsCreateDialogOpen}
-        editingDelivery={editingDelivery}
-        formData={formData}
-        onFormDataChange={setFormData}
-        onSubmit={handleSaveDelivery}
+        onClose={() => setIsCreateDialogOpen(false)}
       />
 
-      {/* Tracking Modal */}
-      <DeliveryTrackingModal
+      {/* Tracking Dialog */}
+      <TrackingModal
         open={isTrackingDialogOpen}
-        onOpenChange={setIsTrackingDialogOpen}
-        delivery={selectedDelivery}
-        statusConfig={statusConfig}
+        onClose={setIsTrackingDialogOpen}
       />
 
-      {/* Delete Confirmation Modal */}
-      <DeleteModal
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
-        title="Delete Delivery"
-        itemName={`delivery ${selectedDelivery?.id}`}
-        onConfirm={confirmDelete}
-      />
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Delivery</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete delivery {selectedDelivery?.id}?
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
