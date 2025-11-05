@@ -7,8 +7,6 @@ import {
   MoreHorizontal,
   Clock,
   Truck,
-  CheckCircle,
-  XCircle,
   ShoppingCart,
   RefreshCcw,
 } from "lucide-react";
@@ -215,10 +213,7 @@ export default function Orders() {
             options: [
               { label: "All Status", value: "all" },
               { label: "Pending", value: "pending" },
-              { label: "Assigned", value: "assigned" },
-              { label: "In Transit", value: "in-transit" },
               { label: "Delivered", value: "delivered" },
-              { label: "Failed", value: "failed" },
             ],
             onChange: setStatusFilter,
             placeholder: "Filter by status",
