@@ -51,9 +51,11 @@ import {
   Edit,
   Trash2,
   X,
+  Plus,
 } from "lucide-react";
 import { users as initialUsers } from "@/data/mockData";
 import { toast } from "@/hooks/use-toast";
+import { BaseTableList, Column } from "@/components/table";
 
 interface User {
   id: string;
@@ -203,133 +205,115 @@ export default function Users() {
     setShowFilterDialog(false);
   };
 
-  return (
-    <div className=" animate-fade-in">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">{t("nav.users")}</h1>
-          <p className="text-muted-foreground mt-1">
-            Manage user accounts and subscriptions
-          </p>
-        </div>
-        <Button className="shadow-elegant" onClick={handleAddUser}>
-          <UserPlus className="mr-2 h-4 w-4" />
-          Add User
-        </Button>
-      </div>
-
-      <Card className="shadow-card">
-        <CardHeader>
-          <CardTitle>User Management</CardTitle>
-          <CardDescription>
-            View and manage all registered users
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder={t("common.search")}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
-              />
-            </div>
-            <Button variant="outline" onClick={() => setShowFilterDialog(true)}>
-              <Filter className="mr-2 h-4 w-4" />
-              {t("common.filter")}
-              {(filterStatus !== "all" || filterSubscription !== "all") && (
-                <Badge variant="secondary" className="ml-2">
-                  Active
-                </Badge>
-              )}
+  // Define table columns
+  const columns: Column<User>[] = [
+    {
+      key: "name",
+      label: "Name",
+    },
+    {
+      key: "email",
+      label: "Email",
+    },
+    {
+      key: "phone",
+      label: "Phone",
+    },
+    {
+      key: "location",
+      label: "Location",
+      className: "max-w-[200px]",
+    },
+    {
+      key: "status",
+      label: "Status",
+      render: (user) => (
+        <Badge variant={user.status === "active" ? "default" : "secondary"}>
+          {user.status}
+        </Badge>
+      ),
+    },
+    {
+      key: "subscription",
+      label: "Subscription",
+      render: (user) => (
+        <Badge
+          variant={user.subscriptionStatus === "active" ? "default" : "outline"}
+        >
+          {user.subscriptionStatus}
+        </Badge>
+      ),
+    },
+    {
+      key: "loyaltyPoints",
+      label: "Loyalty Points",
+    },
+    {
+      key: "totalOrders",
+      label: "Orders",
+    },
+    {
+      key: "actions",
+      label: "Actions",
+      className: "text-right",
+      render: (user) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <MoreHorizontal className="h-4 w-4" />
             </Button>
-          </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => handleViewUser(user)}>
+              <Eye className="mr-2 h-4 w-4" />
+              View Details
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleEditUser(user)}>
+              <Edit className="mr-2 h-4 w-4" />
+              Edit User
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => handleDeleteClick(user)}
+              className="text-destructive"
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Delete User
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
+    },
+  ];
 
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Subscription</TableHead>
-                  <TableHead>Loyalty Points</TableHead>
-                  <TableHead>Orders</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredUsers.map((user) => (
-                  <TableRow key={user.id} className="hover:bg-muted/50">
-                    <TableCell className="font-medium">{user.name}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>{user.phone}</TableCell>
-                    <TableCell>{user.location}</TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          user.status === "active" ? "default" : "secondary"
-                        }
-                      >
-                        {user.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          user.subscriptionStatus === "active"
-                            ? "default"
-                            : "outline"
-                        }
-                      >
-                        {user.subscriptionStatus}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{user.loyaltyPoints}</TableCell>
-                    <TableCell>{user.totalOrders}</TableCell>
-                    <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            onClick={() => handleViewUser(user)}
-                          >
-                            <Eye className="mr-2 h-4 w-4" />
-                            View Details
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => handleEditUser(user)}
-                          >
-                            <Edit className="mr-2 h-4 w-4" />
-                            Edit User
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => handleDeleteClick(user)}
-                            className="text-destructive"
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Delete User
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
+  return (
+    <div className="animate-fade-in">
+      <BaseTableList
+        title="User Management"
+        description="View and manage all registered users"
+        headerActions={[
+          {
+            label: "Add User",
+            icon: Plus,
+            onClick: handleAddUser,
+            variant: "default",
+          },
+        ]}
+        toolbarActions={
+          <Button variant="outline" onClick={() => setShowFilterDialog(true)}>
+            <Filter className="mr-2 h-4 w-4" />
+            Filter
+          </Button>
+        }
+        searchPlaceholder="Search by customer, order, or driver..."
+        searchValue={searchQuery}
+        onSearchChange={setSearchQuery}
+        columns={columns}
+        data={filteredUsers}
+        emptyMessage="No users found"
+        getRowKey={(user) => user.id}
+      />
 
       {/* Filter Dialog */}
       <Dialog open={showFilterDialog} onOpenChange={setShowFilterDialog}>

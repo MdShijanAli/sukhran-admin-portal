@@ -10,7 +10,7 @@ import "@/i18n/config";
 
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import Users from "./pages/Users";
+import Users from "./pages/users/Users";
 import Orders from "./pages/orders/Orders";
 import MainLayout from "./components/layout/MainLayout";
 import NotFound from "./pages/NotFound";
