@@ -57,12 +57,13 @@ import { users as initialUsers } from "@/data/mockData";
 import { toast } from "@/hooks/use-toast";
 import { BaseTableList, Column } from "@/components/table";
 import FormModal from "./modal/FormModal";
+import DeleteModal from "@/components/modals/DeleteModal";
 
 interface User {
   id: string;
   name: string;
-  first_name?: string;
-  last_name?: string;
+  first_name: string;
+  last_name: string;
   email: string;
   phone: string;
   location: string;
@@ -387,36 +388,13 @@ export default function Users() {
       </Dialog>
 
       {/* Delete Confirmation Dialog */}
-      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete User</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this user? This action cannot be
-              undone.
-            </DialogDescription>
-          </DialogHeader>
-          {deletingUser && (
-            <div className="py-4">
-              <p className="font-medium">{deletingUser.name}</p>
-              <p className="text-sm text-muted-foreground">
-                {deletingUser.email}
-              </p>
-            </div>
-          )}
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowDeleteDialog(false)}
-            >
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={handleDeleteUser}>
-              Delete User
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <DeleteModal
+        open={showDeleteDialog}
+        onClose={setShowDeleteDialog}
+        title="Delete User"
+        description={`Are you sure you want to delete user ${deletingUser?.name}? This action cannot be undone.`}
+        onConfirm={handleDeleteUser}
+      />
     </div>
   );
 }
