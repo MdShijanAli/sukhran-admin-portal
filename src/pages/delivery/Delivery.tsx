@@ -154,6 +154,7 @@ export default function Delivery() {
 
   const handleEditDelivery = (delivery: Delivery) => {
     setIsCreateDialogOpen(true);
+    setSelectedDelivery(delivery);
   };
 
   const handleStatusChange = (
@@ -328,6 +329,7 @@ export default function Delivery() {
       <FormModal
         open={isCreateDialogOpen}
         onClose={() => setIsCreateDialogOpen(false)}
+        editData={selectedDelivery}
       />
 
       {/* Tracking Dialog */}

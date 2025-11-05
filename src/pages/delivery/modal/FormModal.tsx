@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BaseModal } from "@/components/modals";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,34 +11,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface Delivery {
-  id: string;
+interface DeliveryFormData {
   orderId: string;
   customer: string;
   address: string;
   driver: string;
   status: "pending" | "assigned" | "in-transit" | "delivered" | "failed";
   scheduledTime: string;
-  deliveredTime?: string;
-}
-
-interface DeliveryFormData {
-  orderId: string;
-  customer: string;
-  address: string;
-  driver: string;
-  status: Delivery["status"];
-  scheduledTime: string;
 }
 
 interface DeliveryFormModalProps {
   open: boolean;
   onClose: () => void;
+  editData?: DeliveryFormData;
 }
 
-export default function DeliveryFormModal({
+export default function FormModal({
   open,
   onClose,
+  editData,
 }: DeliveryFormModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -53,7 +44,7 @@ export default function DeliveryFormModal({
 
   const updateField = (
     field: keyof DeliveryFormData,
-    value: string | Delivery["status"]
+    value: string | DeliveryFormData["status"]
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -69,16 +60,26 @@ export default function DeliveryFormModal({
       onClose();
     }, 1000);
   };
+
+  useEffect(() => {
+    if (editData) {
+      setIsEditing(true);
+      setFormData({
+        orderId: editData.orderId,
+        customer: editData.customer,
+        address: editData.address,
+        driver: editData.driver,
+        status: editData.status,
+        scheduledTime: editData.scheduledTime,
+      });
+    }
+  }, [editData]);
+
   return (
     <BaseModal
       open={open}
       onOpenChange={onClose}
       title={isEditing ? "Edit Delivery" : "Create New Delivery"}
-      description={
-        isEditing
-          ? "Update delivery details"
-          : "Add a new delivery to the system"
-      }
       onSubmit={handleSubmit}
       isSubmitting={isSubmitting}
       submitButtonText={isEditing ? "Update Delivery" : "Create Delivery"}

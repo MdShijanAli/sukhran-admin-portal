@@ -31,6 +31,8 @@ export const users = [
   {
     id: "1",
     name: "Ahmed Hassan",
+    first_name: "Ahmed",
+    last_name: "Hassan",
     email: "ahmed@example.com",
     phone: "+880 1712-345678",
     status: "active",
@@ -43,6 +45,8 @@ export const users = [
   {
     id: "2",
     name: "Fatima Rahman",
+    first_name: "Fatima",
+    last_name: "Rahman",
     email: "fatima@example.com",
     phone: "+880 1812-345679",
     status: "active",
@@ -55,6 +59,8 @@ export const users = [
   {
     id: "3",
     name: "Karim Ahmed",
+    first_name: "Karim",
+    last_name: "Ahmed",
     email: "karim@example.com",
     phone: "+880 1912-345680",
     status: "inactive",

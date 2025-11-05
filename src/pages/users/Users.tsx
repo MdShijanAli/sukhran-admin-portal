@@ -56,10 +56,13 @@ import {
 import { users as initialUsers } from "@/data/mockData";
 import { toast } from "@/hooks/use-toast";
 import { BaseTableList, Column } from "@/components/table";
+import FormModal from "./modal/FormModal";
 
 interface User {
   id: string;
   name: string;
+  first_name?: string;
+  last_name?: string;
   email: string;
   phone: string;
   location: string;
@@ -83,14 +86,6 @@ export default function Users() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [viewingUser, setViewingUser] = useState<User | null>(null);
   const [deletingUser, setDeletingUser] = useState<User | null>(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    location: "",
-    status: "active",
-    subscriptionStatus: "none",
-  });
 
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
@@ -106,27 +101,11 @@ export default function Users() {
 
   const handleAddUser = () => {
     setEditingUser(null);
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      location: "",
-      status: "active",
-      subscriptionStatus: "none",
-    });
     setShowUserDialog(true);
   };
 
   const handleEditUser = (user: User) => {
     setEditingUser(user);
-    setFormData({
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
-      location: user.location,
-      status: user.status,
-      subscriptionStatus: user.subscriptionStatus,
-    });
     setShowUserDialog(true);
   };
 
@@ -138,53 +117,6 @@ export default function Users() {
   const handleDeleteClick = (user: User) => {
     setDeletingUser(user);
     setShowDeleteDialog(true);
-  };
-
-  const handleSaveUser = () => {
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.phone ||
-      !formData.location
-    ) {
-      toast({
-        title: "Error",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (editingUser) {
-      setUsers(
-        users.map((user) =>
-          user.id === editingUser.id
-            ? {
-                ...user,
-                ...formData,
-              }
-            : user
-        )
-      );
-      toast({
-        title: "Success",
-        description: "User updated successfully",
-      });
-    } else {
-      const newUser: User = {
-        id: `user-${Date.now()}`,
-        ...formData,
-        loyaltyPoints: 0,
-        totalOrders: 0,
-        joinDate: new Date().toISOString().split("T")[0],
-      };
-      setUsers([...users, newUser]);
-      toast({
-        title: "Success",
-        description: "User created successfully",
-      });
-    }
-    setShowUserDialog(false);
   };
 
   const handleDeleteUser = () => {
@@ -306,7 +238,7 @@ export default function Users() {
             Filter
           </Button>
         }
-        searchPlaceholder="Search by customer, order, or driver..."
+        searchPlaceholder="Search by name, email, or phone..."
         searchValue={searchQuery}
         onSearchChange={setSearchQuery}
         columns={columns}
@@ -368,108 +300,12 @@ export default function Users() {
         </DialogContent>
       </Dialog>
 
-      {/* Add/Edit User Dialog */}
-      <Dialog open={showUserDialog} onOpenChange={setShowUserDialog}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>
-              {editingUser ? "Edit User" : "Add New User"}
-            </DialogTitle>
-            <DialogDescription>
-              {editingUser
-                ? "Update user information below"
-                : "Enter user details to create a new account"}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label>Name *</Label>
-              <Input
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                placeholder="Enter full name"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Email *</Label>
-              <Input
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                placeholder="Enter email address"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Phone *</Label>
-              <Input
-                value={formData.phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
-                placeholder="Enter phone number"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Location *</Label>
-              <Input
-                value={formData.location}
-                onChange={(e) =>
-                  setFormData({ ...formData, location: e.target.value })
-                }
-                placeholder="Enter location"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Account Status</Label>
-              <Select
-                value={formData.status}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, status: value })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
-                  <SelectItem value="suspended">Suspended</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>Subscription Status</Label>
-              <Select
-                value={formData.subscriptionStatus}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, subscriptionStatus: value })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="expired">Expired</SelectItem>
-                  <SelectItem value="none">None</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowUserDialog(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleSaveUser}>
-              {editingUser ? "Update User" : "Create User"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Create/Edit User Form Modal */}
+      <FormModal
+        open={showUserDialog}
+        onClose={() => setShowUserDialog(false)}
+        editData={editingUser}
+      />
 
       {/* View User Dialog */}
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
