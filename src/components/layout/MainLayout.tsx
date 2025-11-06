@@ -11,13 +11,17 @@ export default function MainLayout() {
     <div className="min-h-screen bg-background">
       <Sidebar />
       <div
-        className={cn(
-          "transition-all duration-300",
-          isCollapsed ? "ml-16" : "ml-64"
-        )}
+        className={cn(isCollapsed ? "ml-16" : "ml-64")}
+        style={{
+          transition: "margin-left 0.7s ease-in-out",
+        }}
       >
         <Header />
-        <main className={`${isCollapsed ? "p-6" : "p-3"}`}>
+        <main
+          className={`transition-all duration-500 ease-in-out ${
+            isCollapsed ? "p-6" : "p-3"
+          }`}
+        >
           <Outlet />
         </main>
       </div>

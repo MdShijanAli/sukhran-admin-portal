@@ -57,29 +57,34 @@ export default function Sidebar() {
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-40 h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300",
+        "fixed left-0 top-0 z-40 h-screen bg-sidebar border-r border-sidebar-border",
         isCollapsed ? "w-18" : "w-64"
       )}
+      style={{
+        transition: "width 0.7s ease-in-out",
+      }}
     >
       <div className="flex h-full flex-col">
         {/* Logo */}
         <div
           className={`relative flex ${
             isCollapsed ? "h-16 border-b" : "h-32"
-          } items-center justify-between border-sidebar-border px-4`}
+          } items-center justify-between border-sidebar-border px-4 transition-all duration-500 ease-in-out`}
         >
           <img
             src={
               language === "en" ? "/images/Skr-eng.png" : "/images/Skr-bng.png"
             }
             alt="Shukran Admin Portal"
-            className={`mx-auto ${isCollapsed ? "w-10" : "h-28 w-100"}`}
+            className={`mx-auto transition-all duration-500 ease-in-out ${
+              isCollapsed ? "w-10" : "h-28 w-100"
+            }`}
           />
           <button
             onClick={toggleSidebar}
             className={`absolute ${
               isCollapsed ? "top-1/2" : "top-8"
-            } -right-4 transform -translate-y-1/2 rounded-lg p-1 bg-sidebar-accent transition-colors`}
+            } -right-4 transform -translate-y-1/2 rounded-lg p-1 bg-sidebar-accent transition-all duration-500 ease-in-out hover:scale-110`}
           >
             {isCollapsed ? (
               <ChevronRight className="h-5 w-5 text-sidebar-foreground" />
@@ -98,7 +103,7 @@ export default function Sidebar() {
                   to={item.path}
                   className={({ isActive }) =>
                     cn(
-                      "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200",
+                      "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-300 ease-in-out",
                       "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                       isActive
                         ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
@@ -106,8 +111,12 @@ export default function Sidebar() {
                     )
                   }
                 >
-                  <item.icon className="h-5 w-5 flex-shrink-0" />
-                  {!isCollapsed && <span>{t(item.label)}</span>}
+                  <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
+                  {!isCollapsed && (
+                    <span className="transition-opacity duration-300 ease-in-out">
+                      {t(item.label)}
+                    </span>
+                  )}
                 </NavLink>
               </li>
             ))}

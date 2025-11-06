@@ -30,8 +30,9 @@ import { Filter, MoreHorizontal, Eye, Edit, Trash2, Plus } from "lucide-react";
 import { users as initialUsers } from "@/data/mockData";
 import { toast } from "@/hooks/use-toast";
 import { BaseTableList, Column } from "@/components/table";
-import { FormModal, ViewModal } from "./modal";
 import { DeleteModal } from "@/components/modals";
+import FormModal from "./modal/FormModal";
+import ViewModal from "./modal/ViewModal";
 
 interface User {
   id: string;
@@ -87,6 +88,11 @@ export default function Users() {
   const handleViewUser = (user: User) => {
     setViewingUser(user);
     setShowViewDialog(true);
+  };
+
+  const handleCloseUserDialog = () => {
+    setShowUserDialog(false);
+    setEditingUser(null);
   };
 
   const handleDeleteClick = (user: User) => {
@@ -278,7 +284,7 @@ export default function Users() {
       {/* Create/Edit User Form Modal */}
       <FormModal
         open={showUserDialog}
-        onClose={() => setShowUserDialog(false)}
+        onClose={handleCloseUserDialog}
         editData={editingUser}
       />
 

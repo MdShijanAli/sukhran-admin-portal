@@ -72,6 +72,7 @@ export default function FormModal({
         subscriptionStatus: editData.subscriptionStatus,
       });
     }
+    setIsEditing(false);
   }, [editData]);
 
   return (
