@@ -71,8 +71,18 @@ export default function FormModal({
         status: editData.status,
         subscriptionStatus: editData.subscriptionStatus,
       });
+    } else {
+      setIsEditing(false);
+      setFormData({
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone: "",
+        location: "",
+        status: "active",
+        subscriptionStatus: "none",
+      });
     }
-    setIsEditing(false);
   }, [editData]);
 
   return (
