@@ -129,6 +129,9 @@ const Marketing = () => {
     status: "active" as "active" | "draft",
   });
 
+  const [isCustomCategory, setIsCustomCategory] = useState(false);
+  const [customCategoryInput, setCustomCategoryInput] = useState("");
+
   const categories = [
     { value: "welcome", label: "Welcome" },
     { value: "birthday", label: "Birthday" },
@@ -168,10 +171,22 @@ const Marketing = () => {
   };
 
   const handleCreateTemplate = () => {
+    const finalCategory = isCustomCategory ? customCategoryInput : formData.category;
+    
+    if (!finalCategory) {
+      toast({
+        title: "Error",
+        description: "Please enter a category",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const variables = extractVariables(formData.content);
     const newTemplate: Template = {
       id: Date.now().toString(),
       ...formData,
+      category: finalCategory,
       variables,
       createdAt: new Date().toISOString().split("T")[0],
       updatedAt: new Date().toISOString().split("T")[0],
@@ -187,6 +202,18 @@ const Marketing = () => {
 
   const handleEditTemplate = () => {
     if (!selectedTemplate) return;
+    
+    const finalCategory = isCustomCategory ? customCategoryInput : formData.category;
+    
+    if (!finalCategory) {
+      toast({
+        title: "Error",
+        description: "Please enter a category",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const variables = extractVariables(formData.content);
     setTemplates(
       templates.map((t) =>
@@ -194,6 +221,7 @@ const Marketing = () => {
           ? {
               ...t,
               ...formData,
+              category: finalCategory,
               variables,
               updatedAt: new Date().toISOString().split("T")[0],
             }
@@ -254,6 +282,19 @@ const Marketing = () => {
       content: "",
       status: "active",
     });
+    setIsCustomCategory(false);
+    setCustomCategoryInput("");
+  };
+
+  const handleCategoryChange = (value: string) => {
+    if (value === "custom") {
+      setIsCustomCategory(true);
+      setFormData({ ...formData, category: "" });
+    } else {
+      setIsCustomCategory(false);
+      setCustomCategoryInput("");
+      setFormData({ ...formData, category: value });
+    }
   };
 
   const openCreateDialog = () => {
@@ -264,10 +305,13 @@ const Marketing = () => {
 
   const openEditDialog = (template: Template) => {
     setSelectedTemplate(template);
+    const isExistingCategory = categories.some(cat => cat.value === template.category);
+    setIsCustomCategory(!isExistingCategory);
+    setCustomCategoryInput(!isExistingCategory ? template.category : "");
     setFormData({
       name: template.name,
       type: template.type,
-      category: template.category,
+      category: isExistingCategory ? template.category : "custom",
       subject: template.subject || "",
       content: template.content,
       status: template.status,
@@ -562,7 +606,7 @@ const Marketing = () => {
                 <Label htmlFor="category">Category</Label>
                 <Select
                   value={formData.category}
-                  onValueChange={(value) => setFormData({ ...formData, category: value })}
+                  onValueChange={handleCategoryChange}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select category" />
@@ -573,8 +617,17 @@ const Marketing = () => {
                         {cat.label}
                       </SelectItem>
                     ))}
+                    <SelectItem value="custom">+ Add Custom Category</SelectItem>
                   </SelectContent>
                 </Select>
+                {isCustomCategory && (
+                  <Input
+                    placeholder="Enter custom category name"
+                    value={customCategoryInput}
+                    onChange={(e) => setCustomCategoryInput(e.target.value)}
+                    className="mt-2"
+                  />
+                )}
               </div>
             </div>
 
@@ -676,7 +729,7 @@ const Marketing = () => {
                 <Label htmlFor="edit-category">Category</Label>
                 <Select
                   value={formData.category}
-                  onValueChange={(value) => setFormData({ ...formData, category: value })}
+                  onValueChange={handleCategoryChange}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -687,8 +740,17 @@ const Marketing = () => {
                         {cat.label}
                       </SelectItem>
                     ))}
+                    <SelectItem value="custom">+ Add Custom Category</SelectItem>
                   </SelectContent>
                 </Select>
+                {isCustomCategory && (
+                  <Input
+                    placeholder="Enter custom category name"
+                    value={customCategoryInput}
+                    onChange={(e) => setCustomCategoryInput(e.target.value)}
+                    className="mt-2"
+                  />
+                )}
               </div>
             </div>
 
