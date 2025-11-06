@@ -20,6 +20,7 @@ import {
   Shield,
   Bell,
   Coins,
+  Mail,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useSidebarStore } from "@/stores/sidebarStore";
@@ -35,6 +36,7 @@ const menuItems = [
   { icon: Truck, label: "nav.delivery", path: "/delivery" },
   { icon: DollarSign, label: "nav.financial", path: "/financial" },
   { icon: Coins, label: "nav.loyaltyRewards", path: "/loyalty-rewards" },
+  { icon: Mail, label: "nav.marketing", path: "/marketing" },
   { icon: HeadphonesIcon, label: "nav.support", path: "/support" },
   { icon: BarChart3, label: "nav.analytics", path: "/analytics" },
   { icon: Ticket, label: "nav.coupons", path: "/coupons" },
