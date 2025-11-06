@@ -286,6 +286,11 @@ export default function Delivery() {
     },
   ];
 
+  const handleCloseDialog = () => {
+    setIsCreateDialogOpen(false);
+    setSelectedDelivery(null);
+  };
+
   return (
     <div>
       <BaseTableList
@@ -328,7 +333,7 @@ export default function Delivery() {
       {/* Create/Edit Delivery Form Modal */}
       <FormModal
         open={isCreateDialogOpen}
-        onClose={() => setIsCreateDialogOpen(false)}
+        onClose={handleCloseDialog}
         editData={selectedDelivery}
       />
 

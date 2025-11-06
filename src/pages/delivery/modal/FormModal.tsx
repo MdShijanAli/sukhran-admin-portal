@@ -72,6 +72,16 @@ export default function FormModal({
         status: editData.status,
         scheduledTime: editData.scheduledTime,
       });
+    } else {
+      setIsEditing(false);
+      setFormData({
+        orderId: "",
+        customer: "",
+        address: "",
+        driver: "",
+        status: "pending",
+        scheduledTime: "",
+      });
     }
   }, [editData]);
 
