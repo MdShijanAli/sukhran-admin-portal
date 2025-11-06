@@ -3,14 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -18,21 +10,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import { Filter, MoreHorizontal, Eye, Edit, Trash2, Plus } from "lucide-react";
 import { users as initialUsers } from "@/data/mockData";
 import { toast } from "@/hooks/use-toast";
 import { BaseTableList, Column } from "@/components/table";
 import { DeleteModal } from "@/components/modals";
-import FormModal from "./modal/FormModal";
-import ViewModal from "./modal/ViewModal";
+import { FormModal, ViewModal, FilterModal } from "./modal";
 
 interface User {
   id: string;
@@ -114,6 +97,14 @@ export default function Users() {
     setFilterStatus("all");
     setFilterSubscription("all");
     setShowFilterDialog(false);
+  };
+
+  const handleApplyFilters = (filters: {
+    filterStatus: string;
+    filterSubscription: string;
+  }) => {
+    setFilterStatus(filters.filterStatus);
+    setFilterSubscription(filters.filterSubscription);
   };
 
   // Define table columns
@@ -226,58 +217,17 @@ export default function Users() {
         getRowKey={(user) => user.id}
       />
 
-      {/* Filter Dialog */}
-      <Dialog open={showFilterDialog} onOpenChange={setShowFilterDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Filter Users</DialogTitle>
-            <DialogDescription>
-              Apply filters to narrow down the user list
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label>Account Status</Label>
-              <Select value={filterStatus} onValueChange={setFilterStatus}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
-                  <SelectItem value="suspended">Suspended</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label>Subscription Status</Label>
-              <Select
-                value={filterSubscription}
-                onValueChange={setFilterSubscription}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Subscriptions</SelectItem>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="expired">Expired</SelectItem>
-                  <SelectItem value="none">None</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={handleClearFilters}>
-              Clear Filters
-            </Button>
-            <Button onClick={() => setShowFilterDialog(false)}>
-              Apply Filters
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Filter Modal */}
+      <FilterModal
+        open={showFilterDialog}
+        onClose={() => setShowFilterDialog(false)}
+        currentFilters={{
+          filterStatus,
+          filterSubscription,
+        }}
+        onApplyFilters={handleApplyFilters}
+        onClearFilters={handleClearFilters}
+      />
 
       {/* Create/Edit User Form Modal */}
       <FormModal
