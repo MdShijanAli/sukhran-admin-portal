@@ -73,7 +73,7 @@ export default function Dashboard() {
   );
 
   return (
-    <div className=" animate-fade-in">
+    <div className="animate-fade-in space-y-4">
       <div>
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <p className="text-muted-foreground mt-1">

@@ -9,7 +9,7 @@ import { useAuthStore } from "@/stores/authStore";
 import "@/i18n/config";
 
 import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/dashboard/Dashboard";
 import Users from "./pages/users/Users";
 import Orders from "./pages/orders/Orders";
 import MainLayout from "./components/layout/MainLayout";
