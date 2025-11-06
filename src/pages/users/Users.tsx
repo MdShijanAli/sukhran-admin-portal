@@ -59,9 +59,7 @@ export default function Users() {
   const [showUserDialog, setShowUserDialog] = useState(false);
   const [showViewDialog, setShowViewDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [viewingUser, setViewingUser] = useState<User | null>(null);
-  const [deletingUser, setDeletingUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
@@ -76,39 +74,39 @@ export default function Users() {
   });
 
   const handleAddUser = () => {
-    setEditingUser(null);
+    setSelectedUser(null);
     setShowUserDialog(true);
   };
 
   const handleEditUser = (user: User) => {
-    setEditingUser(user);
+    setSelectedUser(user);
     setShowUserDialog(true);
   };
 
   const handleViewUser = (user: User) => {
-    setViewingUser(user);
+    setSelectedUser(user);
     setShowViewDialog(true);
   };
 
   const handleCloseUserDialog = () => {
     setShowUserDialog(false);
-    setEditingUser(null);
+    setSelectedUser(null);
   };
 
   const handleDeleteClick = (user: User) => {
-    setDeletingUser(user);
+    setSelectedUser(user);
     setShowDeleteDialog(true);
   };
 
   const handleDeleteUser = () => {
-    if (deletingUser) {
-      setUsers(users.filter((user) => user.id !== deletingUser.id));
+    if (selectedUser) {
+      setUsers(users.filter((user) => user.id !== selectedUser.id));
       toast({
         title: "Success",
         description: "User deleted successfully",
       });
       setShowDeleteDialog(false);
-      setDeletingUser(null);
+      setSelectedUser(null);
     }
   };
 
@@ -285,14 +283,14 @@ export default function Users() {
       <FormModal
         open={showUserDialog}
         onClose={handleCloseUserDialog}
-        editData={editingUser}
+        editData={selectedUser}
       />
 
       {/* View User Modal */}
       <ViewModal
         open={showViewDialog}
         onClose={() => setShowViewDialog(false)}
-        user={viewingUser}
+        user={selectedUser}
       />
 
       {/* Delete Confirmation Dialog */}
@@ -300,7 +298,7 @@ export default function Users() {
         open={showDeleteDialog}
         onClose={setShowDeleteDialog}
         title="Delete User"
-        description={`Are you sure you want to delete user ${deletingUser?.name}? This action cannot be undone.`}
+        description={`Are you sure you want to delete user ${selectedUser?.name}? This action cannot be undone.`}
         onConfirm={handleDeleteUser}
       />
     </div>
