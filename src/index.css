@@ -2,113 +2,136 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Brand Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@100;200;300;400;500;600;700&display=swap');
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here.
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222 47% 11%;
+    /* Primary Palette - Black, White, Gold */
+    --background: 0 0% 100%; /* White #FFFFFF */
+    --foreground: 0 0% 0%; /* Black #000000 */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card: 0 0% 100%; /* White */
+    --card-foreground: 0 0% 0%; /* Black */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover: 0 0% 100%; /* White */
+    --popover-foreground: 0 0% 0%; /* Black */
 
-    --primary: 262 83% 58%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 262 90% 70%;
+    --primary: 0 0% 0%; /* Black #000000 */
+    --primary-foreground: 0 0% 100%; /* White */
+    --primary-glow: 40 85% 65%; /* Gold glow */
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 0 0% 100%; /* White */
+    --secondary-foreground: 0 0% 0%; /* Black */
 
-    --muted: 220 13% 95%;
-    --muted-foreground: 220 9% 46%;
+    /* Utility Colors */
+    --muted: 0 0% 98%; /* Light Gray #fafafa */
+    --muted-foreground: 0 0% 46%; /* Text Gray #757575 */
 
-    --accent: 262 83% 58%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 40 85% 65%; /* Gold #f0ba60 */
+    --accent-foreground: 0 0% 0%; /* Black */
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 4 78% 57%; /* Error Red #e74c3c */
+    --destructive-foreground: 0 0% 100%; /* White */
 
-    --success: 142 76% 36%;
-    --success-foreground: 0 0% 100%;
+    --success: 40 85% 65%; /* Gold #f0ba60 */
+    --success-foreground: 0 0% 0%; /* Black */
 
-    --warning: 38 92% 50%;
+    --warning: 38 92% 50%; /* Keep existing */
     --warning-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 262 83% 58%;
+    --info: 204 70% 53%; /* Info Blue #3498db */
+    --info-foreground: 0 0% 100%;
+
+    --border: 0 0% 88%; /* Medium Gray #e0e0e0 */
+    --input: 0 0% 88%; /* Medium Gray */
+    --ring: 0 0% 0%; /* Black */
 
     --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 262 83% 58%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 262 90% 97%;
-    --sidebar-accent-foreground: 262 83% 58%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 262 83% 58%;
+    /* Sidebar Colors */
+    --sidebar-background: 0 0% 100%; /* White */
+    --sidebar-foreground: 0 0% 0%; /* Black */
+    --sidebar-primary: 0 0% 0%; /* Black */
+    --sidebar-primary-foreground: 0 0% 100%; /* White */
+    --sidebar-accent: 0 0% 98%; /* Light Gray #fafafa */
+    --sidebar-accent-foreground: 0 0% 0%; /* Black */
+    --sidebar-border: 0 0% 88%; /* Medium Gray */
+    --sidebar-ring: 0 0% 0%; /* Black */
 
-    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%), hsl(220 100% 66%));
-    --gradient-card: linear-gradient(135deg, hsl(262 90% 97%), hsl(220 95% 98%));
-    --shadow-elegant: 0 10px 40px -10px hsl(262 83% 58% / 0.2);
-    --shadow-card: 0 2px 8px -2px hsl(222 47% 11% / 0.1);
+    /* Additional Grays */
+    --dark-gray: 0 0% 33%; /* Dark Gray #555555 */
+    --text-gray: 0 0% 46%; /* Text Gray #757575 */
+    --light-gray: 0 0% 98%; /* Light Gray #fafafa */
+    --medium-gray: 0 0% 88%; /* Medium Gray #e0e0e0 */
+
+    --gradient-primary: linear-gradient(135deg, hsl(0, 0%, 0%), hsl(0, 0%, 20%));
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(0 0% 98%));
+    --shadow-elegant: 0 10px 40px -10px hsl(0 0% 0% / 0.15);
+    --shadow-card: 0 2px 8px -2px hsl(0 0% 0% / 0.1);
   }
 
   .dark {
-    --background: 222 47% 4%;
-    --foreground: 210 40% 98%;
+    --background: 0 0% 7%; /* Dark background */
+    --foreground: 0 0% 100%; /* White text */
 
-    --card: 222 47% 7%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 10%; /* Dark card */
+    --card-foreground: 0 0% 100%; /* White text */
 
-    --popover: 222 47% 7%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 262 83% 58%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 262 90% 70%;
+    --primary: 40 85% 65%; /* Gold in dark mode */
+    --primary-foreground: 0 0% 0%; /* Black text */
+    --primary-glow: 40 85% 75%;
 
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 0 0% 15%; /* Dark gray */
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
 
-    --accent: 262 83% 58%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 40 85% 65%; /* Gold */
+    --accent-foreground: 0 0% 0%;
 
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 4 78% 57%; /* Error Red */
+    --destructive-foreground: 0 0% 100%;
 
-    --success: 142 76% 36%;
-    --success-foreground: 0 0% 100%;
+    --success: 40 85% 65%; /* Gold */
+    --success-foreground: 0 0% 0%;
 
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 262 83% 58%;
+    --info: 204 70% 53%; /* Info Blue */
+    --info-foreground: 0 0% 100%;
 
-    --sidebar-background: 222 47% 7%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 262 83% 58%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 33% 17%;
-    --sidebar-accent-foreground: 262 83% 58%;
-    --sidebar-border: 217 33% 17%;
-    --sidebar-ring: 262 83% 58%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 40 85% 65%; /* Gold ring */
 
-    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%), hsl(220 100% 66%));
-    --gradient-card: linear-gradient(135deg, hsl(222 47% 10%), hsl(222 47% 7%));
-    --shadow-elegant: 0 10px 40px -10px hsl(262 83% 58% / 0.3);
-    --shadow-card: 0 4px 12px -4px hsl(262 83% 58% / 0.1);
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 40 85% 65%; /* Gold */
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 40 85% 65%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 40 85% 65%;
+
+    --dark-gray: 0 0% 65%;
+    --text-gray: 0 0% 70%;
+    --light-gray: 0 0% 15%;
+    --medium-gray: 0 0% 20%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(40 85% 65%), hsl(40 85% 55%));
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 10%), hsl(0 0% 7%));
+    --shadow-elegant: 0 10px 40px -10px hsl(40 85% 65% / 0.3);
+    --shadow-card: 0 4px 12px -4px hsl(40 85% 65% / 0.1);
   }
 }
 
@@ -119,10 +142,12 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground transition-colors duration-300;
+    font-family: 'Inter', 'Helvetica Neue', sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold;
+    font-family: 'Playfair Display', serif;
+    @apply font-bold;
   }
 
   /* Custom thin scrollbar for the entire website */
@@ -166,6 +191,32 @@ All colors MUST be HSL.
 
   .shadow-card {
     box-shadow: var(--shadow-card);
+  }
+
+  /* Typography Utilities */
+  .font-display {
+    font-family: 'Playfair Display', serif;
+  }
+
+  .font-body {
+    font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  }
+
+  /* Hero Text */
+  .text-hero {
+    font-family: 'Playfair Display', serif;
+    @apply text-6xl md:text-8xl font-black;
+  }
+
+  /* Heading Text */
+  .text-heading {
+    font-family: 'Playfair Display', serif;
+    @apply text-3xl md:text-5xl font-bold;
+  }
+
+  /* Button Interaction Pattern */
+  .btn-interaction {
+    @apply transition duration-300 ease-in-out hover:scale-105 active:opacity-80 focus:ring-2 ring-black;
   }
 
   .animate-slide-in {
