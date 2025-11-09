@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,27 +8,53 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ArrowLeft, Upload, Plus, X } from 'lucide-react';
+import { ArrowLeft, Upload, Plus, X, Save } from 'lucide-react';
 import { products } from '@/data/mockData';
+import { usePackageStore } from '@/stores/packageStore';
 import { toast } from '@/hooks/use-toast';
 
 export default function PackageCreate() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { id } = useParams();
+  const { addPackage, updatePackage, getPackageById } = usePackageStore();
+  
+  const isEditMode = !!id;
+  const existingPackage = isEditMode ? getPackageById(id) : null;
   
   const [formData, setFormData] = useState({
-    name: '',
-    type: 'individual',
-    frequency: 'daily',
-    size: 'small',
-    description: '',
-    photo: '',
+    name: existingPackage?.name || '',
+    type: existingPackage?.type || 'individual',
+    frequency: existingPackage?.frequency || 'daily',
+    size: existingPackage?.size || 'small',
+    description: existingPackage?.description || '',
+    photo: existingPackage?.photo || '',
+    status: existingPackage?.status || 'active' as 'active' | 'inactive' | 'draft',
   });
   
-  const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
-  const [customPrice, setCustomPrice] = useState<string>('');
-  const [customCoins, setCustomCoins] = useState<string>('');
-  const [imagePreview, setImagePreview] = useState<string>('');
+  const [selectedProducts, setSelectedProducts] = useState<string[]>(existingPackage?.products || []);
+  const [customPrice, setCustomPrice] = useState<string>(existingPackage?.price.toString() || '');
+  const [customCoins, setCustomCoins] = useState<string>(existingPackage?.redeemCoins.toString() || '');
+  const [imagePreview, setImagePreview] = useState<string>(existingPackage?.photo || '');
+
+  // Load existing package data when in edit mode
+  useEffect(() => {
+    if (isEditMode && existingPackage) {
+      setFormData({
+        name: existingPackage.name,
+        type: existingPackage.type,
+        frequency: existingPackage.frequency,
+        size: existingPackage.size,
+        description: existingPackage.description,
+        photo: existingPackage.photo,
+        status: existingPackage.status,
+      });
+      setSelectedProducts(existingPackage.products);
+      setCustomPrice(existingPackage.price.toString());
+      setCustomCoins(existingPackage.redeemCoins.toString());
+      setImagePreview(existingPackage.photo);
+    }
+  }, [isEditMode, existingPackage]);
 
   const calculateBasePrice = () => {
     return products
@@ -94,11 +120,31 @@ export default function PackageCreate() {
       return;
     }
 
-    // Here you would typically save to backend
-    toast({
-      title: "Success",
-      description: "Package created successfully",
-    });
+    const productDetails = products
+      .filter((p) => selectedProducts.includes(p.id))
+      .map((p) => ({ id: p.id, name: p.name, price: p.price }));
+
+    const packageData = {
+      ...formData,
+      products: selectedProducts,
+      productDetails,
+      price: getTotalPrice(),
+      redeemCoins: getRedeemCoins(),
+    };
+
+    if (isEditMode && id) {
+      updatePackage(id, packageData);
+      toast({
+        title: "Success",
+        description: "Package updated successfully",
+      });
+    } else {
+      addPackage(packageData);
+      toast({
+        title: "Success",
+        description: "Package created successfully",
+      });
+    }
     
     navigate('/packages');
   };
@@ -111,9 +157,11 @@ export default function PackageCreate() {
         </Button>
         <div>
           <h1 className="text-3xl font-bold gradient-primary bg-clip-text text-transparent">
-            Create New Package
+            {isEditMode ? 'Edit Package' : 'Create New Package'}
           </h1>
-          <p className="text-muted-foreground mt-1">Fill in the details to create a subscription package</p>
+          <p className="text-muted-foreground mt-1">
+            {isEditMode ? 'Update the package details' : 'Fill in the details to create a subscription package'}
+          </p>
         </div>
       </div>
 
@@ -193,6 +241,22 @@ export default function PackageCreate() {
                   </SelectContent>
                 </Select>
               </div>
+
+              {isEditMode && (
+                <div className="grid gap-2">
+                  <Label htmlFor="status">Status</Label>
+                  <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value as 'active' | 'inactive' | 'draft' })}>
+                    <SelectTrigger id="status">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="inactive">Inactive</SelectItem>
+                      <SelectItem value="draft">Draft</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -359,8 +423,17 @@ export default function PackageCreate() {
 
               <div className="space-y-2 pt-4">
                 <Button className="w-full" onClick={handleSubmit}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Package
+                  {isEditMode ? (
+                    <>
+                      <Save className="h-4 w-4 mr-2" />
+                      Update Package
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create Package
+                    </>
+                  )}
                 </Button>
                 <Button variant="outline" className="w-full" onClick={() => navigate('/packages')}>
                   Cancel

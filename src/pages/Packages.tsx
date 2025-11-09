@@ -1,14 +1,46 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Plus, Edit, Trash2, Package as PackageIcon } from 'lucide-react';
-import { subscriptionPackages } from '@/data/mockData';
+import { usePackageStore } from '@/stores/packageStore';
+import { toast } from '@/hooks/use-toast';
 
 export default function Packages() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { packages, deletePackage } = usePackageStore();
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [packageToDelete, setPackageToDelete] = useState<string | null>(null);
+
+  const handleDeleteClick = (id: string) => {
+    setPackageToDelete(id);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (packageToDelete) {
+      deletePackage(packageToDelete);
+      toast({
+        title: "Success",
+        description: "Package deleted successfully",
+      });
+      setPackageToDelete(null);
+    }
+    setDeleteDialogOpen(false);
+  };
 
   return (
     <div className="space-y-6">
@@ -26,7 +58,7 @@ export default function Packages() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {subscriptionPackages.map((pkg) => (
+        {packages.map((pkg) => (
           <Card key={pkg.id} className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <div className="flex items-start justify-between">
@@ -68,11 +100,20 @@ export default function Packages() {
               </div>
 
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="flex-1">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="flex-1"
+                  onClick={() => navigate(`/packages/edit/${pkg.id}`)}
+                >
                   <Edit className="h-4 w-4 mr-1" />
                   {t('common.edit')}
                 </Button>
-                <Button variant="destructive" size="sm">
+                <Button 
+                  variant="destructive" 
+                  size="sm"
+                  onClick={() => handleDeleteClick(pkg.id)}
+                >
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
@@ -80,6 +121,24 @@ export default function Packages() {
           </Card>
         ))}
       </div>
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the package
+              and remove it from the system.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
