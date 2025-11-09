@@ -31,6 +31,7 @@ import LoyaltyRewards from "./pages/LoyaltyRewards";
 import Family from "./pages/Family";
 import Analytics from "./pages/Analytics";
 import Marketing from "./pages/Marketing";
+import PackageCreate from "./pages/PackageCreate";
 
 const queryClient = new QueryClient();
 
@@ -74,6 +75,8 @@ const App = () => {
               <Route path="products" element={<Products />} />
               <Route path="products/create" element={<ProductCreate />} />
               <Route path="packages" element={<Packages />} />
+              <Route path="packages/create" element={<PackageCreate />} />
+              <Route path="packages/edit/:id" element={<PackageCreate />} />
               <Route path="profile" element={<Profile />} />
               <Route path="reports" element={<Reports />} />
               <Route path="delivery" element={<Delivery />} />
