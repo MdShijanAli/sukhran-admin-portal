@@ -17,6 +17,7 @@ import NotFound from './pages/NotFound';
 import Products from './pages/Products';
 import ProductCreate from './pages/ProductCreate';
 import Packages from './pages/Packages';
+import PackageCreate from './pages/PackageCreate';
 import Profile from './pages/Profile';
 import Reports from './pages/Reports';
 import Delivery from './pages/Delivery';
@@ -74,6 +75,7 @@ const App = () => {
               <Route path="products" element={<Products />} />
               <Route path="products/create" element={<ProductCreate />} />
               <Route path="packages" element={<Packages />} />
+              <Route path="packages/create" element={<PackageCreate />} />
               <Route path="profile" element={<Profile />} />
               <Route path="reports" element={<Reports />} />
               <Route path="delivery" element={<Delivery />} />
