@@ -20,7 +20,7 @@ import Packages from "./pages/Packages";
 import Profile from "./pages/Profile";
 import Reports from "./pages/Reports";
 import Delivery from "./pages/delivery/Delivery";
-import Financial from "./pages/Financial";
+import Financial from "./pages/financial/Financial";
 import Support from "./pages/Support";
 import Coupons from "./pages/Coupons";
 import Returns from "./pages/Returns";

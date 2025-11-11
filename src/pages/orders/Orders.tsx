@@ -11,6 +11,7 @@ import {
   RefreshCcw,
 } from "lucide-react";
 import { BaseTableList, Column } from "@/components/table";
+import { formatDate } from "@/lib/utils";
 
 interface Order {
   id: string;
@@ -86,15 +87,6 @@ export default function Orders() {
       default:
         return "bg-muted text-muted-foreground";
     }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
   };
 
   // Define table columns
