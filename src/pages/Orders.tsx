@@ -11,6 +11,14 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
   Table,
   TableBody,
   TableCell,
@@ -18,12 +26,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Search, Filter, Download, MoreHorizontal } from 'lucide-react';
-import { orders } from '@/data/mockData';
+import { Search, Filter, Download, MoreHorizontal, Eye, CheckCircle, Truck, XCircle } from 'lucide-react';
+import { useOrderStore, Order } from '@/stores/orderStore';
+import { toast } from '@/hooks/use-toast';
+import OrderDetailsDialog from '@/components/OrderDetailsDialog';
 
 export default function Orders() {
   const { t } = useTranslation();
+  const { orders, updateOrderStatus, cancelOrder } = useOrderStore();
   const [searchQuery, setSearchQuery] = useState('');
+  const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   const filteredOrders = orders.filter(
     (order) =>
@@ -50,6 +63,27 @@ export default function Orders() {
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
+    });
+  };
+
+  const handleViewDetails = (order: Order) => {
+    setSelectedOrder(order);
+    setDetailsDialogOpen(true);
+  };
+
+  const handleStatusChange = (orderId: string, status: Order['status']) => {
+    updateOrderStatus(orderId, status);
+    toast({
+      title: "Success",
+      description: `Order status updated to ${status}`,
+    });
+  };
+
+  const handleCancelOrder = (orderId: string) => {
+    cancelOrder(orderId);
+    toast({
+      title: "Success",
+      description: "Order cancelled successfully",
     });
   };
 
@@ -187,9 +221,48 @@ export default function Orders() {
                       )}
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="icon">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuItem onClick={() => handleViewDetails(order)}>
+                            <Eye className="mr-2 h-4 w-4" />
+                            View Details
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          {order.status !== 'delivered' && order.status !== 'cancelled' && (
+                            <>
+                              <DropdownMenuItem 
+                                onClick={() => handleStatusChange(order.id, 'processing')}
+                                disabled={order.status === 'processing'}
+                              >
+                                <CheckCircle className="mr-2 h-4 w-4" />
+                                Mark as Processing
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                onClick={() => handleStatusChange(order.id, 'delivered')}
+                              >
+                                <Truck className="mr-2 h-4 w-4" />
+                                Mark as Delivered
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                            </>
+                          )}
+                          {order.status !== 'cancelled' && order.status !== 'delivered' && (
+                            <DropdownMenuItem 
+                              onClick={() => handleCancelOrder(order.id)}
+                              className="text-destructive"
+                            >
+                              <XCircle className="mr-2 h-4 w-4" />
+                              Cancel Order
+                            </DropdownMenuItem>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -198,6 +271,12 @@ export default function Orders() {
           </div>
         </CardContent>
       </Card>
+
+      <OrderDetailsDialog
+        order={selectedOrder}
+        open={detailsDialogOpen}
+        onOpenChange={setDetailsDialogOpen}
+      />
     </div>
   );
 }

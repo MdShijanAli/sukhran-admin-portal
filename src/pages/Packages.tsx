@@ -5,6 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -14,16 +21,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Plus, Edit, Trash2, Package as PackageIcon } from 'lucide-react';
-import { usePackageStore } from '@/stores/packageStore';
+import { Plus, Edit, Trash2, Package as PackageIcon, Eye, Copy } from 'lucide-react';
+import { usePackageStore, Package } from '@/stores/packageStore';
 import { toast } from '@/hooks/use-toast';
+import PackagePreview from '@/components/PackagePreview';
 
 export default function Packages() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { packages, deletePackage } = usePackageStore();
+  const { packages, deletePackage, duplicatePackage } = usePackageStore();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [packageToDelete, setPackageToDelete] = useState<string | null>(null);
+  const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
+  const [packageToPreview, setPackageToPreview] = useState<Package | null>(null);
 
   const handleDeleteClick = (id: string) => {
     setPackageToDelete(id);
@@ -40,6 +50,19 @@ export default function Packages() {
       setPackageToDelete(null);
     }
     setDeleteDialogOpen(false);
+  };
+
+  const handlePreviewClick = (pkg: Package) => {
+    setPackageToPreview(pkg);
+    setPreviewDialogOpen(true);
+  };
+
+  const handleDuplicateClick = (id: string) => {
+    duplicatePackage(id);
+    toast({
+      title: "Success",
+      description: "Package duplicated successfully",
+    });
   };
 
   return (
@@ -99,7 +122,21 @@ export default function Packages() {
                 </div>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => handlePreviewClick(pkg)}
+                >
+                  <Eye className="h-4 w-4" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => handleDuplicateClick(pkg.id)}
+                >
+                  <Copy className="h-4 w-4" />
+                </Button>
                 <Button 
                   variant="outline" 
                   size="sm" 
@@ -121,6 +158,18 @@ export default function Packages() {
           </Card>
         ))}
       </div>
+
+      <Dialog open={previewDialogOpen} onOpenChange={setPreviewDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Package Preview</DialogTitle>
+            <DialogDescription>
+              This is how customers will see this package
+            </DialogDescription>
+          </DialogHeader>
+          {packageToPreview && <PackagePreview package={packageToPreview} />}
+        </DialogContent>
+      </Dialog>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>

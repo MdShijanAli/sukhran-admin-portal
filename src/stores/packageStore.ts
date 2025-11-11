@@ -25,6 +25,7 @@ interface PackageState {
   addPackage: (pkg: Omit<Package, 'id' | 'createdAt' | 'updatedAt' | 'subscribers'>) => void;
   updatePackage: (id: string, pkg: Partial<Package>) => void;
   deletePackage: (id: string) => void;
+  duplicatePackage: (id: string) => void;
   getPackageById: (id: string) => Package | undefined;
 }
 
@@ -76,6 +77,23 @@ export const usePackageStore = create<PackageState>()(
         set((state) => ({
           packages: state.packages.filter((pkg) => pkg.id !== id),
         }));
+      },
+      duplicatePackage: (id) => {
+        const packageToDuplicate = get().packages.find((pkg) => pkg.id === id);
+        if (packageToDuplicate) {
+          const newPackage: Package = {
+            ...packageToDuplicate,
+            id: `PKG-${Date.now()}`,
+            name: `${packageToDuplicate.name} (Copy)`,
+            subscribers: 0,
+            status: 'draft',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
+          set((state) => ({
+            packages: [newPackage, ...state.packages],
+          }));
+        }
       },
       getPackageById: (id) => {
         return get().packages.find((pkg) => pkg.id === id);
