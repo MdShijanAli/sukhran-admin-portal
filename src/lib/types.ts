@@ -16,3 +16,12 @@ export interface User {
   role: Role;
   avatar?: string;
 }
+
+export interface Notification {
+  id: string;
+  type: "order" | "payment" | "delivery" | "alert";
+  title: string;
+  message: string;
+  time: string;
+  read: boolean;
+}

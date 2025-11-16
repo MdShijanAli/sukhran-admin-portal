@@ -8,6 +8,10 @@ interface LoginResponse {
   refresh_token?: string;
   user: User;
 }
+interface LogoutResponse {
+  success: boolean;
+  message: string;
+}
 
 const authService = {
   login: async (email: string, password: string): Promise<User | null> => {
@@ -41,19 +45,27 @@ const authService = {
     }
   },
 
-  logout: async () => {
+  logout: async (): Promise<LogoutResponse> => {
     try {
       // Best-effort server logout
-      await apiClient.post(apiRoutes.auth.logout);
+      const result = await apiClient.post<LogoutResponse>(
+        apiRoutes.auth.logout
+      );
+      console.log("Logout response:", result);
+      apiClient.setAccessToken(null);
+      apiClient.setRefreshToken(null);
+      useAuthStore.setState({
+        user: null,
+        isAuthenticated: false,
+        access_token: null,
+        refresh_token: null,
+      });
+      return result.data;
     } catch (e) {
       console.error("Logout error:", e);
-      return e;
+      // Rethrow so callers can handle the failure consistently
+      throw e;
     }
-
-    // Clear tokens and local state
-    apiClient.setAccessToken(null);
-    apiClient.setRefreshToken(null);
-    useAuthStore.setState({ user: null, isAuthenticated: false });
   },
 };
 

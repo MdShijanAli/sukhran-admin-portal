@@ -27,15 +27,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import authService from "@/services/authService";
 import { toast } from "sonner";
-
-interface Notification {
-  id: string;
-  type: "order" | "payment" | "delivery" | "alert";
-  title: string;
-  message: string;
-  time: string;
-  read: boolean;
-}
+import { Notification } from "@/lib/types";
 
 const mockNotifications: Notification[] = [
   {
@@ -107,15 +99,21 @@ export default function Header() {
       .toUpperCase();
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     try {
-      const response = authService.logout();
+      const response = await authService.logout();
       console.log("Logout response:", response);
-      toast.success("Logged out successfully");
-      navigate("/login");
-    } catch (error) {
+
+      if (response && response.success) {
+        toast.success("Logged out successfully");
+        navigate("/login");
+      } else {
+        toast.error(response?.message || "Logout failed");
+      }
+    } catch (error: unknown) {
       console.error("Logout error:", error);
-      toast.error(error.message || "An error occurred during logout");
+      const message = error instanceof Error ? error.message : String(error);
+      toast.error(message || "An error occurred during logout");
     }
   };
 
