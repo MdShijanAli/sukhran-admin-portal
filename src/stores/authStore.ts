@@ -20,3 +20,9 @@ export const useAuthStore = createStore<AuthState>(
   "auth-storage",
   true
 );
+
+// Computed selector for isAdmin
+export const useIsAdmin = () => {
+  const user = useAuthStore((state) => state.user);
+  return user?.role?.name === "admin" || false;
+};

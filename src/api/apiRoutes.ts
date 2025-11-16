@@ -22,4 +22,9 @@ export const apiRoutes = {
     resendOtp: createApiUrl("auth/resend-mobile-otp"),
     resetPassword: createApiUrl("auth/reset-password"),
   },
+
+  profile: {
+    getProfile: createApiUrl("auth/profile"),
+    updateProfile: createApiUrl("auth/profile/update"),
+  },
 };

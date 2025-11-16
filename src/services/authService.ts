@@ -8,6 +8,10 @@ interface LoginResponse {
   refresh_token?: string;
   user: User;
 }
+interface FetchProfileResponse {
+  success: boolean;
+  user: User;
+}
 interface LogoutResponse {
   success: boolean;
   message: string;
@@ -41,6 +45,27 @@ const authService = {
     } catch (err) {
       console.error("Login error:", err);
       // Propagate error to caller
+      return err;
+    }
+  },
+
+  fetchProfile: async () => {
+    try {
+      const resp = await apiClient.get<FetchProfileResponse>(
+        apiRoutes.profile.getProfile
+      );
+      const user = resp?.data;
+      console.log("Fetch Profile response data:", user);
+
+      // Update store with fetched user data
+      useAuthStore.setState({
+        user: user.user,
+        isAuthenticated: true,
+      });
+
+      return resp;
+    } catch (err) {
+      console.error("Fetch Profile error:", err);
       return err;
     }
   },

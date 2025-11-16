@@ -5,9 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { ArrowLeft, EyeIcon, EyeOff, Lock, Mail, Phone } from "lucide-react";
-import apiClient from "@/api/apiClient";
-import { apiRoutes } from "@/api/apiRoutes";
+import { ArrowLeft, EyeIcon, EyeOff, Lock, Phone } from "lucide-react";
 import authService from "@/services/authService";
 
 type Step = "request" | "reset";
@@ -315,8 +313,35 @@ export default function ForgotPassword() {
                 <Button
                   type="button"
                   variant="ghost"
-                  onClick={handleRequestOTP}
+                  onClick={async () => {
+                    setResending(true);
+                    try {
+                      const response = await authService.forgotPasswordOtpSent(
+                        mobile
+                      );
+                      toast.success(
+                        response.message ||
+                          "Verification code resent successfully!"
+                      );
+                    } catch (error: unknown) {
+                      const apiError =
+                        error &&
+                        typeof error === "object" &&
+                        "response" in error
+                          ? (error as {
+                              response?: { data?: { error_message?: string } };
+                            })
+                          : null;
+                      toast.error(
+                        apiError?.response?.data?.error_message ||
+                          "Failed to resend code"
+                      );
+                    } finally {
+                      setResending(false);
+                    }
+                  }}
                   className="w-full"
+                  disabled={resending}
                 >
                   {resending ? "Resending..." : "Resend Code"}
                 </Button>
