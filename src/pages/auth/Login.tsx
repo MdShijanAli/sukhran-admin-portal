@@ -10,7 +10,7 @@ import { EyeIcon, EyeOff, Lock, Mail } from "lucide-react";
 import authService from "@/services/authService";
 
 export default function Login() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,34 +39,42 @@ export default function Login() {
     }
   };
 
+  const bulletPoints = [
+    "Real-time Analytics",
+    "Comprehensive Management",
+    "Secure & Reliable",
+  ];
+
   return (
     <div className="flex min-h-screen">
       {/* Left Side - Branding */}
       <div className="hidden lg:flex lg:w-1/2 gradient-primary items-center justify-center p-12">
         <div className="max-w-md text-white">
+          {/* Logo */}
+          <div className="flex justify-center mb-8">
+            <img
+              src={
+                i18n.language === "en"
+                  ? "/images/Skr-eng.png"
+                  : "/images/Skr-bng.png"
+              }
+              alt="Shukran logo"
+              className="w-40 h-auto object-contain"
+            />
+          </div>
           <h1 className="text-5xl font-bold mb-6">Admin Panel</h1>
           <p className="text-xl opacity-90">
             Manage your business with powerful analytics and comprehensive tools
           </p>
           <div className="mt-12 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-full bg-white/20 flex items-center justify-center">
-                ✓
+            {bulletPoints.map((point) => (
+              <div key={point} className="flex items-center gap-3">
+                <div className="size-6 rounded-full bg-white/20 flex items-center justify-center">
+                  ✓
+                </div>
+                <span className="text-lg">{point}</span>
               </div>
-              <span className="text-lg">Real-time Analytics</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-full bg-white/20 flex items-center justify-center">
-                ✓
-              </div>
-              <span className="text-lg">Comprehensive Management</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-full bg-white/20 flex items-center justify-center">
-                ✓
-              </div>
-              <span className="text-lg">Secure & Reliable</span>
-            </div>
+            ))}
           </div>
         </div>
       </div>
