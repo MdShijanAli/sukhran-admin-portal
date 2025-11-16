@@ -25,3 +25,11 @@ export interface Notification {
   time: string;
   read: boolean;
 }
+
+export interface Error {
+  error_code?: string;
+  success: boolean;
+  error_message?: string;
+  message: string;
+  errors?: Record<string, string[]>;
+}

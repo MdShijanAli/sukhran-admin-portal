@@ -144,9 +144,13 @@ export default function Login() {
                   {t("auth.rememberMe")}
                 </Label>
               </div>
-              <a href="#" className="text-sm text-primary hover:underline">
+              <button
+                type="button"
+                onClick={() => navigate("/forgot-password")}
+                className="text-sm text-primary hover:underline"
+              >
                 {t("auth.forgotPassword")}
-              </a>
+              </button>
             </div>
 
             <Button

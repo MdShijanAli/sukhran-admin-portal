@@ -67,6 +67,19 @@ const authService = {
       throw e;
     }
   },
+
+  forgotPassword: async (mobile: string) => {
+    try {
+      const resp = await apiClient.post(apiRoutes.auth.forgotPassword, {
+        mobile,
+      });
+      console.log("Forgot Password response:", resp.data);
+      return resp.data;
+    } catch (e) {
+      console.error("Forgot Password error:", e);
+      throw e;
+    }
+  },
 };
 
 export default authService;

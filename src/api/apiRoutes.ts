@@ -17,5 +17,8 @@ export const apiRoutes = {
     login: createApiUrl("auth/login"),
     logout: createApiUrl("auth/logout"),
     refreshToken: createApiUrl("auth/refresh-token"),
+    forgotPassword: createApiUrl("auth/forgot-password"),
+    verifyOTP: createApiUrl("auth/verify-otp"),
+    resetPassword: createApiUrl("auth/reset-password"),
   },
 };
