@@ -12,6 +12,7 @@ export interface User {
   mobile: string;
   email?: string;
   displayImage?: string;
+  image_url?: string;
   preferredName?: string;
   role: Role;
   avatar?: string;

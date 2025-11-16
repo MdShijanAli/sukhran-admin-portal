@@ -70,6 +70,21 @@ const authService = {
     }
   },
 
+  updateLogo: async (data) => {
+    try {
+      const resp = await apiClient.post(apiRoutes.profile.updateProfile, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("Update Profile response:", resp.data);
+      return resp.data;
+    } catch (e) {
+      console.error("Update Profile error:", e);
+      throw e;
+    }
+  },
+
   logout: async (): Promise<LogoutResponse> => {
     try {
       // Best-effort server logout

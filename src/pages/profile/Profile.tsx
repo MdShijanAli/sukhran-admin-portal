@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuthStore } from "@/stores/authStore";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,12 +16,14 @@ import {
   Lock,
   Upload,
   Palette,
+  EyeIcon,
+  EyeOff,
 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import authService from "@/services/authService";
+import { toast } from "sonner";
 
 export default function Profile() {
   const { t } = useTranslation();
-  const { toast } = useToast();
   const user = useAuthStore((state) => state.user);
 
   // Personal Info State
@@ -29,6 +31,11 @@ export default function Profile() {
   const [email, setEmail] = useState(user?.email || "");
   const [phone, setPhone] = useState(user.mobile || "");
   const [location, setLocation] = useState("Dhaka, Bangladesh");
+  const [showPassword, setShowPassword] = useState({
+    old_password: false,
+    new_password: false,
+    confirm_password: false,
+  });
 
   // Password State
   const [currentPassword, setCurrentPassword] = useState("");
@@ -38,6 +45,10 @@ export default function Profile() {
   // Theme Colors State
   const [primaryColor, setPrimaryColor] = useState("#8B5CF6");
   const [secondaryColor, setSecondaryColor] = useState("#EC4899");
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string>(
+    user?.image_url || ""
+  );
 
   if (!user) return null;
 
@@ -47,49 +58,54 @@ export default function Profile() {
     .join("")
     .toUpperCase();
 
-  const handlePersonalInfoSave = () => {
-    toast({
-      title: t("profile.success"),
-      description: t("profile.personalInfoUpdated"),
-    });
-  };
+  const handlePersonalInfoSave = () => {};
 
   const handlePasswordChange = () => {
     if (newPassword !== confirmPassword) {
-      toast({
-        title: t("profile.error"),
-        description: t("profile.passwordMismatch"),
-        variant: "destructive",
-      });
       return;
     }
 
     if (newPassword.length < 6) {
-      toast({
-        title: t("profile.error"),
-        description: t("profile.passwordTooShort"),
-        variant: "destructive",
-      });
       return;
     }
-
-    toast({
-      title: t("profile.success"),
-      description: t("profile.passwordChanged"),
-    });
 
     setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");
   };
 
-  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      toast({
-        title: t("profile.success"),
-        description: t("profile.logoUploaded"),
-      });
+    if (!file) return;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+
+    setUploadingLogo(true);
+    const data = new FormData();
+    data.append("displayImage", file);
+
+    try {
+      const result = await authService.updateLogo(data);
+      if (result && result.success) {
+        toast.success(result.message || "Logo uploaded successfully");
+        // Fetch updated profile to get new image URL
+        await authService.fetchProfile();
+      } else {
+        throw new Error("Logo upload failed");
+      }
+      console.log("Logo upload result:", result);
+    } catch (error) {
+      console.error("Logo upload error:", error);
+      toast.error("Failed to upload logo");
+      // Revert preview on error
+      setImagePreview(user?.image_url || "");
+    } finally {
+      setUploadingLogo(false);
     }
   };
 
@@ -97,11 +113,6 @@ export default function Profile() {
     // Update CSS variables
     document.documentElement.style.setProperty("--primary", primaryColor);
     document.documentElement.style.setProperty("--secondary", secondaryColor);
-
-    toast({
-      title: t("profile.success"),
-      description: t("profile.themeColorsUpdated"),
-    });
   };
 
   return (
@@ -109,15 +120,33 @@ export default function Profile() {
       <div className="grid gap-6 md:grid-cols-3">
         {/* Profile Avatar Card */}
         <Card className="md:col-span-1">
-          <CardHeader>
-            <CardTitle>{t("profile.avatar")}</CardTitle>
-          </CardHeader>
           <CardContent className="flex flex-col items-center space-y-4">
-            <Avatar className="h-32 w-32">
-              <AvatarFallback className="text-4xl bg-gradient-primary">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
+            <div className="relative my-3">
+              <Avatar
+                className={`h-32 w-32 ${
+                  uploadingLogo
+                    ? "animate-spin border-4 border-primary border-t-transparent rounded-full"
+                    : ""
+                }`}
+              >
+                <AvatarFallback className="text-4xl bg-gradient-primary">
+                  {imagePreview ? (
+                    <img
+                      src={imagePreview}
+                      alt={user.firstName}
+                      className="w-full h-full object-cover object-top border-2 border-primary rounded-full"
+                    />
+                  ) : (
+                    <span>{initials}</span>
+                  )}
+                </AvatarFallback>
+              </Avatar>
+              {uploadingLogo && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full">
+                  <div className="text-white text-sm">Uploading...</div>
+                </div>
+              )}
+            </div>
             <div className="text-center">
               <h3 className="text-xl font-semibold">{user.firstName}</h3>
               <p className="text-sm text-muted-foreground capitalize">
@@ -129,7 +158,7 @@ export default function Profile() {
                 <div className="border-2 border-dashed rounded-lg p-4 text-center hover:border-primary transition-colors">
                   <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                   <p className="text-sm text-muted-foreground">
-                    {t("profile.uploadAvatar")}
+                    {uploadingLogo ? "Uploading..." : t("profile.uploadAvatar")}
                   </p>
                 </div>
                 <Input
@@ -138,6 +167,7 @@ export default function Profile() {
                   accept="image/*"
                   className="hidden"
                   onChange={handleLogoUpload}
+                  disabled={uploadingLogo}
                 />
               </Label>
             </div>
@@ -253,39 +283,110 @@ export default function Profile() {
                     <Label htmlFor="currentPassword">
                       {t("profile.currentPassword")}
                     </Label>
-                    <Input
-                      id="currentPassword"
-                      type="password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      placeholder="••••••••"
-                    />
+                    <div className="relative">
+                      <Input
+                        id="currentPassword"
+                        type={showPassword.old_password ? "text" : "password"}
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        placeholder="••••••••"
+                      />
+                      {showPassword.old_password ? (
+                        <EyeIcon
+                          className="absolute right-3 top-3 h-5 w-5 text-muted-foreground cursor-pointer"
+                          onClick={() =>
+                            setShowPassword({
+                              ...showPassword,
+                              old_password: false,
+                            })
+                          }
+                        />
+                      ) : (
+                        <EyeOff
+                          className="absolute right-3 top-3 h-5 w-5 text-muted-foreground cursor-pointer"
+                          onClick={() =>
+                            setShowPassword({
+                              ...showPassword,
+                              old_password: true,
+                            })
+                          }
+                        />
+                      )}
+                    </div>
                   </div>
 
                   <div className="grid gap-2">
                     <Label htmlFor="newPassword">
                       {t("profile.newPassword")}
                     </Label>
-                    <Input
-                      id="newPassword"
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="••••••••"
-                    />
+                    <div className="relative">
+                      <Input
+                        id="newPassword"
+                        type={showPassword.new_password ? "text" : "password"}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="••••••••"
+                      />
+                      {showPassword.new_password ? (
+                        <EyeIcon
+                          className="absolute right-3 top-3 h-5 w-5 text-muted-foreground cursor-pointer"
+                          onClick={() =>
+                            setShowPassword({
+                              ...showPassword,
+                              new_password: false,
+                            })
+                          }
+                        />
+                      ) : (
+                        <EyeOff
+                          className="absolute right-3 top-3 h-5 w-5 text-muted-foreground cursor-pointer"
+                          onClick={() =>
+                            setShowPassword({
+                              ...showPassword,
+                              new_password: true,
+                            })
+                          }
+                        />
+                      )}
+                    </div>
                   </div>
 
                   <div className="grid gap-2">
                     <Label htmlFor="confirmPassword">
                       {t("profile.confirmPassword")}
                     </Label>
-                    <Input
-                      id="confirmPassword"
-                      type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="••••••••"
-                    />
+                    <div className="relative">
+                      <Input
+                        id="confirmPassword"
+                        type={
+                          showPassword.confirm_password ? "text" : "password"
+                        }
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="••••••••"
+                      />
+                      {showPassword.confirm_password ? (
+                        <EyeIcon
+                          className="absolute right-3 top-3 h-5 w-5 text-muted-foreground cursor-pointer"
+                          onClick={() =>
+                            setShowPassword({
+                              ...showPassword,
+                              confirm_password: false,
+                            })
+                          }
+                        />
+                      ) : (
+                        <EyeOff
+                          className="absolute right-3 top-3 h-5 w-5 text-muted-foreground cursor-pointer"
+                          onClick={() =>
+                            setShowPassword({
+                              ...showPassword,
+                              confirm_password: true,
+                            })
+                          }
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
 

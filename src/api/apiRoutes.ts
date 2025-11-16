@@ -18,6 +18,7 @@ export const apiRoutes = {
     logout: createApiUrl("auth/logout"),
     refreshToken: createApiUrl("auth/refresh-token"),
     forgotPassword: createApiUrl("auth/forgot-password"),
+    changePassword: createApiUrl("auth/change-password"),
     verifyOTP: createApiUrl("auth/verify-otp"),
     resendOtp: createApiUrl("auth/resend-mobile-otp"),
     resetPassword: createApiUrl("auth/reset-password"),
@@ -25,6 +26,6 @@ export const apiRoutes = {
 
   profile: {
     getProfile: createApiUrl("auth/profile"),
-    updateProfile: createApiUrl("auth/profile/update"),
+    updateProfile: createApiUrl("auth/profile"),
   },
 };
