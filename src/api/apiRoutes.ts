@@ -19,6 +19,7 @@ export const apiRoutes = {
     refreshToken: createApiUrl("auth/refresh-token"),
     forgotPassword: createApiUrl("auth/forgot-password"),
     verifyOTP: createApiUrl("auth/verify-otp"),
+    resendOtp: createApiUrl("auth/resend-mobile-otp"),
     resetPassword: createApiUrl("auth/reset-password"),
   },
 };

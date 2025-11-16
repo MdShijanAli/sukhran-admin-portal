@@ -1,6 +1,6 @@
 import apiClient from "@/api/apiClient";
 import { apiRoutes } from "@/api/apiRoutes";
-import { User } from "@/lib/types";
+import { ForgotPassword, User } from "@/lib/types";
 import { useAuthStore } from "@/stores/authStore";
 
 interface LoginResponse {
@@ -68,11 +68,35 @@ const authService = {
     }
   },
 
-  forgotPassword: async (mobile: string) => {
+  forgotPasswordOtpSent: async (mobile: string) => {
     try {
       const resp = await apiClient.post(apiRoutes.auth.forgotPassword, {
         mobile,
       });
+      console.log("Forgot Password response:", resp.data);
+      return resp.data;
+    } catch (e) {
+      console.error("Forgot Password error:", e);
+      throw e;
+    }
+  },
+
+  resendOtp: async (mobile: string) => {
+    try {
+      const resp = await apiClient.post(apiRoutes.auth.resendOtp, {
+        mobile,
+      });
+      console.log("Resend OTP response:", resp.data);
+      return resp.data;
+    } catch (e) {
+      console.error("Resend OTP error:", e);
+      throw e;
+    }
+  },
+
+  forgotPassword: async (data: ForgotPassword) => {
+    try {
+      const resp = await apiClient.post(apiRoutes.auth.resetPassword, data);
       console.log("Forgot Password response:", resp.data);
       return resp.data;
     } catch (e) {

@@ -33,3 +33,10 @@ export interface Error {
   message: string;
   errors?: Record<string, string[]>;
 }
+
+export interface ForgotPassword {
+  mobile: string;
+  otp_code: string;
+  password: string;
+  password_confirmation: string;
+}

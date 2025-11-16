@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { ArrowLeft, Lock, Mail, Phone } from "lucide-react";
+import { ArrowLeft, EyeIcon, EyeOff, Lock, Mail, Phone } from "lucide-react";
 import apiClient from "@/api/apiClient";
 import { apiRoutes } from "@/api/apiRoutes";
 import authService from "@/services/authService";
 
-type Step = "request" | "verify" | "reset";
+type Step = "request" | "reset";
 
 export default function ForgotPassword() {
   const { t, i18n } = useTranslation();
@@ -19,6 +19,9 @@ export default function ForgotPassword() {
   // Step management
   const [currentStep, setCurrentStep] = useState<Step>("request");
   const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Form data
   const [mobile, setMobile] = useState("");
@@ -32,15 +35,19 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      const response = await authService.forgotPassword(mobile);
+      const response = await authService.forgotPasswordOtpSent(mobile);
 
-      console.log("OTP request response:", response.data);
-      toast.success("Verification code sent successfully!");
-      setCurrentStep("verify");
-    } catch (error: any) {
+      console.log("OTP request response:", response);
+      toast.success(response.message || "Verification code sent successfully!");
+      setCurrentStep("reset");
+    } catch (error: unknown) {
       console.error("OTP request error:", error);
+      const apiError =
+        error && typeof error === "object" && "response" in error
+          ? (error as { response?: { data?: { error_message?: string } } })
+          : null;
       toast.error(
-        error?.response?.data?.error_message ||
+        apiError?.response?.data?.error_message ||
           "Failed to send verification code"
       );
     } finally {
@@ -48,8 +55,8 @@ export default function ForgotPassword() {
     }
   };
 
-  // Verify OTP
-  const handleVerifyOTP = async (e: React.FormEvent<HTMLFormElement>) => {
+  // Reset Password with OTP
+  const handleResetPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const otpCode = otp.join("");
@@ -57,35 +64,6 @@ export default function ForgotPassword() {
       toast.error("Please enter all 6 digits");
       return;
     }
-
-    setLoading(true);
-
-    try {
-      const response = await apiClient.post(apiRoutes.auth.verifyOTP, {
-        email_or_mobile: mobile,
-        otp: otpCode,
-      });
-
-      console.log("OTP verify response:", response.data);
-      toast.success("Code verified successfully!");
-      setCurrentStep("reset");
-    } catch (error: unknown) {
-      console.error("OTP verify error:", error);
-      const message =
-        error instanceof Error ? error.message : "Invalid verification code";
-      const apiError =
-        error && typeof error === "object" && "response" in error
-          ? (error as { response?: { data?: { message?: string } } })
-          : null;
-      toast.error(apiError?.response?.data?.message || message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Reset Password
-  const handleResetPassword = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
 
     if (newPassword !== confirmPassword) {
       toast.error("Passwords do not match");
@@ -100,25 +78,25 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      const response = await apiClient.post(apiRoutes.auth.resetPassword, {
-        email_or_mobile: mobile,
-        otp: otp.join(""),
-        new_password: newPassword,
-        confirm_password: confirmPassword,
+      const response = await authService.forgotPassword({
+        mobile,
+        otp_code: otpCode,
+        password: newPassword,
+        password_confirmation: confirmPassword,
       });
 
-      console.log("Reset password response:", response.data);
+      console.log("Reset password response:", response);
       toast.success("Password reset successfully!");
       navigate("/login");
     } catch (error: unknown) {
       console.error("Reset password error:", error);
-      const message =
-        error instanceof Error ? error.message : "Failed to reset password";
       const apiError =
         error && typeof error === "object" && "response" in error
-          ? (error as { response?: { data?: { message?: string } } })
+          ? (error as { response?: { data?: { error_message?: string } } })
           : null;
-      toast.error(apiError?.response?.data?.message || message);
+      toast.error(
+        apiError?.response?.data?.error_message || "Failed to reset password"
+      );
     } finally {
       setLoading(false);
     }
@@ -243,18 +221,17 @@ export default function ForgotPassword() {
             </>
           )}
 
-          {/* Step 2: Verify OTP */}
-          {currentStep === "verify" && (
+          {/* Step 2: Reset Password with OTP */}
+          {currentStep === "reset" && (
             <>
               <div className="text-center">
-                <h2 className="text-3xl font-bold">Enter Verification Code</h2>
+                <h2 className="text-3xl font-bold">Reset Your Password</h2>
                 <p className="mt-2 text-muted-foreground">
-                  We sent a 6-digit code to
+                  We sent a 6-digit code to <strong>{mobile}</strong>
                 </p>
-                <p className="mt-1 font-medium text-foreground">{mobile}</p>
               </div>
 
-              <form onSubmit={handleVerifyOTP} className="grid gap-6">
+              <form onSubmit={handleResetPassword} className="grid gap-4">
                 <div className="space-y-2">
                   <Label>Verification Code</Label>
                   <div className="flex gap-2 justify-center">
@@ -275,41 +252,13 @@ export default function ForgotPassword() {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-2">
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Verifying..." : "Verify Code"}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    onClick={() => setCurrentStep("request")}
-                    className="w-full"
-                  >
-                    Resend Code
-                  </Button>
-                </div>
-              </form>
-            </>
-          )}
-
-          {/* Step 3: Reset Password */}
-          {currentStep === "reset" && (
-            <>
-              <div className="text-center">
-                <h2 className="text-3xl font-bold">Create New Password</h2>
-                <p className="mt-2 text-muted-foreground">
-                  Enter your new password below
-                </p>
-              </div>
-
-              <form onSubmit={handleResetPassword} className="grid gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="newPassword">New Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
                     <Input
                       id="newPassword"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="••••••••"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
@@ -317,6 +266,17 @@ export default function ForgotPassword() {
                       required
                       minLength={6}
                     />
+                    {showPassword ? (
+                      <EyeIcon
+                        className="absolute right-3 top-3 h-5 w-5 text-muted-foreground cursor-pointer"
+                        onClick={() => setShowPassword(false)}
+                      />
+                    ) : (
+                      <EyeOff
+                        className="absolute right-3 top-3 h-5 w-5 text-muted-foreground cursor-pointer"
+                        onClick={() => setShowPassword(true)}
+                      />
+                    )}
                   </div>
                 </div>
 
@@ -326,7 +286,7 @@ export default function ForgotPassword() {
                     <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
                     <Input
                       id="confirmPassword"
-                      type="password"
+                      type={showConfirmPassword ? "text" : "password"}
                       placeholder="••••••••"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
@@ -334,11 +294,31 @@ export default function ForgotPassword() {
                       required
                       minLength={6}
                     />
+                    {showConfirmPassword ? (
+                      <EyeIcon
+                        className="absolute right-3 top-3 h-5 w-5 text-muted-foreground cursor-pointer"
+                        onClick={() => setShowConfirmPassword(false)}
+                      />
+                    ) : (
+                      <EyeOff
+                        className="absolute right-3 top-3 h-5 w-5 text-muted-foreground cursor-pointer"
+                        onClick={() => setShowConfirmPassword(true)}
+                      />
+                    )}
                   </div>
                 </div>
 
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Resetting..." : "Reset Password"}
+                </Button>
+
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={handleRequestOTP}
+                  className="w-full"
+                >
+                  {resending ? "Resending..." : "Resend Code"}
                 </Button>
               </form>
             </>
