@@ -25,6 +25,8 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import authService from "@/services/authService";
+import { toast } from "sonner";
 
 interface Notification {
   id: string;
@@ -89,7 +91,7 @@ export default function Header() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { theme, toggleTheme, setLanguage } = useThemeStore();
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
 
   const toggleLanguage = () => {
     const newLang = i18n.language === "en" ? "bn" : "en";
@@ -103,6 +105,18 @@ export default function Header() {
       .map((n) => n[0])
       .join("")
       .toUpperCase();
+  };
+
+  const handleLogout = () => {
+    try {
+      const response = authService.logout();
+      console.log("Logout response:", response);
+      toast.success("Logged out successfully");
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error(error.message || "An error occurred during logout");
+    }
   };
 
   return (
@@ -211,7 +225,7 @@ export default function Header() {
             <Button variant="ghost" className="relative h-10 w-10 rounded-full">
               <Avatar>
                 <AvatarFallback className="bg-primary text-primary-foreground">
-                  {user ? getInitials(user.name) : "AD"}
+                  {user ? getInitials(user.firstName) : "AD"}
                 </AvatarFallback>
               </Avatar>
             </Button>
@@ -219,7 +233,9 @@ export default function Header() {
           <DropdownMenuContent className="w-56 bg-popover" align="end">
             <DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium">{user?.name}</p>
+                <p className="text-sm font-medium">
+                  {user?.firstName} {user?.lastName}
+                </p>
                 <p className="text-xs text-muted-foreground">{user?.email}</p>
               </div>
             </DropdownMenuLabel>
@@ -229,7 +245,10 @@ export default function Header() {
               <span>{t("nav.profile")}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={logout} className="text-destructive">
+            <DropdownMenuItem
+              onClick={handleLogout}
+              className="text-destructive"
+            >
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>

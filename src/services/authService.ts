@@ -1,10 +1,11 @@
 import apiClient from "@/api/apiClient";
 import { apiRoutes } from "@/api/apiRoutes";
-import { useAuthStore, User } from "@/stores/authStore";
+import { User } from "@/lib/types";
+import { useAuthStore } from "@/stores/authStore";
 
 interface LoginResponse {
-  accessToken: string;
-  refreshToken?: string;
+  access_token: string;
+  refresh_token?: string;
   user: User;
 }
 
@@ -12,24 +13,31 @@ const authService = {
   login: async (email: string, password: string): Promise<User | null> => {
     try {
       const resp = await apiClient.post<LoginResponse>(apiRoutes.auth.login, {
-        email,
+        email_or_mobile: email,
         password,
       });
       const data = resp?.data;
+      console.log("Login response data:", data);
       if (!data) return null;
 
-      const { accessToken, refreshToken, user } = data;
+      const { access_token, refresh_token, user } = data;
 
-      if (accessToken) apiClient.setAccessToken(accessToken);
-      if (refreshToken) apiClient.setRefreshToken(refreshToken);
+      if (access_token) apiClient.setAccessToken(access_token);
+      if (refresh_token) apiClient.setRefreshToken(refresh_token);
 
       // Update store
-      useAuthStore.setState({ user, isAuthenticated: true });
+      useAuthStore.setState({
+        user,
+        isAuthenticated: true,
+        access_token,
+        refresh_token,
+      });
 
       return user;
     } catch (err) {
+      console.error("Login error:", err);
       // Propagate error to caller
-      return null;
+      return err;
     }
   },
 
@@ -38,7 +46,8 @@ const authService = {
       // Best-effort server logout
       await apiClient.post(apiRoutes.auth.logout);
     } catch (e) {
-      // ignore
+      console.error("Logout error:", e);
+      return e;
     }
 
     // Clear tokens and local state

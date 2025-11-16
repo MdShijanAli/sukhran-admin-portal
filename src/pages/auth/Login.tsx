@@ -1,37 +1,38 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useAuthStore } from "@/stores/authStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { EyeClosed, EyeIcon, EyeOff, Lock, Mail } from "lucide-react";
+import { EyeIcon, EyeOff, Lock, Mail } from "lucide-react";
+import authService from "@/services/authService";
 
 export default function Login() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const login = useAuthStore((state) => state.login);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const success = await login(email, password);
-      if (success) {
+      const response = await authService.login(email, password);
+      console.log("Login success:", response);
+      if (response.id) {
         toast.success("Login successful!");
         navigate("/dashboard");
       } else {
-        toast.error("Invalid credentials");
+        toast.error(response?.response?.data?.message || "Invalid credentials");
       }
     } catch (error) {
+      console.error("Login error caught in handleSubmit:", error);
       toast.error("An error occurred");
     } finally {
       setLoading(false);
@@ -148,12 +149,6 @@ export default function Login() {
               {loading ? t("common.loading") : t("auth.loginButton")}
             </Button>
           </form>
-
-          <div className="text-center text-sm text-muted-foreground">
-            <p>Demo credentials:</p>
-            <p className="mt-1">Admin: admin@example.com / password</p>
-            <p>CXO: cxo@example.com / password</p>
-          </div>
         </div>
       </div>
     </div>
