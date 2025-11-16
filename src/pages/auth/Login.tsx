@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Lock, Mail } from "lucide-react";
+import { EyeClosed, EyeIcon, EyeOff, Lock, Mail } from "lucide-react";
 
 export default function Login() {
   const { t } = useTranslation();
@@ -17,6 +17,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,8 +78,8 @@ export default function Login() {
             <p className="mt-2 text-muted-foreground">{t("auth.subtitle")}</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="">
-            <div className="space-y-2">
+          <form onSubmit={handleSubmit} className="grid gap-3">
+            <div className="space-y-1">
               <Label htmlFor="email">{t("auth.email")}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
@@ -94,23 +95,34 @@ export default function Login() {
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1">
               <Label htmlFor="password">{t("auth.password")}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
                 <Input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="pl-10"
                   required
                 />
+                {showPassword ? (
+                  <EyeIcon
+                    className="absolute right-3 top-3 h-5 w-5 text-muted-foreground cursor-pointer"
+                    onClick={() => setShowPassword(false)}
+                  />
+                ) : (
+                  <EyeOff
+                    className="absolute right-3 top-3 h-5 w-5 text-muted-foreground cursor-pointer"
+                    onClick={() => setShowPassword(true)}
+                  />
+                )}
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between space-y-1">
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="remember"
@@ -128,7 +140,11 @@ export default function Login() {
               </a>
             </div>
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button
+              type="submit"
+              className="w-full space-y-2"
+              disabled={loading}
+            >
               {loading ? t("common.loading") : t("auth.loginButton")}
             </Button>
           </form>

@@ -8,7 +8,7 @@ import { useThemeStore } from "@/stores/themeStore";
 import { useAuthStore } from "@/stores/authStore";
 import "@/i18n/config";
 
-import Login from "./pages/Login";
+import Login from "./pages/auth/Login";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Users from "./pages/users/Users";
 import Orders from "./pages/orders/Orders";
