@@ -13,7 +13,7 @@ import Products from "@/pages/Products";
 import ProductCreate from "@/pages/ProductCreate";
 import Packages from "@/pages/Packages";
 import PackageCreate from "@/pages/PackageCreate";
-import Profile from "@/pages/Profile";
+import Profile from "@/pages/profile/Profile";
 import Reports from "@/pages/Reports";
 import Delivery from "@/pages/delivery/Delivery";
 import Financial from "@/pages/financial/Financial";

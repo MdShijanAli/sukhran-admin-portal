@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuthStore } from "@/stores/authStore";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -31,9 +25,9 @@ export default function Profile() {
   const user = useAuthStore((state) => state.user);
 
   // Personal Info State
-  const [name, setName] = useState(user?.name || "");
+  const [name, setName] = useState(user.firstName || "");
   const [email, setEmail] = useState(user?.email || "");
-  const [phone, setPhone] = useState("+880 1712-345678");
+  const [phone, setPhone] = useState(user.mobile || "");
   const [location, setLocation] = useState("Dhaka, Bangladesh");
 
   // Password State
@@ -47,7 +41,7 @@ export default function Profile() {
 
   if (!user) return null;
 
-  const initials = user.name
+  const initials = user.firstName
     .split(" ")
     .map((n) => n[0])
     .join("")
@@ -112,13 +106,6 @@ export default function Profile() {
 
   return (
     <div className=" max-w-6xl">
-      <div>
-        <h1 className="text-3xl font-bold gradient-primary bg-clip-text text-transparent">
-          {t("profile.title")}
-        </h1>
-        <p className="text-muted-foreground mt-2">{t("profile.subtitle")}</p>
-      </div>
-
       <div className="grid gap-6 md:grid-cols-3">
         {/* Profile Avatar Card */}
         <Card className="md:col-span-1">
@@ -132,9 +119,9 @@ export default function Profile() {
               </AvatarFallback>
             </Avatar>
             <div className="text-center">
-              <h3 className="text-xl font-semibold">{user.name}</h3>
+              <h3 className="text-xl font-semibold">{user.firstName}</h3>
               <p className="text-sm text-muted-foreground capitalize">
-                {user.role}
+                {user.role.name}
               </p>
             </div>
             <div className="w-full">
@@ -238,7 +225,7 @@ export default function Profile() {
                     </Label>
                     <Input
                       id="role"
-                      value={user.role}
+                      value={user.role.name}
                       disabled
                       className="capitalize"
                     />
