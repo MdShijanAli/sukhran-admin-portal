@@ -223,7 +223,15 @@ export default function Header() {
             <Button variant="ghost" className="relative h-10 w-10 rounded-full">
               <Avatar>
                 <AvatarFallback className="bg-primary text-primary-foreground">
-                  {user ? getInitials(user.firstName) : "AD"}
+                  {user.image_url ? (
+                    <img
+                      src={user.image_url}
+                      alt={user.firstName}
+                      className="w-full h-full object-cover object-top border-2 border-primary rounded-full"
+                    />
+                  ) : (
+                    getInitials(user.firstName)
+                  )}
                 </AvatarFallback>
               </Avatar>
             </Button>
