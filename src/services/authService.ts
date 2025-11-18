@@ -30,10 +30,7 @@ const authService = {
 
       const { access_token, refresh_token, user } = data;
 
-      if (access_token) apiClient.setAccessToken(access_token);
-      if (refresh_token) apiClient.setRefreshToken(refresh_token);
-
-      // Update store
+      // Update store (single source of truth)
       useAuthStore.setState({
         user,
         isAuthenticated: true,
@@ -92,14 +89,15 @@ const authService = {
         apiRoutes.auth.logout
       );
       console.log("Logout response:", result);
-      apiClient.setAccessToken(null);
-      apiClient.setRefreshToken(null);
+
+      // Clear auth store (single source of truth)
       useAuthStore.setState({
         user: null,
         isAuthenticated: false,
         access_token: null,
         refresh_token: null,
       });
+
       return result.data;
     } catch (e) {
       console.error("Logout error:", e);

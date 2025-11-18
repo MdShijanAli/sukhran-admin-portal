@@ -1,45 +1,15 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, {
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+  AxiosResponse,
+} from "axios";
 import { apiRoutes } from "./apiRoutes";
+import { useAuthStore } from "@/stores/authStore";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
 let isRefreshing = false;
 let refreshPromise: Promise<string | null> | null = null;
-
-const getAccessToken = () => {
-  try {
-    return localStorage.getItem("access_token");
-  } catch (e) {
-    return null;
-  }
-};
-
-const setAccessToken = (token: string | null) => {
-  try {
-    if (token) localStorage.setItem("access_token", token);
-    else localStorage.removeItem("access_token");
-  } catch (e) {
-    // Handle localStorage errors silently
-    console.error("Failed to set access token:", e);
-  }
-};
-
-const getRefreshToken = () => {
-  try {
-    return localStorage.getItem("refresh_token");
-  } catch (e) {
-    return null;
-  }
-};
-
-const setRefreshToken = (token: string | null) => {
-  try {
-    if (token) localStorage.setItem("refresh_token", token);
-    else localStorage.removeItem("refresh_token");
-  } catch (e) {
-    console.error("Failed to set refresh token:", e);
-  }
-};
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_BASE,
@@ -51,8 +21,8 @@ const axiosInstance: AxiosInstance = axios.create({
 
 // Request interceptor to attach access token
 axiosInstance.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
-    const token = getAccessToken();
+  (config: InternalAxiosRequestConfig) => {
+    const token = useAuthStore.getState().access_token;
     if (token && config && config.headers) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -65,38 +35,53 @@ axiosInstance.interceptors.request.use(
 async function refreshAccessToken(): Promise<string | null> {
   if (isRefreshing && refreshPromise) return refreshPromise;
   isRefreshing = true;
-  refreshPromise = new Promise(async (resolve) => {
-    try {
-      const refreshToken = getRefreshToken();
-      if (!refreshToken) {
-        setAccessToken(null);
-        setRefreshToken(null);
+  refreshPromise = new Promise((resolve) => {
+    (async () => {
+      try {
+        const refreshToken = useAuthStore.getState().refresh_token;
+        if (!refreshToken) {
+          useAuthStore.getState().setState({
+            user: null,
+            isAuthenticated: false,
+            access_token: null,
+            refresh_token: null,
+          });
+          resolve(null);
+          isRefreshing = false;
+          refreshPromise = null;
+          return;
+        }
+
+        const resp = await axios.post(apiRoutes.auth.refreshToken, {
+          refresh_token: refreshToken,
+        });
+
+        const data = resp?.data;
+        console.log("Response data from refresh token:", data);
+        const newAccess = data?.access_token ?? null;
+        const newRefresh = data?.refresh_token ?? null;
+
+        if (newAccess || newRefresh) {
+          useAuthStore.getState().setState({
+            access_token: newAccess,
+            refresh_token: newRefresh,
+          });
+        }
+
+        resolve(newAccess);
+      } catch (err) {
+        useAuthStore.getState().setState({
+          user: null,
+          isAuthenticated: false,
+          access_token: null,
+          refresh_token: null,
+        });
         resolve(null);
+      } finally {
         isRefreshing = false;
         refreshPromise = null;
-        return;
       }
-
-      const resp = await axios.post(apiRoutes.auth.refreshToken, {
-        refreshToken,
-      });
-
-      const data = resp?.data;
-      const newAccess = data?.accessToken ?? null;
-      const newRefresh = data?.refreshToken ?? null;
-
-      if (newAccess) setAccessToken(newAccess);
-      if (newRefresh) setRefreshToken(newRefresh);
-
-      resolve(newAccess);
-    } catch (err) {
-      setAccessToken(null);
-      setRefreshToken(null);
-      resolve(null);
-    } finally {
-      isRefreshing = false;
-      refreshPromise = null;
-    }
+    })();
   });
 
   return refreshPromise;
@@ -110,6 +95,8 @@ axiosInstance.interceptors.response.use(
     if (!originalRequest) return Promise.reject(error);
 
     // If unauthorized, try to refresh token once
+    console.log("Response error status:", error);
+    console.log("Response error status:", error);
     if (error?.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const newAccess = await refreshAccessToken();
@@ -127,18 +114,20 @@ axiosInstance.interceptors.response.use(
 // Simple helpers
 const apiClient = {
   instance: axiosInstance,
-  get: <T = any>(url: string, config?: AxiosRequestConfig) =>
+  get: <T = unknown>(url: string, config?: InternalAxiosRequestConfig) =>
     axiosInstance.get<T>(url, config),
-  post: <T = any>(url: string, data?: any, config?: AxiosRequestConfig) =>
-    axiosInstance.post<T>(url, data, config),
-  put: <T = any>(url: string, data?: any, config?: AxiosRequestConfig) =>
-    axiosInstance.put<T>(url, data, config),
-  delete: <T = any>(url: string, config?: AxiosRequestConfig) =>
+  post: <T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: InternalAxiosRequestConfig
+  ) => axiosInstance.post<T>(url, data, config),
+  put: <T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: InternalAxiosRequestConfig
+  ) => axiosInstance.put<T>(url, data, config),
+  delete: <T = unknown>(url: string, config?: InternalAxiosRequestConfig) =>
     axiosInstance.delete<T>(url, config),
-  setAccessToken,
-  setRefreshToken,
-  getAccessToken,
-  getRefreshToken,
 };
 
 export default apiClient;

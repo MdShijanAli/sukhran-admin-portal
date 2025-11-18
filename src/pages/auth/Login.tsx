@@ -94,7 +94,7 @@ export default function Login() {
                 <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
                 <Input
                   id="email"
-                  type="email"
+                  type="text"
                   placeholder="admin@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
