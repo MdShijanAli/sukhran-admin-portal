@@ -2,9 +2,11 @@ import axios, {
   AxiosInstance,
   InternalAxiosRequestConfig,
   AxiosResponse,
+  AxiosRequestConfig,
 } from "axios";
 import { apiRoutes } from "./apiRoutes";
 import { useAuthStore } from "@/stores/authStore";
+import { toast } from "sonner";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
@@ -13,9 +15,6 @@ let refreshPromise: Promise<string | null> | null = null;
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_BASE,
-  headers: {
-    "Content-Type": "application/json",
-  },
   withCredentials: true,
 });
 
@@ -97,6 +96,12 @@ axiosInstance.interceptors.response.use(
     // If unauthorized, try to refresh token once
     console.log("Response error status:", error);
     console.log("Response error status:", error);
+    toast.error(
+      error?.response?.data?.error_message ||
+        error?.response?.data?.message ||
+        error.message ||
+        "An error occurred."
+    );
     if (error?.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const newAccess = await refreshAccessToken();
@@ -114,19 +119,19 @@ axiosInstance.interceptors.response.use(
 // Simple helpers
 const apiClient = {
   instance: axiosInstance,
-  get: <T = unknown>(url: string, config?: InternalAxiosRequestConfig) =>
+  get: <T = unknown>(url: string, config?: AxiosRequestConfig) =>
     axiosInstance.get<T>(url, config),
   post: <T = unknown>(
     url: string,
     data?: unknown,
-    config?: InternalAxiosRequestConfig
+    config?: AxiosRequestConfig
   ) => axiosInstance.post<T>(url, data, config),
   put: <T = unknown>(
     url: string,
     data?: unknown,
-    config?: InternalAxiosRequestConfig
+    config?: AxiosRequestConfig
   ) => axiosInstance.put<T>(url, data, config),
-  delete: <T = unknown>(url: string, config?: InternalAxiosRequestConfig) =>
+  delete: <T = unknown>(url: string, config?: AxiosRequestConfig) =>
     axiosInstance.delete<T>(url, config),
 };
 

@@ -26,7 +26,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { CategoryDialog } from "./modal/CategoryDialog";
+import FormModal from "./modal/FormModal";
 import { CategoryDetailsDialog } from "./modal/CategoryDetailsDialog";
 import { DeleteCategoryDialog } from "./modal/DeleteCategoryDialog";
 import { SortableCategoryRow } from "./SortableCategoryRow";
@@ -184,11 +184,10 @@ const Categories = () => {
       </div>
 
       {/* Dialogs */}
-      <CategoryDialog
+      <FormModal
         open={dialogMode !== null}
-        onOpenChange={(open) => !open && setDialogMode(null)}
-        category={selectedCategory}
-        mode={dialogMode || "create"}
+        onClose={() => setDialogMode(null)}
+        editData={selectedCategory}
       />
 
       <CategoryDetailsDialog

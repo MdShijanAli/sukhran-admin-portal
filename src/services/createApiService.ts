@@ -69,7 +69,18 @@ export const createApiService = <T = unknown>(
       if (!apiRoutes.create) {
         throw new Error("create route not configured");
       }
-      const response = await apiClient.post<T>(apiRoutes.create, data);
+
+      // Automatically detect if data is FormData and set appropriate headers
+      const config =
+        data instanceof FormData
+          ? {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          : undefined;
+
+      const response = await apiClient.post<T>(apiRoutes.create, data, config);
 
       if (response && (response.status === 200 || response.status === 201)) {
         // Update store if provided
@@ -91,7 +102,18 @@ export const createApiService = <T = unknown>(
         throw new Error("update route not configured");
       }
       const url = apiRoutes.update(id);
-      const response = await apiClient.put<T>(url, data);
+
+      // Automatically detect if data is FormData and set appropriate headers
+      const config =
+        data instanceof FormData
+          ? {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          : undefined;
+
+      const response = await apiClient.put<T>(url, data, config);
 
       if (response && response.status === 200) {
         // Update store if provided
