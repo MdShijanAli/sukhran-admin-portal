@@ -28,4 +28,12 @@ export const apiRoutes = {
     getProfile: createApiUrl("auth/profile"),
     updateProfile: createApiUrl("auth/profile"),
   },
+
+  categories: {
+    getAll: createApiUrl("admin/categories"),
+    getById: (id: number | string) => createApiUrl(`admin/categories/${id}`),
+    create: createApiUrl("admin/categories"),
+    update: (id: number | string) => createApiUrl(`admin/categories/${id}`),
+    delete: (id: number | string) => createApiUrl(`admin/categories/${id}`),
+  },
 };
