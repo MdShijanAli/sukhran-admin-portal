@@ -124,7 +124,7 @@ const Products = () => {
       </div>
 
       {/* Search and Filter */}
-      <Card>
+      <Card className="my-5">
         <CardContent className="p-4">
           <div className="flex flex-col gap-3 sm:flex-row">
             <div className="relative flex-1">
@@ -160,7 +160,7 @@ const Products = () => {
 
       {/* Filter Panel */}
       {isFilterOpen && (
-        <Card>
+        <Card className="mb-5">
           <CardContent className="p-4">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -209,7 +209,7 @@ const Products = () => {
       )}
 
       {/* Products Grid */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filteredProducts.map((product) => (
           <Card
             key={product.id}
@@ -296,7 +296,7 @@ const Products = () => {
 
       {/* Empty State */}
       {filteredProducts.length === 0 && (
-        <Card className="p-12">
+        <Card className="p-12 my-5">
           <div className="text-center">
             <Package className="mx-auto h-12 w-12 text-muted-foreground" />
             <h3 className="mt-4 text-lg font-semibold">No products found</h3>
