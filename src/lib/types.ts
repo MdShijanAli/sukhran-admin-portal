@@ -41,3 +41,37 @@ export interface ForgotPassword {
   password: string;
   password_confirmation: string;
 }
+
+export interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  imgUrl: string;
+  displayOrder: number;
+  isActive: boolean;
+  businessId: string;
+  created_at: string;
+  updated_at: string;
+  sub_categories_count: string;
+  products_count: string;
+  image_url: string;
+  subCategories?: SubCategory[];
+}
+
+export interface SubCategory {
+  id?: number;
+  name: string;
+  description: string;
+  displayOrder: number;
+  isActive: boolean;
+}
+
+export interface CategoryFormData {
+  name: string;
+  description: string;
+  displayOrder: number;
+  isActive: boolean;
+  image?: File;
+  subCategories: SubCategory[];
+}

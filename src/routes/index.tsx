@@ -27,6 +27,7 @@ import LoyaltyRewards from "@/pages/LoyaltyRewards";
 import Family from "@/pages/Family";
 import Analytics from "@/pages/Analytics";
 import Marketing from "@/pages/Marketing";
+import Categories from "@/pages/categories/Categories";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -84,6 +85,14 @@ const AppRoutes: React.FC = () => {
           element={
             <PrivateRoute>
               <Products />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="categories"
+          element={
+            <PrivateRoute>
+              <Categories />
             </PrivateRoute>
           }
         />

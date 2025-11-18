@@ -31,6 +31,7 @@ const menuItems = [
   { icon: LayoutDashboard, label: "nav.dashboard", path: "/dashboard" },
   { icon: Users, label: "nav.users", path: "/users" },
   { icon: Package, label: "nav.products", path: "/products" },
+  { icon: FileText, label: "nav.categories", path: "/categories" },
   { icon: Gift, label: "nav.packages", path: "/packages" },
   { icon: ShoppingCart, label: "nav.orders", path: "/orders" },
   { icon: Truck, label: "nav.delivery", path: "/delivery" },
