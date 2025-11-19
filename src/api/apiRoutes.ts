@@ -34,11 +34,21 @@ export const apiRoutes = {
     getById: (id: number | string) => createApiUrl(`admin/categories/${id}`),
     create: createApiUrl("admin/categories"),
     createSubCategory: createApiUrl("admin/sub-categories"),
+    getSubCategoryById: (id: number | string) =>
+      createApiUrl(`admin/sub-categories/?categoryId=${id}`),
     updateSubCategory: (id: number | string) =>
       createApiUrl(`admin/sub-categories/${id}`),
     deleteSubCategory: (id: number | string) =>
       createApiUrl(`admin/sub-categories/${id}`),
     update: (id: number | string) => createApiUrl(`admin/categories/${id}`),
     delete: (id: number | string) => createApiUrl(`admin/categories/${id}`),
+  },
+
+  products: {
+    getAll: createApiUrl("admin/products"),
+    getById: (id: number | string) => createApiUrl(`admin/products/${id}`),
+    create: createApiUrl("admin/products"),
+    update: (id: number | string) => createApiUrl(`admin/products/${id}`),
+    delete: (id: number | string) => createApiUrl(`admin/products/${id}`),
   },
 };

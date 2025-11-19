@@ -20,6 +20,7 @@ interface CategoryService extends ApiService<Category> {
     formData: FormData
   ) => Promise<unknown>;
   deleteSubCategory: (id: number | string) => Promise<unknown>;
+  fetchSubCategories: (categoryId: number | string) => Promise<unknown>;
 }
 
 const categoryService: CategoryService = {
@@ -35,6 +36,18 @@ const categoryService: CategoryService = {
       return response.data;
     } catch (error) {
       console.error("Error toggling category status:", error);
+      throw error;
+    }
+  },
+
+  fetchSubCategories: async (categoryId: number | string) => {
+    try {
+      const response = await apiClient.get(
+        apiRoutes.categories.getSubCategoryById(categoryId)
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching sub-categories:", error);
       throw error;
     }
   },

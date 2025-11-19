@@ -10,9 +10,9 @@ import Orders from "@/pages/orders/Orders";
 import MainLayout from "@/components/layout/MainLayout";
 import NotFound from "@/pages/NotFound";
 import Products from "@/pages/products/Products";
-import ProductCreate from "@/pages/ProductCreate";
+import ProductForm from "@/pages/products/form/ProductForm";
 import Packages from "@/pages/Packages";
-import PackageCreate from "@/pages/products/form/PackageCreate";
+import PackageCreate from "@/pages/package/PackageCreate";
 import Profile from "@/pages/profile/Profile";
 import Reports from "@/pages/Reports";
 import Delivery from "@/pages/delivery/Delivery";
@@ -100,7 +100,7 @@ const AppRoutes: React.FC = () => {
           path="products/create"
           element={
             <PrivateRoute>
-              <ProductCreate />
+              <ProductForm />
             </PrivateRoute>
           }
         />
