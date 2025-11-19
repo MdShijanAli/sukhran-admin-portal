@@ -19,16 +19,33 @@ interface SubCategoryFormData {
   imgUrl?: File;
 }
 
+interface SubCategory {
+  id: number;
+  categoryId: string;
+  name: string;
+  slug: string;
+  description: string;
+  imgUrl: string;
+  displayOrder: number;
+  isActive: boolean;
+  businessId: string;
+  created_at: string;
+  updated_at: string;
+  image_url?: string;
+}
+
 interface AddSubCategoryFormModalProps {
   open: boolean;
   onClose: () => void;
   selectedCategory: Category | null;
+  editData?: SubCategory | null;
 }
 
 export default function AddSubCategoryFormModal({
   open,
   onClose,
   selectedCategory,
+  editData,
 }: AddSubCategoryFormModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState<string>("");
@@ -39,19 +56,39 @@ export default function AddSubCategoryFormModal({
     displayOrder: 1,
     isActive: true,
   });
+  const apiURL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     if (open) {
-      setFormData({
-        categoryId: selectedCategory?.id || "",
-        name: "",
-        description: "",
-        displayOrder: 1,
-        isActive: true,
-      });
-      setImagePreview("");
+      if (editData) {
+        // Edit mode
+        setFormData({
+          categoryId: editData.categoryId,
+          name: editData.name,
+          description: editData.description,
+          displayOrder: editData.displayOrder,
+          isActive: editData.isActive,
+        });
+        if (editData.image_url || editData.imgUrl) {
+          setImagePreview(
+            editData.image_url || `${apiURL}/storage/${editData.imgUrl}`
+          );
+        } else {
+          setImagePreview("");
+        }
+      } else {
+        // Create mode
+        setFormData({
+          categoryId: selectedCategory?.id || "",
+          name: "",
+          description: "",
+          displayOrder: 1,
+          isActive: true,
+        });
+        setImagePreview("");
+      }
     }
-  }, [open, selectedCategory]);
+  }, [open, selectedCategory, editData]);
 
   const updateField = (
     field: keyof SubCategoryFormData,
@@ -107,15 +144,23 @@ export default function AddSubCategoryFormModal({
       if (formData.imgUrl) {
         formDataToSubmit.append("imgUrl", formData.imgUrl);
       }
-      console.log("Submitting SubCategory FormData:", formDataToSubmit);
 
-      await categoryService.storeSubCategory(formDataToSubmit);
+      if (editData) {
+        await categoryService.updateSubCategory(editData.id, formDataToSubmit);
+        toast.success("Sub-category updated successfully");
+      } else {
+        await categoryService.storeSubCategory(formDataToSubmit);
+        toast.success("Sub-category created successfully");
+      }
 
-      toast.success("Sub-category created successfully");
       onClose();
     } catch (error) {
       console.error("Error submitting sub-category:", error);
-      toast.error("Failed to create sub-category");
+      toast.error(
+        editData
+          ? "Failed to update sub-category"
+          : "Failed to create sub-category"
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -125,10 +170,12 @@ export default function AddSubCategoryFormModal({
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title="Add Sub-Category"
+      title={editData ? "Edit Sub-Category" : "Add Sub-Category"}
       onSubmit={handleSubmit}
       isSubmitting={isSubmitting}
-      submitButtonText="Create Sub-Category"
+      submitButtonText={
+        editData ? "Update Sub-Category" : "Create Sub-Category"
+      }
       size="2xl"
     >
       <div className="grid gap-6">

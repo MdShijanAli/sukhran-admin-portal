@@ -1,10 +1,14 @@
 import { BaseModal } from "@/components/modals/BaseModal";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Calendar, Package, Layers, Image as ImageIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Calendar, Package, Layers, Edit, Trash2 } from "lucide-react";
 import { Category } from "@/stores/categoryStore";
 import { useEffect, useState } from "react";
 import categoryService from "@/services/categoryService";
+import AddSubCategoryFormModal from "./AddSubCategoryFormModal";
+import { DeleteModal } from "@/components/modals";
+import { toast } from "sonner";
 
 interface SubCategory {
   id: number;
@@ -25,6 +29,10 @@ interface CategoryDetails extends Category {
   sub_categories?: SubCategory[];
 }
 
+interface ApiResponse {
+  data: CategoryDetails;
+}
+
 interface ViewModalProps {
   open: boolean;
   onClose: (open: boolean) => void;
@@ -38,6 +46,11 @@ export default function ViewModal({
 }: ViewModalProps) {
   const [category, setCategory] = useState<CategoryDetails | null>(null);
   const [isCategoryLoading, setIsCategoryLoading] = useState(false);
+  const [selectedSubCategory, setSelectedSubCategory] =
+    useState<SubCategory | null>(null);
+  const [showEditSubCategory, setShowEditSubCategory] = useState(false);
+  const [showDeleteSubCategory, setShowDeleteSubCategory] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (!categoryId) return;
@@ -46,7 +59,9 @@ export default function ViewModal({
       try {
         const response = await categoryService.fetchDetails(categoryId);
         console.log("Fetched category details:", response);
-        setCategory(response.data);
+        // API returns { data: CategoryDetails }
+        const apiResponse = response as unknown as ApiResponse;
+        setCategory(apiResponse.data || (response as CategoryDetails));
       } catch (error) {
         console.error("Failed to fetch category details:", error);
       } finally {
@@ -56,6 +71,54 @@ export default function ViewModal({
 
     fetchCategory();
   }, [categoryId]);
+
+  const handleEditSubCategory = (subCat: SubCategory) => {
+    setSelectedSubCategory(subCat);
+    setShowEditSubCategory(true);
+  };
+
+  const handleDeleteSubCategory = (subCat: SubCategory) => {
+    setSelectedSubCategory(subCat);
+    setShowDeleteSubCategory(true);
+  };
+
+  const confirmDeleteSubCategory = async () => {
+    if (!selectedSubCategory) return;
+    setIsDeleting(true);
+    try {
+      await categoryService.deleteSubCategory(selectedSubCategory.id);
+      toast.success("Sub-category deleted successfully");
+      // Refresh category details
+      if (categoryId) {
+        const response = await categoryService.fetchDetails(categoryId);
+        const apiResponse = response as unknown as ApiResponse;
+        setCategory(apiResponse.data || (response as CategoryDetails));
+      }
+      setShowDeleteSubCategory(false);
+    } catch (error) {
+      console.error("Error deleting sub-category:", error);
+      toast.error("Failed to delete sub-category");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleCloseEditModal = async () => {
+    setShowEditSubCategory(false);
+    // Refresh category details after edit
+    if (categoryId) {
+      setIsCategoryLoading(true);
+      try {
+        const response = await categoryService.fetchDetails(categoryId);
+        const apiResponse = response as unknown as ApiResponse;
+        setCategory(apiResponse.data || (response as CategoryDetails));
+      } catch (error) {
+        console.error("Failed to refresh category details:", error);
+      } finally {
+        setIsCategoryLoading(false);
+      }
+    }
+  };
 
   return (
     <BaseModal
@@ -173,12 +236,32 @@ export default function ViewModal({
                               {subCat.slug}
                             </p>
                           </div>
-                          <Badge
-                            variant={subCat.isActive ? "default" : "secondary"}
-                            className="flex-shrink-0"
-                          >
-                            {subCat.isActive ? "Active" : "Inactive"}
-                          </Badge>
+                          <div className="flex items-center gap-2">
+                            <Badge
+                              variant={
+                                subCat.isActive ? "default" : "secondary"
+                              }
+                              className="flex-shrink-0"
+                            >
+                              {subCat.isActive ? "Active" : "Inactive"}
+                            </Badge>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className="h-8 w-8"
+                              onClick={() => handleEditSubCategory(subCat)}
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className="h-8 w-8 text-destructive hover:text-destructive"
+                              onClick={() => handleDeleteSubCategory(subCat)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
                         {subCat.description && (
                           <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
@@ -231,13 +314,26 @@ export default function ViewModal({
               </span>
             </div>
           )}
-          {category?.businessId && (
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <span>Business ID: {category?.businessId}</span>
-            </div>
-          )}
         </div>
       </div>
+
+      {/* Edit Sub-Category Modal */}
+      <AddSubCategoryFormModal
+        open={showEditSubCategory}
+        onClose={handleCloseEditModal}
+        selectedCategory={category}
+        editData={selectedSubCategory}
+      />
+
+      {/* Delete Sub-Category Modal */}
+      <DeleteModal
+        open={showDeleteSubCategory}
+        onClose={() => setShowDeleteSubCategory(false)}
+        title="Delete Sub-Category"
+        description={`Are you sure you want to delete "${selectedSubCategory?.name}"? This action cannot be undone.`}
+        onConfirm={confirmDeleteSubCategory}
+        isDeleting={isDeleting}
+      />
     </BaseModal>
   );
 }
