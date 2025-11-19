@@ -4,16 +4,16 @@ import { Badge } from "@/components/ui/badge";
 import FormModal from "./modal/FormModal";
 import { CategoryDetailsDialog } from "./modal/CategoryDetailsDialog";
 import { DeleteCategoryDialog } from "./modal/DeleteCategoryDialog";
-import { Category } from "@/lib/types";
 import {
   BaseTableList,
   Column,
   DropdownMenuActions,
   ActionItem,
 } from "@/components/table";
+import { useCategoryStore, Category } from "@/stores/categoryStore";
+import categoryService from "@/services/categoryService";
 
 const Categories = () => {
-  const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
   );
@@ -21,25 +21,7 @@ const Categories = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
 
-  // Mock data - replace with actual API call
-  const [categories, setCategories] = useState<Category[]>([
-    {
-      id: 1,
-      name: "Groceries",
-      slug: "groceries",
-      description: "Fresh groceries and daily essentials",
-      imgUrl: "categories/xQsid87m6BUxpfO0vPZszn7OC3PtRWjbOJpBbQuM.jpg",
-      displayOrder: 1,
-      isActive: true,
-      businessId: "1",
-      created_at: "2025-11-18T06:19:49.000000Z",
-      updated_at: "2025-11-18T06:19:49.000000Z",
-      sub_categories_count: "0",
-      products_count: "0",
-      image_url:
-        "https://d2c.thevisitlondon.com/storage/categories/xQsid87m6BUxpfO0vPZszn7OC3PtRWjbOJpBbQuM.jpg",
-    },
-  ]);
+  const store = useCategoryStore();
 
   const handleCreate = () => {
     setSelectedCategory(null);
@@ -133,15 +115,9 @@ const Categories = () => {
     },
   ];
 
-  const filteredCategories = categories.filter(
-    (category) =>
-      category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      category.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   return (
     <div className="animate-fade-in">
-      <BaseTableList
+      <BaseTableList<Category>
         title="Categories"
         description="Manage your product categories"
         headerActions={[
@@ -152,11 +128,11 @@ const Categories = () => {
             variant: "default",
           },
         ]}
-        searchPlaceholder="Search by name, email, or phone..."
-        searchValue={searchQuery}
-        onSearchChange={setSearchQuery}
+        searchPlaceholder="Search by name or description..."
+        enableSearch={true}
         columns={columns}
-        data={filteredCategories}
+        service={categoryService}
+        store={store}
         emptyMessage="No categories found"
         getRowKey={(category) => category.id}
       />

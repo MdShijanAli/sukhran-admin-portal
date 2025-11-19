@@ -209,8 +209,7 @@ export default function Users() {
           </Button>
         }
         searchPlaceholder="Search by name, email, or phone..."
-        searchValue={searchQuery}
-        onSearchChange={setSearchQuery}
+        enableSearch={true}
         columns={columns}
         data={filteredUsers}
         emptyMessage="No users found"

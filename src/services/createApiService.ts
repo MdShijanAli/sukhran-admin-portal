@@ -15,7 +15,7 @@ interface ApiRoutes {
   delete?: (id: number | string) => string;
 }
 
-interface ApiService<T = unknown> {
+export interface ApiService<T = unknown> {
   fetchLists: (queryString?: string) => Promise<T>;
   fetchDetails: (id: number | string) => Promise<T>;
   storeItem: (data: unknown) => Promise<T>;

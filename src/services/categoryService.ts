@@ -1,15 +1,23 @@
-import { createApiService } from "./createApiService";
+import { createApiService, ApiService } from "./createApiService";
 import { apiRoutes } from "@/api/apiRoutes";
-import { useCategoryStore } from "@/stores/categoryStore";
+import { useCategoryStore, Category } from "@/stores/categoryStore";
 import apiClient from "@/api/apiClient";
 
 // Create base API service with all CRUD operations
-const apiService = createApiService(
+const apiService = createApiService<Category>(
   apiRoutes.categories,
   useCategoryStore.getState()
 );
 
-const categoryService = {
+interface CategoryService extends ApiService<Category> {
+  toggleCategoryStatus: (
+    id: number | string,
+    isActive: boolean
+  ) => Promise<unknown>;
+  fetchCategoriesWithProductCount: () => Promise<unknown>;
+}
+
+const categoryService: CategoryService = {
   // Inherit all basic CRUD operations
   ...apiService,
 

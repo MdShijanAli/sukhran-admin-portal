@@ -8,11 +8,21 @@ export interface Category {
   imgUrl?: string;
   displayOrder?: number;
   isActive?: boolean;
+  businessId?: string;
   sub_categories_count?: number | string;
   products_count?: number | string;
-  image_url?: number | null;
+  image_url?: string;
   created_at?: string;
   updated_at?: string;
+  subCategories?: SubCategory[];
+}
+
+export interface SubCategory {
+  id?: number;
+  name: string;
+  description: string;
+  displayOrder: number;
+  isActive: boolean;
 }
 
 interface CategoryState {
