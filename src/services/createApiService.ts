@@ -137,12 +137,14 @@ export const createApiService = <T = unknown>(
       const url = apiRoutes.delete(id);
       const response = await apiClient.delete<T>(url);
 
+      console.log("Delete response:", response);
+
       if (response && response.status === 200) {
         // Update store if provided
         if (store && store.removeItem) {
           store.removeItem(id);
         }
-        return response.data;
+        return response;
       }
       throw new Error("Failed to delete item");
     } catch (error) {

@@ -3,7 +3,6 @@ import { Edit, Eye, Plus, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import FormModal from "./modal/FormModal";
 import ViewModal from "./modal/ViewModal";
-import { DeleteCategoryDialog } from "./modal/DeleteCategoryDialog";
 import {
   BaseTableList,
   Column,
@@ -12,6 +11,8 @@ import {
 } from "@/components/table";
 import { useCategoryStore, Category } from "@/stores/categoryStore";
 import categoryService from "@/services/categoryService";
+import { DeleteModal } from "@/components/modals";
+import { toast } from "sonner";
 
 const Categories = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
@@ -20,6 +21,7 @@ const Categories = () => {
   const [dialogMode, setDialogMode] = useState<"create" | "edit" | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const store = useCategoryStore();
 
@@ -41,6 +43,25 @@ const Categories = () => {
   const handleDelete = (category: Category) => {
     setSelectedCategory(category);
     setShowDelete(true);
+  };
+
+  const handleDeleteCategory = async () => {
+    if (!selectedCategory) return;
+    setIsDeleting(true);
+    try {
+      const response = await categoryService.deleteItem(selectedCategory.id);
+      console.log("Delete response:", response);
+      if (response && response.status === 200) {
+        toast.success("Category deleted successfully");
+      } else {
+        toast.error("Failed to delete category");
+      }
+    } catch (error) {
+      console.error("Error deleting category:", error);
+    } finally {
+      setIsDeleting(false);
+      setShowDelete(false);
+    }
   };
 
   // Define actions for dropdown menu
@@ -157,10 +178,13 @@ const Categories = () => {
         category={selectedCategory}
       />
 
-      <DeleteCategoryDialog
+      <DeleteModal
         open={showDelete}
-        onOpenChange={setShowDelete}
-        category={selectedCategory}
+        onClose={setShowDelete}
+        title="Delete Category"
+        description={`Are you sure you want to delete this ${selectedCategory?.name} category? This action cannot be undone.`}
+        onConfirm={handleDeleteCategory}
+        isDeleting={isDeleting}
       />
     </div>
   );
