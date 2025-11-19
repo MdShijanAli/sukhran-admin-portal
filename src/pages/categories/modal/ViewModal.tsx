@@ -91,6 +91,7 @@ export default function ViewModal({
       // Refresh category details
       if (categoryId) {
         const response = await categoryService.fetchDetails(categoryId);
+        await categoryService.fetchLists(); // Refresh categories list
         const apiResponse = response as unknown as ApiResponse;
         setCategory(apiResponse.data || (response as CategoryDetails));
       }
