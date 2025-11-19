@@ -1,3 +1,4 @@
+import { PaginationMeta } from "@/lib/types";
 import { createStore } from "./createStore";
 
 export interface Category {
@@ -27,6 +28,7 @@ export interface SubCategory {
 
 interface CategoryState {
   categories: Category[];
+  pagination: PaginationMeta;
   isLoading: boolean;
   error: string | null;
   setItems: (categories: unknown) => void;
@@ -41,6 +43,14 @@ interface CategoryState {
 export const useCategoryStore = createStore<CategoryState>(
   (set, get) => ({
     categories: [],
+    pagination: {
+      current_page: 1,
+      total: 0,
+      per_page: 10,
+      last_page: 1,
+      from: 1,
+      to: 1,
+    },
     isLoading: false,
     error: null,
 
@@ -49,7 +59,13 @@ export const useCategoryStore = createStore<CategoryState>(
       const categories = Array.isArray(data)
         ? data
         : (data as { data?: Category[] })?.data || [];
-      set({ categories, isLoading: false, error: null });
+      set({
+        categories,
+        isLoading: false,
+        error: null,
+        pagination:
+          (data as { meta: PaginationMeta })?.meta || get().pagination,
+      });
     },
 
     addItem: (data: unknown) => {

@@ -34,6 +34,7 @@ export const createApiService = <T = unknown>(
 
       if (response && response.status === 200) {
         // Update store if provided
+        console.log("Fetch Lists response data:", response.data);
         if (store && store.setItems) {
           store.setItems(response.data);
         }

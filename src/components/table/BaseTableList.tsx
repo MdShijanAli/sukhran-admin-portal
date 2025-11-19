@@ -37,6 +37,15 @@ export interface ActionButton {
     | "link";
 }
 
+export interface Pagination {
+  current_page: number;
+  from: number;
+  last_page: number;
+  per_page: number;
+  to: number;
+  total: number;
+}
+
 export interface StoreWithData<T> {
   items?: T[];
   categories?: T[];
@@ -45,6 +54,7 @@ export interface StoreWithData<T> {
   users?: T[];
   isLoading?: boolean;
   error?: string | null;
+  pagination?: Pagination;
   setLoading?: (loading: boolean) => void;
   setError?: (error: string | null) => void;
 }
@@ -126,6 +136,7 @@ export function BaseTableList<T>({
     store.users ||
     []) as T[];
   const isLoading = store.isLoading || false;
+  const pagination = store.pagination;
 
   // Create stable references for store methods
   const setLoading = store.setLoading;
@@ -365,25 +376,31 @@ export function BaseTableList<T>({
           />
 
           {/* Pagination */}
-          {showPagination && (
+          {showPagination && pagination && (
             <div className="flex items-center justify-between mt-4">
               <div className="text-sm text-muted-foreground">
-                Page {currentPage}
+                Showing {pagination.from} to {pagination.to} of{" "}
+                {pagination.total} entries
               </div>
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage <= 1 || isLoading}
+                  onClick={() => handlePageChange(pagination.current_page - 1)}
+                  disabled={pagination.current_page <= 1 || isLoading}
                 >
                   Previous
                 </Button>
+                <span className="text-sm text-muted-foreground px-3">
+                  Page {pagination.current_page} of {pagination.last_page}
+                </span>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={isLoading}
+                  onClick={() => handlePageChange(pagination.current_page + 1)}
+                  disabled={
+                    pagination.current_page >= pagination.last_page || isLoading
+                  }
                 >
                   Next
                 </Button>
