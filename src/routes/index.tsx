@@ -105,6 +105,14 @@ const AppRoutes: React.FC = () => {
           }
         />
         <Route
+          path="products/edit/:id"
+          element={
+            <PrivateRoute>
+              <ProductForm />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="packages"
           element={
             <PrivateRoute>
