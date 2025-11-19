@@ -12,7 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export interface Column<T> {
   key: string;
   label: string;
-  render?: (item: T) => React.ReactNode;
+  render?: (item: T, index: number) => React.ReactNode;
   className?: string;
 }
 
@@ -100,7 +100,7 @@ export function BaseTable<T>({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((item) => (
+          {data.map((item, index) => (
             <TableRow
               key={getRowKey(item)}
               className={rowClassName ? rowClassName(item) : ""}
@@ -108,7 +108,7 @@ export function BaseTable<T>({
               {columns.map((column) => (
                 <TableCell key={column.key} className={column.className}>
                   {column.render
-                    ? column.render(item)
+                    ? column.render(item, index)
                     : String(
                         (item as Record<string, unknown>)[column.key] ?? ""
                       )}

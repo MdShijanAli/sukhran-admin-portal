@@ -70,10 +70,19 @@ const Categories = () => {
     {
       key: "sl",
       label: "Sl.",
+      render: (_, index) => index + 1,
+      className: "text-center",
     },
     {
-      key: "image",
+      key: "image_url",
       label: "Image",
+      render: (category) => (
+        <img
+          src={category.image_url || "/placeholder-image.png"}
+          alt={category.name}
+          className="size-16 rounded-md object-cover object-top"
+        />
+      ),
     },
     {
       key: "name",
@@ -85,16 +94,14 @@ const Categories = () => {
       className: "max-w-[200px]",
     },
     {
-      key: "totalOrders",
-      label: "Orders",
-    },
-    {
-      key: "subCategories",
+      key: "sub_categories_count",
       label: "Sub Categories",
+      className: "text-center",
     },
     {
-      key: "products",
+      key: "products_count",
       label: "Products",
+      className: "text-center",
     },
     {
       key: "status",
@@ -104,6 +111,7 @@ const Categories = () => {
           {category.isActive ? "Active" : "Inactive"}
         </Badge>
       ),
+      className: "text-center",
     },
     {
       key: "actions",

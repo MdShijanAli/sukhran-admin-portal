@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 import { BaseTable, Column } from "./BaseTable";
 import { ApiService } from "@/services/createApiService";
-import { RefreshCcw, RefreshCw } from "lucide-react";
+import { RefreshCcw, RefreshCw, X } from "lucide-react";
 
 export interface FilterOption {
   label: string;
@@ -246,9 +246,75 @@ export function BaseTableList<T>({
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>{title}</CardTitle>
-              {description && <CardDescription>{description}</CardDescription>}
+            <div className="flex items-center gap-3">
+              <div>
+                <CardTitle>{title}</CardTitle>
+                {description && (
+                  <CardDescription>{description}</CardDescription>
+                )}
+              </div>
+              {/* Toolbar: Search, Filters, and Actions */}
+              {(enableSearch || filters || toolbarActions) && (
+                <div className="flex items-center gap-4 flex-wrap">
+                  {/* Search Input */}
+                  {enableSearch && (
+                    <div className="relative w-[300px] max-w-[500px]">
+                      <Input
+                        placeholder={searchPlaceholder}
+                        value={searchQuery}
+                        onChange={(e) => handleSearchChange(e.target.value)}
+                        className="pr-8"
+                      />
+                      {searchQuery.length > 0 && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setSearchQuery("")}
+                          className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Filters */}
+                  {filters &&
+                    filters.map((filter, index) => (
+                      <Select
+                        key={index}
+                        value={filter.value}
+                        onValueChange={(value) => {
+                          filter.onChange(value);
+                          // Trigger refetch when filter changes
+                          if (currentPage !== 1) {
+                            setCurrentPage(1);
+                          } else {
+                            fetchData();
+                          }
+                        }}
+                      >
+                        <SelectTrigger
+                          className={filter.className || "w-[180px]"}
+                        >
+                          <SelectValue
+                            placeholder={filter.placeholder || "Select..."}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {filter.options.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ))}
+
+                  {/* Additional Toolbar Actions */}
+                  {toolbarActions}
+                </div>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -282,55 +348,6 @@ export function BaseTableList<T>({
           </div>
         </CardHeader>
         <CardContent>
-          {/* Toolbar: Search, Filters, and Actions */}
-          {(enableSearch || filters || toolbarActions) && (
-            <div className="flex items-center gap-4 mb-4 flex-wrap">
-              {/* Search Input */}
-              {enableSearch && (
-                <Input
-                  placeholder={searchPlaceholder}
-                  value={searchQuery}
-                  onChange={(e) => handleSearchChange(e.target.value)}
-                  className="max-w-sm"
-                />
-              )}
-
-              {/* Filters */}
-              {filters &&
-                filters.map((filter, index) => (
-                  <Select
-                    key={index}
-                    value={filter.value}
-                    onValueChange={(value) => {
-                      filter.onChange(value);
-                      // Trigger refetch when filter changes
-                      if (currentPage !== 1) {
-                        setCurrentPage(1);
-                      } else {
-                        fetchData();
-                      }
-                    }}
-                  >
-                    <SelectTrigger className={filter.className || "w-[180px]"}>
-                      <SelectValue
-                        placeholder={filter.placeholder || "Select..."}
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {filter.options.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                ))}
-
-              {/* Additional Toolbar Actions */}
-              {toolbarActions}
-            </div>
-          )}
-
           {/* Table */}
           <BaseTable
             columns={columns}
