@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Plus, Trash2, X } from "lucide-react";
+import { Backpack, Plus, Trash2, Undo2, X } from "lucide-react";
 import { toast } from "sonner";
 import productService from "@/services/productService";
 import categoryService from "@/services/categoryService";
@@ -366,8 +366,12 @@ export default function ProductForm() {
       <form onSubmit={handleSubmit} className="mb-5">
         <Card>
           <CardHeader>
-            <CardTitle>
+            <CardTitle className="flex justify-between items-center">
               {isEditMode ? "Edit Product" : t("productCreate.basicInfo")}
+              <Button onClick={() => navigate("/products")}>
+                <Undo2 />
+                Back
+              </Button>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
