@@ -14,6 +14,8 @@ import { Switch } from "@/components/ui/switch";
 import { Category } from "@/lib/types";
 import { toast } from "sonner";
 import categoryService from "@/services/categoryService";
+import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface CategoryFormData {
   name: string;
@@ -92,6 +94,16 @@ export default function FormModal({
     }
   };
 
+  const handleRemoveImage = () => {
+    setImagePreview("");
+    setFormData((prev) => ({ ...prev, imgUrl: undefined }));
+    // Reset file input
+    const fileInput = document.getElementById("imgUrl") as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
+  };
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
@@ -149,11 +161,22 @@ export default function FormModal({
             onChange={handleImageChange}
           />
           {imagePreview && (
-            <img
-              src={imagePreview}
-              alt="Preview"
-              className="mt-2 h-32 w-32 rounded-md object-cover"
-            />
+            <div className="relative inline-block mt-2">
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="h-32 w-32 rounded-md object-cover object-top"
+              />
+              <Button
+                type="button"
+                variant="destructive"
+                size="icon"
+                className="absolute -top-2 -right-2 h-6 w-6 rounded-full"
+                onClick={handleRemoveImage}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
           )}
         </div>
 

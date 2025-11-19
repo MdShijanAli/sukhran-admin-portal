@@ -113,7 +113,7 @@ export const createApiService = <T = unknown>(
             }
           : undefined;
 
-      const response = await apiClient.put<T>(url, data, config);
+      const response = await apiClient.post<T>(url, data, config);
 
       if (response && response.status === 200) {
         // Update store if provided

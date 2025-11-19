@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Edit, Eye, Plus, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import FormModal from "./modal/FormModal";
-import { CategoryDetailsDialog } from "./modal/CategoryDetailsDialog";
+import ViewModal from "./modal/ViewModal";
 import { DeleteCategoryDialog } from "./modal/DeleteCategoryDialog";
 import {
   BaseTableList,
@@ -61,7 +61,6 @@ const Categories = () => {
       icon: Trash2,
       onClick: handleDelete,
       variant: "destructive",
-      show: (category) => category.isActive, // Example: only show for active categories
     },
   ];
 
@@ -91,12 +90,12 @@ const Categories = () => {
     {
       key: "description",
       label: "Description",
-      className: "max-w-[200px]",
+      className: "max-w-[300px]",
     },
     {
       key: "sub_categories_count",
       label: "Sub Categories",
-      className: "text-center",
+      className: "text-center w-[140px]",
     },
     {
       key: "products_count",
@@ -152,9 +151,9 @@ const Categories = () => {
         editData={selectedCategory}
       />
 
-      <CategoryDetailsDialog
+      <ViewModal
         open={showDetails}
-        onOpenChange={setShowDetails}
+        onClose={setShowDetails}
         category={selectedCategory}
       />
 

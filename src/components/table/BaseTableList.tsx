@@ -192,9 +192,9 @@ export function BaseTableList<T>({
   ]);
 
   // Fetch on mount and when dependencies change
-  // useEffect(() => {
-  //   fetchData();
-  // }, [fetchData]);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   // Handle search with debounce
   useEffect(() => {

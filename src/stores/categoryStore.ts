@@ -55,7 +55,7 @@ export const useCategoryStore = createStore<CategoryState>(
     addItem: (data: unknown) => {
       const category = (data as { data?: Category })?.data || data;
       set((state) => ({
-        categories: [...state.categories, category as Category],
+        categories: [category as Category, ...state.categories],
         isLoading: false,
         error: null,
       }));
