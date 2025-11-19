@@ -6,7 +6,7 @@ import { Calendar, Package, Layers, Edit, Trash2 } from "lucide-react";
 import { Category } from "@/stores/categoryStore";
 import { useEffect, useState } from "react";
 import categoryService from "@/services/categoryService";
-import AddSubCategoryFormModal from "./AddSubCategoryFormModal";
+import SubCategoryFormModal from "./SubCategoryFormModal";
 import { DeleteModal } from "@/components/modals";
 import { toast } from "sonner";
 
@@ -319,7 +319,7 @@ export default function ViewModal({
       </div>
 
       {/* Edit Sub-Category Modal */}
-      <AddSubCategoryFormModal
+      <SubCategoryFormModal
         open={showEditSubCategory}
         onClose={handleCloseEditModal}
         selectedCategory={category}

@@ -131,6 +131,7 @@ export function BaseTableList<T>({
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(10);
   const [isFirstRender, setIsFirstRender] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Get data from store
   const data = (store.items ||
@@ -240,8 +241,10 @@ export function BaseTableList<T>({
     setCurrentPage(page);
   };
 
-  const handleRefresh = useCallback(() => {
-    fetchData();
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    await fetchData();
+    setIsRefreshing(false);
   }, [fetchData]);
 
   // Expose refresh function to parent
@@ -348,10 +351,10 @@ export function BaseTableList<T>({
               <Button
                 variant="default"
                 onClick={handleRefresh}
-                disabled={isLoading}
+                disabled={isRefreshing}
               >
                 <RefreshCw
-                  className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
+                  className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
                 />
               </Button>
               {headerActions && headerActions.length > 0 && (

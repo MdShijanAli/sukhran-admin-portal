@@ -34,19 +34,19 @@ interface SubCategory {
   image_url?: string;
 }
 
-interface AddSubCategoryFormModalProps {
+interface SubCategoryFormModalProps {
   open: boolean;
   onClose: () => void;
   selectedCategory: Category | null;
   editData?: SubCategory | null;
 }
 
-export default function AddSubCategoryFormModal({
+export default function SubCategoryFormModal({
   open,
   onClose,
   selectedCategory,
   editData,
-}: AddSubCategoryFormModalProps) {
+}: SubCategoryFormModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState<string>("");
   const [formData, setFormData] = useState<SubCategoryFormData>({
@@ -152,7 +152,7 @@ export default function AddSubCategoryFormModal({
         await categoryService.storeSubCategory(formDataToSubmit);
         toast.success("Sub-category created successfully");
       }
-
+      await categoryService.fetchLists(); // Refresh categories list
       onClose();
     } catch (error) {
       console.error("Error submitting sub-category:", error);

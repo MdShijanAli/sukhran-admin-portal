@@ -3,7 +3,7 @@ import { Edit, Eye, Plus, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import FormModal from "./modal/FormModal";
 import ViewModal from "./modal/ViewModal";
-import AddSubCategoryFormModal from "./modal/AddSubCategoryFormModal";
+import SubCategoryFormModal from "./modal/SubCategoryFormModal";
 import {
   BaseTableList,
   Column,
@@ -27,12 +27,6 @@ const Categories = () => {
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
 
   const store = useCategoryStore();
-
-  const handleRefresh = useCallback(() => {
-    if (refreshTable) {
-      refreshTable();
-    }
-  }, [refreshTable]);
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {
     setRefreshTable(() => refreshFn);
@@ -190,12 +184,9 @@ const Categories = () => {
         editData={selectedCategory || undefined}
       />
 
-      <AddSubCategoryFormModal
+      <SubCategoryFormModal
         open={showAddSubCategory}
-        onClose={() => {
-          setShowAddSubCategory(false);
-          handleRefresh();
-        }}
+        onClose={() => setShowAddSubCategory(false)}
         selectedCategory={selectedCategory}
       />
 
