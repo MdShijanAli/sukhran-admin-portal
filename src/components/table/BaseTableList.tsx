@@ -116,6 +116,7 @@ export function BaseTableList<T>({
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(10);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   // Get data from store
   const data = (store.items ||
@@ -193,11 +194,16 @@ export function BaseTableList<T>({
 
   // Fetch on mount and when dependencies change
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (isFirstRender) {
+      setIsFirstRender(false);
+      fetchData();
+    }
+  }, [fetchData, isFirstRender]);
 
   // Handle search with debounce
   useEffect(() => {
+    if (isFirstRender) return; // Skip debounce on first render
+
     const timer = setTimeout(() => {
       if (currentPage !== 1) {
         setCurrentPage(1);
