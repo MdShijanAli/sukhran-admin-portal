@@ -51,7 +51,7 @@ export function BaseTable<T>({
               <TableRow key={index}>
                 {columns.map((column) => (
                   <TableCell key={column.key}>
-                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 my-5 w-full" />
                   </TableCell>
                 ))}
               </TableRow>

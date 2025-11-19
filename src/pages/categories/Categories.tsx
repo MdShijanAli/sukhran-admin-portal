@@ -100,7 +100,7 @@ const Categories = () => {
         <img
           src={category.image_url || "/placeholder-image.png"}
           alt={category.name}
-          className="size-16 rounded-md object-cover object-top"
+          className="w-16 h-16 rounded-md object-cover object-top"
         />
       ),
     },
