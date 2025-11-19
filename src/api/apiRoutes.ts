@@ -33,6 +33,7 @@ export const apiRoutes = {
     getAll: createApiUrl("admin/categories"),
     getById: (id: number | string) => createApiUrl(`admin/categories/${id}`),
     create: createApiUrl("admin/categories"),
+    createSubCategory: createApiUrl("admin/sub-categories"),
     update: (id: number | string) => createApiUrl(`admin/categories/${id}`),
     delete: (id: number | string) => createApiUrl(`admin/categories/${id}`),
   },

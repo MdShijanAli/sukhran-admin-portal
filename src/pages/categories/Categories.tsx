@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Edit, Eye, Plus, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import FormModal from "./modal/FormModal";
 import ViewModal from "./modal/ViewModal";
+import AddSubCategoryFormModal from "./modal/AddSubCategoryFormModal";
 import {
   BaseTableList,
   Column,
@@ -21,9 +22,21 @@ const Categories = () => {
   const [dialogMode, setDialogMode] = useState<"create" | "edit" | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [showAddSubCategory, setShowAddSubCategory] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
 
   const store = useCategoryStore();
+
+  const handleRefresh = useCallback(() => {
+    if (refreshTable) {
+      refreshTable();
+    }
+  }, [refreshTable]);
+
+  const handleSetRefresh = useCallback((refreshFn: () => void) => {
+    setRefreshTable(() => refreshFn);
+  }, []);
 
   const handleCreate = () => {
     setSelectedCategory(null);
@@ -49,15 +62,11 @@ const Categories = () => {
     if (!selectedCategory) return;
     setIsDeleting(true);
     try {
-      const response = await categoryService.deleteItem(selectedCategory.id);
-      console.log("Delete response:", response);
-      if (response && response.status === 200) {
-        toast.success("Category deleted successfully");
-      } else {
-        toast.error("Failed to delete category");
-      }
+      await categoryService.deleteItem(selectedCategory.id);
+      toast.success("Category deleted successfully");
     } catch (error) {
       console.error("Error deleting category:", error);
+      toast.error("Failed to delete category");
     } finally {
       setIsDeleting(false);
       setShowDelete(false);
@@ -75,13 +84,21 @@ const Categories = () => {
       label: "Edit Category",
       icon: Edit,
       onClick: handleEdit,
-      separator: true,
     },
     {
       label: "Delete Category",
       icon: Trash2,
       onClick: handleDelete,
       variant: "destructive",
+      separator: true,
+    },
+    {
+      label: "Add Sub Category",
+      icon: Plus,
+      onClick: (category) => {
+        setSelectedCategory(category);
+        setShowAddSubCategory(true);
+      },
     },
   ];
 
@@ -163,13 +180,23 @@ const Categories = () => {
         store={store}
         emptyMessage="No categories found"
         getRowKey={(category) => category.id}
+        onRefresh={handleSetRefresh}
       />
 
       {/* Dialogs */}
       <FormModal
         open={dialogMode !== null}
         onClose={() => setDialogMode(null)}
-        editData={selectedCategory}
+        editData={selectedCategory || undefined}
+      />
+
+      <AddSubCategoryFormModal
+        open={showAddSubCategory}
+        onClose={() => {
+          setShowAddSubCategory(false);
+          handleRefresh();
+        }}
+        selectedCategory={selectedCategory}
       />
 
       <ViewModal

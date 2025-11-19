@@ -1,23 +1,17 @@
 import { useEffect, useState } from "react";
-import {
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { BaseModal } from "@/components/modals/BaseModal";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Category } from "@/stores/categoryStore";
-import { toast } from "sonner";
-import categoryService from "@/services/categoryService";
-import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { X } from "lucide-react";
+import categoryService from "@/services/categoryService";
+import { Category } from "@/stores/categoryStore";
 
-interface CategoryFormData {
+interface SubCategoryFormData {
+  categoryId: string | number;
   name: string;
   description: string;
   displayOrder: number;
@@ -25,47 +19,31 @@ interface CategoryFormData {
   imgUrl?: File;
 }
 
-interface CategoryDialogProps {
+interface AddSubCategoryFormModalProps {
   open: boolean;
   onClose: () => void;
-  editData?: Category;
+  selectedCategory: Category | null;
 }
 
-export default function FormModal({
+export default function AddSubCategoryFormModal({
   open,
   onClose,
-  editData,
-}: CategoryDialogProps) {
+  selectedCategory,
+}: AddSubCategoryFormModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
   const [imagePreview, setImagePreview] = useState<string>("");
-  const [formData, setFormData] = useState<CategoryFormData>({
+  const [formData, setFormData] = useState<SubCategoryFormData>({
+    categoryId: "",
     name: "",
     description: "",
     displayOrder: 1,
     isActive: true,
   });
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
   useEffect(() => {
-    if (editData) {
-      setIsEditing(true);
+    if (open) {
       setFormData({
-        name: editData.name,
-        description: editData.description || "",
-        displayOrder: editData.displayOrder || 1,
-        isActive: editData.isActive ?? true,
-      });
-      setImagePreview(editData.image_url || "");
-    } else {
-      setIsEditing(false);
-      setFormData({
+        categoryId: selectedCategory?.id || "",
         name: "",
         description: "",
         displayOrder: 1,
@@ -73,10 +51,10 @@ export default function FormModal({
       });
       setImagePreview("");
     }
-  }, [editData, open]);
+  }, [open, selectedCategory]);
 
   const updateField = (
-    field: keyof CategoryFormData,
+    field: keyof SubCategoryFormData,
     value: string | number | boolean | File
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -97,44 +75,47 @@ export default function FormModal({
   const handleRemoveImage = () => {
     setImagePreview("");
     setFormData((prev) => ({ ...prev, imgUrl: undefined }));
-    // Reset file input
-    const fileInput = document.getElementById("imgUrl") as HTMLInputElement;
+    const fileInput = document.getElementById(
+      "subCategoryImg"
+    ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = "";
     }
   };
 
   const handleSubmit = async () => {
+    if (!formData.categoryId) {
+      toast.error("Please select a category");
+      return;
+    }
+
+    if (!formData.name) {
+      toast.error("Please enter sub-category name");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      // Create FormData for file upload
       const formDataToSubmit = new FormData();
+      formDataToSubmit.append("categoryId", formData.categoryId.toString());
       formDataToSubmit.append("name", formData.name);
       formDataToSubmit.append("description", formData.description);
       formDataToSubmit.append("displayOrder", formData.displayOrder.toString());
       formDataToSubmit.append("isActive", formData.isActive ? "1" : "0");
 
-      // Append image file if exists
       if (formData.imgUrl) {
         formDataToSubmit.append("imgUrl", formData.imgUrl);
       }
+      console.log("Submitting SubCategory FormData:", formDataToSubmit);
 
-      console.log("Submitting FormData:", formDataToSubmit);
+      await categoryService.storeSubCategory(formDataToSubmit);
 
-      const result = isEditing
-        ? await categoryService.updateItem(editData!.id, formDataToSubmit)
-        : await categoryService.storeItem(formDataToSubmit);
-
-      console.log("Result:", result);
-      toast.success(
-        isEditing
-          ? "Category updated successfully"
-          : "Category created successfully"
-      );
+      toast.success("Sub-category created successfully");
       onClose();
     } catch (error) {
-      console.error("Error submitting category:", error);
+      console.error("Error submitting sub-category:", error);
+      toast.error("Failed to create sub-category");
     } finally {
       setIsSubmitting(false);
     }
@@ -144,18 +125,28 @@ export default function FormModal({
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title={isEditing ? "Edit Category" : "Create New Category"}
+      title="Add Sub-Category"
       onSubmit={handleSubmit}
       isSubmitting={isSubmitting}
-      submitButtonText={isEditing ? "Update Category" : "Create Category"}
+      submitButtonText="Create Sub-Category"
       size="2xl"
     >
       <div className="grid gap-6">
-        {/* Category Image */}
+        {/* Category Name (Read-only) */}
         <div className="space-y-2">
-          <Label htmlFor="imgUrl">Category Image</Label>
+          <Label>Parent Category</Label>
           <Input
-            id="imgUrl"
+            value={selectedCategory?.name || ""}
+            disabled
+            className="bg-muted"
+          />
+        </div>
+
+        {/* Sub-Category Image */}
+        <div className="space-y-2">
+          <Label htmlFor="subCategoryImg">Sub-Category Image</Label>
+          <Input
+            id="subCategoryImg"
             type="file"
             accept="image/*"
             onChange={handleImageChange}
@@ -180,25 +171,25 @@ export default function FormModal({
           )}
         </div>
 
-        {/* Category Name */}
+        {/* Sub-Category Name */}
         <div className="space-y-2">
-          <Label htmlFor="name">Category Name *</Label>
+          <Label htmlFor="subCategoryName">Sub-Category Name *</Label>
           <Input
-            id="name"
+            id="subCategoryName"
             value={formData.name}
             onChange={(e) => updateField("name", e.target.value)}
-            placeholder="Enter category name"
+            placeholder="Enter sub-category name"
           />
         </div>
 
         {/* Description */}
         <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
+          <Label htmlFor="subCategoryDescription">Description</Label>
           <Textarea
-            id="description"
+            id="subCategoryDescription"
             value={formData.description}
             onChange={(e) => updateField("description", e.target.value)}
-            placeholder="Enter category description"
+            placeholder="Enter sub-category description"
             rows={3}
           />
         </div>
@@ -206,9 +197,9 @@ export default function FormModal({
         {/* Display Order & Status */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="displayOrder">Display Order</Label>
+            <Label htmlFor="subCategoryDisplayOrder">Display Order</Label>
             <Input
-              id="displayOrder"
+              id="subCategoryDisplayOrder"
               type="number"
               value={formData.displayOrder}
               onChange={(e) =>
@@ -218,11 +209,11 @@ export default function FormModal({
           </div>
           <div className="flex items-center space-x-2 pt-8">
             <Switch
-              id="isActive"
+              id="subCategoryIsActive"
               checked={formData.isActive}
               onCheckedChange={(checked) => updateField("isActive", checked)}
             />
-            <Label htmlFor="isActive">Active</Label>
+            <Label htmlFor="subCategoryIsActive">Active</Label>
           </div>
         </div>
       </div>

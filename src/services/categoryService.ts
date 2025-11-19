@@ -14,7 +14,7 @@ interface CategoryService extends ApiService<Category> {
     id: number | string,
     isActive: boolean
   ) => Promise<unknown>;
-  fetchCategoriesWithProductCount: () => Promise<unknown>;
+  storeSubCategory: (formData: FormData) => Promise<unknown>;
 }
 
 const categoryService: CategoryService = {
@@ -34,15 +34,16 @@ const categoryService: CategoryService = {
     }
   },
 
-  // Example: Get categories with products count
-  fetchCategoriesWithProductCount: async () => {
+  storeSubCategory: async (formData: FormData) => {
     try {
-      const response = await apiClient.get(
-        `${apiRoutes.categories.getAll}?include=products_count`
+      const response = await apiClient.post(
+        apiRoutes.categories.createSubCategory,
+        formData
       );
+      console.log("Response from storing sub-category:", response);
       return response.data;
     } catch (error) {
-      console.error("Error fetching categories with count:", error);
+      console.error("Error storing sub-category:", error);
       throw error;
     }
   },

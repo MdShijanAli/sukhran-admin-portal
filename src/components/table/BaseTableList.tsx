@@ -96,6 +96,9 @@ export interface BaseTableListProps<T> {
   service: ApiService<T>;
   store: StoreWithData<T>;
 
+  // Refresh callback
+  onRefresh?: (refreshFn: () => void) => void;
+
   summaryLists?: Array<{
     title: string;
     color: string;
@@ -121,6 +124,7 @@ export function BaseTableList<T>({
   rowClassName,
   showPagination = false,
   summaryLists = [],
+  onRefresh,
 }: BaseTableListProps<T>) {
   // Local state for query params
   const [searchQuery, setSearchQuery] = useState("");
@@ -236,9 +240,16 @@ export function BaseTableList<T>({
     setCurrentPage(page);
   };
 
-  const handleRefresh = () => {
+  const handleRefresh = useCallback(() => {
     fetchData();
-  };
+  }, [fetchData]);
+
+  // Expose refresh function to parent
+  useEffect(() => {
+    if (onRefresh) {
+      onRefresh(handleRefresh);
+    }
+  }, [onRefresh, handleRefresh]);
 
   return (
     <div className="space-y-3">

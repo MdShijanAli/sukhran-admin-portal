@@ -75,6 +75,9 @@ export function DropdownMenuActions<T>({
                 {Icon && <Icon className="mr-2 h-4 w-4" />}
                 {action.label}
               </DropdownMenuItem>
+              {action.separator && index < visibleActions.length - 1 && (
+                <DropdownMenuSeparator />
+              )}
             </div>
           );
         })}
