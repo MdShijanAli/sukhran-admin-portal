@@ -202,7 +202,7 @@ const Categories = () => {
       <ViewModal
         open={showDetails}
         onClose={setShowDetails}
-        category={selectedCategory}
+        categoryId={selectedCategory?.id || null}
       />
 
       <DeleteModal

@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 export interface BaseModalProps {
   // Modal State
@@ -43,6 +44,7 @@ export interface BaseModalProps {
   onSubmit?: () => void;
   submitButtonDisabled?: boolean;
   isSubmitting?: boolean;
+  loading?: boolean;
 
   // Additional custom actions
   customActions?: ReactNode;
@@ -79,6 +81,7 @@ export function BaseModal({
   customActions,
   size = "md",
   className,
+  loading,
 }: BaseModalProps) {
   const handleClose = () => {
     if (onClose) {
@@ -106,7 +109,13 @@ export function BaseModal({
         </DialogHeader>
 
         <div className="px-4 py-2 overflow-y-auto flex-1 min-h-0">
-          {children}
+          {loading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : (
+            children
+          )}
         </div>
 
         <DialogFooter className="flex-shrink-0">
