@@ -21,6 +21,7 @@ export interface ProductSku {
 export interface Product {
   id: number | string;
   categoryId: number | string;
+  slug: string;
   name: string;
   subCategoryId?: number | string;
   productType: "normal" | "subscription" | "bundle";

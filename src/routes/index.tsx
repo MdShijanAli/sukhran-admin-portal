@@ -28,6 +28,7 @@ import Family from "@/pages/Family";
 import Analytics from "@/pages/Analytics";
 import Marketing from "@/pages/Marketing";
 import Categories from "@/pages/categories/Categories";
+import ProductViewDetails from "@/pages/products/ViewDetails";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -109,6 +110,14 @@ const AppRoutes: React.FC = () => {
           element={
             <PrivateRoute>
               <ProductForm />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="products/view/:id"
+          element={
+            <PrivateRoute>
+              <ProductViewDetails />
             </PrivateRoute>
           }
         />
