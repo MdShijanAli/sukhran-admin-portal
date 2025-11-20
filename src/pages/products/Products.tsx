@@ -21,6 +21,7 @@ import { useProductStore, Product } from "@/stores/productStore";
 import { DeleteModal } from "@/components/modals";
 import noProductImage from "@/assets/images/no_product_image.png";
 import { useSidebarStore } from "@/stores/sidebarStore";
+import { Pagination } from "@/components/table/Pagination";
 
 const Products = () => {
   const { t } = useTranslation();
@@ -31,36 +32,43 @@ const Products = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const { isCollapsed } = useSidebarStore();
 
   // Get data from store
   const products = store.products || [];
+  const pagination = store.pagination;
   const isLoading = store.isLoading || false;
 
-  const fetchProducts = useCallback(async () => {
-    try {
-      store.setLoading?.(true);
-      const params = new URLSearchParams();
-      if (searchQuery) {
-        params.append("search", searchQuery);
+  const fetchProducts = useCallback(
+    async (page = 1) => {
+      try {
+        store.setLoading?.(true);
+        const params = new URLSearchParams();
+        if (searchQuery) {
+          params.append("search", searchQuery);
+        }
+        params.append("page", page.toString());
+        await productService.fetchLists(params.toString());
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+        toast.error("Failed to load products");
       }
-      await productService.fetchLists(params.toString());
-    } catch (error) {
-      console.error("Failed to fetch products:", error);
-      toast.error("Failed to load products");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [searchQuery]
+  );
 
-  // Fetch products on mount
+  // Fetch products on mount and page change
   useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+    fetchProducts(currentPage);
+  }, [fetchProducts, currentPage]);
 
-  // Debounced search
+  // Debounced search - reset to page 1
   useEffect(() => {
     const timer = setTimeout(() => {
-      fetchProducts();
+      setCurrentPage(1);
+      fetchProducts(1);
     }, 500);
 
     return () => clearTimeout(timer);
@@ -69,8 +77,12 @@ const Products = () => {
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await fetchProducts();
+    await fetchProducts(currentPage);
     setIsRefreshing(false);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   const handleEdit = (product: Product) => {
@@ -92,7 +104,7 @@ const Products = () => {
     try {
       await productService.deleteItem(selectedProduct.id);
       toast.success("Product deleted successfully");
-      await fetchProducts();
+      await fetchProducts(currentPage);
       setShowDelete(false);
     } catch (error) {
       console.error("Error deleting product:", error);
@@ -321,6 +333,24 @@ const Products = () => {
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {!isLoading &&
+        products.length > 0 &&
+        pagination &&
+        pagination.last_page > 1 && (
+          <Card className="mt-3">
+            <CardContent className="p-0">
+              <Pagination
+                currentPage={pagination.current_page}
+                totalPages={pagination.last_page}
+                totalItems={pagination.total}
+                itemsPerPage={pagination.per_page}
+                onPageChange={handlePageChange}
+              />
+            </CardContent>
+          </Card>
+        )}
 
       {/* Delete Product Modal */}
       <DeleteModal

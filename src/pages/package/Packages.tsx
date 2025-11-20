@@ -21,6 +21,7 @@ import packageService from "@/services/packageService";
 import DeleteModal from "@/components/modals/DeleteModal";
 import { Package } from "@/lib/types";
 import { useSidebarStore } from "@/stores/sidebarStore";
+import { Pagination } from "@/components/table/Pagination";
 
 export default function Packages() {
   const { t } = useTranslation();
@@ -31,36 +32,43 @@ export default function Packages() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const { isCollapsed } = useSidebarStore();
 
   // Get data from store
   const packages = store.packages || [];
+  const pagination = store.pagination;
   const isLoading = store.isLoading || false;
 
-  const fetchPackages = useCallback(async () => {
-    try {
-      store.setLoading?.(true);
-      const params = new URLSearchParams();
-      if (searchQuery) {
-        params.append("search", searchQuery);
+  const fetchPackages = useCallback(
+    async (page = 1) => {
+      try {
+        store.setLoading?.(true);
+        const params = new URLSearchParams();
+        if (searchQuery) {
+          params.append("search", searchQuery);
+        }
+        params.append("page", page.toString());
+        await packageService.fetchLists(params.toString());
+      } catch (error) {
+        console.error("Failed to fetch packages:", error);
+        toast.error("Failed to load packages");
       }
-      await packageService.fetchLists(params.toString());
-    } catch (error) {
-      console.error("Failed to fetch packages:", error);
-      toast.error("Failed to load packages");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [searchQuery]
+  );
 
-  // Fetch packages on mount
+  // Fetch packages on mount and page change
   useEffect(() => {
-    fetchPackages();
-  }, [fetchPackages]);
+    fetchPackages(currentPage);
+  }, [fetchPackages, currentPage]);
 
-  // Debounced search
+  // Debounced search - reset to page 1
   useEffect(() => {
     const timer = setTimeout(() => {
-      fetchPackages();
+      setCurrentPage(1);
+      fetchPackages(1);
     }, 500);
 
     return () => clearTimeout(timer);
@@ -69,8 +77,12 @@ export default function Packages() {
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await fetchPackages();
+    await fetchPackages(currentPage);
     setIsRefreshing(false);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   const handleEdit = (pkg: Package) => {
@@ -92,7 +104,7 @@ export default function Packages() {
     try {
       await packageService.deleteItem(selectedPackage.id);
       toast.success("Package deleted successfully");
-      await fetchPackages();
+      await fetchPackages(currentPage);
       setShowDelete(false);
     } catch (error) {
       console.error("Error deleting package:", error);
@@ -160,7 +172,13 @@ export default function Packages() {
       {/* Packages Grid */}
       <div>
         {isLoading ? (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div
+            className={`grid grid-cols-2 gap-3 ${
+              isCollapsed
+                ? "2xl:grid-cols-6 xl:grid-cols-5 sm:grid-cols-3 lg:grid-cols-4"
+                : "2xl:grid-cols-5 xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3"
+            }`}
+          >
             {Array.from({ length: 8 }).map((_, index) => (
               <Card key={index} className="overflow-hidden animate-pulse">
                 <div className="aspect-square bg-muted" />
@@ -191,10 +209,10 @@ export default function Packages() {
           </Card>
         ) : (
           <div
-            className={`grid grid-cols-1 gap-3 ${
+            className={`grid grid-cols-2 gap-3 ${
               isCollapsed
-                ? "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                : "sm:grid-cols-2 lg:grid-cols-3"
+                ? "2xl:grid-cols-6 xl:grid-cols-5 sm:grid-cols-3 lg:grid-cols-4"
+                : "2xl:grid-cols-5 xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3"
             }`}
           >
             {packages.map((pkg) => {
@@ -327,6 +345,24 @@ export default function Packages() {
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {!isLoading &&
+        packages.length > 0 &&
+        pagination &&
+        pagination.last_page > 1 && (
+          <Card className="mt-3">
+            <CardContent className="p-0">
+              <Pagination
+                currentPage={pagination.current_page}
+                totalPages={pagination.last_page}
+                totalItems={pagination.total}
+                itemsPerPage={pagination.per_page}
+                onPageChange={handlePageChange}
+              />
+            </CardContent>
+          </Card>
+        )}
 
       {/* Delete Package Modal */}
       <DeleteModal
