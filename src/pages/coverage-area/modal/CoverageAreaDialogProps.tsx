@@ -101,13 +101,16 @@ export function CoverageAreaDialog({
         latitude: formData.latitude,
         longitude: formData.longitude,
         radius_km: formData.radius_km,
-        is_active: formData.is_active ? 1 : 0,
+        is_active: formData.is_active,
       };
 
       console.log("Submitting data:", dataToSubmit);
 
       const result = isEditing
-        ? await coverageAreaService.updateItem(editData!.id, dataToSubmit)
+        ? await coverageAreaService.updateCoverageArea(
+            editData!.id,
+            dataToSubmit
+          )
         : await coverageAreaService.storeItem(dataToSubmit);
 
       console.log("Result:", result);

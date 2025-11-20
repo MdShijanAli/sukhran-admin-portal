@@ -12,6 +12,7 @@ const apiService = createApiService<CoverageArea>(
 
 interface CoverageAreaService extends ApiService<CoverageArea> {
   toggleActiveStatus: (id: number | string) => Promise<unknown>;
+  updateCoverageArea: (id: number | string, data: unknown) => Promise<unknown>;
 }
 
 const coverageAreaService: CoverageAreaService = {
@@ -31,6 +32,22 @@ const coverageAreaService: CoverageAreaService = {
       return response;
     } catch (error) {
       console.error("Error toggling coverage area status:", error);
+      throw error;
+    }
+  },
+  updateCoverageArea: async (id: number | string, data: unknown) => {
+    try {
+      const response = await apiClient.put(
+        apiRoutes.coverageAreas.update(id),
+        data
+      );
+      console.log("Update coverage area response:", response.data);
+      if (response && response.status === 200) {
+        useCoverageAreaStore.getState().updateItem(id, response.data.data);
+      }
+      return response;
+    } catch (error) {
+      console.error("Error updating coverage area:", error);
       throw error;
     }
   },

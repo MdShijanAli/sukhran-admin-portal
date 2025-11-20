@@ -115,6 +115,7 @@ export const createApiService = <T = unknown>(
               headers: {
                 "Content-Type": "multipart/form-data",
               },
+              method: "POST",
             }
           : undefined;
 
