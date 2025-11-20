@@ -48,6 +48,8 @@ export default function PackageForm() {
   const [imagePreview, setImagePreview] = useState<string>("");
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoadingProducts, setIsLoadingProducts] = useState(false);
+  const [productSearchQuery, setProductSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
 
   const [formData, setFormData] = useState<PackageFormData>({
     name: "",
@@ -80,17 +82,30 @@ export default function PackageForm() {
     }
   }, [isEditMode, id]);
 
-  const fetchProducts = async () => {
-    setIsLoadingProducts(true);
+  // Debounced product search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchProducts(productSearchQuery);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [productSearchQuery]);
+
+  const fetchProducts = async (searchQuery = "") => {
+    setIsSearching(true);
     try {
-      const result = await productService.fetchLists();
+      const params = new URLSearchParams();
+      if (searchQuery) {
+        params.append("search", searchQuery);
+      }
+      const result = await productService.fetchLists(params.toString());
       const productsData = (result as { data?: Product[] })?.data || [];
       setProducts(productsData);
     } catch (error) {
       console.error("Error fetching products:", error);
       toast.error("Failed to load products");
     } finally {
-      setIsLoadingProducts(false);
+      setIsSearching(false);
     }
   };
 
@@ -210,8 +225,8 @@ export default function PackageForm() {
       if (item.productId && item.skuId && item.quantity) {
         const product = getProductById(item.productId);
         const sku = product?.skus?.find((s) => s.id?.toString() === item.skuId);
-        if (sku) {
-          total += sku.currentPrice * parseFloat(item.quantity);
+        if (sku && sku.pricing) {
+          total += sku.pricing.currentPrice * parseFloat(item.quantity);
         }
       }
     });
@@ -296,9 +311,18 @@ export default function PackageForm() {
   };
 
   const totalPrice = calculateTotalPrice();
+  const fixedPriceNum = parseFloat(formData.fixedPrice) || 0;
+  const discountPercentNum = parseFloat(formData.discountPercent) || 0;
+
+  // Calculate price after discount
+  const priceAfterDiscount =
+    fixedPriceNum > 0 && discountPercentNum > 0
+      ? fixedPriceNum - (fixedPriceNum * discountPercentNum) / 100
+      : fixedPriceNum;
+
   const savings =
-    formData.fixedPrice && totalPrice > parseFloat(formData.fixedPrice)
-      ? totalPrice - parseFloat(formData.fixedPrice)
+    formData.fixedPrice && totalPrice > fixedPriceNum
+      ? totalPrice - fixedPriceNum
       : 0;
 
   return (
@@ -428,6 +452,213 @@ export default function PackageForm() {
                 </CardContent>
               </Card>
 
+              {/* Package Items */}
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>Package Items</CardTitle>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={addItem}
+                    >
+                      <Plus className="h-4 w-4 mr-1" />
+                      Add Item
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {items.map((item, index) => {
+                    const selectedProduct = getProductById(item.productId);
+                    const availableSkus = getSkusForProduct(item.productId);
+                    const selectedSku = availableSkus.find(
+                      (s) => s.id?.toString() === item.skuId
+                    );
+
+                    return (
+                      <Card key={index} className="p-4">
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-medium">Item {index + 1}</h4>
+                            {items.length > 1 && (
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => removeItem(index)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
+
+                          <div className="grid gap-4 md:grid-cols-3">
+                            <div className="space-y-2">
+                              <Label>
+                                Product{" "}
+                                <span className="text-destructive">*</span>
+                              </Label>
+                              <Select
+                                value={item.productId}
+                                onValueChange={(value) =>
+                                  updateItem(index, "productId", value)
+                                }
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select product" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <div className="flex items-center border-b px-3 pb-2">
+                                    <Input
+                                      placeholder="Search products..."
+                                      value={productSearchQuery}
+                                      onChange={(e) =>
+                                        setProductSearchQuery(e.target.value)
+                                      }
+                                      className="h-8"
+                                    />
+                                  </div>
+                                  <div className="max-h-[200px] overflow-y-auto">
+                                    {isSearching ? (
+                                      <div className="py-6 text-center text-sm text-muted-foreground">
+                                        <Loader2 className="h-4 w-4 animate-spin mx-auto mb-2" />
+                                        Searching...
+                                      </div>
+                                    ) : products.length === 0 ? (
+                                      <div className="py-6 text-center text-sm text-muted-foreground">
+                                        No products found
+                                      </div>
+                                    ) : (
+                                      products.map((product) => (
+                                        <SelectItem
+                                          key={product.id}
+                                          value={product.id.toString()}
+                                        >
+                                          {product.name}
+                                        </SelectItem>
+                                      ))
+                                    )}
+                                  </div>
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label>
+                                SKU <span className="text-destructive">*</span>
+                              </Label>
+                              <Select
+                                value={item.skuId}
+                                onValueChange={(value) =>
+                                  updateItem(index, "skuId", value)
+                                }
+                                disabled={!item.productId}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select SKU" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {availableSkus.map((sku) => (
+                                    <SelectItem
+                                      key={sku.id}
+                                      value={sku.id!.toString()}
+                                    >
+                                      {sku.name} - ৳{sku.pricing.currentPrice}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            <div className="space-y-2">
+                              <Label>
+                                Quantity{" "}
+                                <span className="text-destructive">*</span>
+                              </Label>
+                              <Input
+                                type="number"
+                                min="1"
+                                placeholder="1"
+                                value={item.quantity}
+                                onChange={(e) =>
+                                  updateItem(index, "quantity", e.target.value)
+                                }
+                              />
+                            </div>
+                          </div>
+
+                          {selectedSku && item.quantity && (
+                            <div className="rounded-lg bg-muted p-3 text-sm">
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">
+                                  Subtotal:
+                                </span>
+                                <span className="font-medium">
+                                  ৳
+                                  {(
+                                    (selectedSku.pricing?.currentPrice ||
+                                      selectedSku.currentPrice ||
+                                      0) * parseFloat(item.quantity)
+                                  ).toFixed(2)}
+                                </span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </Card>
+                    );
+                  })}
+                </CardContent>
+              </Card>
+
+              {/* Package Image */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Package Image</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {imagePreview ? (
+                    <div className="relative">
+                      <img
+                        src={imagePreview}
+                        alt="Package preview"
+                        className="w-full h-48 object-cover rounded-lg"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="icon"
+                        className="absolute top-2 right-2"
+                        onClick={handleRemoveImage}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="border-2 border-dashed rounded-lg p-8 text-center">
+                      <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                      <Label
+                        htmlFor="packageImg"
+                        className="cursor-pointer text-sm text-muted-foreground"
+                      >
+                        Click to upload package image
+                      </Label>
+                      <Input
+                        id="packageImg"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageChange}
+                      />
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Sidebar Summary */}
+            <div className="space-y-3">
               {/* Pricing */}
               <Card>
                 <CardHeader>
@@ -481,9 +712,17 @@ export default function PackageForm() {
                           ৳{formData.fixedPrice || "0.00"}
                         </span>
                       </div>
+                      {discountPercentNum > 0 && (
+                        <div className="flex justify-between text-sm">
+                          <span>After Discount ({discountPercentNum}%):</span>
+                          <span className="font-bold text-green-600">
+                            ৳{priceAfterDiscount.toFixed(2)}
+                          </span>
+                        </div>
+                      )}
                       {savings > 0 && (
                         <div className="flex justify-between text-sm">
-                          <span>Savings:</span>
+                          <span>You Save:</span>
                           <span className="font-medium text-green-600">
                             ৳{savings.toFixed(2)}
                           </span>
@@ -493,205 +732,7 @@ export default function PackageForm() {
                   )}
                 </CardContent>
               </Card>
-
-              {/* Package Items */}
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle>Package Items</CardTitle>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={addItem}
-                    >
-                      <Plus className="h-4 w-4 mr-1" />
-                      Add Item
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {isLoadingProducts ? (
-                    <div className="text-center py-8">
-                      <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
-                      <p className="text-sm text-muted-foreground mt-2">
-                        Loading products...
-                      </p>
-                    </div>
-                  ) : (
-                    items.map((item, index) => {
-                      const selectedProduct = getProductById(item.productId);
-                      const availableSkus = getSkusForProduct(item.productId);
-                      const selectedSku = availableSkus.find(
-                        (s) => s.id?.toString() === item.skuId
-                      );
-
-                      return (
-                        <Card key={index} className="p-4">
-                          <div className="space-y-4">
-                            <div className="flex items-center justify-between">
-                              <h4 className="font-medium">Item {index + 1}</h4>
-                              {items.length > 1 && (
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => removeItem(index)}
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              )}
-                            </div>
-
-                            <div className="grid gap-4 md:grid-cols-3">
-                              <div className="space-y-2">
-                                <Label>
-                                  Product{" "}
-                                  <span className="text-destructive">*</span>
-                                </Label>
-                                <Select
-                                  value={item.productId}
-                                  onValueChange={(value) =>
-                                    updateItem(index, "productId", value)
-                                  }
-                                >
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Select product" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    {products.map((product) => (
-                                      <SelectItem
-                                        key={product.id}
-                                        value={product.id.toString()}
-                                      >
-                                        {product.name}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                              </div>
-
-                              <div className="space-y-2">
-                                <Label>
-                                  SKU{" "}
-                                  <span className="text-destructive">*</span>
-                                </Label>
-                                <Select
-                                  value={item.skuId}
-                                  onValueChange={(value) =>
-                                    updateItem(index, "skuId", value)
-                                  }
-                                  disabled={!item.productId}
-                                >
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Select SKU" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    {availableSkus.map((sku) => (
-                                      <SelectItem
-                                        key={sku.id}
-                                        value={sku.id!.toString()}
-                                      >
-                                        {sku.name} - ৳{sku.currentPrice}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                              </div>
-
-                              <div className="space-y-2">
-                                <Label>
-                                  Quantity{" "}
-                                  <span className="text-destructive">*</span>
-                                </Label>
-                                <Input
-                                  type="number"
-                                  min="1"
-                                  placeholder="1"
-                                  value={item.quantity}
-                                  onChange={(e) =>
-                                    updateItem(
-                                      index,
-                                      "quantity",
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                              </div>
-                            </div>
-
-                            {selectedSku && item.quantity && (
-                              <div className="rounded-lg bg-muted p-3 text-sm">
-                                <div className="flex justify-between">
-                                  <span className="text-muted-foreground">
-                                    Subtotal:
-                                  </span>
-                                  <span className="font-medium">
-                                    ৳
-                                    {(
-                                      selectedSku.currentPrice *
-                                      parseFloat(item.quantity)
-                                    ).toFixed(2)}
-                                  </span>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        </Card>
-                      );
-                    })
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Package Image */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Package Image</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {imagePreview ? (
-                    <div className="relative">
-                      <img
-                        src={imagePreview}
-                        alt="Package preview"
-                        className="w-full h-48 object-cover rounded-lg"
-                      />
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        size="icon"
-                        className="absolute top-2 right-2"
-                        onClick={handleRemoveImage}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="border-2 border-dashed rounded-lg p-8 text-center">
-                      <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                      <Label
-                        htmlFor="packageImg"
-                        className="cursor-pointer text-sm text-muted-foreground"
-                      >
-                        Click to upload package image
-                      </Label>
-                      <Input
-                        id="packageImg"
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={handleImageChange}
-                      />
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Sidebar Summary */}
-            <div className="space-y-3">
-              <Card className="sticky top-6">
+              <Card className="">
                 <CardHeader>
                   <CardTitle>Settings</CardTitle>
                 </CardHeader>

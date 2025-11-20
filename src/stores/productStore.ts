@@ -4,9 +4,9 @@ import { createStore } from "./createStore";
 export interface ProductSku {
   id?: number | string;
   name: string;
-  unitName: string;
-  unitSize: string;
-  currentPrice: number;
+  unitName?: string;
+  unitSize?: string;
+  currentPrice?: number;
   stockQuantity: number;
   originalPrice?: number;
   weight?: number;
@@ -16,6 +16,23 @@ export interface ProductSku {
   height?: number;
   imgUrl?: string;
   image_url?: string;
+  unit?: {
+    name: string;
+    size: string;
+  };
+  pricing?: {
+    currentPrice: number;
+    originalPrice: number;
+    discountPercent: number;
+  };
+  isInStock?: boolean;
+  metaData?: {
+    weight?: string;
+    color?: string;
+    length?: string;
+    width?: string;
+    height?: string;
+  };
 }
 
 export interface Product {
