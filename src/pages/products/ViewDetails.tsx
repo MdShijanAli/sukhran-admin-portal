@@ -5,6 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   ArrowLeft,
   Edit,
   Package,
@@ -12,6 +20,12 @@ import {
   Calendar,
   Loader2,
   ShoppingCart,
+  Share2,
+  Link as LinkIcon,
+  Facebook,
+  Linkedin,
+  Twitter,
+  MessageCircle,
 } from "lucide-react";
 import productService from "@/services/productService";
 import { toast } from "sonner";
@@ -100,6 +114,54 @@ const ProductViewDetails = () => {
     fetchProductDetails();
   }, [id]);
 
+  const handleShare = (platform: string) => {
+    if (!product) return;
+
+    const url = window.location.href;
+    const title = `Check out ${product.name}`;
+    const description = product.description || "Amazing product!";
+
+    // Get the first SKU price for sharing
+    const firstSku = product.skus[0];
+    const price = firstSku?.pricing?.currentPrice || 0;
+    const text = `${title} - Starting from ৳${price}! ${description}`;
+
+    let shareUrl = "";
+
+    switch (platform) {
+      case "facebook":
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+          url
+        )}`;
+        break;
+      case "twitter":
+        shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+          url
+        )}&text=${encodeURIComponent(text)}`;
+        break;
+      case "linkedin":
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+          url
+        )}`;
+        break;
+      case "whatsapp":
+        shareUrl = `https://wa.me/?text=${encodeURIComponent(
+          text + " " + url
+        )}`;
+        break;
+      case "copy":
+        navigator.clipboard.writeText(url);
+        toast.success("Link copied to clipboard!");
+        return;
+      default:
+        return;
+    }
+
+    if (shareUrl) {
+      window.open(shareUrl, "_blank", "width=600,height=400");
+    }
+  };
+
   if (isLoading) {
     return (
       <Card>
@@ -155,6 +217,39 @@ const ProductViewDetails = () => {
               </div>
             </div>
             <div className="flex gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline">
+                    <Share2 className="h-4 w-4 mr-2" />
+                    Share
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuLabel>Share on Social Media</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => handleShare("facebook")}>
+                    <Facebook className="h-4 w-4 mr-2 text-blue-600" />
+                    Facebook
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleShare("twitter")}>
+                    <Twitter className="h-4 w-4 mr-2 text-sky-500" />
+                    Twitter (X)
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleShare("linkedin")}>
+                    <Linkedin className="h-4 w-4 mr-2 text-blue-700" />
+                    LinkedIn
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleShare("whatsapp")}>
+                    <MessageCircle className="h-4 w-4 mr-2 text-green-600" />
+                    WhatsApp
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => handleShare("copy")}>
+                    <LinkIcon className="h-4 w-4 mr-2" />
+                    Copy Link
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Button
                 variant="outline"
                 onClick={() => navigate(`/products/edit/${product.id}`)}
