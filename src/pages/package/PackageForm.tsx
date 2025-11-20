@@ -119,8 +119,14 @@ export default function PackageForm() {
         name: packageData.name || "",
         description: packageData.description || "",
         packageType: packageData.packageType || "admin",
-        fixedPrice: packageData.fixedPrice?.toString() || "",
-        discountPercent: packageData.discountPercent?.toString() || "0",
+        fixedPrice:
+          packageData.pricing?.fixedPrice?.toString() ||
+          packageData.fixedPrice?.toString() ||
+          "",
+        discountPercent:
+          packageData.pricing?.discountPercent?.toString() ||
+          packageData.discountPercent?.toString() ||
+          "0",
         displayOrder: packageData.displayOrder?.toString() || "0",
         isActive: packageData.isActive ?? true,
         isFeatured: packageData.isFeatured ?? false,
@@ -314,16 +320,20 @@ export default function PackageForm() {
   const fixedPriceNum = parseFloat(formData.fixedPrice) || 0;
   const discountPercentNum = parseFloat(formData.discountPercent) || 0;
 
-  // Calculate price after discount
-  const priceAfterDiscount =
-    fixedPriceNum > 0 && discountPercentNum > 0
-      ? fixedPriceNum - (fixedPriceNum * discountPercentNum) / 100
-      : fixedPriceNum;
+  // Calculate final price based on scenarios:
+  // 1. If fixed price exists, use it as base
+  // 2. If no fixed price, use total price as base
+  // 3. Apply discount percentage on the base price
+  const basePrice = fixedPriceNum > 0 ? fixedPriceNum : totalPrice;
 
+  const priceAfterDiscount =
+    discountPercentNum > 0
+      ? basePrice - (basePrice * discountPercentNum) / 100
+      : basePrice;
+
+  // Calculate savings compared to original total price
   const savings =
-    formData.fixedPrice && totalPrice > fixedPriceNum
-      ? totalPrice - fixedPriceNum
-      : 0;
+    totalPrice > priceAfterDiscount ? totalPrice - priceAfterDiscount : 0;
 
   return (
     <div className="">
@@ -706,12 +716,14 @@ export default function PackageForm() {
                           ৳{totalPrice.toFixed(2)}
                         </span>
                       </div>
-                      <div className="flex justify-between text-sm">
-                        <span>Package Price:</span>
-                        <span className="font-bold text-primary">
-                          ৳{formData.fixedPrice || "0.00"}
-                        </span>
-                      </div>
+                      {fixedPriceNum > 0 && (
+                        <div className="flex justify-between text-sm">
+                          <span>Fixed Price:</span>
+                          <span className="font-bold text-primary">
+                            ৳{fixedPriceNum.toFixed(2)}
+                          </span>
+                        </div>
+                      )}
                       {discountPercentNum > 0 && (
                         <div className="flex justify-between text-sm">
                           <span>After Discount ({discountPercentNum}%):</span>
@@ -720,10 +732,26 @@ export default function PackageForm() {
                           </span>
                         </div>
                       )}
-                      {savings > 0 && (
+                      {!discountPercentNum && fixedPriceNum > 0 && (
                         <div className="flex justify-between text-sm">
-                          <span>You Save:</span>
-                          <span className="font-medium text-green-600">
+                          <span>Final Price:</span>
+                          <span className="font-bold text-green-600">
+                            ৳{priceAfterDiscount.toFixed(2)}
+                          </span>
+                        </div>
+                      )}
+                      {!fixedPriceNum && discountPercentNum > 0 && (
+                        <div className="flex justify-between text-sm">
+                          <span>Discounted Price:</span>
+                          <span className="font-bold text-green-600">
+                            ৳{priceAfterDiscount.toFixed(2)}
+                          </span>
+                        </div>
+                      )}
+                      {savings > 0 && (
+                        <div className="flex justify-between text-sm font-medium border-t pt-2 mt-2">
+                          <span className="text-green-600">You Save:</span>
+                          <span className="text-green-600">
                             ৳{savings.toFixed(2)}
                           </span>
                         </div>
