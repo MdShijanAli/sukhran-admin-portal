@@ -247,12 +247,6 @@ export default function PackageForm() {
       toast.error("Package name is required");
       return;
     }
-
-    if (!formData.fixedPrice || parseFloat(formData.fixedPrice) <= 0) {
-      toast.error("Fixed price must be greater than 0");
-      return;
-    }
-
     // Validate at least one item with complete data
     const hasValidItem = items.some(
       (item) =>
@@ -677,9 +671,7 @@ export default function PackageForm() {
                 <CardContent className="space-y-4">
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor="fixedPrice">
-                        Fixed Price <span className="text-destructive">*</span>
-                      </Label>
+                      <Label htmlFor="fixedPrice">Fixed Price</Label>
                       <Input
                         id="fixedPrice"
                         type="number"
@@ -689,7 +681,6 @@ export default function PackageForm() {
                         onChange={(e) =>
                           updateField("fixedPrice", e.target.value)
                         }
-                        required
                       />
                     </div>
 

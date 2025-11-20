@@ -5,29 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   ArrowLeft,
   Edit,
   Loader2,
   Package as PackageIcon,
   Calendar,
-  Share2,
-  Link as LinkIcon,
-  Facebook,
-  Linkedin,
-  Twitter,
-  MessageCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import packageService from "@/services/packageService";
 import { Package } from "@/lib/types";
+import ShareButton from "@/components/custom/ShareButton";
 
 export default function PackageDetails() {
   const navigate = useNavigate();
@@ -52,61 +39,6 @@ export default function PackageDetails() {
       toast.error("Failed to load package details");
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleShare = (platform: string) => {
-    if (!packageData) return;
-
-    const url = window.location.href;
-    const title = `Check out ${packageData.name}`;
-    const description = packageData.description || "Amazing package deal!";
-    const pricing = packageData.pricing || {
-      totalItemsPrice: 0,
-      fixedPrice: packageData.fixedPrice || 0,
-      discountPercent: packageData.discountPercent || 0,
-    };
-    const basePrice =
-      pricing.fixedPrice > 0 ? pricing.fixedPrice : pricing.totalItemsPrice;
-    const finalPrice =
-      pricing.discountPercent > 0
-        ? basePrice - (basePrice * pricing.discountPercent) / 100
-        : basePrice;
-    const text = `${title} - Only ৳${finalPrice.toFixed(2)}! ${description}`;
-
-    let shareUrl = "";
-
-    switch (platform) {
-      case "facebook":
-        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-          url
-        )}`;
-        break;
-      case "twitter":
-        shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-          url
-        )}&text=${encodeURIComponent(text)}`;
-        break;
-      case "linkedin":
-        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-          url
-        )}`;
-        break;
-      case "whatsapp":
-        shareUrl = `https://wa.me/?text=${encodeURIComponent(
-          text + " " + url
-        )}`;
-        break;
-      case "copy":
-        navigator.clipboard.writeText(url);
-        toast.success("Link copied to clipboard!");
-        return;
-      default:
-        return;
-    }
-
-    if (shareUrl) {
-      window.open(shareUrl, "_blank", "width=600,height=400");
     }
   };
 
@@ -183,39 +115,11 @@ export default function PackageDetails() {
           </p>
         </div>
         <div className="flex gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                <Share2 className="h-4 w-4 mr-2" />
-                Share
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuLabel>Share on Social Media</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleShare("facebook")}>
-                <Facebook className="h-4 w-4 mr-2 text-blue-600" />
-                Facebook
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleShare("twitter")}>
-                <Twitter className="h-4 w-4 mr-2 text-sky-500" />
-                Twitter (X)
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleShare("linkedin")}>
-                <Linkedin className="h-4 w-4 mr-2 text-blue-700" />
-                LinkedIn
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleShare("whatsapp")}>
-                <MessageCircle className="h-4 w-4 mr-2 text-green-600" />
-                WhatsApp
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleShare("copy")}>
-                <LinkIcon className="h-4 w-4 mr-2" />
-                Copy Link
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <ShareButton
+            title={`Check out ${packageData.name}`}
+            description={packageData.description || "Amazing package deal!"}
+            price={finalPrice}
+          />
           <Button onClick={() => navigate(`/packages/edit/${packageData.id}`)}>
             <Edit className="h-4 w-4 mr-2" />
             Edit Package

@@ -22,6 +22,7 @@ import { DeleteModal } from "@/components/modals";
 import noProductImage from "@/assets/images/no_product_image.png";
 import { useSidebarStore } from "@/stores/sidebarStore";
 import { Pagination } from "@/components/table/Pagination";
+import ShareButton from "@/components/custom/ShareButton";
 
 const Products = () => {
   const { t } = useTranslation();
@@ -308,6 +309,18 @@ const Products = () => {
                         >
                           <Eye className="h-3.5 w-3.5" />
                         </Button>
+                        <ShareButton
+                          url={`${window.location.origin}/products/view/${product.id}`}
+                          title={`Check out ${product.name}`}
+                          description={
+                            product.description || "Amazing product!"
+                          }
+                          price={firstSku?.pricing?.currentPrice}
+                          variant="outline"
+                          size="sm"
+                          iconOnly
+                          className="flex-1 h-8 text-xs"
+                        />
                         <Button
                           variant="outline"
                           size="sm"

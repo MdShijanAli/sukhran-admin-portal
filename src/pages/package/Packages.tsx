@@ -22,6 +22,7 @@ import DeleteModal from "@/components/modals/DeleteModal";
 import { Package } from "@/lib/types";
 import { useSidebarStore } from "@/stores/sidebarStore";
 import { Pagination } from "@/components/table/Pagination";
+import ShareButton from "@/components/custom/ShareButton";
 
 export default function Packages() {
   const { t } = useTranslation();
@@ -222,6 +223,7 @@ export default function Packages() {
                 fixedPrice: pkg.fixedPrice || 0,
                 discountPercent: pkg.discountPercent || 0,
                 savings: 0,
+                currentPrice: 0,
               };
 
               return (
@@ -283,23 +285,33 @@ export default function Packages() {
                       </div>
 
                       {/* Price Section */}
-                      <div className="pt-1">
-                        <div className="flex items-center justify-between">
-                          {pricing.originalPrice > 0 &&
-                            pricing.originalPrice > pricing.fixedPrice && (
-                              <p className="text-xs text-muted-foreground line-through">
-                                ৳{pricing.originalPrice.toFixed(2)}
-                              </p>
-                            )}
-                          {pricing.savings && pricing.savings > 0 && (
-                            <p className="text-xs text-green-600 font-medium">
-                              Save ৳{pricing.savings.toFixed(2)}
+                      <div className="pt-1 space-y-1">
+                        <div className="flex items-baseline gap-2">
+                          {pricing.fixedPrice > 0 && (
+                            <p className="text-sm text-muted-foreground line-through">
+                              ৳{pricing.fixedPrice.toFixed(2)}
                             </p>
                           )}
+                          {pricing.discountPercent > 0 && (
+                            <Badge
+                              variant="destructive"
+                              className="text-[10px] px-1.5 py-0 h-4"
+                            >
+                              {pricing.discountPercent}% OFF
+                            </Badge>
+                          )}
                         </div>
-                        <p className="text-lg font-bold text-primary">
-                          ৳{pricing.fixedPrice}
+                        <p className="text-xl font-bold text-green-600">
+                          ৳
+                          {pricing.currentPrice
+                            ? pricing.currentPrice.toFixed(2)
+                            : pricing.fixedPrice.toFixed(2)}
                         </p>
+                        {pricing.savings > 0 && (
+                          <p className="text-xs text-green-600 font-medium">
+                            You save ৳{pricing.savings.toFixed(2)}
+                          </p>
+                        )}
                       </div>
 
                       {/* Action Buttons */}
@@ -312,6 +324,18 @@ export default function Packages() {
                         >
                           <Eye className="h-3.5 w-3.5" />
                         </Button>
+                        <ShareButton
+                          url={`${window.location.origin}/packages/view/${pkg.id}`}
+                          title={`Check out ${pkg.name}`}
+                          description={
+                            pkg.description || "Amazing package deal!"
+                          }
+                          price={pricing.fixedPrice}
+                          variant="outline"
+                          size="sm"
+                          iconOnly
+                          className="flex-1 h-8 text-xs"
+                        />
                         <Button
                           variant="outline"
                           size="sm"
