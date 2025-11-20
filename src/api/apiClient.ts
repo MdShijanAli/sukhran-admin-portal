@@ -130,6 +130,11 @@ const apiClient = {
     data?: unknown,
     config?: AxiosRequestConfig
   ) => axiosInstance.put<T>(url, data, config),
+  patch: <T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig
+  ) => axiosInstance.patch<T>(url, data, config),
   delete: <T = unknown>(url: string, config?: AxiosRequestConfig) =>
     axiosInstance.delete<T>(url, config),
 };

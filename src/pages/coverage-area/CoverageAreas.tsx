@@ -23,6 +23,7 @@ const CoverageAreas = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
+  const [togglingAreaId, setTogglingAreaId] = useState<number | null>(null);
 
   const store = useCoverageAreaStore();
 
@@ -66,14 +67,19 @@ const CoverageAreas = () => {
   };
 
   const handleStatusToggle = async (area: CoverageArea) => {
+    setTogglingAreaId(area.id);
     try {
-      await coverageAreaService.toggleActiveStatus(area.id, !area.is_active);
+      await coverageAreaService.toggleActiveStatus(area.id);
       toast.success(
         `Area ${!area.is_active ? "activated" : "deactivated"} successfully`
       );
     } catch (error) {
       console.error("Error toggling area status:", error);
-      toast.error("Failed to update area status");
+      toast.error(
+        error?.response?.data?.message || "Failed to update area status"
+      );
+    } finally {
+      setTogglingAreaId(null);
     }
   };
 
@@ -142,10 +148,11 @@ const CoverageAreas = () => {
       key: "status",
       label: "Status",
       render: (area) => (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center gap-2">
           <Switch
             checked={area.is_active}
             onCheckedChange={() => handleStatusToggle(area)}
+            disabled={togglingAreaId === area.id}
           />
           <Badge variant={area.is_active ? "default" : "secondary"}>
             {area.is_active ? "Active" : "Inactive"}
