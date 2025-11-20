@@ -11,8 +11,8 @@ import {
 import { useCoverageAreaStore } from "@/stores/coverageAreaStore";
 import { CoverageArea } from "@/lib/types";
 import coverageAreaService from "@/services/coverageAreaService";
-import { CoverageAreaDialog } from "./modal/CoverageAreaDialogProps";
-import { CoverageAreaDetailsDialog } from "./modal/CoverageAreaDetailsDialog";
+import FormModal from "./modal/FormModal";
+import ViewModal from "./modal/ViewModal";
 import { DeleteModal } from "@/components/modals";
 import { toast } from "sonner";
 
@@ -223,13 +223,13 @@ const CoverageAreas = () => {
       />
 
       {/* Dialogs */}
-      <CoverageAreaDialog
+      <FormModal
         open={dialogMode !== null}
         onClose={() => setDialogMode(null)}
         editData={selectedArea || undefined}
       />
 
-      <CoverageAreaDetailsDialog
+      <ViewModal
         open={showDetails}
         onClose={() => setShowDetails(false)}
         areaId={selectedArea?.id || null}

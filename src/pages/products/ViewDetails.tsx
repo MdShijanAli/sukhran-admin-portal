@@ -16,6 +16,7 @@ import {
 import productService from "@/services/productService";
 import { toast } from "sonner";
 import noProductImage from "@/assets/images/no_product_image.png";
+import TimeStaps from "@/components/custom/TimeStamps";
 
 interface ProductDetails {
   id: number;
@@ -265,20 +266,8 @@ const ProductViewDetails = () => {
                 Timestamps
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-              <div>
-                <p className="text-xs text-muted-foreground">Created</p>
-                <p className="text-sm">
-                  {new Date(product.created_at).toLocaleString()}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Last Updated</p>
-                <p className="text-sm">
-                  {new Date(product.updated_at).toLocaleString()}
-                </p>
-              </div>
-            </CardContent>
+            {/* Timestamps */}
+            <TimeStaps item={product} className="p-3 pt-0" />
           </Card>
         </div>
 

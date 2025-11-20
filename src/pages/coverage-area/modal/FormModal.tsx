@@ -22,7 +22,7 @@ interface CoverageAreaDialogProps {
   editData?: CoverageArea;
 }
 
-export function CoverageAreaDialog({
+export default function FormModal({
   open,
   onClose,
   editData,

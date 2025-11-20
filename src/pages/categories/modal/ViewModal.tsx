@@ -9,6 +9,7 @@ import categoryService from "@/services/categoryService";
 import SubCategoryFormModal from "./SubCategoryFormModal";
 import { DeleteModal } from "@/components/modals";
 import { toast } from "sonner";
+import TimeStaps from "@/components/custom/TimeStamps";
 
 interface SubCategory {
   id: number;
@@ -297,25 +298,8 @@ export default function ViewModal({
           </>
         )}
 
-        {/* Metadata */}
-        <div className="space-y-2 text-sm">
-          {category?.created_at && (
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Calendar className="h-4 w-4" />
-              <span>
-                Created: {new Date(category?.created_at).toLocaleString()}
-              </span>
-            </div>
-          )}
-          {category?.updated_at && (
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Calendar className="h-4 w-4" />
-              <span>
-                Updated: {new Date(category?.updated_at).toLocaleString()}
-              </span>
-            </div>
-          )}
-        </div>
+        {/* Timestamps */}
+        <TimeStaps item={category} />
       </div>
 
       {/* Edit Sub-Category Modal */}
