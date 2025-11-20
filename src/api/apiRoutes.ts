@@ -62,4 +62,12 @@ export const apiRoutes = {
     toggleCoverageAreaStatus: (id: number | string) =>
       createApiUrl(`admin/coverage-areas/${id}/toggle-status`),
   },
+
+  packages: {
+    getAll: createApiUrl("admin/packages"),
+    getById: (id: number | string) => createApiUrl(`admin/packages/${id}`),
+    create: createApiUrl("admin/packages"),
+    update: (id: number | string) => createApiUrl(`admin/packages/${id}`),
+    delete: (id: number | string) => createApiUrl(`admin/packages/${id}`),
+  },
 };

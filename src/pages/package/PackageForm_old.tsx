@@ -1,41 +1,56 @@
-import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { ArrowLeft, Upload, Plus, X, Save } from 'lucide-react';
-import { products } from '@/data/mockData';
-import { usePackageStore } from '@/stores/packageStore';
-import { toast } from '@/hooks/use-toast';
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate, useParams } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ArrowLeft, Upload, Plus, X, Save } from "lucide-react";
+import { products } from "@/data/mockData";
+import { usePackageStore } from "@/stores/packageStore";
+import { toast } from "@/hooks/use-toast";
 
-export default function PackageCreate() {
+export default function PackageForm() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
   const { addPackage, updatePackage, getPackageById } = usePackageStore();
-  
+
   const isEditMode = !!id;
   const existingPackage = isEditMode ? getPackageById(id) : null;
-  
+
   const [formData, setFormData] = useState({
-    name: existingPackage?.name || '',
-    type: existingPackage?.type || 'individual',
-    frequency: existingPackage?.frequency || 'daily',
-    size: existingPackage?.size || 'small',
-    description: existingPackage?.description || '',
-    photo: existingPackage?.photo || '',
-    status: existingPackage?.status || 'active' as 'active' | 'inactive' | 'draft',
+    name: existingPackage?.name || "",
+    type: existingPackage?.type || "individual",
+    frequency: existingPackage?.frequency || "daily",
+    size: existingPackage?.size || "small",
+    description: existingPackage?.description || "",
+    photo: existingPackage?.photo || "",
+    status:
+      existingPackage?.status || ("active" as "active" | "inactive" | "draft"),
   });
-  
-  const [selectedProducts, setSelectedProducts] = useState<string[]>(existingPackage?.products || []);
-  const [customPrice, setCustomPrice] = useState<string>(existingPackage?.price.toString() || '');
-  const [customCoins, setCustomCoins] = useState<string>(existingPackage?.redeemCoins.toString() || '');
-  const [imagePreview, setImagePreview] = useState<string>(existingPackage?.photo || '');
+
+  const [selectedProducts, setSelectedProducts] = useState<string[]>(
+    existingPackage?.products || []
+  );
+  const [customPrice, setCustomPrice] = useState<string>(
+    existingPackage?.price.toString() || ""
+  );
+  const [customCoins, setCustomCoins] = useState<string>(
+    existingPackage?.redeemCoins.toString() || ""
+  );
+  const [imagePreview, setImagePreview] = useState<string>(
+    existingPackage?.photo || ""
+  );
 
   // Load existing package data when in edit mode
   useEffect(() => {
@@ -145,22 +160,28 @@ export default function PackageCreate() {
         description: "Package created successfully",
       });
     }
-    
-    navigate('/packages');
+
+    navigate("/packages");
   };
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" onClick={() => navigate('/packages')}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => navigate("/packages")}
+        >
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div>
           <h1 className="text-3xl font-bold gradient-primary bg-clip-text text-transparent">
-            {isEditMode ? 'Edit Package' : 'Create New Package'}
+            {isEditMode ? "Edit Package" : "Create New Package"}
           </h1>
           <p className="text-muted-foreground mt-1">
-            {isEditMode ? 'Update the package details' : 'Fill in the details to create a subscription package'}
+            {isEditMode
+              ? "Update the package details"
+              : "Fill in the details to create a subscription package"}
           </p>
         </div>
       </div>
@@ -180,7 +201,9 @@ export default function PackageCreate() {
                   id="name"
                   placeholder="Enter package name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                 />
               </div>
 
@@ -191,14 +214,21 @@ export default function PackageCreate() {
                   placeholder="Describe your package..."
                   rows={4}
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="type">Package Type *</Label>
-                  <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
+                  <Select
+                    value={formData.type}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, type: value })
+                    }
+                  >
                     <SelectTrigger id="type">
                       <SelectValue />
                     </SelectTrigger>
@@ -213,7 +243,12 @@ export default function PackageCreate() {
 
                 <div className="grid gap-2">
                   <Label htmlFor="size">Package Size</Label>
-                  <Select value={formData.size} onValueChange={(value) => setFormData({ ...formData, size: value })}>
+                  <Select
+                    value={formData.size}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, size: value })
+                    }
+                  >
                     <SelectTrigger id="size">
                       <SelectValue />
                     </SelectTrigger>
@@ -229,7 +264,12 @@ export default function PackageCreate() {
 
               <div className="grid gap-2">
                 <Label htmlFor="frequency">Delivery Frequency *</Label>
-                <Select value={formData.frequency} onValueChange={(value) => setFormData({ ...formData, frequency: value })}>
+                <Select
+                  value={formData.frequency}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, frequency: value })
+                  }
+                >
                   <SelectTrigger id="frequency">
                     <SelectValue />
                   </SelectTrigger>
@@ -245,7 +285,15 @@ export default function PackageCreate() {
               {isEditMode && (
                 <div className="grid gap-2">
                   <Label htmlFor="status">Status</Label>
-                  <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value as 'active' | 'inactive' | 'draft' })}>
+                  <Select
+                    value={formData.status}
+                    onValueChange={(value) =>
+                      setFormData({
+                        ...formData,
+                        status: value as "active" | "inactive" | "draft",
+                      })
+                    }
+                  >
                     <SelectTrigger id="status">
                       <SelectValue />
                     </SelectTrigger>
@@ -279,8 +327,8 @@ export default function PackageCreate() {
                       size="icon"
                       className="absolute top-2 right-2"
                       onClick={() => {
-                        setImagePreview('');
-                        setFormData({ ...formData, photo: '' });
+                        setImagePreview("");
+                        setFormData({ ...formData, photo: "" });
                       }}
                     >
                       <X className="h-4 w-4" />
@@ -292,8 +340,12 @@ export default function PackageCreate() {
                     className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-accent transition-colors"
                   >
                     <Upload className="h-10 w-10 text-muted-foreground mb-2" />
-                    <span className="text-sm text-muted-foreground">Click to upload package photo</span>
-                    <span className="text-xs text-muted-foreground mt-1">PNG, JPG up to 5MB</span>
+                    <span className="text-sm text-muted-foreground">
+                      Click to upload package photo
+                    </span>
+                    <span className="text-xs text-muted-foreground mt-1">
+                      PNG, JPG up to 5MB
+                    </span>
                     <input
                       id="photo-upload"
                       type="file"
@@ -331,9 +383,13 @@ export default function PackageCreate() {
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm font-medium">{product.name}</p>
-                          <p className="text-xs text-muted-foreground">{product.category}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {product.category}
+                          </p>
                         </div>
-                        <span className="text-sm font-semibold">৳{product.price}</span>
+                        <span className="text-sm font-semibold">
+                          ৳{product.price}
+                        </span>
                       </div>
                     </label>
                   </div>
@@ -361,9 +417,11 @@ export default function PackageCreate() {
                   <span className="text-muted-foreground">Base Price:</span>
                   <span className="font-medium">৳{calculateBasePrice()}</span>
                 </div>
-                
+
                 <div className="border-t pt-2">
-                  <Label htmlFor="custom-price" className="text-xs">Custom Total Price (Optional)</Label>
+                  <Label htmlFor="custom-price" className="text-xs">
+                    Custom Total Price (Optional)
+                  </Label>
                   <Input
                     id="custom-price"
                     type="number"
@@ -386,12 +444,18 @@ export default function PackageCreate() {
 
               <div className="border-t pt-4 space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Auto Redeem Coins:</span>
-                  <span className="font-medium">{calculateCoins(getTotalPrice())} coins</span>
+                  <span className="text-muted-foreground">
+                    Auto Redeem Coins:
+                  </span>
+                  <span className="font-medium">
+                    {calculateCoins(getTotalPrice())} coins
+                  </span>
                 </div>
 
                 <div>
-                  <Label htmlFor="custom-coins" className="text-xs">Custom Coins (Optional)</Label>
+                  <Label htmlFor="custom-coins" className="text-xs">
+                    Custom Coins (Optional)
+                  </Label>
                   <Input
                     id="custom-coins"
                     type="number"
@@ -414,10 +478,18 @@ export default function PackageCreate() {
 
               <div className="border-t pt-4 space-y-2">
                 <div className="text-xs text-muted-foreground space-y-1">
-                  <p><strong>Type:</strong> {formData.type}</p>
-                  <p><strong>Size:</strong> {formData.size}</p>
-                  <p><strong>Frequency:</strong> {formData.frequency}</p>
-                  <p><strong>Products:</strong> {selectedProducts.length}</p>
+                  <p>
+                    <strong>Type:</strong> {formData.type}
+                  </p>
+                  <p>
+                    <strong>Size:</strong> {formData.size}
+                  </p>
+                  <p>
+                    <strong>Frequency:</strong> {formData.frequency}
+                  </p>
+                  <p>
+                    <strong>Products:</strong> {selectedProducts.length}
+                  </p>
                 </div>
               </div>
 
@@ -435,7 +507,11 @@ export default function PackageCreate() {
                     </>
                   )}
                 </Button>
-                <Button variant="outline" className="w-full" onClick={() => navigate('/packages')}>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => navigate("/packages")}
+                >
                   Cancel
                 </Button>
               </div>

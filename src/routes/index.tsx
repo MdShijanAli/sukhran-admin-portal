@@ -11,8 +11,9 @@ import MainLayout from "@/components/layout/MainLayout";
 import NotFound from "@/pages/NotFound";
 import Products from "@/pages/products/Products";
 import ProductForm from "@/pages/products/form/ProductForm";
-import Packages from "@/pages/Packages";
-import PackageCreate from "@/pages/package/PackageCreate";
+import Packages from "@/pages/package/Packages";
+import PackageForm from "@/pages/package/PackageForm";
+import PackageDetails from "@/pages/package/PackageDetails";
 import Profile from "@/pages/profile/Profile";
 import Reports from "@/pages/Reports";
 import Delivery from "@/pages/delivery/Delivery";
@@ -134,7 +135,7 @@ const AppRoutes: React.FC = () => {
           path="packages/create"
           element={
             <PrivateRoute>
-              <PackageCreate />
+              <PackageForm />
             </PrivateRoute>
           }
         />
@@ -142,7 +143,7 @@ const AppRoutes: React.FC = () => {
           path="packages/edit/:id"
           element={
             <PrivateRoute>
-              <PackageCreate />
+              <PackageForm />
             </PrivateRoute>
           }
         />
@@ -150,7 +151,7 @@ const AppRoutes: React.FC = () => {
           path="packages/view/:id"
           element={
             <PrivateRoute>
-              <PackageCreate />
+              <PackageDetails />
             </PrivateRoute>
           }
         />

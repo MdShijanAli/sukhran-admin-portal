@@ -122,3 +122,65 @@ export interface CoverageAreaPaginationMeta {
   to: number;
   stats?: CoverageAreaStats;
 }
+
+export interface PackageProduct {
+  id: number;
+  name: string;
+  slug: string;
+  imgUrl: string | null;
+  image_url: string | null;
+}
+
+export interface PackageSku {
+  id: number;
+  name: string;
+  unitName: string;
+  unitSize: number;
+  currentPrice: number;
+  imgUrl: string | null;
+  image_url: string | null;
+}
+
+export interface PackageItem {
+  id: number;
+  product: PackageProduct;
+  sku: PackageSku;
+  quantity: number;
+  price: number;
+  subtotal: number;
+}
+
+export interface Package {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  imgUrl: string | null;
+  image_url: string | null;
+  packageType: "admin" | "custom";
+  fixedPrice: number;
+  discountPercent: number;
+  displayOrder: string;
+  isActive: boolean;
+  isFeatured: boolean;
+  items: PackageItem[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PackageFormData {
+  name: string;
+  description: string;
+  packageType: "admin" | "custom";
+  fixedPrice: number;
+  discountPercent: number;
+  displayOrder: number;
+  isActive: boolean;
+  isFeatured: boolean;
+  imgUrl?: File;
+  items: {
+    productId: number | string;
+    skuId: number | string;
+    quantity: number;
+  }[];
+}

@@ -1,0 +1,762 @@
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { ArrowLeft, Loader2, Plus, Trash2, Upload, X } from "lucide-react";
+import { toast } from "sonner";
+import packageService from "@/services/packageService";
+import productService from "@/services/productService";
+import { Product } from "@/stores/productStore";
+import { Badge } from "@/components/ui/badge";
+
+interface PackageFormData {
+  name: string;
+  description: string;
+  packageType: "admin" | "custom";
+  fixedPrice: string;
+  discountPercent: string;
+  displayOrder: string;
+  isActive: boolean;
+  isFeatured: boolean;
+  imgUrl?: File;
+}
+
+interface PackageItem {
+  productId: string;
+  skuId: string;
+  quantity: string;
+}
+
+export default function PackageForm() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const isEditMode = !!id;
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingPackage, setIsLoadingPackage] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
+
+  const [formData, setFormData] = useState<PackageFormData>({
+    name: "",
+    description: "",
+    packageType: "admin",
+    fixedPrice: "",
+    discountPercent: "0",
+    displayOrder: "0",
+    isActive: true,
+    isFeatured: false,
+  });
+
+  const [items, setItems] = useState<PackageItem[]>([
+    {
+      productId: "",
+      skuId: "",
+      quantity: "1",
+    },
+  ]);
+
+  // Fetch products on mount
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  // Fetch package details if editing
+  useEffect(() => {
+    if (isEditMode && id) {
+      fetchPackageDetails(id);
+    }
+  }, [isEditMode, id]);
+
+  const fetchProducts = async () => {
+    setIsLoadingProducts(true);
+    try {
+      const result = await productService.fetchLists();
+      const productsData = (result as { data?: Product[] })?.data || [];
+      setProducts(productsData);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      toast.error("Failed to load products");
+    } finally {
+      setIsLoadingProducts(false);
+    }
+  };
+
+  const fetchPackageDetails = async (packageId: string) => {
+    setIsLoadingPackage(true);
+    try {
+      const result = await packageService.fetchDetails(packageId);
+      const packageData = (result as { data?: any })?.data || result;
+
+      setFormData({
+        name: packageData.name || "",
+        description: packageData.description || "",
+        packageType: packageData.packageType || "admin",
+        fixedPrice: packageData.fixedPrice?.toString() || "",
+        discountPercent: packageData.discountPercent?.toString() || "0",
+        displayOrder: packageData.displayOrder?.toString() || "0",
+        isActive: packageData.isActive ?? true,
+        isFeatured: packageData.isFeatured ?? false,
+      });
+
+      if (packageData.image_url || packageData.imgUrl) {
+        setImagePreview(packageData.image_url || packageData.imgUrl);
+      }
+
+      if (packageData.items && packageData.items.length > 0) {
+        setItems(
+          packageData.items.map((item: any) => ({
+            productId: item.product?.id?.toString() || "",
+            skuId: item.sku?.id?.toString() || "",
+            quantity: item.quantity?.toString() || "1",
+          }))
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching package details:", error);
+      toast.error("Failed to load package details");
+    } finally {
+      setIsLoadingPackage(false);
+    }
+  };
+
+  const updateField = (
+    field: keyof PackageFormData,
+    value: string | boolean | File
+  ) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData((prev) => ({ ...prev, imgUrl: file }));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImagePreview("");
+    setFormData((prev) => ({ ...prev, imgUrl: undefined }));
+    const fileInput = document.getElementById("packageImg") as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
+  };
+
+  // Package Items Management
+  const addItem = () => {
+    setItems([
+      ...items,
+      {
+        productId: "",
+        skuId: "",
+        quantity: "1",
+      },
+    ]);
+  };
+
+  const removeItem = (index: number) => {
+    if (items.length > 1) {
+      const newItems = items.filter((_, i) => i !== index);
+      setItems(newItems);
+    }
+  };
+
+  const updateItem = (
+    index: number,
+    field: keyof PackageItem,
+    value: string
+  ) => {
+    const newItems = [...items];
+    newItems[index] = { ...newItems[index], [field]: value };
+
+    // Reset SKU when product changes
+    if (field === "productId") {
+      newItems[index].skuId = "";
+    }
+
+    setItems(newItems);
+  };
+
+  const getProductById = (productId: string) => {
+    return products.find((p) => p.id.toString() === productId);
+  };
+
+  const getSkusForProduct = (productId: string) => {
+    const product = getProductById(productId);
+    return product?.skus || [];
+  };
+
+  const calculateTotalPrice = () => {
+    let total = 0;
+    items.forEach((item) => {
+      if (item.productId && item.skuId && item.quantity) {
+        const product = getProductById(item.productId);
+        const sku = product?.skus?.find((s) => s.id?.toString() === item.skuId);
+        if (sku) {
+          total += sku.currentPrice * parseFloat(item.quantity);
+        }
+      }
+    });
+    return total;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Validation
+    if (!formData.name.trim()) {
+      toast.error("Package name is required");
+      return;
+    }
+
+    if (!formData.fixedPrice || parseFloat(formData.fixedPrice) <= 0) {
+      toast.error("Fixed price must be greater than 0");
+      return;
+    }
+
+    // Validate at least one item with complete data
+    const hasValidItem = items.some(
+      (item) =>
+        item.productId &&
+        item.skuId &&
+        item.quantity &&
+        parseFloat(item.quantity) > 0
+    );
+
+    if (!hasValidItem) {
+      toast.error(
+        "Please add at least one item with product, SKU, and quantity"
+      );
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const formDataToSubmit = new FormData();
+
+      // Append basic fields
+      formDataToSubmit.append("name", formData.name);
+      formDataToSubmit.append("description", formData.description);
+      formDataToSubmit.append("packageType", formData.packageType);
+      formDataToSubmit.append("fixedPrice", formData.fixedPrice);
+      formDataToSubmit.append("discountPercent", formData.discountPercent);
+      formDataToSubmit.append("displayOrder", formData.displayOrder);
+      formDataToSubmit.append("isActive", formData.isActive ? "1" : "0");
+      formDataToSubmit.append("isFeatured", formData.isFeatured ? "1" : "0");
+
+      // Append image if exists
+      if (formData.imgUrl) {
+        formDataToSubmit.append("imgUrl", formData.imgUrl);
+      }
+
+      // Append items
+      items.forEach((item, index) => {
+        if (item.productId && item.skuId && item.quantity) {
+          formDataToSubmit.append(`items[${index}][productId]`, item.productId);
+          formDataToSubmit.append(`items[${index}][skuId]`, item.skuId);
+          formDataToSubmit.append(`items[${index}][quantity]`, item.quantity);
+        }
+      });
+
+      if (isEditMode && id) {
+        formDataToSubmit.append("_method", "PUT");
+        await packageService.updateItem(id, formDataToSubmit);
+        toast.success("Package updated successfully");
+      } else {
+        await packageService.storeItem(formDataToSubmit);
+        toast.success("Package created successfully");
+      }
+
+      navigate("/packages");
+    } catch (error: any) {
+      console.error("Error saving package:", error);
+      toast.error(error?.response?.data?.message || "Failed to save package");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const totalPrice = calculateTotalPrice();
+  const savings =
+    formData.fixedPrice && totalPrice > parseFloat(formData.fixedPrice)
+      ? totalPrice - parseFloat(formData.fixedPrice)
+      : 0;
+
+  return (
+    <div className="">
+      {isLoadingPackage ? (
+        <Card className="p-12">
+          <div className="flex flex-col items-center justify-center">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            <p className="mt-4 text-muted-foreground">
+              Loading package details...
+            </p>
+          </div>
+        </Card>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          {/* Header */}
+          <div className="flex items-center gap-4 mb-6">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/packages")}
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div className="flex-1">
+              <h1 className="text-3xl font-bold tracking-tight">
+                {isEditMode ? "Edit Package" : "Create New Package"}
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                {isEditMode
+                  ? "Update package details and items"
+                  : "Fill in the details to create a new package"}
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => navigate("/packages")}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>{isEditMode ? "Update Package" : "Create Package"}</>
+                )}
+              </Button>
+            </div>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-3">
+            {/* Main Form */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Basic Information */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Basic Information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">
+                      Package Name <span className="text-destructive">*</span>
+                    </Label>
+                    <Input
+                      id="name"
+                      placeholder="Enter package name"
+                      value={formData.name}
+                      onChange={(e) => updateField("name", e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="description">Description</Label>
+                    <Textarea
+                      id="description"
+                      placeholder="Enter package description"
+                      value={formData.description}
+                      onChange={(e) =>
+                        updateField("description", e.target.value)
+                      }
+                      rows={4}
+                    />
+                  </div>
+
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="packageType">
+                        Package Type <span className="text-destructive">*</span>
+                      </Label>
+                      <Select
+                        value={formData.packageType}
+                        onValueChange={(value) =>
+                          updateField("packageType", value)
+                        }
+                      >
+                        <SelectTrigger id="packageType">
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="admin">Admin</SelectItem>
+                          <SelectItem value="custom">Custom</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="displayOrder">Display Order</Label>
+                      <Input
+                        id="displayOrder"
+                        type="number"
+                        placeholder="0"
+                        value={formData.displayOrder}
+                        onChange={(e) =>
+                          updateField("displayOrder", e.target.value)
+                        }
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Pricing */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Pricing</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="fixedPrice">
+                        Fixed Price <span className="text-destructive">*</span>
+                      </Label>
+                      <Input
+                        id="fixedPrice"
+                        type="number"
+                        step="0.01"
+                        placeholder="0.00"
+                        value={formData.fixedPrice}
+                        onChange={(e) =>
+                          updateField("fixedPrice", e.target.value)
+                        }
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="discountPercent">Discount Percent</Label>
+                      <Input
+                        id="discountPercent"
+                        type="number"
+                        step="0.01"
+                        placeholder="0"
+                        value={formData.discountPercent}
+                        onChange={(e) =>
+                          updateField("discountPercent", e.target.value)
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  {totalPrice > 0 && (
+                    <div className="rounded-lg bg-muted p-4 space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span>Total Product Value:</span>
+                        <span className="font-medium">
+                          ৳{totalPrice.toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span>Package Price:</span>
+                        <span className="font-bold text-primary">
+                          ৳{formData.fixedPrice || "0.00"}
+                        </span>
+                      </div>
+                      {savings > 0 && (
+                        <div className="flex justify-between text-sm">
+                          <span>Savings:</span>
+                          <span className="font-medium text-green-600">
+                            ৳{savings.toFixed(2)}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Package Items */}
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>Package Items</CardTitle>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={addItem}
+                    >
+                      <Plus className="h-4 w-4 mr-1" />
+                      Add Item
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {isLoadingProducts ? (
+                    <div className="text-center py-8">
+                      <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+                      <p className="text-sm text-muted-foreground mt-2">
+                        Loading products...
+                      </p>
+                    </div>
+                  ) : (
+                    items.map((item, index) => {
+                      const selectedProduct = getProductById(item.productId);
+                      const availableSkus = getSkusForProduct(item.productId);
+                      const selectedSku = availableSkus.find(
+                        (s) => s.id?.toString() === item.skuId
+                      );
+
+                      return (
+                        <Card key={index} className="p-4">
+                          <div className="space-y-4">
+                            <div className="flex items-center justify-between">
+                              <h4 className="font-medium">Item {index + 1}</h4>
+                              {items.length > 1 && (
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => removeItem(index)}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              )}
+                            </div>
+
+                            <div className="grid gap-4 md:grid-cols-3">
+                              <div className="space-y-2">
+                                <Label>
+                                  Product{" "}
+                                  <span className="text-destructive">*</span>
+                                </Label>
+                                <Select
+                                  value={item.productId}
+                                  onValueChange={(value) =>
+                                    updateItem(index, "productId", value)
+                                  }
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select product" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {products.map((product) => (
+                                      <SelectItem
+                                        key={product.id}
+                                        value={product.id.toString()}
+                                      >
+                                        {product.name}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label>
+                                  SKU{" "}
+                                  <span className="text-destructive">*</span>
+                                </Label>
+                                <Select
+                                  value={item.skuId}
+                                  onValueChange={(value) =>
+                                    updateItem(index, "skuId", value)
+                                  }
+                                  disabled={!item.productId}
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select SKU" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {availableSkus.map((sku) => (
+                                      <SelectItem
+                                        key={sku.id}
+                                        value={sku.id!.toString()}
+                                      >
+                                        {sku.name} - ৳{sku.currentPrice}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label>
+                                  Quantity{" "}
+                                  <span className="text-destructive">*</span>
+                                </Label>
+                                <Input
+                                  type="number"
+                                  min="1"
+                                  placeholder="1"
+                                  value={item.quantity}
+                                  onChange={(e) =>
+                                    updateItem(
+                                      index,
+                                      "quantity",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </div>
+                            </div>
+
+                            {selectedSku && item.quantity && (
+                              <div className="rounded-lg bg-muted p-3 text-sm">
+                                <div className="flex justify-between">
+                                  <span className="text-muted-foreground">
+                                    Subtotal:
+                                  </span>
+                                  <span className="font-medium">
+                                    ৳
+                                    {(
+                                      selectedSku.currentPrice *
+                                      parseFloat(item.quantity)
+                                    ).toFixed(2)}
+                                  </span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </Card>
+                      );
+                    })
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Package Image */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Package Image</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {imagePreview ? (
+                    <div className="relative">
+                      <img
+                        src={imagePreview}
+                        alt="Package preview"
+                        className="w-full h-48 object-cover rounded-lg"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="icon"
+                        className="absolute top-2 right-2"
+                        onClick={handleRemoveImage}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="border-2 border-dashed rounded-lg p-8 text-center">
+                      <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                      <Label
+                        htmlFor="packageImg"
+                        className="cursor-pointer text-sm text-muted-foreground"
+                      >
+                        Click to upload package image
+                      </Label>
+                      <Input
+                        id="packageImg"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageChange}
+                      />
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Sidebar Summary */}
+            <div className="space-y-6">
+              <Card className="sticky top-6">
+                <CardHeader>
+                  <CardTitle>Settings</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="isActive">Active Status</Label>
+                    <Switch
+                      id="isActive"
+                      checked={formData.isActive}
+                      onCheckedChange={(checked) =>
+                        updateField("isActive", checked)
+                      }
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="isFeatured">Featured</Label>
+                    <Switch
+                      id="isFeatured"
+                      checked={formData.isFeatured}
+                      onCheckedChange={(checked) =>
+                        updateField("isFeatured", checked)
+                      }
+                    />
+                  </div>
+
+                  <div className="pt-4 border-t space-y-2">
+                    <h4 className="font-medium">Package Summary</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Items:</span>
+                        <Badge variant="secondary">
+                          {items.filter((i) => i.productId && i.skuId).length}
+                        </Badge>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Type:</span>
+                        <Badge variant="outline" className="capitalize">
+                          {formData.packageType}
+                        </Badge>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Status:</span>
+                        <Badge
+                          variant={formData.isActive ? "default" : "secondary"}
+                        >
+                          {formData.isActive ? "Active" : "Inactive"}
+                        </Badge>
+                      </div>
+                      {formData.isFeatured && (
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">
+                            Featured:
+                          </span>
+                          <Badge>Yes</Badge>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </form>
+      )}
+    </div>
+  );
+}

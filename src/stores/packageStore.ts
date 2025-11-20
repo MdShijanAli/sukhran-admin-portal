@@ -1,106 +1,88 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { subscriptionPackages } from '@/data/mockData';
-
-export interface Package {
-  id: string;
-  name: string;
-  type: string;
-  frequency: string;
-  size: string;
-  description: string;
-  photo: string;
-  products: string[];
-  productDetails: Array<{ id: string; name: string; price: number }>;
-  price: number;
-  redeemCoins: number;
-  subscribers: number;
-  status: 'active' | 'inactive' | 'draft';
-  createdAt: string;
-  updatedAt: string;
-}
+import { PaginationMeta } from "@/lib/types";
+import { createStore } from "./createStore";
+import { Package } from "@/lib/types";
 
 interface PackageState {
   packages: Package[];
-  addPackage: (pkg: Omit<Package, 'id' | 'createdAt' | 'updatedAt' | 'subscribers'>) => void;
-  updatePackage: (id: string, pkg: Partial<Package>) => void;
-  deletePackage: (id: string) => void;
-  duplicatePackage: (id: string) => void;
-  getPackageById: (id: string) => Package | undefined;
+  pagination: PaginationMeta;
+  isLoading: boolean;
+  error: string | null;
+  setItems: (packages: unknown) => void;
+  addItem: (pkg: unknown) => void;
+  updateItem: (id: number | string, pkg: unknown) => void;
+  removeItem: (id: number | string) => void;
+  getPackageById: (id: number | string) => Package | undefined;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
 }
 
-// Transform mock data to match our Package interface
-const initialPackages: Package[] = subscriptionPackages.map((pkg, index) => ({
-  id: pkg.id,
-  name: pkg.name,
-  type: 'individual',
-  frequency: pkg.frequency,
-  size: 'medium',
-  description: `Premium ${pkg.frequency} subscription package`,
-  photo: '',
-  products: pkg.products,
-  productDetails: [],
-  price: pkg.price,
-  redeemCoins: Math.floor(pkg.price * 0.01),
-  subscribers: pkg.subscribers,
-  status: pkg.status as 'active' | 'inactive' | 'draft',
-  createdAt: new Date(Date.now() - (index * 86400000)).toISOString(),
-  updatedAt: new Date().toISOString(),
-}));
+export const usePackageStore = createStore<PackageState>(
+  (set, get) => ({
+    packages: [],
+    pagination: {
+      current_page: 1,
+      total: 0,
+      per_page: 10,
+      last_page: 1,
+      from: 1,
+      to: 1,
+    },
+    isLoading: false,
+    error: null,
 
-export const usePackageStore = create<PackageState>()(
-  persist(
-    (set, get) => ({
-      packages: initialPackages,
-      addPackage: (pkg) => {
-        const newPackage: Package = {
-          ...pkg,
-          id: `PKG-${Date.now()}`,
-          subscribers: 0,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
-        set((state) => ({
-          packages: [newPackage, ...state.packages],
-        }));
-      },
-      updatePackage: (id, updates) => {
-        set((state) => ({
-          packages: state.packages.map((pkg) =>
-            pkg.id === id
-              ? { ...pkg, ...updates, updatedAt: new Date().toISOString() }
-              : pkg
-          ),
-        }));
-      },
-      deletePackage: (id) => {
-        set((state) => ({
-          packages: state.packages.filter((pkg) => pkg.id !== id),
-        }));
-      },
-      duplicatePackage: (id) => {
-        const packageToDuplicate = get().packages.find((pkg) => pkg.id === id);
-        if (packageToDuplicate) {
-          const newPackage: Package = {
-            ...packageToDuplicate,
-            id: `PKG-${Date.now()}`,
-            name: `${packageToDuplicate.name} (Copy)`,
-            subscribers: 0,
-            status: 'draft',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          };
-          set((state) => ({
-            packages: [newPackage, ...state.packages],
-          }));
-        }
-      },
-      getPackageById: (id) => {
-        return get().packages.find((pkg) => pkg.id === id);
-      },
-    }),
-    {
-      name: 'package-storage',
-    }
-  )
+    setItems: (data: unknown) => {
+      // Handle both array and object responses
+      const packages = Array.isArray(data)
+        ? data
+        : (data as { data?: Package[] })?.data || [];
+      set({
+        packages,
+        isLoading: false,
+        error: null,
+        pagination:
+          (data as { meta: PaginationMeta })?.meta || get().pagination,
+      });
+    },
+
+    addItem: (data: unknown) => {
+      const pkg = (data as { data?: Package })?.data || data;
+      set((state) => ({
+        packages: [pkg as Package, ...state.packages],
+        isLoading: false,
+        error: null,
+      }));
+    },
+
+    updateItem: (id: number | string, data: unknown) => {
+      const pkg = (data as { data?: Partial<Package> })?.data || data;
+      set((state) => ({
+        packages: state.packages.map((p) =>
+          p.id === id ? { ...p, ...(pkg as Partial<Package>) } : p
+        ),
+        isLoading: false,
+        error: null,
+      }));
+    },
+
+    removeItem: (id: number | string) => {
+      set((state) => ({
+        packages: state.packages.filter((p) => p.id !== id),
+        isLoading: false,
+        error: null,
+      }));
+    },
+
+    getPackageById: (id: number | string) => {
+      return get().packages.find((p) => p.id === id);
+    },
+
+    setLoading: (loading: boolean) => {
+      set({ isLoading: loading });
+    },
+
+    setError: (error: string | null) => {
+      set({ error, isLoading: false });
+    },
+  }),
+  "package-storage"
 );

@@ -160,7 +160,13 @@ const Products = () => {
       {/* Products Grid */}
       <div>
         {isLoading ? (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+          <div
+            className={`grid grid-cols-2 gap-3 ${
+              isCollapsed
+                ? "2xl:grid-cols-6 xl:grid-cols-5 sm:grid-cols-3 lg:grid-cols-4"
+                : "2xl:grid-cols-5 xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3"
+            }`}
+          >
             {Array.from({ length: 12 }).map((_, index) => (
               <Card key={index} className="overflow-hidden animate-pulse">
                 <div className="aspect-square bg-muted" />
@@ -192,7 +198,7 @@ const Products = () => {
           </Card>
         ) : (
           <div
-            className={`grid grid-cols-2 gap-3  ${
+            className={`grid grid-cols-2 gap-3 ${
               isCollapsed
                 ? "2xl:grid-cols-6 xl:grid-cols-5 sm:grid-cols-3 lg:grid-cols-4"
                 : "2xl:grid-cols-5 xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3"
