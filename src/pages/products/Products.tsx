@@ -103,52 +103,53 @@ const Products = () => {
   return (
     <div className="">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            {t("nav.products")}
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Manage your product catalog and inventory
-          </p>
-        </div>
-        <Button className="gap-2" onClick={() => navigate("/products/create")}>
-          <Plus className="h-4 w-4" />
-          Add Product
-        </Button>
-      </div>
-
-      {/* Search Bar */}
-      <Card className="mb-6">
-        <CardContent className="p-4">
-          <div className="flex gap-3">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Search products..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-9"
-              />
-              {searchQuery && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              )}
+      <Card className="mb-3">
+        <CardContent className="p-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">
+              {t("nav.products")}
+            </h1>
+            <p className="text-muted-foreground mt-1">
+              Manage your product catalog and inventory
+            </p>
+          </div>
+          <div className="flex gap-3 sm:flex-row sm:items-center">
+            <div className="flex gap-3">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9 pr-9"
+                />
+                {searchQuery && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+              <Button
+                variant="outline"
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+              >
+                <RefreshCw
+                  className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+                />
+              </Button>
             </div>
             <Button
-              variant="outline"
-              onClick={handleRefresh}
-              disabled={isRefreshing}
+              className="gap-2"
+              onClick={() => navigate("/products/create")}
             >
-              <RefreshCw
-                className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
-              />
+              <Plus className="h-4 w-4" />
+              Add Product
             </Button>
           </div>
         </CardContent>
