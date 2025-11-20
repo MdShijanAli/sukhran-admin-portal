@@ -25,7 +25,6 @@ const authService = {
         password,
       });
       const data = resp?.data;
-      console.log("Login response data:", data);
       if (!data) return null;
 
       const { access_token, refresh_token, user } = data;
@@ -52,7 +51,6 @@ const authService = {
         apiRoutes.profile.getProfile
       );
       const user = resp?.data;
-      console.log("Fetch Profile response data:", user);
 
       // Update store with fetched user data
       useAuthStore.setState({
@@ -74,7 +72,6 @@ const authService = {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("Update Profile response:", resp.data);
       return resp.data;
     } catch (e) {
       console.error("Update Profile error:", e);
@@ -88,7 +85,6 @@ const authService = {
       const result = await apiClient.post<LogoutResponse>(
         apiRoutes.auth.logout
       );
-      console.log("Logout response:", result);
 
       // Clear auth store (single source of truth)
       useAuthStore.setState({
@@ -111,7 +107,6 @@ const authService = {
       const resp = await apiClient.post(apiRoutes.auth.forgotPassword, {
         mobile,
       });
-      console.log("Forgot Password response:", resp.data);
       return resp.data;
     } catch (e) {
       console.error("Forgot Password error:", e);
@@ -124,7 +119,6 @@ const authService = {
       const resp = await apiClient.post(apiRoutes.auth.resendOtp, {
         mobile,
       });
-      console.log("Resend OTP response:", resp.data);
       return resp.data;
     } catch (e) {
       console.error("Resend OTP error:", e);
@@ -135,7 +129,6 @@ const authService = {
   forgotPassword: async (data: ForgotPassword) => {
     try {
       const resp = await apiClient.post(apiRoutes.auth.resetPassword, data);
-      console.log("Forgot Password response:", resp.data);
       return resp.data;
     } catch (e) {
       console.error("Forgot Password error:", e);

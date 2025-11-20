@@ -56,7 +56,6 @@ async function refreshAccessToken(): Promise<string | null> {
         });
 
         const data = resp?.data;
-        console.log("Response data from refresh token:", data);
         const newAccess = data?.access_token ?? null;
         const newRefresh = data?.refresh_token ?? null;
 

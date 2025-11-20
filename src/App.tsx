@@ -32,7 +32,6 @@ const App = () => {
                 "Failed to fetch user profile"
             );
           }
-          console.log("Profile fetched in App.tsx:", response);
         } catch (error) {
           console.error("Failed to fetch profile:", error);
           toast.error("Failed to fetch user profile");

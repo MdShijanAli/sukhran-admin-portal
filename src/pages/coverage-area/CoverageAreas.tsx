@@ -9,7 +9,7 @@ import {
   ActionItem,
 } from "@/components/table";
 import { useCoverageAreaStore } from "@/stores/coverageAreaStore";
-import { CoverageArea, CoverageAreaStats } from "@/lib/types";
+import { CoverageArea } from "@/lib/types";
 import coverageAreaService from "@/services/coverageAreaService";
 import { CoverageAreaDialog } from "./modal/CoverageAreaDialogProps";
 import { CoverageAreaDetailsDialog } from "./modal/CoverageAreaDetailsDialog";
