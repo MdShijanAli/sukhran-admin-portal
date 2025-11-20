@@ -73,12 +73,14 @@ export default function PackageDetails() {
   }
 
   const totalItems = packageData.items?.length || 0;
-  const calculatedTotal =
-    packageData.items?.reduce((sum, item) => sum + item.subtotal, 0) || 0;
-  const savings =
-    calculatedTotal > packageData.fixedPrice
-      ? calculatedTotal - packageData.fixedPrice
-      : 0;
+  const pricing = packageData.pricing || {
+    originalPrice: 0,
+    fixedPrice: packageData.fixedPrice || 0,
+    discountPercent: packageData.discountPercent || 0,
+    savings: 0,
+  };
+  const calculatedTotal = pricing.originalPrice || 0;
+  const savings = pricing.savings || 0;
 
   return (
     <div className="">
@@ -103,9 +105,9 @@ export default function PackageDetails() {
         </Button>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-3 lg:grid-cols-3">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-3">
           {/* Package Info */}
           <Card>
             <CardHeader>
@@ -154,7 +156,7 @@ export default function PackageDetails() {
                 <div className="rounded-lg border bg-card p-3">
                   <p className="text-xs text-muted-foreground">Discount</p>
                   <p className="text-lg font-semibold text-green-600">
-                    {packageData.discountPercent}%
+                    {pricing.discountPercent}%
                   </p>
                 </div>
               </div>
@@ -168,7 +170,7 @@ export default function PackageDetails() {
             </CardHeader>
             <CardContent>
               {packageData.items && packageData.items.length > 0 ? (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {packageData.items.map((item, index) => (
                     <div
                       key={item.id}
@@ -301,13 +303,13 @@ export default function PackageDetails() {
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6">
+        <div className="space-y-3">
           {/* Pricing Summary */}
           <Card>
             <CardHeader>
               <CardTitle>Pricing Summary</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-3">
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">
@@ -317,19 +319,25 @@ export default function PackageDetails() {
                     ৳{calculatedTotal.toFixed(2)}
                   </span>
                 </div>
-                {packageData.discountPercent > 0 && (
+                {pricing.discountPercent > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Discount:</span>
                     <span className="font-medium text-green-600">
-                      {packageData.discountPercent}%
+                      {pricing.discountPercent}%
                     </span>
                   </div>
                 )}
-                {savings > 0 && (
+                {savings !== 0 && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">You Save:</span>
-                    <span className="font-medium text-green-600">
-                      ৳{savings.toFixed(2)}
+                    <span className="text-muted-foreground">
+                      {savings > 0 ? "You Save:" : "Price Difference:"}
+                    </span>
+                    <span
+                      className={`font-medium ${
+                        savings > 0 ? "text-green-600" : "text-muted-foreground"
+                      }`}
+                    >
+                      ৳{Math.abs(savings).toFixed(2)}
                     </span>
                   </div>
                 )}
@@ -340,7 +348,7 @@ export default function PackageDetails() {
               <div className="flex justify-between items-center">
                 <span className="text-base font-medium">Package Price:</span>
                 <span className="text-2xl font-bold text-primary">
-                  ৳{packageData.fixedPrice}
+                  ৳{pricing.fixedPrice}
                 </span>
               </div>
             </CardContent>

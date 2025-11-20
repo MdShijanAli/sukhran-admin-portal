@@ -217,10 +217,12 @@ export default function Packages() {
           >
             {packages.map((pkg) => {
               const totalItems = pkg.items?.length || 0;
-              const calculatedTotal = pkg.items?.reduce(
-                (sum, item) => sum + item.subtotal,
-                0
-              );
+              const pricing = pkg.pricing || {
+                originalPrice: 0,
+                fixedPrice: pkg.fixedPrice || 0,
+                discountPercent: pkg.discountPercent || 0,
+                savings: 0,
+              };
 
               return (
                 <Card
@@ -273,23 +275,30 @@ export default function Packages() {
                       {/* Package Stats */}
                       <div className="flex items-center justify-between text-xs text-muted-foreground">
                         <span>{totalItems} Items</span>
-                        {pkg.discountPercent > 0 && (
+                        {pricing.discountPercent > 0 && (
                           <span className="text-green-600 font-medium">
-                            {pkg.discountPercent}% OFF
+                            {pricing.discountPercent}% OFF
                           </span>
                         )}
                       </div>
 
                       {/* Price Section */}
                       <div className="pt-1">
-                        {calculatedTotal &&
-                          calculatedTotal > pkg.fixedPrice && (
-                            <p className="text-xs text-muted-foreground line-through">
-                              ৳{calculatedTotal.toFixed(2)}
+                        <div className="flex items-center justify-between">
+                          {pricing.originalPrice > 0 &&
+                            pricing.originalPrice > pricing.fixedPrice && (
+                              <p className="text-xs text-muted-foreground line-through">
+                                ৳{pricing.originalPrice.toFixed(2)}
+                              </p>
+                            )}
+                          {pricing.savings && pricing.savings > 0 && (
+                            <p className="text-xs text-green-600 font-medium">
+                              Save ৳{pricing.savings.toFixed(2)}
                             </p>
                           )}
+                        </div>
                         <p className="text-lg font-bold text-primary">
-                          ৳{pkg.fixedPrice}
+                          ৳{pricing.fixedPrice}
                         </p>
                       </div>
 

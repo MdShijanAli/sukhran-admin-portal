@@ -356,15 +356,15 @@ export default function PackageForm() {
             </div>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="grid gap-3 lg:grid-cols-3">
             {/* Main Form */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-3">
               {/* Basic Information */}
               <Card>
                 <CardHeader>
                   <CardTitle>Basic Information</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-3">
                   <div className="space-y-2">
                     <Label htmlFor="name">
                       Package Name <span className="text-destructive">*</span>
@@ -690,12 +690,12 @@ export default function PackageForm() {
             </div>
 
             {/* Sidebar Summary */}
-            <div className="space-y-6">
+            <div className="space-y-3">
               <Card className="sticky top-6">
                 <CardHeader>
                   <CardTitle>Settings</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-3">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="isActive">Active Status</Label>
                     <Switch

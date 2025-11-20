@@ -82,6 +82,18 @@ export default function ProductForm() {
     },
   ]);
 
+  const unitNames = [
+    "kg",
+    "gm",
+    "liter",
+    "ml",
+    "pcs",
+    "bottle",
+    "bag",
+    "box",
+    "pack",
+  ];
+
   const [skuImages, setSkuImages] = useState<{ [key: number]: string }>({});
 
   // Fetch categories on mount
@@ -643,15 +655,24 @@ export default function ProductForm() {
                     {/* Unit Name */}
                     <div className="grid gap-2">
                       <Label htmlFor={`unit-name-${index}`}>Unit Name *</Label>
-                      <Input
-                        id={`unit-name-${index}`}
-                        placeholder="e.g., Bottle, Bag, Piece"
+                      <Select
                         value={sku.unitName}
-                        onChange={(e) =>
-                          updateSku(index, "unitName", e.target.value)
+                        onValueChange={(value) =>
+                          updateSku(index, "unitName", value)
                         }
                         required
-                      />
+                      >
+                        <SelectTrigger id={`unit-name-${index}`}>
+                          <SelectValue placeholder="Select unit" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {unitNames.map((unit) => (
+                            <SelectItem key={unit} value={unit}>
+                              {unit}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
 
                     {/* Unit Size */}
@@ -659,7 +680,8 @@ export default function ProductForm() {
                       <Label htmlFor={`unit-size-${index}`}>Unit Size *</Label>
                       <Input
                         id={`unit-size-${index}`}
-                        placeholder="e.g., 1L, 500g, 12oz"
+                        type="number"
+                        placeholder="e.g., 1,5,250"
                         value={sku.unitSize}
                         onChange={(e) =>
                           updateSku(index, "unitSize", e.target.value)

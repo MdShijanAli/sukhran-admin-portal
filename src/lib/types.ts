@@ -150,6 +150,15 @@ export interface PackageItem {
   subtotal: number;
 }
 
+export interface PackagePricing {
+  originalPrice: number;
+  currentPrice: number;
+  fixedPrice: number;
+  discountPercent: number;
+  calculatedDiscountPercent: number;
+  savings: number;
+}
+
 export interface Package {
   id: number;
   name: string;
@@ -160,6 +169,7 @@ export interface Package {
   packageType: "admin" | "custom";
   fixedPrice: number;
   discountPercent: number;
+  pricing?: PackagePricing;
   displayOrder: string;
   isActive: boolean;
   isFeatured: boolean;
