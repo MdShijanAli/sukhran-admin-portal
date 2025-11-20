@@ -277,13 +277,11 @@ export function BaseTableList<T>({
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div>
-                <CardTitle>{title}</CardTitle>
-                {description && (
-                  <CardDescription>{description}</CardDescription>
-                )}
-              </div>
+            <div>
+              <CardTitle>{title}</CardTitle>
+              {description && <CardDescription>{description}</CardDescription>}
+            </div>
+            <div className="flex items-center gap-2">
               {/* Toolbar: Search, Filters, and Actions */}
               {(enableSearch || filters || toolbarActions) && (
                 <div className="flex items-center gap-4 flex-wrap">
@@ -346,8 +344,6 @@ export function BaseTableList<T>({
                   {toolbarActions}
                 </div>
               )}
-            </div>
-            <div className="flex items-center gap-2">
               <Button
                 variant="default"
                 onClick={handleRefresh}
