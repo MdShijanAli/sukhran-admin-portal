@@ -266,7 +266,7 @@ const Products = () => {
                     {/* Product Info */}
                     <div className="p-2.5 space-y-2">
                       {/* Product Name */}
-                      <h3 className="font-semibold text-sm line-clamp-2 min-h-[2.5rem]">
+                      <h3 className="font-semibold text-sm line-clamp-2 min-h-[2rem]">
                         {product.name}
                       </h3>
 
