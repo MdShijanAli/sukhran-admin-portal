@@ -20,6 +20,7 @@ import productService from "@/services/productService";
 import { useProductStore, Product } from "@/stores/productStore";
 import { DeleteModal } from "@/components/modals";
 import noProductImage from "@/assets/images/no_product_image.png";
+import { useSidebarStore } from "@/stores/sidebarStore";
 
 const Products = () => {
   const { t } = useTranslation();
@@ -30,6 +31,7 @@ const Products = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const { isCollapsed } = useSidebarStore();
 
   // Get data from store
   const products = store.products || [];
@@ -158,15 +160,15 @@ const Products = () => {
       {/* Products Grid */}
       <div>
         {isLoading ? (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {Array.from({ length: 8 }).map((_, index) => (
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+            {Array.from({ length: 12 }).map((_, index) => (
               <Card key={index} className="overflow-hidden animate-pulse">
                 <div className="aspect-square bg-muted" />
-                <CardContent className="p-4 space-y-3">
+                <CardContent className="p-3 space-y-2">
+                  <div className="h-4 bg-muted rounded" />
+                  <div className="h-3 bg-muted rounded w-2/3" />
                   <div className="h-6 bg-muted rounded" />
-                  <div className="h-4 bg-muted rounded w-2/3" />
                   <div className="h-8 bg-muted rounded" />
-                  <div className="h-12 bg-muted rounded" />
                 </CardContent>
               </Card>
             ))}
@@ -189,7 +191,13 @@ const Products = () => {
             </div>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div
+            className={`grid grid-cols-2 gap-3  ${
+              isCollapsed
+                ? "2xl:grid-cols-6 xl:grid-cols-5 sm:grid-cols-3 lg:grid-cols-4"
+                : "2xl:grid-cols-5 xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3"
+            }`}
+          >
             {products.map((product) => {
               const firstSku = product.skus?.[0];
               const hasMultipleSKUs = (product.skus?.length || 0) > 1;
@@ -211,19 +219,25 @@ const Products = () => {
                         alt={product.name}
                         className="h-full w-full object-cover transition-transform group-hover:scale-105"
                       />
-                      <div className="absolute right-2 top-2 flex gap-2">
+                      <div className="absolute right-1 top-1 flex gap-1">
                         <Badge
                           variant={product.isActive ? "default" : "secondary"}
+                          className="text-[10px] px-1.5 py-0"
                         >
                           {product.isActive ? "Active" : "Inactive"}
                         </Badge>
                         {product.isFeatured && (
-                          <Badge variant="destructive">Featured</Badge>
+                          <Badge
+                            variant="destructive"
+                            className="text-[10px] px-1.5 py-0"
+                          >
+                            Featured
+                          </Badge>
                         )}
                       </div>
                       {hasMultipleSKUs && (
                         <Badge
-                          className="absolute left-2 top-2"
+                          className="absolute left-1 top-1 text-[10px] px-1.5 py-0"
                           variant="secondary"
                         >
                           {product.skus?.length} SKUs
@@ -232,105 +246,65 @@ const Products = () => {
                     </div>
 
                     {/* Product Info */}
-                    <div className="p-4 space-y-3">
-                      <div>
-                        <h3 className="font-semibold text-lg line-clamp-1">
-                          {product.name}
-                        </h3>
-                        <div className="flex items-center gap-2 mt-1">
-                          <p className="text-sm text-muted-foreground">
-                            {product.category?.name}
-                          </p>
-                          {product.subCategory && (
-                            <>
-                              <span className="text-muted-foreground">•</span>
-                              <p className="text-sm text-muted-foreground">
-                                {product.subCategory.name}
-                              </p>
-                            </>
-                          )}
-                        </div>
-                        <Badge
-                          variant="outline"
-                          className="mt-1 text-xs capitalize"
-                        >
-                          {product.productType}
-                        </Badge>
-                      </div>
+                    <div className="p-2.5 space-y-2">
+                      {/* Product Name */}
+                      <h3 className="font-semibold text-sm line-clamp-2 min-h-[2.5rem]">
+                        {product.name}
+                      </h3>
 
-                      {/* SKU Info */}
+                      {/* Price */}
                       {firstSku && (
-                        <div className="border-t pt-3">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-xs text-muted-foreground">
-                                {firstSku.name}
-                              </p>
-                              <p className="text-sm font-medium">
-                                {(firstSku as any).unit?.name}{" "}
-                                {(firstSku as any).unit?.size}
-                              </p>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-lg font-bold">
-                                ৳{(firstSku as any).pricing?.currentPrice || 0}
-                              </p>
-                              {(firstSku as any).pricing?.originalPrice &&
-                                (firstSku as any).pricing.originalPrice !==
-                                  (firstSku as any).pricing.currentPrice && (
-                                  <p className="text-sm text-muted-foreground line-through">
-                                    ৳{(firstSku as any).pricing.originalPrice}
-                                  </p>
-                                )}
-                            </div>
-                          </div>
-                          <div className="flex items-center justify-between mt-2">
-                            <p className="text-xs text-muted-foreground">
-                              Stock: {firstSku.stockQuantity || 0}
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-base font-bold text-primary">
+                              ৳{(firstSku as any).pricing?.currentPrice || 0}
                             </p>
-                            <Badge
-                              variant={
-                                (firstSku as any).isInStock
-                                  ? "default"
-                                  : "destructive"
-                              }
-                              className="text-xs"
-                            >
-                              {(firstSku as any).isInStock
-                                ? "In Stock"
-                                : "Out of Stock"}
-                            </Badge>
+                            {(firstSku as any).pricing?.originalPrice &&
+                              (firstSku as any).pricing.originalPrice !==
+                                (firstSku as any).pricing.currentPrice && (
+                                <p className="text-[10px] text-muted-foreground line-through">
+                                  ৳{(firstSku as any).pricing.originalPrice}
+                                </p>
+                              )}
                           </div>
+                          <Badge
+                            variant={
+                              (firstSku as any).isInStock
+                                ? "default"
+                                : "destructive"
+                            }
+                            className="text-[10px] px-1.5 py-0"
+                          >
+                            {(firstSku as any).isInStock ? "In Stock" : "Out"}
+                          </Badge>
                         </div>
                       )}
 
                       {/* Action Buttons */}
-                      <div className="flex gap-2 pt-2">
+                      <div className="flex gap-1 pt-1">
                         <Button
                           variant="outline"
                           size="sm"
-                          className="flex-1 gap-1"
+                          className="flex-1 h-8 text-xs"
                           onClick={() => handleView(product)}
                         >
-                          <Eye className="h-3 w-3" />
-                          View
+                          <Eye className="h-3.5 w-3.5" />
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          className="gap-1"
+                          className="flex-1 h-8 text-xs"
                           onClick={() => handleEdit(product)}
                         >
-                          <Edit className="h-3 w-3" />
-                          Edit
+                          <Edit className="h-3.5 w-3.5" />
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          className="gap-1"
+                          className="flex-1 h-8 text-xs"
                           onClick={() => handleDelete(product)}
                         >
-                          <Trash2 className="h-3 w-3 text-destructive" />
+                          <Trash2 className="h-3.5 w-3.5 text-destructive" />
                         </Button>
                       </div>
                     </div>
