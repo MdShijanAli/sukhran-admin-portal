@@ -21,6 +21,7 @@ import {
   Bell,
   Coins,
   Mail,
+  MapPin,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useSidebarStore } from "@/stores/sidebarStore";
@@ -35,6 +36,7 @@ const menuItems = [
   { icon: Gift, label: "nav.packages", path: "/packages" },
   { icon: ShoppingCart, label: "nav.orders", path: "/orders" },
   { icon: Truck, label: "nav.delivery", path: "/delivery" },
+  { icon: MapPin, label: "nav.coverageAreas", path: "/coverage-areas" },
   { icon: DollarSign, label: "nav.financial", path: "/financial" },
   { icon: Coins, label: "nav.loyaltyRewards", path: "/loyalty-rewards" },
   { icon: Mail, label: "nav.marketing", path: "/marketing" },

@@ -29,6 +29,7 @@ import Analytics from "@/pages/Analytics";
 import Marketing from "@/pages/Marketing";
 import Categories from "@/pages/categories/Categories";
 import ProductViewDetails from "@/pages/products/ViewDetails";
+import CoverageAreas from "@/pages/coverage-area/CoverageAreas";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -142,6 +143,22 @@ const AppRoutes: React.FC = () => {
           element={
             <PrivateRoute>
               <PackageCreate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="packages/view/:id"
+          element={
+            <PrivateRoute>
+              <PackageCreate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="coverage-areas"
+          element={
+            <PrivateRoute>
+              <CoverageAreas />
             </PrivateRoute>
           }
         />

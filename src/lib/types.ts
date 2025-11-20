@@ -84,3 +84,41 @@ export interface PaginationMeta {
   from: number;
   to: number;
 }
+
+export interface CoverageArea {
+  id: number;
+  name: string;
+  city: string;
+  latitude: string;
+  longitude: string;
+  radius_km: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CoverageAreaFormData {
+  name: string;
+  city: string;
+  latitude: number;
+  longitude: number;
+  radius_km: number;
+  is_active: boolean;
+}
+
+export interface CoverageAreaStats {
+  total_areas: number;
+  active_areas: number;
+  inactive_areas: number;
+  cities: string[];
+}
+
+export interface CoverageAreaPaginationMeta {
+  current_page: number;
+  total: number;
+  per_page: number;
+  last_page: number;
+  from: number;
+  to: number;
+  stats?: CoverageAreaStats;
+}

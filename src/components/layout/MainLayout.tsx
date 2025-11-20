@@ -11,7 +11,7 @@ export default function MainLayout() {
     <div className="min-h-screen bg-background">
       <Sidebar />
       <div
-        className={cn(isCollapsed ? "ml-16" : "ml-64")}
+        className={cn(isCollapsed ? "ml-[4.5rem]" : "ml-64")}
         style={{
           transition: "margin-left 0.7s ease-in-out",
         }}
@@ -19,7 +19,7 @@ export default function MainLayout() {
         <Header />
         <main
           className={`transition-all duration-500 ease-in-out ${
-            isCollapsed ? "p-6" : "p-3"
+            isCollapsed ? "p-3" : "p-3"
           }`}
         >
           <Outlet />
