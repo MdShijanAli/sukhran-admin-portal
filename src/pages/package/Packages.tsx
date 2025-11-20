@@ -240,101 +240,84 @@ export default function Packages() {
                         <PackageIcon className="h-12 w-12 text-muted-foreground" />
                       </div>
                     )}
-                    {pkg.isFeatured && (
-                      <Badge className="absolute top-2 right-2">Featured</Badge>
-                    )}
+                    {/* Status Badges */}
+                    <div className="absolute top-2 left-2 flex gap-1">
+                      <Badge
+                        variant={pkg.isActive ? "default" : "secondary"}
+                        className="text-[10px] px-1.5 py-0"
+                      >
+                        {pkg.isActive ? "Active" : "Inactive"}
+                      </Badge>
+                      {pkg.isFeatured && (
+                        <Badge className="text-[10px] px-1.5 py-0">
+                          Featured
+                        </Badge>
+                      )}
+                    </div>
+                    {/* Type Badge */}
+                    <Badge
+                      variant="outline"
+                      className="absolute top-2 right-2 text-[10px] px-1.5 py-0 capitalize bg-background/80"
+                    >
+                      {pkg.packageType}
+                    </Badge>
                   </div>
 
-                  <CardContent className="p-4">
-                    {/* Package Info */}
-                    <div className="space-y-3">
-                      <div>
-                        <div className="flex items-start justify-between gap-2">
-                          <h3 className="font-semibold text-lg line-clamp-1">
-                            {pkg.name}
-                          </h3>
-                          <Badge
-                            variant={pkg.isActive ? "default" : "secondary"}
-                          >
-                            {pkg.isActive ? "Active" : "Inactive"}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
-                          {pkg.description}
-                        </p>
-                      </div>
+                  <CardContent className="p-3">
+                    <div className="space-y-2">
+                      {/* Package Name */}
+                      <h3 className="font-semibold text-sm line-clamp-2 min-h-[2rem]">
+                        {pkg.name}
+                      </h3>
 
-                      {/* Package Details */}
-                      <div className="space-y-2 py-2 border-t">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Type:</span>
-                          <Badge variant="outline" className="capitalize">
-                            {pkg.packageType}
-                          </Badge>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Items:</span>
-                          <span className="font-medium">{totalItems}</span>
-                        </div>
+                      {/* Package Stats */}
+                      <div className="flex items-center justify-between text-xs text-muted-foreground">
+                        <span>{totalItems} Items</span>
                         {pkg.discountPercent > 0 && (
-                          <div className="flex justify-between text-sm">
-                            <span className="text-muted-foreground">
-                              Discount:
-                            </span>
-                            <span className="font-medium text-green-600">
-                              {pkg.discountPercent}%
-                            </span>
-                          </div>
+                          <span className="text-green-600 font-medium">
+                            {pkg.discountPercent}% OFF
+                          </span>
                         )}
                       </div>
 
                       {/* Price Section */}
-                      <div className="space-y-1 pt-2 border-t">
+                      <div className="pt-1">
                         {calculatedTotal &&
                           calculatedTotal > pkg.fixedPrice && (
-                            <div className="flex justify-between text-sm">
-                              <span className="text-muted-foreground">
-                                Original:
-                              </span>
-                              <span className="line-through text-muted-foreground">
-                                ৳{calculatedTotal.toFixed(2)}
-                              </span>
-                            </div>
+                            <p className="text-xs text-muted-foreground line-through">
+                              ৳{calculatedTotal.toFixed(2)}
+                            </p>
                           )}
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-muted-foreground">
-                            Package Price:
-                          </span>
-                          <span className="text-2xl font-bold text-primary">
-                            ৳{pkg.fixedPrice}
-                          </span>
-                        </div>
+                        <p className="text-lg font-bold text-primary">
+                          ৳{pkg.fixedPrice}
+                        </p>
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="flex gap-2 pt-2">
+                      <div className="flex gap-1 pt-1">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleView(pkg)}
-                          className="flex-1"
+                          className="flex-1 h-8 text-xs"
                         >
-                          <Eye className="h-4 w-4 mr-1" />
-                          View
+                          <Eye className="h-3.5 w-3.5" />
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleEdit(pkg)}
+                          className="flex-1 h-8 text-xs"
                         >
-                          <Edit className="h-4 w-4" />
+                          <Edit className="h-3.5 w-3.5" />
                         </Button>
                         <Button
-                          variant="destructive"
+                          variant="outline"
                           size="sm"
                           onClick={() => handleDelete(pkg)}
+                          className="flex-1 h-8 text-xs"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3.5 w-3.5 text-destructive" />
                         </Button>
                       </div>
                     </div>
