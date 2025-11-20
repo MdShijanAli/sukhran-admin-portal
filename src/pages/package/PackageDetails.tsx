@@ -73,14 +73,28 @@ export default function PackageDetails() {
   }
 
   const totalItems = packageData.items?.length || 0;
+
+  // Handle both new and old pricing structures
   const pricing = packageData.pricing || {
-    originalPrice: 0,
+    totalItemsPrice: 0,
     fixedPrice: packageData.fixedPrice || 0,
     discountPercent: packageData.discountPercent || 0,
+    calculatedDiscountPercent: 0,
     savings: 0,
   };
-  const calculatedTotal = pricing.originalPrice || 0;
+
+  const totalItemsPrice = pricing.totalItemsPrice || 0;
+  const fixedPrice = pricing.fixedPrice || 0;
+  const discountPercent = pricing.discountPercent || 0;
+  const calculatedDiscountPercent = pricing.calculatedDiscountPercent || 0;
   const savings = pricing.savings || 0;
+
+  // Calculate final price based on fixed price and discount
+  const basePrice = fixedPrice > 0 ? fixedPrice : totalItemsPrice;
+  const finalPrice =
+    discountPercent > 0
+      ? basePrice - (basePrice * discountPercent) / 100
+      : basePrice;
 
   return (
     <div className="">
@@ -156,7 +170,7 @@ export default function PackageDetails() {
                 <div className="rounded-lg border bg-card p-3">
                   <p className="text-xs text-muted-foreground">Discount</p>
                   <p className="text-lg font-semibold text-green-600">
-                    {pricing.discountPercent}%
+                    {discountPercent}%
                   </p>
                 </div>
               </div>
@@ -313,31 +327,43 @@ export default function PackageDetails() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">
-                    Total Product Value:
+                    Total Items Value:
                   </span>
                   <span className="font-medium">
-                    ৳{calculatedTotal.toFixed(2)}
+                    ৳{totalItemsPrice.toFixed(2)}
                   </span>
                 </div>
-                {pricing.discountPercent > 0 && (
+                {fixedPrice > 0 && fixedPrice !== totalItemsPrice && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Discount:</span>
-                    <span className="font-medium text-green-600">
-                      {pricing.discountPercent}%
+                    <span className="text-muted-foreground">Fixed Price:</span>
+                    <span className="font-medium text-primary">
+                      ৳{fixedPrice.toFixed(2)}
                     </span>
                   </div>
                 )}
-                {savings !== 0 && (
+                {discountPercent > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Discount:</span>
+                    <span className="font-medium text-orange-600">
+                      {discountPercent}%
+                    </span>
+                  </div>
+                )}
+                {savings > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">You Save:</span>
+                    <span className="font-medium text-green-600">
+                      ৳{savings.toFixed(2)}
+                    </span>
+                  </div>
+                )}
+                {calculatedDiscountPercent > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">
-                      {savings > 0 ? "You Save:" : "Price Difference:"}
+                      Effective Discount:
                     </span>
-                    <span
-                      className={`font-medium ${
-                        savings > 0 ? "text-green-600" : "text-muted-foreground"
-                      }`}
-                    >
-                      ৳{Math.abs(savings).toFixed(2)}
+                    <span className="font-medium text-green-600">
+                      {calculatedDiscountPercent.toFixed(2)}%
                     </span>
                   </div>
                 )}
@@ -346,9 +372,9 @@ export default function PackageDetails() {
               <Separator />
 
               <div className="flex justify-between items-center">
-                <span className="text-base font-medium">Package Price:</span>
+                <span className="text-base font-medium">Final Price:</span>
                 <span className="text-2xl font-bold text-primary">
-                  ৳{pricing.fixedPrice}
+                  ৳{finalPrice.toFixed(2)}
                 </span>
               </div>
             </CardContent>
