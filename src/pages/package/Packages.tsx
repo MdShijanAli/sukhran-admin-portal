@@ -270,19 +270,9 @@ export default function Packages() {
                   <CardContent className="p-3">
                     <div className="space-y-2">
                       {/* Package Name */}
-                      <h3 className="font-semibold text-sm line-clamp-2 min-h-[2rem]">
+                      <h3 className="font-semibold text-sm line-clamp-2 min-h-[1rem]">
                         {pkg.name}
                       </h3>
-
-                      {/* Package Stats */}
-                      <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <span>{totalItems} Items</span>
-                        {pricing.discountPercent > 0 && (
-                          <span className="text-green-600 font-medium">
-                            {pricing.discountPercent}% OFF
-                          </span>
-                        )}
-                      </div>
 
                       {/* Price Section */}
                       <div className="pt-1 space-y-1">

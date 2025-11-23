@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BaseModal } from "@/components/modals";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -9,81 +9,108 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { User } from "@/stores/userStore";
+import userService from "@/services/userService";
+import { toast } from "sonner";
 
 interface UserFormData {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  phone: string;
-  location: string;
-  status: string;
-  subscriptionStatus: string;
+  mobile: string;
+  gender: string;
+  date_of_birth: string;
+  isActive: boolean;
 }
 
-interface DeliveryFormModalProps {
+interface FormModalProps {
   open: boolean;
   onClose: () => void;
-  editData?: UserFormData;
+  editData?: User;
+  onSuccess?: () => void;
 }
 
 export default function FormModal({
   open,
   onClose,
   editData,
-}: DeliveryFormModalProps) {
+  onSuccess,
+}: FormModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<UserFormData>({
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
     email: "",
-    phone: "",
-    location: "",
-    status: "active",
-    subscriptionStatus: "none",
+    mobile: "",
+    gender: "male",
+    date_of_birth: "",
+    isActive: true,
   });
 
-  const updateField = (field: keyof UserFormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
+  const handleSubmit = async () => {
+    // Validate required fields
+    if (!formData.firstName || !formData.email || !formData.mobile) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
 
-  const handleSubmit = () => {
     setIsSubmitting(true);
-    // Handle form submission logic here
-    console.log("Submitting form data:", formData);
+    try {
+      const submitData = new FormData();
+      submitData.append("firstName", formData.firstName);
+      submitData.append("lastName", formData.lastName);
+      submitData.append("email", formData.email);
+      submitData.append("mobile", formData.mobile);
+      submitData.append("gender", formData.gender);
+      submitData.append("date_of_birth", formData.date_of_birth);
+      submitData.append("is_active", formData.isActive ? "1" : "0");
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+      if (isEditing && editData) {
+        await userService.updateItem(editData.id, submitData);
+        toast.success("User updated successfully");
+      } else {
+        await userService.storeItem(submitData);
+        toast.success("User created successfully");
+      }
+
+      onSuccess?.();
       onClose();
-    }, 1000);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error(
+        isEditing ? "Failed to update user" : "Failed to create user"
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
     if (editData) {
       setIsEditing(true);
       setFormData({
-        first_name: editData.first_name,
-        last_name: editData.last_name,
+        firstName: editData.firstName,
+        lastName: editData.lastName,
         email: editData.email,
-        phone: editData.phone,
-        location: editData.location,
-        status: editData.status,
-        subscriptionStatus: editData.subscriptionStatus,
+        mobile: editData.mobile,
+        gender: editData.gender || "male",
+        date_of_birth: editData.date_of_birth || "",
+        isActive: editData.isActive,
       });
     } else {
       setIsEditing(false);
       setFormData({
-        first_name: "",
-        last_name: "",
+        firstName: "",
+        lastName: "",
         email: "",
-        phone: "",
-        location: "",
-        status: "active",
-        subscriptionStatus: "none",
+        mobile: "",
+        gender: "male",
+        date_of_birth: "",
+        isActive: true,
       });
     }
-  }, [editData]);
+  }, [editData, open]);
 
   return (
     <BaseModal
@@ -98,23 +125,23 @@ export default function FormModal({
       <div className="grid gap-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="first_name">First Name *</Label>
+            <Label htmlFor="firstName">First Name *</Label>
             <Input
-              id="first_name"
-              value={formData.first_name}
+              id="firstName"
+              value={formData.firstName}
               onChange={(e) =>
-                setFormData({ ...formData, first_name: e.target.value })
+                setFormData({ ...formData, firstName: e.target.value })
               }
               placeholder="Enter first name"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="last_name">Last Name </Label>
+            <Label htmlFor="lastName">Last Name</Label>
             <Input
-              id="last_name"
-              value={formData.last_name}
+              id="lastName"
+              value={formData.lastName}
               onChange={(e) =>
-                setFormData({ ...formData, last_name: e.target.value })
+                setFormData({ ...formData, lastName: e.target.value })
               }
               placeholder="Enter last name"
             />
@@ -129,39 +156,62 @@ export default function FormModal({
                 setFormData({ ...formData, email: e.target.value })
               }
               placeholder="Enter email address"
+              disabled={isEditing}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="phone">Phone *</Label>
+            <Label htmlFor="mobile">Mobile *</Label>
             <Input
-              id="phone"
-              value={formData.phone}
+              id="mobile"
+              value={formData.mobile}
               onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
+                setFormData({ ...formData, mobile: e.target.value })
               }
-              placeholder="Enter phone number"
+              placeholder="Enter mobile number (e.g., +8801XXXXXXXXX)"
+              disabled={isEditing}
             />
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="location">Location *</Label>
-          <Input
-            id="location"
-            value={formData.location}
-            onChange={(e) =>
-              setFormData({ ...formData, location: e.target.value })
-            }
-            placeholder="Enter location"
-          />
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="gender">Gender</Label>
+            <Select
+              value={formData.gender}
+              onValueChange={(value) =>
+                setFormData({ ...formData, gender: value })
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="male">Male</SelectItem>
+                <SelectItem value="female">Female</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="date_of_birth">Date of Birth</Label>
+            <Input
+              type="date"
+              id="date_of_birth"
+              value={formData.date_of_birth}
+              onChange={(e) =>
+                setFormData({ ...formData, date_of_birth: e.target.value })
+              }
+            />
+          </div>
         </div>
 
         <div className="space-y-2">
           <Label>Account Status</Label>
           <Select
-            value={formData.status}
+            value={formData.isActive ? "active" : "inactive"}
             onValueChange={(value) =>
-              setFormData({ ...formData, status: value })
+              setFormData({ ...formData, isActive: value === "active" })
             }
           >
             <SelectTrigger>
@@ -170,26 +220,6 @@ export default function FormModal({
             <SelectContent>
               <SelectItem value="active">Active</SelectItem>
               <SelectItem value="inactive">Inactive</SelectItem>
-              <SelectItem value="suspended">Suspended</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label>Subscription Status</Label>
-          <Select
-            value={formData.subscriptionStatus}
-            onValueChange={(value) =>
-              setFormData({ ...formData, subscriptionStatus: value })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="expired">Expired</SelectItem>
-              <SelectItem value="none">None</SelectItem>
             </SelectContent>
           </Select>
         </div>

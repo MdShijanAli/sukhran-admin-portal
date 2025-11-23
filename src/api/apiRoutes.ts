@@ -29,6 +29,16 @@ export const apiRoutes = {
     updateProfile: createApiUrl("auth/profile"),
   },
 
+  users: {
+    getAll: createApiUrl("admin/users"),
+    getById: (id: number | string) => createApiUrl(`admin/users/${id}`),
+    create: createApiUrl("admin/users"),
+    update: (id: number | string) => createApiUrl(`admin/users/${id}`),
+    delete: (id: number | string) => createApiUrl(`admin/users/${id}`),
+    toggleUserStatus: (id: number | string) =>
+      createApiUrl(`admin/users/${id}/toggle-status`),
+  },
+
   categories: {
     getAll: createApiUrl("admin/categories"),
     getById: (id: number | string) => createApiUrl(`admin/categories/${id}`),
