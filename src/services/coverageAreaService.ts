@@ -11,7 +11,7 @@ const apiService = createApiService<CoverageArea>(
 );
 
 interface CoverageAreaService extends ApiService<CoverageArea> {
-  toggleActiveStatus: (id: number | string) => Promise<unknown>;
+  toggleActiveStatus: (area: CoverageArea) => Promise<unknown>;
   updateCoverageArea: (id: number | string, data: unknown) => Promise<unknown>;
 }
 
@@ -20,14 +20,15 @@ const coverageAreaService: CoverageAreaService = {
   ...apiService,
 
   // Add extra custom API methods here
-  toggleActiveStatus: async (id: number | string) => {
+  toggleActiveStatus: async (area: CoverageArea) => {
     try {
       const response = await apiClient.patch(
-        apiRoutes.coverageAreas.toggleCoverageAreaStatus(id)
+        apiRoutes.coverageAreas.toggleCoverageAreaStatus(area.id)
       );
       console.log("Toggle active status response:", response.data);
       if (response && response.status === 200) {
-        useCoverageAreaStore.getState().updateItem(id, response.data.data);
+        useCoverageAreaStore.getState().updateItem(area.id, response.data.data);
+        useCoverageAreaStore.getState().setStats(response.data.data);
       }
       return response;
     } catch (error) {

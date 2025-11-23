@@ -13,6 +13,7 @@ interface CoverageAreaState {
   getCoverageAreaById: (id: number | string) => CoverageArea | undefined;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setStats: (stats: Partial<CoverageAreaPaginationMeta["stats"]>) => void;
 }
 
 export const useCoverageAreaStore = createStore<CoverageAreaState>(
@@ -48,6 +49,24 @@ export const useCoverageAreaStore = createStore<CoverageAreaState>(
           (data as { meta: CoverageAreaPaginationMeta })?.meta ||
           get().pagination,
       });
+    },
+
+    setStats: (data: CoverageArea) => {
+      console.log("Updating stats with data:", data);
+      set((state) => ({
+        pagination: {
+          ...state.pagination,
+          stats: {
+            ...state.pagination.stats,
+            active_areas: data.is_active
+              ? state.pagination.stats.active_areas + 1
+              : state.pagination.stats.active_areas - 1,
+            inactive_areas: data.is_active
+              ? state.pagination.stats.inactive_areas - 1
+              : state.pagination.stats.inactive_areas + 1,
+          },
+        },
+      }));
     },
 
     addItem: (data: unknown) => {

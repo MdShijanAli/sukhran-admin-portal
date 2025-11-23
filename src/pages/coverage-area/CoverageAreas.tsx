@@ -69,7 +69,7 @@ const CoverageAreas = () => {
   const handleStatusToggle = async (area: CoverageArea) => {
     setTogglingAreaId(area.id);
     try {
-      await coverageAreaService.toggleActiveStatus(area.id);
+      await coverageAreaService.toggleActiveStatus(area);
       toast.success(
         `Area ${!area.is_active ? "activated" : "deactivated"} successfully`
       );
