@@ -1,5 +1,14 @@
-import { useState, useCallback } from "react";
-import { Eye, Edit, Trash2, Plus } from "lucide-react";
+import { useState, useCallback, useEffect } from "react";
+import {
+  Eye,
+  Edit,
+  Trash2,
+  Plus,
+  Users as UsersIcon,
+  UserCheck,
+  UserX,
+  UserMinus,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
   BaseTableList,
@@ -22,6 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import ConfirmationModal from "@/components/modals/ConfirmationModal";
 
 const Users = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -33,8 +43,36 @@ const Users = () => {
   const [togglingUserId, setTogglingUserId] = useState<number | string | null>(
     null
   );
+  const [stats, setStats] = useState({
+    total_users: 0,
+    active_users: 0,
+    inactive_users: 0,
+    deleted_users: 0,
+    verified_users: 0,
+    unverified_users: 0,
+  });
+  const [isLoadingStats, setIsLoadingStats] = useState(false);
 
   const store = useUserStore();
+
+  // Fetch user statistics
+  useEffect(() => {
+    const fetchStatistics = async () => {
+      setIsLoadingStats(true);
+      try {
+        const response = await userService.getUsersStatistics();
+        const statistics = (response as { statistics: typeof stats })
+          .statistics;
+        setStats(statistics);
+      } catch (error) {
+        console.error("Error fetching user statistics:", error);
+        toast.error("Failed to load user statistics");
+      } finally {
+        setIsLoadingStats(false);
+      }
+    };
+    fetchStatistics();
+  }, []);
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {
     setRefreshTable(() => refreshFn);
@@ -181,6 +219,45 @@ const Users = () => {
     },
   ];
 
+  const summaryLists = [
+    {
+      title: "Total Users",
+      value: stats.total_users,
+      icon: UsersIcon,
+      color: "text-muted-foreground",
+    },
+    {
+      title: "Active Users",
+      value: stats.active_users,
+      icon: UserCheck,
+      color: "text-green-600",
+    },
+    {
+      title: "Inactive Users",
+      value: stats.inactive_users,
+      icon: UserX,
+      color: "text-orange-600",
+    },
+    {
+      title: "Deleted Users",
+      value: stats.deleted_users,
+      icon: UserMinus,
+      color: "text-red-600",
+    },
+    // {
+    //   title: "Verified Users",
+    //   value: stats.verified_users,
+    //   icon: UserCheck,
+    //   color: "text-green-600",
+    // },
+    // {
+    //   title: "Unverified Users",
+    //   value: stats.unverified_users,
+    //   icon: UserX,
+    //   color: "text-orange-600",
+    // },
+  ];
+
   return (
     <div className="animate-fade-in">
       <BaseTableList<User>
@@ -197,7 +274,7 @@ const Users = () => {
         filters={[
           {
             label: "status",
-            value: "all",
+            value: "active",
             options: [
               { label: "All Users", value: "all" },
               { label: "Active Users", value: "active" },
@@ -216,6 +293,7 @@ const Users = () => {
         emptyMessage="No users found"
         getRowKey={(user) => user.id}
         onRefresh={handleSetRefresh}
+        summaryLists={summaryLists}
       />
 
       {/* Dialogs */}

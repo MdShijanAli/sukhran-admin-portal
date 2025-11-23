@@ -11,6 +11,8 @@ const apiService = createApiService<User>(
 
 interface UserService extends ApiService<User> {
   toggleUserStatus: (id: number | string) => Promise<unknown>;
+  getUsersStatistics: () => Promise<unknown>;
+  resetUserPassword: (id: number | string) => Promise<unknown>;
 }
 
 const userService: UserService = {
@@ -30,6 +32,28 @@ const userService: UserService = {
       return response.data;
     } catch (error) {
       console.error("Error toggling user status:", error);
+      throw error;
+    }
+  },
+
+  getUsersStatistics: async () => {
+    try {
+      const response = await apiClient.get(apiRoutes.users.getUsersStatistics);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching users statistics:", error);
+      throw error;
+    }
+  },
+
+  resetUserPassword: async (id: number | string) => {
+    try {
+      const response = await apiClient.post(
+        apiRoutes.users.resetUserPassword(id)
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error resetting user password:", error);
       throw error;
     }
   },

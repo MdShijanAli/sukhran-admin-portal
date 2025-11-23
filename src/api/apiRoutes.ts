@@ -37,6 +37,9 @@ export const apiRoutes = {
     delete: (id: number | string) => createApiUrl(`admin/users/${id}`),
     toggleUserStatus: (id: number | string) =>
       createApiUrl(`admin/users/${id}/toggle-status`),
+    getUsersStatistics: createApiUrl("admin/users/statistics"),
+    resetUserPassword: (id: number | string) =>
+      createApiUrl(`admin/users/${id}/reset-password`),
   },
 
   categories: {

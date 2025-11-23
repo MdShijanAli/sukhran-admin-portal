@@ -276,19 +276,21 @@ export function BaseTableList<T>({
   }, [onRefresh, handleRefresh]);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {summaryLists.length > 0 && (
-        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {summaryLists.map((stat) => (
-            <Card key={stat.title}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
+            <Card key={stat.title} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
                   {stat.title}
                 </CardTitle>
-                <stat.icon className={`h-4 w-4 ${stat.color}`} />
+                <div className="p-2 rounded-lg bg-muted/50">
+                  <stat.icon className={`h-5 w-5 ${stat.color}`} />
+                </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
+              <CardContent className="pb-4">
+                <div className="text-3xl font-bold tracking-tight">{stat.value}</div>
               </CardContent>
             </Card>
           ))}
