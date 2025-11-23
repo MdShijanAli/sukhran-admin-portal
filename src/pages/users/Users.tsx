@@ -15,6 +15,13 @@ import userService from "@/services/userService";
 import { toast } from "sonner";
 import noImage from "@/assets/images/avatar-ractangle.jpg";
 import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Users = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -23,7 +30,9 @@ const Users = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
-  const [togglingUserId, setTogglingUserId] = useState<number | null>(null);
+  const [togglingUserId, setTogglingUserId] = useState<number | string | null>(
+    null
+  );
 
   const store = useUserStore();
 
@@ -183,6 +192,20 @@ const Users = () => {
             icon: Plus,
             onClick: handleCreate,
             variant: "default",
+          },
+        ]}
+        filters={[
+          {
+            label: "status",
+            value: "all",
+            options: [
+              { label: "All Users", value: "all" },
+              { label: "Active Users", value: "active" },
+              { label: "Inactive Users", value: "inactive" },
+              { label: "Deleted Users", value: "deleted" },
+            ],
+            onChange: () => {},
+            placeholder: "Filter by status",
           },
         ]}
         searchPlaceholder="Search by name, email, or mobile..."

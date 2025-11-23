@@ -133,6 +133,15 @@ export function BaseTableList<T>({
   const [perPage] = useState(10);
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [localFilters, setLocalFilters] = useState<Record<string, string>>(
+    () => {
+      const initial: Record<string, string> = {};
+      filters?.forEach((filter, index) => {
+        initial[filter.label || `filter_${index}`] = filter.value;
+      });
+      return initial;
+    }
+  );
 
   // Get data from store
   const data = (store.items ||
@@ -150,7 +159,7 @@ export function BaseTableList<T>({
   const setError = store.setError;
 
   // Serialize filters to detect changes
-  const filterValues = filters?.map((f) => f.value).join(",") || "";
+  const filterValues = Object.values(localFilters).join(",");
 
   // Fetch data function with query params
   const fetchData = useCallback(async () => {
@@ -173,9 +182,12 @@ export function BaseTableList<T>({
 
       // Add filter params
       if (filters) {
-        filters.forEach((filter) => {
-          if (filter.value) {
-            params.append(filter.label || "filter", filter.value);
+        filters.forEach((filter, index) => {
+          const filterKey = filter.label || `filter_${index}`;
+          const filterValue = localFilters[filterKey];
+          if (filterValue) {
+            // Use filter.label as the param key (e.g., "status")
+            params.append(filter.label || "filter", filterValue);
           }
         });
       }
@@ -234,6 +246,13 @@ export function BaseTableList<T>({
     // Only run when searchQuery changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
+
+  // Handle filter changes
+  useEffect(() => {
+    if (isFirstRender) return; // Skip on first render
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterValues, currentPage]);
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
@@ -311,36 +330,45 @@ export function BaseTableList<T>({
 
                   {/* Filters */}
                   {filters &&
-                    filters.map((filter, index) => (
-                      <Select
-                        key={index}
-                        value={filter.value}
-                        onValueChange={(value) => {
-                          filter.onChange(value);
-                          // Trigger refetch when filter changes
-                          if (currentPage !== 1) {
-                            setCurrentPage(1);
-                          } else {
-                            fetchData();
-                          }
-                        }}
-                      >
-                        <SelectTrigger
-                          className={filter.className || "w-[180px]"}
+                    filters.map((filter, index) => {
+                      const filterKey = filter.label || `filter_${index}`;
+                      return (
+                        <Select
+                          key={index}
+                          value={localFilters[filterKey] || filter.value}
+                          onValueChange={(value) => {
+                            // Update local filter state
+                            setLocalFilters((prev) => ({
+                              ...prev,
+                              [filterKey]: value,
+                            }));
+                            filter.onChange(value);
+                            // Reset to page 1 when filter changes
+                            if (currentPage !== 1) {
+                              setCurrentPage(1);
+                            }
+                          }}
                         >
-                          <SelectValue
-                            placeholder={filter.placeholder || "Select..."}
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {filter.options.map((option) => (
-                            <SelectItem key={option.value} value={option.value}>
-                              {option.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    ))}
+                          <SelectTrigger
+                            className={filter.className || "w-[180px]"}
+                          >
+                            <SelectValue
+                              placeholder={filter.placeholder || "Select..."}
+                            />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {filter.options.map((option) => (
+                              <SelectItem
+                                key={option.value}
+                                value={option.value}
+                              >
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      );
+                    })}
 
                   {/* Additional Toolbar Actions */}
                   {toolbarActions}
