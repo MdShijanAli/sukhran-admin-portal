@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { BaseModal } from "@/components/modals";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { User } from "@/stores/userStore";
 import userService from "@/services/userService";
 import { Loader2 } from "lucide-react";
+import noImage from "@/assets/images/avatar-ractangle.jpg";
 
 interface ViewModalProps {
   open: boolean;
@@ -52,101 +52,255 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
           <Loader2 className="h-8 w-8 animate-spin" />
         </div>
       ) : user ? (
-        <div className="space-y-6">
-          {/* User Info Section */}
-          <div>
-            <h3 className="text-lg font-semibold mb-3">Personal Information</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label className="text-muted-foreground">First Name</Label>
-                <p className="font-medium">{user.firstName}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">Last Name</Label>
-                <p className="font-medium">{user.lastName}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">Email</Label>
-                <p className="font-medium">{user.email}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">Mobile</Label>
-                <p className="font-medium">{user.mobile}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">Gender</Label>
-                <p className="font-medium">{user.gender || "N/A"}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">Date of Birth</Label>
-                <p className="font-medium">{user.date_of_birth || "N/A"}</p>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">Role</Label>
-                <Badge variant="outline">{user.role.display_name}</Badge>
-              </div>
-              <div>
-                <Label className="text-muted-foreground">Status</Label>
-                <Badge variant={user.isActive ? "default" : "secondary"}>
+        <div className="space-y-3">
+          {/* User Profile Section */}
+          <div className="flex items-center gap-3 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-4">
+            <img
+              src={user.image_url || user.displayImage || noImage}
+              alt={`${user.firstName} ${user.lastName}`}
+              className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md"
+            />
+            <div className="flex-1 min-w-0">
+              <h3 className="text-xl font-bold mb-1 truncate">
+                {user.firstName} {user.lastName}
+              </h3>
+              {user.preferredName && (
+                <p className="text-sm text-muted-foreground mb-2">
+                  Preferred: {user.preferredName}
+                </p>
+              )}
+              <div className="flex flex-wrap gap-1.5">
+                <Badge variant="outline" className="text-xs">
+                  {user.role.display_name}
+                </Badge>
+                <Badge
+                  variant={user.isActive ? "default" : "secondary"}
+                  className="text-xs"
+                >
                   {user.isActive ? "Active" : "Inactive"}
                 </Badge>
+                {user.isBlocked && (
+                  <Badge variant="destructive" className="text-xs">
+                    Blocked
+                  </Badge>
+                )}
+                {user.email_verified_at && (
+                  <Badge className="bg-green-600 text-xs">Email ✓</Badge>
+                )}
+                {user.mobile_verified_at && (
+                  <Badge className="bg-blue-600 text-xs">Mobile ✓</Badge>
+                )}
               </div>
-              <div>
-                <Label className="text-muted-foreground">Referral Code</Label>
-                <p className="font-medium">{user.referral_code || "N/A"}</p>
+            </div>
+          </div>
+
+          {/* Information Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {/* Personal Information */}
+            <div className="border rounded-lg p-4 space-y-3">
+              <h4 className="font-semibold text-sm text-primary mb-3">
+                Personal Information
+              </h4>
+              <div className="space-y-2">
+                <div className="flex justify-between items-start">
+                  <span className="text-xs text-muted-foreground">Email:</span>
+                  <span className="text-sm font-medium text-right">
+                    {user.email}
+                  </span>
+                </div>
+                <div className="flex justify-between items-start">
+                  <span className="text-xs text-muted-foreground">Mobile:</span>
+                  <span className="text-sm font-medium text-right">
+                    {user.mobile}
+                  </span>
+                </div>
+                <div className="flex justify-between items-start">
+                  <span className="text-xs text-muted-foreground">Gender:</span>
+                  <span className="text-sm font-medium capitalize">
+                    {user.gender || "N/A"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-start">
+                  <span className="text-xs text-muted-foreground">
+                    Date of Birth:
+                  </span>
+                  <span className="text-sm font-medium">
+                    {user.date_of_birth || "N/A"}
+                  </span>
+                </div>
               </div>
-              <div>
-                <Label className="text-muted-foreground">Business ID</Label>
-                <p className="font-medium">{user.businessId || "N/A"}</p>
+            </div>
+
+            {/* Account Details */}
+            <div className="border rounded-lg p-4 space-y-3">
+              <h4 className="font-semibold text-sm text-primary mb-3">
+                Account Details
+              </h4>
+              <div className="space-y-2">
+                <div className="flex justify-between items-start">
+                  <span className="text-xs text-muted-foreground">
+                    Referral Code:
+                  </span>
+                  <span className="text-sm font-medium">
+                    {user.referral_code || "N/A"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-start">
+                  <span className="text-xs text-muted-foreground">
+                    Referred By:
+                  </span>
+                  <span className="text-sm font-medium">
+                    {user.referred_by || "N/A"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-start">
+                  <span className="text-xs text-muted-foreground">
+                    Business ID:
+                  </span>
+                  <span className="text-sm font-medium">
+                    {user.businessId || "N/A"}
+                  </span>
+                </div>
+                <div className="flex justify-between items-start">
+                  <span className="text-xs text-muted-foreground">
+                    Store ID:
+                  </span>
+                  <span className="text-sm font-medium">
+                    {user.storeId || "N/A"}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Security Information */}
+            <div className="border rounded-lg p-4 space-y-3">
+              <h4 className="font-semibold text-sm text-primary mb-3">
+                Security
+              </h4>
+              <div className="space-y-2">
+                <div className="flex justify-between items-start">
+                  <span className="text-xs text-muted-foreground">
+                    Failed Attempts:
+                  </span>
+                  <span className="text-sm font-medium">
+                    {user.attemptWrongPassword}
+                  </span>
+                </div>
+                <div className="flex justify-between items-start">
+                  <span className="text-xs text-muted-foreground">Status:</span>
+                  <div className="flex gap-1">
+                    {user.isBlocked && (
+                      <Badge variant="destructive" className="text-xs">
+                        Blocked
+                      </Badge>
+                    )}
+                    {user.isDeleted && (
+                      <Badge variant="destructive" className="text-xs">
+                        Deleted
+                      </Badge>
+                    )}
+                    {!user.isBlocked && !user.isDeleted && (
+                      <Badge variant="default" className="text-xs">
+                        Active
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Timestamps */}
+            <div className="border rounded-lg p-4 space-y-3">
+              <h4 className="font-semibold text-sm text-primary mb-3">
+                Timeline
+              </h4>
+              <div className="space-y-2">
+                <div className="flex justify-between items-start">
+                  <span className="text-xs text-muted-foreground">
+                    Created:
+                  </span>
+                  <span className="text-sm font-medium">
+                    {new Date(user.created_at).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </span>
+                </div>
+                <div className="flex justify-between items-start">
+                  <span className="text-xs text-muted-foreground">
+                    Last Updated:
+                  </span>
+                  <span className="text-sm font-medium">
+                    {new Date(user.updated_at).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Addresses Section */}
           {user.addresses && user.addresses.length > 0 && (
-            <div>
-              <h3 className="text-lg font-semibold mb-3">Addresses</h3>
-              <div className="space-y-3">
+            <div className="border rounded-lg p-4">
+              <h4 className="font-semibold text-sm text-primary mb-3">
+                Addresses ({user.addresses.length})
+              </h4>
+              <div className="space-y-2">
                 {user.addresses.map((address, index) => (
-                  <div key={address.id} className="border rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium">Address {index + 1}</span>
-                      <div className="flex gap-2">
-                        <Badge variant="outline">{address.category}</Badge>
+                  <div
+                    key={address.id}
+                    className="bg-muted/50 rounded-md p-3 space-y-2"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">
+                        Address {index + 1}
+                      </span>
+                      <div className="flex gap-1.5">
+                        <Badge variant="outline" className="text-xs capitalize">
+                          {address.category}
+                        </Badge>
                         {address.is_default && (
-                          <Badge variant="default">Default</Badge>
+                          <Badge variant="default" className="text-xs">
+                            Default
+                          </Badge>
                         )}
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                      <div>
-                        <span className="text-muted-foreground">House:</span>{" "}
-                        {address.house}
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">House:</span>
+                        <span className="font-medium">{address.house}</span>
                       </div>
-                      <div>
-                        <span className="text-muted-foreground">Road:</span>{" "}
-                        {address.road}
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Road:</span>
+                        <span className="font-medium">{address.road}</span>
                       </div>
-                      <div>
-                        <span className="text-muted-foreground">Block:</span>{" "}
-                        {address.block}
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Block:</span>
+                        <span className="font-medium">{address.block}</span>
                       </div>
-                      <div>
-                        <span className="text-muted-foreground">Zip:</span>{" "}
-                        {address.zip_code}
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Zip:</span>
+                        <span className="font-medium">{address.zip_code}</span>
                       </div>
                       {address.label && (
-                        <div className="col-span-2">
-                          <span className="text-muted-foreground">Label:</span>{" "}
-                          {address.label}
+                        <div className="col-span-2 flex justify-between">
+                          <span className="text-muted-foreground">Label:</span>
+                          <span className="font-medium">{address.label}</span>
                         </div>
                       )}
                       {address.landmark && (
-                        <div className="col-span-2">
+                        <div className="col-span-2 flex justify-between">
                           <span className="text-muted-foreground">
                             Landmark:
-                          </span>{" "}
-                          {address.landmark}
+                          </span>
+                          <span className="font-medium">
+                            {address.landmark}
+                          </span>
                         </div>
                       )}
                     </div>

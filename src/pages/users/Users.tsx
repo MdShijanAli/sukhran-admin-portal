@@ -14,8 +14,6 @@ import { User, useUserStore } from "@/stores/userStore";
 import userService from "@/services/userService";
 import { toast } from "sonner";
 import noImage from "@/assets/images/avatar-ractangle.jpg";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { AvatarFallback } from "@radix-ui/react-avatar";
 import { Switch } from "@/components/ui/switch";
 
 const Users = () => {
