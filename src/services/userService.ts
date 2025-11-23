@@ -10,10 +10,7 @@ const apiService = createApiService<User>(
 );
 
 interface UserService extends ApiService<User> {
-  toggleUserStatus: (
-    id: number | string,
-    isActive: boolean
-  ) => Promise<unknown>;
+  toggleUserStatus: (id: number | string) => Promise<unknown>;
 }
 
 const userService: UserService = {
@@ -21,14 +18,15 @@ const userService: UserService = {
   ...apiService,
 
   // Add extra custom API methods here
-  toggleUserStatus: async (id: number | string, isActive: boolean) => {
+  toggleUserStatus: async (id: number | string) => {
     try {
-      const response = await apiClient.put(
-        apiRoutes.users.toggleUserStatus(id),
-        {
-          is_active: isActive,
-        }
+      const response = await apiClient.patch(
+        apiRoutes.users.toggleUserStatus(id)
       );
+      console.log("Toggle active status response:", response.data);
+      if (response && response.status === 200) {
+        useUserStore.getState().updateItem(id, response.data.user);
+      }
       return response.data;
     } catch (error) {
       console.error("Error toggling user status:", error);

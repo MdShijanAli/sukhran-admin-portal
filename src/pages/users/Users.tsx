@@ -13,6 +13,10 @@ import ViewModal from "./modal/ViewModal";
 import { User, useUserStore } from "@/stores/userStore";
 import userService from "@/services/userService";
 import { toast } from "sonner";
+import noImage from "@/assets/images/avatar-ractangle.jpg";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { AvatarFallback } from "@radix-ui/react-avatar";
+import { Switch } from "@/components/ui/switch";
 
 const Users = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -21,6 +25,7 @@ const Users = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
+  const [togglingUserId, setTogglingUserId] = useState<number | null>(null);
 
   const store = useUserStore();
 
@@ -64,6 +69,23 @@ const Users = () => {
     }
   };
 
+  const handleStatusToggle = async (user: User) => {
+    setTogglingUserId(user.id);
+    try {
+      await userService.toggleUserStatus(user.id);
+      toast.success(
+        `User ${!user.isActive ? "activated" : "deactivated"} successfully`
+      );
+    } catch (error) {
+      console.error("Error toggling user status:", error);
+      toast.error(
+        error?.response?.data?.message || "Failed to update user status"
+      );
+    } finally {
+      setTogglingUserId(null);
+    }
+  };
+
   // Define actions for dropdown menu
   const userActions: ActionItem<User>[] = [
     {
@@ -98,7 +120,7 @@ const Users = () => {
       label: "Image",
       render: (user) => (
         <img
-          src={user.image_url || user.displayImage || "/placeholder-image.png"}
+          src={user.image_url || user.displayImage || noImage}
           alt={user.firstName}
           className="w-10 h-10 rounded-full object-cover"
         />
@@ -123,14 +145,22 @@ const Users = () => {
       render: (user) => (
         <Badge variant="outline">{user.role.display_name}</Badge>
       ),
+      className: "text-center",
     },
     {
       key: "isActive",
       label: "Status",
       render: (user) => (
-        <Badge variant={user.isActive ? "default" : "secondary"}>
-          {user.isActive ? "Active" : "Inactive"}
-        </Badge>
+        <div className="flex items-center justify-center gap-2">
+          <Switch
+            checked={user.isActive}
+            onCheckedChange={() => handleStatusToggle(user)}
+            disabled={togglingUserId === user.id}
+          />
+          <Badge variant={user.isActive ? "default" : "secondary"}>
+            {user.isActive ? "Active" : "Inactive"}
+          </Badge>
+        </div>
       ),
       className: "text-center",
     },
