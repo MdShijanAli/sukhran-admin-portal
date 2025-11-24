@@ -292,7 +292,7 @@ export function BaseTableList<T>({
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {summaryLoading ? (
+                  {isLoading || summaryLoading ? (
                     <Skeleton className="h-5 w-16" />
                   ) : (
                     stat.value

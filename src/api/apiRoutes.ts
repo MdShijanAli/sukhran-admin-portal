@@ -40,6 +40,8 @@ export const apiRoutes = {
     getUsersStatistics: createApiUrl("admin/users/statistics"),
     resetUserPassword: (id: number | string) =>
       createApiUrl(`admin/users/${id}/reset-password`),
+    restoreUser: (id: number | string) =>
+      createApiUrl(`admin/users/${id}/restore`),
   },
 
   categories: {

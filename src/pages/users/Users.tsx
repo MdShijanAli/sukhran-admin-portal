@@ -9,6 +9,7 @@ import {
   UserX,
   UserMinus,
   Filter,
+  FolderSync,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -27,53 +28,29 @@ import noImage from "@/assets/images/avatar-ractangle.jpg";
 import { Switch } from "@/components/ui/switch";
 import FilterModal from "./modal/FilterModal";
 import { Button } from "@/components/ui/button";
+import ConfirmationModal from "@/components/modals/ConfirmationModal";
 
 const Users = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [dialogMode, setDialogMode] = useState<"create" | "edit" | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [showRestore, setShowRestore] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isRestoring, setIsRestoring] = useState(false);
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
   const [togglingUserId, setTogglingUserId] = useState<number | string | null>(
     null
   );
-  const [stats, setStats] = useState({
-    total_users: 0,
-    active_users: 0,
-    inactive_users: 0,
-    deleted_users: 0,
-    verified_users: 0,
-    unverified_users: 0,
-  });
-  const [isLoadingStats, setIsLoadingStats] = useState(false);
+
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [filterData, setFilterData] = useState<Record<string, string>>({
-    status: null,
-    subscription: null,
-    role: null,
+    status: "",
+    subscription: "",
+    role: "",
   });
 
   const store = useUserStore();
-
-  // Fetch user statistics
-  useEffect(() => {
-    const fetchStatistics = async () => {
-      setIsLoadingStats(true);
-      try {
-        const response = await userService.getUsersStatistics();
-        const statistics = (response as { statistics: typeof stats })
-          .statistics;
-        setStats(statistics);
-      } catch (error) {
-        console.error("Error fetching user statistics:", error);
-        toast.error("Failed to load user statistics");
-      } finally {
-        setIsLoadingStats(false);
-      }
-    };
-    fetchStatistics();
-  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -103,7 +80,7 @@ const Users = () => {
     } else {
       fetchLists();
     }
-  }, [filterData.status, filterData.subscription, filterData.role, store]);
+  }, [filterData.status, filterData.subscription, filterData.role]);
 
   const handleApplyFilters = (filters: Record<string, string>) => {
     setFilterData(filters);
@@ -183,6 +160,27 @@ const Users = () => {
     setShowDelete(true);
   };
 
+  const handleRestore = (user: User) => {
+    setSelectedUser(user);
+    setShowRestore(true);
+  };
+
+  const handleRestoreUser = async () => {
+    if (!selectedUser) return;
+    setIsRestoring(true);
+    try {
+      await userService.restoreUser(selectedUser.id);
+      toast.success("User restored successfully");
+      handleClearFilters();
+    } catch (error) {
+      console.error("Error restoring user:", error);
+      toast.error("Failed to restore user");
+    } finally {
+      setIsRestoring(false);
+      setShowRestore(false);
+    }
+  };
+
   const handleDeleteUser = async () => {
     if (!selectedUser) return;
     setIsDeleting(true);
@@ -217,7 +215,7 @@ const Users = () => {
   };
 
   // Define actions for dropdown menu
-  const userActions: ActionItem<User>[] = [
+  const userActions = (user: User): ActionItem<User>[] => [
     {
       label: "View Details",
       icon: Eye,
@@ -232,8 +230,16 @@ const Users = () => {
       label: "Delete User",
       icon: Trash2,
       onClick: handleDelete,
+      show: !user.isDeleted,
       variant: "destructive",
       separator: true,
+    },
+    {
+      label: "Restore User",
+      icon: FolderSync,
+      onClick: handleRestore,
+      show: user.isDeleted,
+      variant: "default",
     },
   ];
 
@@ -281,16 +287,22 @@ const Users = () => {
       key: "isActive",
       label: "Status",
       render: (user) => (
-        <div className="flex items-center justify-center gap-2">
-          <Switch
-            checked={user.isActive}
-            onCheckedChange={() => handleStatusToggle(user)}
-            disabled={togglingUserId === user.id}
-          />
-          <Badge variant={user.isActive ? "default" : "secondary"}>
-            {user.isActive ? "Active" : "Inactive"}
-          </Badge>
-        </div>
+        <>
+          {user.isDeleted ? (
+            <Badge variant="destructive">Deleted</Badge>
+          ) : (
+            <div className="flex items-center justify-center gap-2">
+              <Switch
+                checked={user.isActive}
+                onCheckedChange={() => handleStatusToggle(user)}
+                disabled={togglingUserId === user.id}
+              />
+              <Badge variant={user.isActive ? "default" : "secondary"}>
+                {user.isActive ? "Active" : "Inactive"}
+              </Badge>
+            </div>
+          )}
+        </>
       ),
       className: "text-center",
     },
@@ -299,7 +311,7 @@ const Users = () => {
       label: "Actions",
       className: "text-right",
       render: (user) => (
-        <DropdownMenuActions item={user} actions={userActions} />
+        <DropdownMenuActions item={user} actions={userActions(user)} />
       ),
     },
   ];
@@ -307,25 +319,25 @@ const Users = () => {
   const summaryLists = [
     {
       title: "Total Users",
-      value: stats.total_users,
+      value: store.statistics.total_users,
       icon: UsersIcon,
       color: "text-muted-foreground",
     },
     {
       title: "Active Users",
-      value: stats.active_users,
+      value: store.statistics.active_users,
       icon: UserCheck,
       color: "text-green-600",
     },
     {
       title: "Inactive Users",
-      value: stats.inactive_users,
+      value: store.statistics.inactive_users,
       icon: UserX,
       color: "text-orange-600",
     },
     {
       title: "Deleted Users",
-      value: stats.deleted_users,
+      value: store.statistics.deleted_users,
       icon: UserMinus,
       color: "text-red-600",
     },
@@ -371,7 +383,6 @@ const Users = () => {
         getRowKey={(user) => user.id}
         onRefresh={handleSetRefresh}
         summaryLists={summaryLists}
-        summaryLoading={isLoadingStats}
       />
 
       {/* Dialogs */}
@@ -395,6 +406,15 @@ const Users = () => {
         description={`Are you sure you want to delete ${selectedUser?.firstName} ${selectedUser?.lastName}? This action cannot be undone.`}
         onConfirm={handleDeleteUser}
         isDeleting={isDeleting}
+      />
+
+      <ConfirmationModal
+        open={showRestore}
+        onClose={() => setShowRestore(false)}
+        title="Restore User"
+        description={`Are you sure you want to restore ${selectedUser?.firstName} ${selectedUser?.lastName}?`}
+        onConfirm={handleRestoreUser}
+        isProcessing={isRestoring}
       />
 
       {/* Filter Modal */}

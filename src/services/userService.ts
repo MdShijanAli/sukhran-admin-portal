@@ -13,6 +13,7 @@ interface UserService extends ApiService<User> {
   toggleUserStatus: (id: number | string) => Promise<unknown>;
   getUsersStatistics: () => Promise<unknown>;
   resetUserPassword: (id: number | string) => Promise<unknown>;
+  restoreUser: (id: number | string) => Promise<unknown>;
 }
 
 const userService: UserService = {
@@ -54,6 +55,16 @@ const userService: UserService = {
       return response.data;
     } catch (error) {
       console.error("Error resetting user password:", error);
+      throw error;
+    }
+  },
+
+  restoreUser: async (id: number | string) => {
+    try {
+      const response = await apiClient.post(apiRoutes.users.restoreUser(id));
+      return response.data;
+    } catch (error) {
+      console.error("Error restoring user:", error);
       throw error;
     }
   },

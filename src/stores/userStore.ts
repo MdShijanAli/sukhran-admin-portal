@@ -62,8 +62,19 @@ export interface User {
   deleted_by_user?: unknown | null;
 }
 
+export interface UserStatistics {
+  total_users: number;
+  active_users: number;
+  inactive_users: number;
+  deleted_users: number;
+  verified_users: number;
+  unverified_users: number;
+  blocked_users: number;
+}
+
 interface UserState {
   users: User[];
+  statistics: UserStatistics;
   pagination: PaginationMeta;
   isLoading: boolean;
   error: string | null;
@@ -79,6 +90,15 @@ interface UserState {
 export const useUserStore = createStore<UserState>(
   (set, get) => ({
     users: [],
+    statistics: {
+      total_users: 0,
+      active_users: 0,
+      inactive_users: 0,
+      deleted_users: 0,
+      verified_users: 0,
+      unverified_users: 0,
+      blocked_users: 0,
+    },
     pagination: {
       current_page: 1,
       total: 0,
@@ -97,6 +117,9 @@ export const useUserStore = createStore<UserState>(
         : (data as { data?: User[] })?.data || [];
       set({
         users,
+        statistics:
+          (data as { statistics: UserStatistics })?.statistics ||
+          get().statistics,
         isLoading: false,
         error: null,
         pagination:
