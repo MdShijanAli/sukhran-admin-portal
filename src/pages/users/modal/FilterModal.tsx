@@ -9,30 +9,42 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface FilterData {
-  filterStatus: string;
-  filterSubscription: string;
+export interface FilterOption {
+  label: string;
+  value: string;
+}
+
+export interface FilterConfig {
+  key: string;
+  label: string;
+  options: FilterOption[];
+  defaultValue?: string;
 }
 
 interface FilterModalProps {
   open: boolean;
   onClose: () => void;
-  currentFilters: FilterData;
-  onApplyFilters: (filters: FilterData) => void;
+  title?: string;
+  filters: FilterConfig[];
+  currentFilters: Record<string, string>;
+  onApplyFilters: (filters: Record<string, string>) => void;
   onClearFilters: () => void;
+  submitButtonText?: string;
+  clearButtonText?: string;
 }
 
 export default function FilterModal({
   open,
   onClose,
+  title = "Apply Filters",
+  filters,
   currentFilters,
   onApplyFilters,
   onClearFilters,
+  submitButtonText = "Apply Filters",
+  clearButtonText = "Clear Filters",
 }: FilterModalProps) {
-  const [filterData, setFilterData] = useState<FilterData>({
-    filterStatus: "all",
-    filterSubscription: "all",
-  });
+  const [filterData, setFilterData] = useState<Record<string, string>>({});
 
   const handleApply = () => {
     onApplyFilters(filterData);
@@ -40,11 +52,19 @@ export default function FilterModal({
   };
 
   const handleClear = () => {
-    setFilterData({
-      filterStatus: "all",
-      filterSubscription: "all",
+    const clearedFilters: Record<string, string> = {};
+    filters.forEach((filter) => {
+      clearedFilters[filter.key] = filter.defaultValue || "all";
     });
+    setFilterData(clearedFilters);
     onClearFilters();
+  };
+
+  const handleFilterChange = (key: string, value: string) => {
+    setFilterData((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
   };
 
   useEffect(() => {
@@ -57,53 +77,35 @@ export default function FilterModal({
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title="Filter Users"
+      title={title}
       onSubmit={handleApply}
-      submitButtonText="Apply Filters"
-      closeButtonText="Clear Filters"
+      submitButtonText={submitButtonText}
+      closeButtonText={clearButtonText}
       closeButtonVariant="outline"
       onClose={handleClear}
       size="md"
     >
       <div className="space-y-4">
-        <div className="space-y-2">
-          <Label>Account Status</Label>
-          <Select
-            value={filterData.filterStatus}
-            onValueChange={(value) =>
-              setFilterData({ ...filterData, filterStatus: value })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Statuses</SelectItem>
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="inactive">Inactive</SelectItem>
-              <SelectItem value="suspended">Suspended</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-2">
-          <Label>Subscription Status</Label>
-          <Select
-            value={filterData.filterSubscription}
-            onValueChange={(value) =>
-              setFilterData({ ...filterData, filterSubscription: value })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Subscriptions</SelectItem>
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="expired">Expired</SelectItem>
-              <SelectItem value="none">None</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        {filters.map((filter) => (
+          <div key={filter.key} className="space-y-2">
+            <Label>{filter.label}</Label>
+            <Select
+              value={filterData[filter.key] || filter.defaultValue || "all"}
+              onValueChange={(value) => handleFilterChange(filter.key, value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {filter.options.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        ))}
       </div>
     </BaseModal>
   );

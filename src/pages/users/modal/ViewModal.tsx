@@ -5,6 +5,7 @@ import { User } from "@/stores/userStore";
 import userService from "@/services/userService";
 import { Loader2 } from "lucide-react";
 import noImage from "@/assets/images/avatar-ractangle.jpg";
+import { formatDDMMYYY } from "@/lib/utils";
 
 interface ViewModalProps {
   open: boolean;
@@ -58,7 +59,7 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
             <img
               src={user.image_url || user.displayImage || noImage}
               alt={`${user.firstName} ${user.lastName}`}
-              className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md"
+              className="w-20 h-20 rounded-full object-cover object-top border-4 border-white shadow-md"
             />
             <div className="flex-1 min-w-0">
               <h3 className="text-xl font-bold mb-1 truncate">
@@ -125,12 +126,11 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
                     Date of Birth:
                   </span>
                   <span className="text-sm font-medium">
-                    {user.date_of_birth || "N/A"}
+                    {formatDDMMYYY(user.date_of_birth) || "N/A"}
                   </span>
                 </div>
               </div>
             </div>
-
             {/* Account Details */}
             <div className="border rounded-lg p-4 space-y-3">
               <h4 className="font-semibold text-sm text-primary mb-3">

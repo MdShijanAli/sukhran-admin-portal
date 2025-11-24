@@ -18,6 +18,7 @@ import {
 import { BaseTable, Column } from "./BaseTable";
 import { ApiService } from "@/services/createApiService";
 import { RefreshCcw, RefreshCw, X } from "lucide-react";
+import { Skeleton } from "../ui/skeleton";
 
 export interface FilterOption {
   label: string;
@@ -106,6 +107,7 @@ export interface BaseTableListProps<T> {
     icon?: React.ComponentType<{ className?: string }>;
     value: string | number;
   }>;
+  summaryLoading?: boolean;
 }
 
 export function BaseTableList<T>({
@@ -125,6 +127,7 @@ export function BaseTableList<T>({
   rowClassName,
   showPagination = false,
   summaryLists = [],
+  summaryLoading = false,
   onRefresh,
 }: BaseTableListProps<T>) {
   // Local state for query params
@@ -288,7 +291,13 @@ export function BaseTableList<T>({
                 <stat.icon className={`h-4 w-4 ${stat.color}`} />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
+                <div className="text-2xl font-bold">
+                  {summaryLoading ? (
+                    <Skeleton className="h-5 w-16" />
+                  ) : (
+                    stat.value
+                  )}
+                </div>
               </CardContent>
             </Card>
           ))}
@@ -305,7 +314,7 @@ export function BaseTableList<T>({
             <div className="flex items-center gap-2">
               {/* Toolbar: Search, Filters, and Actions */}
               {(enableSearch || filters || toolbarActions) && (
-                <div className="flex items-center gap-4 flex-wrap">
+                <div className="flex items-center gap-2 flex-wrap">
                   {/* Search Input */}
                   {enableSearch && (
                     <div className="relative w-[300px] max-w-[500px]">

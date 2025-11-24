@@ -8,6 +8,7 @@ import {
   UserCheck,
   UserX,
   UserMinus,
+  Filter,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -24,14 +25,8 @@ import userService from "@/services/userService";
 import { toast } from "sonner";
 import noImage from "@/assets/images/avatar-ractangle.jpg";
 import { Switch } from "@/components/ui/switch";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import ConfirmationModal from "@/components/modals/ConfirmationModal";
+import FilterModal from "./modal/FilterModal";
+import { Button } from "@/components/ui/button";
 
 const Users = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -52,6 +47,12 @@ const Users = () => {
     unverified_users: 0,
   });
   const [isLoadingStats, setIsLoadingStats] = useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [filterData, setFilterData] = useState<Record<string, string>>({
+    status: null,
+    subscription: null,
+    role: null,
+  });
 
   const store = useUserStore();
 
@@ -73,6 +74,90 @@ const Users = () => {
     };
     fetchStatistics();
   }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (filterData.status) {
+      params.append("status", filterData.status);
+    }
+    if (filterData.subscription) {
+      params.append("subscription", filterData.subscription);
+    }
+    if (filterData.role) {
+      params.append("role", filterData.role);
+    }
+    const queryString = params.toString();
+    const fetchLists = async () => {
+      store.setLoading(true);
+      try {
+        await userService.fetchLists(queryString);
+      } catch (error) {
+        console.error("Error fetching filtered user list:", error);
+        toast.error("Failed to fetch filtered user list");
+      } finally {
+        store.setLoading(false);
+      }
+    };
+    if (!queryString) {
+      return;
+    } else {
+      fetchLists();
+    }
+  }, [filterData.status, filterData.subscription, filterData.role, store]);
+
+  const handleApplyFilters = (filters: Record<string, string>) => {
+    setFilterData(filters);
+    // Apply filters to your data fetching logic
+    console.log("Applied filters:", filters);
+    toast.success("Filters applied successfully");
+  };
+
+  const handleClearFilters = () => {
+    setFilterData({
+      status: "active",
+      subscription: "all",
+      role: "all",
+    });
+    toast.info("Filters cleared");
+    setShowFilterModal(false);
+  };
+
+  // Filter configurations
+  const userFilterConfigs = [
+    {
+      key: "status",
+      label: "Account Status",
+      options: [
+        { label: "All Statuses", value: "all" },
+        { label: "Active", value: "active" },
+        { label: "Inactive", value: "inactive" },
+        { label: "Deleted", value: "deleted" },
+      ],
+      defaultValue: "active",
+    },
+    // {
+    //   key: "subscription",
+    //   label: "Subscription Status",
+    //   options: [
+    //     { label: "All Subscriptions", value: "all" },
+    //     { label: "Active", value: "active" },
+    //     { label: "Expired", value: "expired" },
+    //     { label: "None", value: "none" },
+    //   ],
+    //   defaultValue: "all",
+    // },
+    {
+      key: "role",
+      label: "User Role",
+      options: [
+        { label: "All Roles", value: "all" },
+        { label: "Admin", value: "admin" },
+        { label: "Customer", value: "customer" },
+        { label: "Manager", value: "manager" },
+      ],
+      defaultValue: "all",
+    },
+  ];
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {
     setRefreshTable(() => refreshFn);
@@ -271,20 +356,12 @@ const Users = () => {
             variant: "default",
           },
         ]}
-        filters={[
-          {
-            label: "status",
-            value: "active",
-            options: [
-              { label: "All Users", value: "all" },
-              { label: "Active Users", value: "active" },
-              { label: "Inactive Users", value: "inactive" },
-              { label: "Deleted Users", value: "deleted" },
-            ],
-            onChange: () => {},
-            placeholder: "Filter by status",
-          },
-        ]}
+        toolbarActions={
+          <Button variant="outline" onClick={() => setShowFilterModal(true)}>
+            <Filter className="mr-2 h-4 w-4" />
+            Filter
+          </Button>
+        }
         searchPlaceholder="Search by name, email, or mobile..."
         enableSearch={true}
         columns={columns}
@@ -294,6 +371,7 @@ const Users = () => {
         getRowKey={(user) => user.id}
         onRefresh={handleSetRefresh}
         summaryLists={summaryLists}
+        summaryLoading={isLoadingStats}
       />
 
       {/* Dialogs */}
@@ -317,6 +395,17 @@ const Users = () => {
         description={`Are you sure you want to delete ${selectedUser?.firstName} ${selectedUser?.lastName}? This action cannot be undone.`}
         onConfirm={handleDeleteUser}
         isDeleting={isDeleting}
+      />
+
+      {/* Filter Modal */}
+      <FilterModal
+        open={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        title="Filter Users"
+        filters={userFilterConfigs}
+        currentFilters={filterData}
+        onApplyFilters={handleApplyFilters}
+        onClearFilters={handleClearFilters}
       />
     </div>
   );
