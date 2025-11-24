@@ -382,7 +382,7 @@ const Users = () => {
         description="View and manage all registered users"
         headerActions={[
           {
-            label: "Add User",
+            label: "Add Staff",
             icon: Plus,
             onClick: handleCreate,
             variant: "default",

@@ -116,7 +116,7 @@ export default function FormModal({
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title={isEditing ? "Edit User" : "Create New User"}
+      title={isEditing ? "Edit User" : "Create New Staff User"}
       onSubmit={handleSubmit}
       isSubmitting={isSubmitting}
       submitButtonText={isEditing ? "Update User" : "Create User"}
