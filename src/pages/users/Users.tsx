@@ -201,10 +201,13 @@ const Users = () => {
   const handleStatusToggle = async (user: User) => {
     setTogglingUserId(user.id);
     try {
-      await userService.toggleUserStatus(user.id);
+      const result = await userService.toggleUserStatus(user.id);
       toast.success(
         `User ${!user.isActive ? "activated" : "deactivated"} successfully`
       );
+      if (result && result.user) {
+        setFilterData((prev) => ({ ...prev, status: "active" }));
+      }
     } catch (error) {
       console.error("Error toggling user status:", error);
       toast.error(
@@ -296,9 +299,11 @@ const Users = () => {
       render: (user) => (
         <>
           {user.isDeleted ? (
-            <Badge variant="destructive">Deleted</Badge>
+            <div className="flex items-center justify-end">
+              <Badge variant="destructive">Deleted</Badge>
+            </div>
           ) : (
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center justify-end gap-2">
               {user.role.name !== constData.roles.ADMIN ? (
                 <>
                   <Switch
@@ -310,7 +315,11 @@ const Users = () => {
                     {user.isActive ? "Active" : "Inactive"}
                   </Badge>
                 </>
-              ) : null}
+              ) : (
+                <Badge variant={user.isActive ? "default" : "outline"}>
+                  {user.isActive ? "Active" : "Inactive"}
+                </Badge>
+              )}
             </div>
           )}
         </>

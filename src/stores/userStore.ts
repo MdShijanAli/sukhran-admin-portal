@@ -144,7 +144,31 @@ export const useUserStore = createStore<UserState>(
         ),
         isLoading: false,
         error: null,
+        statistics: {
+          ...state.statistics,
+          active_users:
+            user.isActive && !user.isDeleted
+              ? state.statistics.active_users + 1
+              : state.statistics.active_users - 1,
+          inactive_users:
+            user.isActive && !user.isDeleted
+              ? state.statistics.inactive_users - 1
+              : state.statistics.inactive_users + 1,
+          deleted_users: user.isDeleted
+            ? state.statistics.deleted_users + 1
+            : state.statistics.deleted_users,
+        },
       }));
+      console.log("Updated user data:", user);
+
+      // set((state) => ({
+      //   statistics: {
+      //     ...state.statistics,
+      //     active_users: data.isActive ? state.statistics.active_users + 1 : state.statistics.active_users - 1,
+      //     inactive_users: data.isActive ? state.statistics.inactive_users - 1 : state.statistics.inactive_users + 1,
+      //     deleted_users: state.users.filter((u) => u.isDeleted).length,
+      //   },
+      // }));
     },
 
     removeItem: (id: number | string) => {

@@ -21,7 +21,7 @@ const userService: UserService = {
   ...apiService,
 
   // Add extra custom API methods here
-  toggleUserStatus: async (id: number | string) => {
+  toggleUserStatus: async (id: number | string): Promise<User> => {
     try {
       const response = await apiClient.patch(
         apiRoutes.users.toggleUserStatus(id)
@@ -30,7 +30,7 @@ const userService: UserService = {
       if (response && response.status === 200) {
         useUserStore.getState().updateItem(id, response.data.user);
       }
-      return response.data;
+      return response.data.user;
     } catch (error) {
       console.error("Error toggling user status:", error);
       throw error;

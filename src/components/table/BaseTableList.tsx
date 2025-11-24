@@ -291,7 +291,7 @@ export function BaseTableList<T>({
                 <stat.icon className={`h-4 w-4 ${stat.color}`} />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
+                <div className="text-2xl font-bold ml-3">
                   {isLoading || summaryLoading ? (
                     <Skeleton className="h-5 w-16" />
                   ) : (
