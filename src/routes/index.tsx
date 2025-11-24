@@ -21,7 +21,7 @@ import Financial from "@/pages/financial/Financial";
 import Support from "@/pages/Support";
 import Coupons from "@/pages/Coupons";
 import Returns from "@/pages/Returns";
-import RoleManagement from "@/pages/RoleManagement";
+import RoleManagement from "@/pages/roles/RoleManagement";
 import Notifications from "@/pages/Notifications";
 import Settings from "@/pages/Settings";
 import LoyaltyRewards from "@/pages/LoyaltyRewards";
