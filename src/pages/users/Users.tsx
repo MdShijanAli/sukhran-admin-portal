@@ -29,6 +29,7 @@ import { Switch } from "@/components/ui/switch";
 import FilterModal from "./modal/FilterModal";
 import { Button } from "@/components/ui/button";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
+import constData from "@/lib/constData";
 
 const Users = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -230,7 +231,7 @@ const Users = () => {
       label: "Delete User",
       icon: Trash2,
       onClick: handleDelete,
-      show: !user.isDeleted,
+      show: !user.isDeleted && user.role.name !== constData.roles.ADMIN,
       variant: "destructive",
       separator: true,
     },
@@ -279,7 +280,13 @@ const Users = () => {
       key: "role",
       label: "Role",
       render: (user) => (
-        <Badge variant="outline">{user.role.display_name}</Badge>
+        <Badge
+          variant={
+            user.role.name === constData.roles.CUSTOMER ? "primary" : "outline"
+          }
+        >
+          {user.role.display_name}
+        </Badge>
       ),
       className: "text-center",
     },
@@ -292,14 +299,18 @@ const Users = () => {
             <Badge variant="destructive">Deleted</Badge>
           ) : (
             <div className="flex items-center justify-center gap-2">
-              <Switch
-                checked={user.isActive}
-                onCheckedChange={() => handleStatusToggle(user)}
-                disabled={togglingUserId === user.id}
-              />
-              <Badge variant={user.isActive ? "default" : "secondary"}>
-                {user.isActive ? "Active" : "Inactive"}
-              </Badge>
+              {user.role.name !== constData.roles.ADMIN ? (
+                <>
+                  <Switch
+                    checked={user.isActive}
+                    onCheckedChange={() => handleStatusToggle(user)}
+                    disabled={togglingUserId === user.id}
+                  />
+                  <Badge variant={user.isActive ? "default" : "outline"}>
+                    {user.isActive ? "Active" : "Inactive"}
+                  </Badge>
+                </>
+              ) : null}
             </div>
           )}
         </>
