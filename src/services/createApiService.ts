@@ -108,18 +108,17 @@ export const createApiService = <T = unknown>(
       }
       const url = apiRoutes.update(id);
 
-      // Automatically detect if data is FormData and set appropriate headers
-      const config =
-        data instanceof FormData
-          ? {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-              method: "POST",
-            }
-          : undefined;
-
-      const response = await apiClient.post<T>(url, data, config);
+      // Automatically detect if data is FormData and use POST, otherwise PUT
+      let response;
+      if (data instanceof FormData) {
+        response = await apiClient.post<T>(url, data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      } else {
+        response = await apiClient.put<T>(url, data);
+      }
 
       if (response && response.status === 200) {
         // Update store if provided

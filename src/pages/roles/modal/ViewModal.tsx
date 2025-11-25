@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BaseModal } from "@/components/modals";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Loader2 } from "lucide-react";
+import { Loader2, Shield, Users, Key, Calendar } from "lucide-react";
 import { Role } from "@/stores/roleStore";
 import roleService from "@/services/roleService";
 
@@ -24,7 +24,8 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
         const response = await roleService.fetchDetails(roleId);
         const responseData = response as unknown as Record<string, unknown>;
         const roleData =
-          (responseData?.data as Role) || (response as unknown as Role);
+          (responseData?.role as Role) || (response as unknown as Role);
+        console.log("Fetched role details:", roleData);
         setRole(roleData);
       } catch (error) {
         console.error("Error fetching role details:", error);
@@ -44,7 +45,7 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
       title="Role Details"
       showSubmitButton={false}
       closeButtonText="Close"
-      size="lg"
+      size="xl"
     >
       {isLoading ? (
         <div className="flex items-center justify-center py-8">
@@ -53,110 +54,124 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
       ) : role ? (
         <div className="space-y-4">
           {/* Role Header */}
-          <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-4">
-            <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-4 bg-card border rounded-lg">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-primary/10 rounded-lg">
+                <Shield className="h-5 w-5 text-primary" />
+              </div>
               <div>
-                <h3 className="text-xl font-bold mb-1">{role.display_name}</h3>
+                <h3 className="text-lg font-semibold">{role.display_name}</h3>
                 <p className="text-sm text-muted-foreground">{role.name}</p>
               </div>
-              <Badge variant={role.isActive ? "default" : "secondary"}>
-                {role.isActive ? "Active" : "Inactive"}
-              </Badge>
             </div>
-            {role.description && (
-              <p className="text-sm mt-3 text-muted-foreground">
-                {role.description}
-              </p>
-            )}
+            <Badge variant={role.isActive ? "default" : "secondary"}>
+              {role.isActive ? "Active" : "Inactive"}
+            </Badge>
           </div>
 
-          {/* Role Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="border rounded-lg p-4 space-y-3">
-              <h4 className="font-semibold text-sm text-primary mb-3">
-                Role Information
-              </h4>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <Label className="text-xs text-muted-foreground">
-                    Total Permissions
-                  </Label>
-                  <span className="font-medium">
-                    {role.permissions_count || role.permissions?.length || 0}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <Label className="text-xs text-muted-foreground">
-                    Assigned Users
-                  </Label>
-                  <span className="font-medium">{role.users_count || 0}</span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <Label className="text-xs text-muted-foreground">
-                    Created At
-                  </Label>
-                  <span className="font-medium">
-                    {new Date(role.created_at).toLocaleDateString()}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <Label className="text-xs text-muted-foreground">
-                    Updated At
-                  </Label>
-                  <span className="font-medium">
-                    {new Date(role.updated_at).toLocaleDateString()}
-                  </span>
-                </div>
+          {/* Description */}
+          {role.description && (
+            <div className="p-3 bg-muted/50 border rounded-lg">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {role.description}
+              </p>
+            </div>
+          )}
+
+          {/* Stats Cards */}
+          <div className="grid grid-cols-3 gap-3">
+            <div className="p-3 bg-card border rounded-lg">
+              <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                <Key className="h-4 w-4" />
+                <span className="text-xs font-medium">Permissions</span>
               </div>
+              <p className="text-2xl font-bold">
+                {role.permissions_count || 0}
+              </p>
             </div>
 
-            <div className="border rounded-lg p-4 space-y-3">
-              <h4 className="font-semibold text-sm text-primary mb-3">
-                Status Information
-              </h4>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <Label className="text-xs text-muted-foreground">
-                    Status
-                  </Label>
-                  <Badge variant={role.isActive ? "default" : "secondary"}>
-                    {role.isActive ? "Active" : "Inactive"}
-                  </Badge>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <Label className="text-xs text-muted-foreground">
-                    Role ID
-                  </Label>
-                  <span className="font-medium">{role.id}</span>
-                </div>
+            <div className="p-3 bg-card border rounded-lg">
+              <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                <Users className="h-4 w-4" />
+                <span className="text-xs font-medium">Assigned Users</span>
               </div>
+              <p className="text-2xl font-bold">{role.users_count || 0}</p>
+            </div>
+
+            <div className="p-3 bg-card border rounded-lg">
+              <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                <Calendar className="h-4 w-4" />
+                <span className="text-xs font-medium">Created</span>
+              </div>
+              <p className="text-sm font-semibold">
+                {new Date(role.created_at).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </p>
             </div>
           </div>
 
           {/* Permissions Section */}
           {role.permissions && role.permissions.length > 0 && (
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-sm text-primary mb-3">
-                Permissions ({role.permissions.length})
-              </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {role.permissions.map((permission) => (
-                  <div
-                    key={permission.id}
-                    className="flex items-start gap-2 p-2 rounded bg-muted/30"
-                  >
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">
-                        {permission.display_name}
-                      </p>
-                      {permission.description && (
-                        <p className="text-xs text-muted-foreground">
-                          {permission.description}
-                        </p>
+            <div className="border rounded-lg overflow-hidden">
+              <div className="flex items-center justify-between px-4 py-3 bg-muted/50 border-b">
+                <h4 className="font-semibold text-sm">Assigned Permissions</h4>
+                <Badge variant="secondary">
+                  {role.permissions.length} Total
+                </Badge>
+              </div>
+
+              <div className="p-4 space-y-4 max-h-[400px] overflow-y-auto">
+                {(() => {
+                  const groupedPermissions = role.permissions.reduce(
+                    (acc, permission) => {
+                      if (!acc[permission.module]) {
+                        acc[permission.module] = [];
+                      }
+                      acc[permission.module].push(permission);
+                      return acc;
+                    },
+                    {} as Record<string, typeof role.permissions>
+                  );
+
+                  return (
+                    <>
+                      {Object.entries(groupedPermissions).map(
+                        ([module, permissions]) => (
+                          <div key={module}>
+                            <div className="flex items-center gap-2 mb-2 px-2 py-1.5 bg-muted/50 rounded">
+                              <h5 className="text-xs font-semibold text-primary uppercase">
+                                {module}
+                              </h5>
+                              <Badge variant="outline" className="text-xs h-5">
+                                {permissions.length}
+                              </Badge>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              {permissions.map((permission) => (
+                                <div
+                                  key={permission.id}
+                                  className="p-2.5 bg-card border rounded hover:border-primary/50 transition-colors"
+                                >
+                                  <p className="text-sm font-medium mb-1">
+                                    {permission.display_name}
+                                  </p>
+                                  {permission.description && (
+                                    <p className="text-xs text-muted-foreground">
+                                      {permission.description}
+                                    </p>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )
                       )}
-                    </div>
-                  </div>
-                ))}
+                    </>
+                  );
+                })()}
               </div>
             </div>
           )}

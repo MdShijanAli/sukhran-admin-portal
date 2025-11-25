@@ -22,6 +22,7 @@ import { Role, useRoleStore } from "@/stores/roleStore";
 import roleService from "@/services/roleService";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
+import constData from "@/lib/constData";
 
 const RoleManagement = () => {
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
@@ -103,6 +104,7 @@ const RoleManagement = () => {
     {
       label: "Edit Role",
       icon: Edit,
+      show: role.name !== constData.roles.SUPER_ADMIN, // Prevent editing super admin role
       onClick: handleEdit,
     },
     {
