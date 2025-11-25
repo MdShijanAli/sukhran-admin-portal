@@ -15,6 +15,7 @@ import { Role } from "@/stores/roleStore";
 import userService from "@/services/userService";
 import roleService from "@/services/roleService";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface UserFormData {
   firstName: string;
@@ -43,6 +44,7 @@ export default function FormModal({
   editData,
   onSuccess,
 }: FormModalProps) {
+  const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [roles, setRoles] = useState<Role[]>([]);
@@ -68,13 +70,13 @@ export default function FormModal({
       !formData.role_id ||
       !formData.mobile
     ) {
-      toast.error("Please fill in all required fields");
+      toast.error(t("users.messages.requiredFields"));
       return;
     }
 
     // Validate password for new users
     if (!isEditing && !formData.password) {
-      toast.error("Password is required for new users");
+      toast.error(t("users.messages.passwordRequired"));
       return;
     }
 
@@ -98,10 +100,10 @@ export default function FormModal({
 
       if (isEditing && editData) {
         await userService.updateItem(editData.id, submitData);
-        toast.success("User updated successfully");
+        toast.success(t("users.messages.userUpdated"));
       } else {
         await userService.storeItem(submitData);
-        toast.success("User created successfully");
+        toast.success(t("users.messages.userCreated"));
       }
 
       onSuccess?.();
@@ -109,7 +111,9 @@ export default function FormModal({
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error(
-        isEditing ? "Failed to update user" : "Failed to create user"
+        isEditing
+          ? t("users.messages.failedToUpdate")
+          : t("users.messages.failedToCreate")
       );
     } finally {
       setIsSubmitting(false);
@@ -131,7 +135,7 @@ export default function FormModal({
         setRoles(activeRoles);
       } catch (error) {
         console.error("Error fetching roles:", error);
-        toast.error("Failed to load roles");
+        toast.error(t("users.messages.failedToLoadRoles"));
       }
     };
 
@@ -170,44 +174,49 @@ export default function FormModal({
         isActive: true,
       });
     }
-  }, [editData, open]);
+  }, [editData, open, t]);
 
   return (
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title={isEditing ? "Edit User" : "Create New Staff User"}
+      title={isEditing ? t("users.modal.edit") : t("users.modal.create")}
       onSubmit={handleSubmit}
       isSubmitting={isSubmitting}
-      submitButtonText={isEditing ? "Update User" : "Create User"}
+      submitButtonText={
+        isEditing ? t("users.modal.updateUser") : t("users.modal.createUser")
+      }
       size="2xl"
+      closeButtonText={t("cancel")}
     >
       <div className="grid gap-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="firstName">First Name *</Label>
+            <Label htmlFor="firstName">{t("users.form.firstName")} *</Label>
             <Input
               id="firstName"
               value={formData.firstName}
               onChange={(e) =>
                 setFormData({ ...formData, firstName: e.target.value })
               }
-              placeholder="Enter first name"
+              placeholder={t("users.form.enterFirstName")}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="lastName">Last Name</Label>
+            <Label htmlFor="lastName">{t("users.form.lastName")}</Label>
             <Input
               id="lastName"
               value={formData.lastName}
               onChange={(e) =>
                 setFormData({ ...formData, lastName: e.target.value })
               }
-              placeholder="Enter last name"
+              placeholder={t("users.form.enterLastName")}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="preferredName">Preferred Name *</Label>
+            <Label htmlFor="preferredName">
+              {t("users.form.preferredName")} *
+            </Label>
             <Select
               value={formData.preferredName}
               onValueChange={(value) =>
@@ -218,13 +227,17 @@ export default function FormModal({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="firstName">First Name</SelectItem>
-                <SelectItem value="lastName">Last Name</SelectItem>
+                <SelectItem value="firstName">
+                  {t("users.form.firstName")}
+                </SelectItem>
+                <SelectItem value="lastName">
+                  {t("users.form.lastName")}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="role">Role *</Label>
+            <Label htmlFor="role">{t("users.columns.role")} *</Label>
             <Select
               value={String(formData.role_id)}
               onValueChange={(value) =>
@@ -232,7 +245,7 @@ export default function FormModal({
               }
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select role" />
+                <SelectValue placeholder={t("users.form.selectRole")} />
               </SelectTrigger>
               <SelectContent>
                 {roles.map((role) => (
@@ -244,7 +257,7 @@ export default function FormModal({
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">Email *</Label>
+            <Label htmlFor="email">{t("users.columns.email")} *</Label>
             <Input
               type="email"
               id="email"
@@ -252,19 +265,19 @@ export default function FormModal({
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
-              placeholder="Enter email address"
+              placeholder={t("users.form.enterEmail")}
               disabled={isEditing}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="mobile">Mobile *</Label>
+            <Label htmlFor="mobile">{t("users.form.mobile")} *</Label>
             <Input
               id="mobile"
               value={formData.mobile}
               onChange={(e) =>
                 setFormData({ ...formData, mobile: e.target.value })
               }
-              placeholder="Enter mobile number (e.g., 01XXXXXXXXX)"
+              placeholder={t("users.form.enterMobile")}
               disabled={isEditing}
             />
           </div>
@@ -272,7 +285,7 @@ export default function FormModal({
 
         {!isEditing && (
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{t("users.form.password")}</Label>
             <Input
               type="password"
               id="password"
@@ -280,7 +293,7 @@ export default function FormModal({
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              placeholder="Enter password"
+              placeholder={t("users.form.enterPassword")}
             />
           </div>
         )}
@@ -298,15 +311,15 @@ export default function FormModal({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="male">Male</SelectItem>
-                <SelectItem value="female">Female</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
+                <SelectItem value="male">{t("users.form.male")}</SelectItem>
+                <SelectItem value="female">{t("users.form.female")}</SelectItem>
+                <SelectItem value="other">{t("users.form.other")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="date_of_birth">Date of Birth</Label>
+            <Label htmlFor="date_of_birth">{t("users.form.dateOfBirth")}</Label>
             <Input
               type="date"
               id="date_of_birth"
@@ -319,7 +332,7 @@ export default function FormModal({
         </div>
 
         <div className="space-y-2">
-          <Label>Account Status</Label>
+          <Label>{t("users.form.accountStatus")}</Label>
           <Select
             value={formData.isActive ? "active" : "inactive"}
             onValueChange={(value) =>
@@ -330,8 +343,12 @@ export default function FormModal({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="inactive">Inactive</SelectItem>
+              <SelectItem value="active">
+                {t("users.columns.active")}
+              </SelectItem>
+              <SelectItem value="inactive">
+                {t("users.columns.inactive")}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -349,7 +366,7 @@ export default function FormModal({
               htmlFor="send_email"
               className="text-sm font-normal cursor-pointer"
             >
-              Send welcome email with login credentials
+              {t("users.form.sendWelcomeEmail")}
             </Label>
           </div>
         )}

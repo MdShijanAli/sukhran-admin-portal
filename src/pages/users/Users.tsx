@@ -30,6 +30,7 @@ import FilterModal from "./modal/FilterModal";
 import { Button } from "@/components/ui/button";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import constData from "@/lib/constData";
+import { useTranslation } from "react-i18next";
 
 const Users = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -52,6 +53,7 @@ const Users = () => {
   });
 
   const store = useUserStore();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -104,12 +106,12 @@ const Users = () => {
   const userFilterConfigs = [
     {
       key: "status",
-      label: "Account Status",
+      label: t("users.filter.account_status"),
       options: [
-        { label: "All Statuses", value: "all" },
-        { label: "Active", value: "active" },
-        { label: "Inactive", value: "inactive" },
-        { label: "Deleted", value: "deleted" },
+        { label: t("users.filter.allStatuses"), value: "all" },
+        { label: t("users.filter.active"), value: "active" },
+        { label: t("users.filter.inactive"), value: "inactive" },
+        { label: t("users.filter.deleted"), value: "deleted" },
       ],
       defaultValue: "active",
     },
@@ -126,7 +128,7 @@ const Users = () => {
     // },
     {
       key: "role",
-      label: "User Role",
+      label: t("users.filter.user_role"),
       options: [
         { label: "All Roles", value: "all" },
         { label: "Admin", value: "admin" },
@@ -221,17 +223,17 @@ const Users = () => {
   // Define actions for dropdown menu
   const userActions = (user: User): ActionItem<User>[] => [
     {
-      label: "View Details",
+      label: t("view"),
       icon: Eye,
       onClick: handleViewDetails,
     },
     {
-      label: "Edit User",
+      label: t("edit"),
       icon: Edit,
       onClick: handleEdit,
     },
     {
-      label: "Delete User",
+      label: t("delete"),
       icon: Trash2,
       onClick: handleDelete,
       show: !user.isDeleted && user.role.name !== constData.roles.ADMIN,
@@ -239,7 +241,7 @@ const Users = () => {
       separator: true,
     },
     {
-      label: "Restore User",
+      label: t("restore"),
       icon: FolderSync,
       onClick: handleRestore,
       show: user.isDeleted,
@@ -268,20 +270,20 @@ const Users = () => {
     },
     {
       key: "name",
-      label: "Name",
+      label: t("users.columns.userName"),
       render: (user) => `${user.firstName} ${user.lastName}`,
     },
     {
       key: "email",
-      label: "Email",
+      label: t("users.columns.email"),
     },
     {
       key: "mobile",
-      label: "Mobile",
+      label: t("users.form.mobile"),
     },
     {
       key: "role",
-      label: "Role",
+      label: t("users.columns.role"),
       render: (user) => (
         <Badge
           variant={
@@ -297,12 +299,12 @@ const Users = () => {
     },
     {
       key: "isActive",
-      label: "Status",
+      label: t("users.columns.status"),
       render: (user) => (
         <>
           {user.isDeleted ? (
             <div className="flex items-center justify-end">
-              <Badge variant="destructive">Deleted</Badge>
+              <Badge variant="destructive">{t("deleted")}</Badge>
             </div>
           ) : (
             <div className="flex items-center justify-end gap-2">
@@ -314,12 +316,16 @@ const Users = () => {
                     disabled={togglingUserId === user.id}
                   />
                   <Badge variant={user.isActive ? "default" : "outline"}>
-                    {user.isActive ? "Active" : "Inactive"}
+                    {user.isActive
+                      ? t("users.columns.active")
+                      : t("users.columns.inactive")}
                   </Badge>
                 </>
               ) : (
                 <Badge variant={user.isActive ? "default" : "outline"}>
-                  {user.isActive ? "Active" : "Inactive"}
+                  {user.isActive
+                    ? t("users.columns.active")
+                    : t("users.columns.inactive")}
                 </Badge>
               )}
             </div>
@@ -330,35 +336,39 @@ const Users = () => {
     },
     {
       key: "actions",
-      label: "Actions",
+      label: t("actions"),
       className: "text-right",
       render: (user) => (
-        <DropdownMenuActions item={user} actions={userActions(user)} />
+        <DropdownMenuActions
+          item={user}
+          actions={userActions(user)}
+          menuLabel={t("actions")}
+        />
       ),
     },
   ];
 
   const summaryLists = [
     {
-      title: "Total Users",
+      title: t("users.summary.totalUsers"),
       value: store.statistics.total_users,
       icon: UsersIcon,
       color: "text-muted-foreground",
     },
     {
-      title: "Active Users",
+      title: t("users.summary.activeUsers"),
       value: store.statistics.active_users,
       icon: UserCheck,
       color: "text-green-600",
     },
     {
-      title: "Inactive Users",
+      title: t("users.summary.inactiveUsers"),
       value: store.statistics.inactive_users,
       icon: UserX,
       color: "text-orange-600",
     },
     {
-      title: "Deleted Users",
+      title: t("users.summary.blockedUsers"),
       value: store.statistics.deleted_users,
       icon: UserMinus,
       color: "text-red-600",
@@ -380,11 +390,11 @@ const Users = () => {
   return (
     <div className="animate-fade-in">
       <BaseTableList<User>
-        title="User Management"
-        description="View and manage all registered users"
+        title={t("users.title")}
+        description={t("users.subtitle")}
         headerActions={[
           {
-            label: "Add Staff",
+            label: t("add"),
             icon: Plus,
             onClick: handleCreate,
             variant: "default",
@@ -393,15 +403,15 @@ const Users = () => {
         toolbarActions={
           <Button variant="outline" onClick={() => setShowFilterModal(true)}>
             <Filter className="mr-2 h-4 w-4" />
-            Filter
+            {t("filter")}
           </Button>
         }
-        searchPlaceholder="Search by name, email, or mobile..."
+        searchPlaceholder={t("users.searchPlaceholder")}
         enableSearch={true}
         columns={columns}
         service={userService}
         store={store}
-        emptyMessage="No users found"
+        emptyMessage={t("users.noUsersFound")}
         getRowKey={(user) => user.id}
         onRefresh={handleSetRefresh}
         summaryLists={summaryLists}
@@ -424,7 +434,7 @@ const Users = () => {
       <DeleteModal
         open={showDelete}
         onClose={setShowDelete}
-        title="Delete User"
+        title={t("users.delete.title")}
         description={`Are you sure you want to delete ${selectedUser?.firstName} ${selectedUser?.lastName}? This action cannot be undone.`}
         onConfirm={handleDeleteUser}
         isDeleting={isDeleting}
@@ -443,11 +453,13 @@ const Users = () => {
       <FilterModal
         open={showFilterModal}
         onClose={() => setShowFilterModal(false)}
-        title="Filter Users"
+        title={t("filter")}
         filters={userFilterConfigs}
         currentFilters={filterData}
         onApplyFilters={handleApplyFilters}
         onClearFilters={handleClearFilters}
+        submitButtonText={t("users.filter.apply")}
+        clearButtonText={t("users.filter.clear")}
       />
     </div>
   );

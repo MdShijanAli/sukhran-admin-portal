@@ -139,5 +139,93 @@
     "price": "মূল্য (৳)",
     "stock": "স্টক",
     "createProduct": "পণ্য তৈরি করুন"
+  },
+  "users": {
+    "title": "ব্যবহারকারী ম্যানেজমেন্ট",
+    "subtitle": "আপনার প্ল্যাটফর্মের ব্যবহারকারী পরিচালনা করুন",
+    "searchPlaceholder": "ব্যবহারকারী অনুসন্ধান করুন...",
+    "noUsersFound": "কোন ব্যবহারকারী পাওয়া যায়নি",
+    "columns": {
+      "userName": "ব্যবহারকারীর নাম",
+      "email": "ইমেল ঠিকানা",
+      "role": "ভূমিকা",
+      "status": "অবস্থা",
+      "active": "সক্রিয়",
+      "inactive": "নিষ্ক্রিয়",
+      "blocked": "অবরুদ্ধ"
+    },
+    "form": {
+      "firstName": "প্রথম নাম",
+      "lastName": "শেষ নাম",
+      "preferredName": "পছন্দের নাম",
+      "mobile": "মোবাইল",
+      "password": "পাসওয়ার্ড",
+      "gender": "লিঙ্গ",
+      "male": "পুরুষ",
+      "female": "মহিলা",
+      "other": "অন্যান্য",
+      "dateOfBirth": "জন্ম তারিখ",
+      "accountStatus": "অ্যাকাউন্ট স্ট্যাটাস",
+      "sendWelcomeEmail": "লগইন তথ্য সহ স্বাগত ইমেল পাঠান",
+      "enterFirstName": "প্রথম নাম লিখুন",
+      "enterLastName": "শেষ নাম লিখুন",
+      "enterEmail": "ইমেল ঠিকানা লিখুন",
+      "enterMobile": "মোবাইল নম্বর লিখুন (যেমন, 01XXXXXXXXX)",
+      "enterPassword": "পাসওয়ার্ড লিখুন",
+      "selectRole": "ভূমিকা নির্বাচন করুন"
+    },
+    "modal": {
+      "add": "ব্যবহারকারী যোগ করুন",
+      "edit": "ব্যবহারকারী সম্পাদনা করুন",
+      "create": "নতুন স্টাফ ব্যবহারকারী তৈরি করুন",
+      "view": "ব্যবহারকারীর বিবরণ",
+      "createUser": "ব্যবহারকারী তৈরি করুন",
+      "updateUser": "ব্যবহারকারী আপডেট করুন",
+      "close": "বন্ধ করুন"
+    },
+    "filter": {
+      "apply": "ফিল্টার প্রয়োগ করুন",
+      "clear": "ফিল্টার সাফ করুন",
+      "byStatus": "স্ট্যাটাস দ্বারা ফিল্টার করুন",
+      "byRole": "ভূমিকা দ্বারা ফিল্টার করুন",
+      "byGender": "লিঙ্গ দ্বারা ফিল্টার করুন",
+      "allStatuses": "সকল স্ট্যাটাস",
+      "allRoles": "সকল ভূমিকা",
+      "allGenders": "সকল লিঙ্গ"
+    },
+    "view": {
+      "personalInformation": "ব্যক্তিগত তথ্য",
+      "accountDetails": "অ্যাকাউন্ট বিবরণ",
+      "security": "নিরাপত্তা",
+      "timeline": "টাইমলাইন",
+      "addresses": "ঠিকানা",
+      "preferred": "পছন্দের",
+      "emailVerified": "ইমেল",
+      "mobileVerified": "মোবাইল",
+      "referralCode": "রেফারেল কোড",
+      "referredBy": "রেফার করেছে",
+      "businessId": "ব্যবসার আইডি",
+      "storeId": "স্টোর আইডি",
+      "failedAttempts": "ব্যর্থ প্রচেষ্টা",
+      "created": "তৈরি হয়েছে",
+      "lastUpdated": "শেষ আপডেট",
+      "address": "ঠিকানা",
+      "house": "বাড়ি",
+      "road": "রাস্তা",
+      "block": "ব্লক",
+      "zip": "জিপ",
+      "label": "লেবেল",
+      "landmark": "ল্যান্ডমার্ক",
+      "default": "ডিফল্ট"
+    },
+    "messages": {
+      "requiredFields": "সকল প্রয়োজনীয় ক্ষেত্র পূরণ করুন",
+      "passwordRequired": "নতুন ব্যবহারকারীর জন্য পাসওয়ার্ড প্রয়োজন",
+      "userCreated": "ব্যবহারকারী সফলভাবে তৈরি হয়েছে",
+      "userUpdated": "ব্যবহারকারী সফলভাবে আপডেট হয়েছে",
+      "failedToCreate": "ব্যবহারকারী তৈরি করতে ব্যর্থ",
+      "failedToUpdate": "ব্যবহারকারী আপডেট করতে ব্যর্থ",
+      "failedToLoadRoles": "ভূমিকা লোড করতে ব্যর্থ"
+    }
   }
 }

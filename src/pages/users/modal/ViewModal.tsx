@@ -6,6 +6,7 @@ import userService from "@/services/userService";
 import { Loader2 } from "lucide-react";
 import noImage from "@/assets/images/avatar-ractangle.jpg";
 import { formatDDMMYYY } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 interface ViewModalProps {
   open: boolean;
@@ -14,6 +15,7 @@ interface ViewModalProps {
 }
 
 export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
+  const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -43,9 +45,9 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title="User Details"
+      title={t("users.modal.view")}
       showSubmitButton={false}
-      closeButtonText="Close"
+      closeButtonText={t("users.modal.close")}
       size="2xl"
     >
       {isLoading ? (
@@ -67,7 +69,7 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
               </h3>
               {user.preferredName && (
                 <p className="text-sm text-muted-foreground mb-2">
-                  Preferred: {user.preferredName}
+                  {t("users.view.preferred")}: {user.preferredName}
                 </p>
               )}
               <div className="flex flex-wrap gap-1.5">
@@ -78,18 +80,24 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
                   variant={user.isActive ? "default" : "secondary"}
                   className="text-xs"
                 >
-                  {user.isActive ? "Active" : "Inactive"}
+                  {user.isActive
+                    ? t("users.columns.active")
+                    : t("users.columns.inactive")}
                 </Badge>
                 {user.isBlocked && (
                   <Badge variant="destructive" className="text-xs">
-                    Blocked
+                    {t("users.columns.blocked")}
                   </Badge>
                 )}
                 {user.email_verified_at && (
-                  <Badge className="bg-green-600 text-xs">Email ✓</Badge>
+                  <Badge className="bg-green-600 text-xs">
+                    {t("users.view.emailVerified")} ✓
+                  </Badge>
                 )}
                 {user.mobile_verified_at && (
-                  <Badge className="bg-blue-600 text-xs">Mobile ✓</Badge>
+                  <Badge className="bg-blue-600 text-xs">
+                    {t("users.view.mobileVerified")} ✓
+                  </Badge>
                 )}
               </div>
             </div>
@@ -100,30 +108,36 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
             {/* Personal Information */}
             <div className="border rounded-lg p-4 space-y-3">
               <h4 className="font-semibold text-sm text-primary mb-3">
-                Personal Information
+                {t("users.view.personalInformation")}
               </h4>
               <div className="space-y-2">
                 <div className="flex justify-between items-start">
-                  <span className="text-xs text-muted-foreground">Email:</span>
+                  <span className="text-xs text-muted-foreground">
+                    {t("users.columns.email")}:
+                  </span>
                   <span className="text-sm font-medium text-right">
                     {user.email}
                   </span>
                 </div>
                 <div className="flex justify-between items-start">
-                  <span className="text-xs text-muted-foreground">Mobile:</span>
+                  <span className="text-xs text-muted-foreground">
+                    {t("users.form.mobile")}:
+                  </span>
                   <span className="text-sm font-medium text-right">
                     {user.mobile}
                   </span>
                 </div>
                 <div className="flex justify-between items-start">
-                  <span className="text-xs text-muted-foreground">Gender:</span>
+                  <span className="text-xs text-muted-foreground">
+                    {t("users.form.gender")}:
+                  </span>
                   <span className="text-sm font-medium capitalize">
                     {user.gender || "N/A"}
                   </span>
                 </div>
                 <div className="flex justify-between items-start">
                   <span className="text-xs text-muted-foreground">
-                    Date of Birth:
+                    {t("users.form.dateOfBirth")}:
                   </span>
                   <span className="text-sm font-medium">
                     {formatDDMMYYY(user.date_of_birth) || "N/A"}
@@ -134,12 +148,12 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
             {/* Account Details */}
             <div className="border rounded-lg p-4 space-y-3">
               <h4 className="font-semibold text-sm text-primary mb-3">
-                Account Details
+                {t("users.view.accountDetails")}
               </h4>
               <div className="space-y-2">
                 <div className="flex justify-between items-start">
                   <span className="text-xs text-muted-foreground">
-                    Referral Code:
+                    {t("users.view.referralCode")}:
                   </span>
                   <span className="text-sm font-medium">
                     {user.referral_code || "N/A"}
@@ -147,7 +161,7 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
                 </div>
                 <div className="flex justify-between items-start">
                   <span className="text-xs text-muted-foreground">
-                    Referred By:
+                    {t("users.view.referredBy")}:
                   </span>
                   <span className="text-sm font-medium">
                     {user.referred_by || "N/A"}
@@ -155,7 +169,7 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
                 </div>
                 <div className="flex justify-between items-start">
                   <span className="text-xs text-muted-foreground">
-                    Business ID:
+                    {t("users.view.businessId")}:
                   </span>
                   <span className="text-sm font-medium">
                     {user.businessId || "N/A"}
@@ -163,7 +177,7 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
                 </div>
                 <div className="flex justify-between items-start">
                   <span className="text-xs text-muted-foreground">
-                    Store ID:
+                    {t("users.view.storeId")}:
                   </span>
                   <span className="text-sm font-medium">
                     {user.storeId || "N/A"}
@@ -175,19 +189,21 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
             {/* Security Information */}
             <div className="border rounded-lg p-4 space-y-3">
               <h4 className="font-semibold text-sm text-primary mb-3">
-                Security
+                {t("users.view.security")}
               </h4>
               <div className="space-y-2">
                 <div className="flex justify-between items-start">
                   <span className="text-xs text-muted-foreground">
-                    Failed Attempts:
+                    {t("users.view.failedAttempts")}:
                   </span>
                   <span className="text-sm font-medium">
                     {user.attemptWrongPassword}
                   </span>
                 </div>
                 <div className="flex justify-between items-start">
-                  <span className="text-xs text-muted-foreground">Status:</span>
+                  <span className="text-xs text-muted-foreground">
+                    {t("users.columns.status")}:
+                  </span>
                   <div className="flex gap-1">
                     {user.isBlocked && (
                       <Badge variant="destructive" className="text-xs">
@@ -247,7 +263,7 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
           {user.addresses && user.addresses.length > 0 && (
             <div className="border rounded-lg p-4">
               <h4 className="font-semibold text-sm text-primary mb-3">
-                Addresses ({user.addresses.length})
+                {t("users.view.addresses")} ({user.addresses.length})
               </h4>
               <div className="space-y-2">
                 {user.addresses.map((address, index) => (

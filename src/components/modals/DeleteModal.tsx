@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import { BaseModal } from "./BaseModal";
+import { useTranslation } from "react-i18next";
 
 export interface DeleteModalProps {
   open: boolean;
@@ -18,6 +19,7 @@ export default function DeleteModal({
   onConfirm,
   isDeleting = false,
 }: DeleteModalProps) {
+  const { t } = useTranslation();
   return (
     <BaseModal
       open={open}
@@ -25,9 +27,9 @@ export default function DeleteModal({
       title={title}
       onSubmit={onConfirm}
       isSubmitting={isDeleting}
-      submitButtonText="Delete"
+      submitButtonText={t("delete")}
       submitButtonVariant="destructive"
-      closeButtonText="Cancel"
+      closeButtonText={t("cancel")}
       size="md"
     >
       <p className="text-sm text-muted-foreground">{description}</p>

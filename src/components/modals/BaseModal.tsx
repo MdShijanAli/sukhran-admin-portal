@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export interface BaseModalProps {
   // Modal State
@@ -83,6 +84,7 @@ export function BaseModal({
   className,
   loading,
 }: BaseModalProps) {
+  const { t } = useTranslation();
   const handleClose = () => {
     if (onClose) {
       onClose();
