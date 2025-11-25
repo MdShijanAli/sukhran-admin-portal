@@ -53,6 +53,7 @@ export interface StoreWithData<T> {
   orders?: T[];
   products?: T[];
   users?: T[];
+  roles?: T[];
   coverageAreas?: T[];
   isLoading?: boolean;
   error?: string | null;
@@ -153,6 +154,7 @@ export function BaseTableList<T>({
     store.products ||
     store.users ||
     store.coverageAreas ||
+    store.roles ||
     []) as T[];
   const isLoading = store.isLoading || false;
   const pagination = store.pagination;
@@ -281,7 +283,7 @@ export function BaseTableList<T>({
   return (
     <div className="space-y-3">
       {summaryLists.length > 0 && (
-        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
           {summaryLists.map((stat) => (
             <Card key={stat.title}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

@@ -85,4 +85,19 @@ export const apiRoutes = {
     update: (id: number | string) => createApiUrl(`admin/packages/${id}`),
     delete: (id: number | string) => createApiUrl(`admin/packages/${id}`),
   },
+
+  roles: {
+    getAll: createApiUrl("admin/roles"),
+    getById: (id: number | string) => createApiUrl(`admin/roles/${id}`),
+    create: createApiUrl("admin/roles"),
+    update: (id: number | string) => createApiUrl(`admin/roles/${id}`),
+    delete: (id: number | string) => createApiUrl(`admin/roles/${id}`),
+    toggleRoleStatus: (id: number | string) =>
+      createApiUrl(`admin/roles/${id}/toggle-status`),
+  },
+
+  permissions: {
+    getAll: createApiUrl("admin/permissions"),
+    getById: (id: number | string) => createApiUrl(`admin/permissions/${id}`),
+  },
 };
