@@ -183,7 +183,7 @@ const Products = () => {
           >
             {Array.from({ length: 12 }).map((_, index) => (
               <Card key={index} className="overflow-hidden animate-pulse">
-                <div className="aspect-square bg-muted" />
+                <div className="aspect-video bg-muted" />
                 <CardContent className="p-3 space-y-2">
                   <div className="h-4 bg-muted rounded" />
                   <div className="h-3 bg-muted rounded w-2/3" />
@@ -229,7 +229,7 @@ const Products = () => {
                 >
                   <CardContent className="p-0">
                     {/* Product Image */}
-                    <div className="relative aspect-square overflow-hidden bg-muted">
+                    <div className="relative aspect-video overflow-hidden bg-muted">
                       <img
                         src={
                           firstSku?.image_url ||

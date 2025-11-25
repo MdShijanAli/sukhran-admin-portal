@@ -182,7 +182,7 @@ export default function Packages() {
           >
             {Array.from({ length: 8 }).map((_, index) => (
               <Card key={index} className="overflow-hidden animate-pulse">
-                <div className="aspect-square bg-muted" />
+                <div className="aspect-video bg-muted" />
                 <CardContent className="p-4 space-y-3">
                   <div className="h-6 bg-muted rounded" />
                   <div className="h-4 bg-muted rounded w-3/4" />
@@ -217,7 +217,6 @@ export default function Packages() {
             }`}
           >
             {packages.map((pkg) => {
-              const totalItems = pkg.items?.length || 0;
               const pricing = pkg.pricing || {
                 originalPrice: 0,
                 fixedPrice: pkg.fixedPrice || 0,
