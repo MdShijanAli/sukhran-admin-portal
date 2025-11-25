@@ -285,7 +285,9 @@ const Users = () => {
       render: (user) => (
         <Badge
           variant={
-            user.role.name === constData.roles.CUSTOMER ? "primary" : "outline"
+            user?.role?.name === constData.roles.CUSTOMER
+              ? "primary"
+              : "outline"
           }
         >
           {user.role.display_name}
