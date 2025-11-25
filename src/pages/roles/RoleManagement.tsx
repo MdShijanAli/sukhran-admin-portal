@@ -99,19 +99,22 @@ const RoleManagement = () => {
     {
       label: "View Details",
       icon: Eye,
+      show: role.name !== constData.roles.CUSTOMER,
       onClick: handleViewDetails,
     },
     {
       label: "Edit Role",
       icon: Edit,
-      show: role.name !== constData.roles.SUPER_ADMIN, // Prevent editing super admin role
+      show:
+        role.name !== constData.roles.SUPER_ADMIN &&
+        role.name !== constData.roles.CUSTOMER, // Prevent editing super admin and admin roles
       onClick: handleEdit,
     },
     {
       label: "Delete Role",
       icon: Trash2,
       onClick: handleDelete,
-      show: role.users_count === 0, // Only show delete if no users assigned
+      show: role.users_count === 0 && role.name !== constData.roles.CUSTOMER, // Only show delete if no users assigned
       variant: "destructive",
       separator: true,
     },
@@ -169,11 +172,6 @@ const RoleManagement = () => {
       label: "Status",
       render: (role) => (
         <div className="flex items-center justify-center gap-2">
-          <Switch
-            checked={role.isActive}
-            onCheckedChange={() => handleStatusToggle(role)}
-            disabled={togglingRoleId === role.id}
-          />
           <Badge variant={role.isActive ? "default" : "secondary"}>
             {role.isActive ? "Active" : "Inactive"}
           </Badge>
