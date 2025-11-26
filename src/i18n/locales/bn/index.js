@@ -4,6 +4,7 @@ import products from "./products/index.json";
 import categories from "./categories/index.json";
 import packages from "./packages/index.json";
 import coverage_area from "./coverage_area/index.json";
+import roles from "./roles/index.json";
 
 /**
  * follow the file structure.
@@ -18,6 +19,7 @@ const combined = {
   categories,
   packages,
   coverage_area,
+  roles,
 };
 
 export default combined;

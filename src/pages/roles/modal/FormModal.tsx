@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { BaseModal } from "@/components/modals";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -37,6 +38,7 @@ export default function FormModal({
   editData,
   onSuccess,
 }: FormModalProps) {
+  const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [permissionModules, setPermissionModules] = useState<
@@ -62,7 +64,7 @@ export default function FormModal({
         setPermissionModules(permissionsData);
       } catch (error) {
         console.error("Error fetching permissions:", error);
-        toast.error("Failed to load permissions");
+        toast.error(t("roles.messages.failedToLoadPermissions"));
       } finally {
         setIsLoadingPermissions(false);
       }
@@ -76,7 +78,7 @@ export default function FormModal({
   const handleSubmit = async () => {
     // Validate required fields
     if (!formData.name || !formData.display_name) {
-      toast.error("Please fill in all required fields");
+      toast.error(t("roles.messages.fillRequiredFields"));
       return;
     }
 
@@ -92,10 +94,10 @@ export default function FormModal({
 
       if (isEditing && editData) {
         await roleService.updateItem(editData.id, submitData);
-        toast.success("Role updated successfully");
+        toast.success(t("roles.messages.roleUpdated"));
       } else {
         await roleService.storeItem(submitData);
-        toast.success("Role created successfully");
+        toast.success(t("roles.messages.roleCreated"));
       }
 
       onSuccess?.();
@@ -103,7 +105,9 @@ export default function FormModal({
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error(
-        isEditing ? "Failed to update role" : "Failed to create role"
+        isEditing
+          ? t("roles.messages.failedToUpdate")
+          : t("roles.messages.failedToCreate")
       );
     } finally {
       setIsSubmitting(false);
@@ -194,10 +198,14 @@ export default function FormModal({
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title={isEditing ? "Edit Role" : "Create New Role"}
+      title={
+        isEditing ? t("roles.form.editRole") : t("roles.form.createNewRole")
+      }
       onSubmit={handleSubmit}
       isSubmitting={isSubmitting}
-      submitButtonText={isEditing ? "Update Role" : "Create Role"}
+      submitButtonText={
+        isEditing ? t("roles.form.updateRole") : t("roles.form.createRole")
+      }
       size="2xl"
       loading={isLoadingPermissions}
     >
@@ -205,7 +213,7 @@ export default function FormModal({
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="name">
-              Role Name <span className="text-red-500">*</span>
+              {t("roles.form.roleName")} <span className="text-red-500">*</span>
             </Label>
             <Input
               id="name"
@@ -213,16 +221,17 @@ export default function FormModal({
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-              placeholder="e.g., store_manager"
+              placeholder={t("roles.form.roleNamePlaceholder")}
               disabled={isEditing}
             />
             <p className="text-xs text-muted-foreground">
-              Use lowercase with underscores (e.g., store_manager)
+              {t("roles.form.roleNameHint")}
             </p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="display_name">
-              Display Name <span className="text-red-500">*</span>
+              {t("roles.form.displayName")}{" "}
+              <span className="text-red-500">*</span>
             </Label>
             <Input
               id="display_name"
@@ -230,27 +239,27 @@ export default function FormModal({
               onChange={(e) =>
                 setFormData({ ...formData, display_name: e.target.value })
               }
-              placeholder="e.g., Store Manager"
+              placeholder={t("roles.form.displayNamePlaceholder")}
             />
           </div>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
+          <Label htmlFor="description">{t("roles.form.description")}</Label>
           <Textarea
             id="description"
             value={formData.description}
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
             }
-            placeholder="Brief description of the role"
+            placeholder={t("roles.form.descriptionPlaceholder")}
             rows={3}
           />
         </div>
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label>Status</Label>
+            <Label>{t("roles.form.status")}</Label>
             <div className="flex items-center gap-2">
               <Switch
                 checked={formData.isActive}
@@ -259,7 +268,9 @@ export default function FormModal({
                 }
               />
               <Badge variant={formData.isActive ? "default" : "secondary"}>
-                {formData.isActive ? "Active" : "Inactive"}
+                {formData.isActive
+                  ? t("roles.status.active")
+                  : t("roles.status.inactive")}
               </Badge>
             </div>
           </div>
@@ -268,10 +279,10 @@ export default function FormModal({
         <div className="space-y-3 border-t pt-4">
           <div className="flex items-center justify-between">
             <Label className="text-base">
-              Permissions{" "}
+              {t("roles.form.permissions")}{" "}
               <span className="text-sm text-muted-foreground">
                 ({formData.permission_ids.length} / {getTotalPermissions()}{" "}
-                selected)
+                {t("roles.form.selected")})
               </span>
             </Label>
             <button
@@ -280,15 +291,15 @@ export default function FormModal({
               className="text-sm text-primary hover:underline"
             >
               {formData.permission_ids.length === getTotalPermissions()
-                ? "Deselect All"
-                : "Select All"}
+                ? t("roles.form.deselectAll")
+                : t("roles.form.selectAll")}
             </button>
           </div>
 
           <div className="max-h-[400px] overflow-y-auto border rounded-lg">
             {permissionModules.length === 0 && !isLoadingPermissions && (
               <p className="text-sm text-muted-foreground text-center py-8">
-                No permissions available
+                {t("roles.form.noPermissionsAvailable")}
               </p>
             )}
             <Accordion type="multiple" className="w-full">

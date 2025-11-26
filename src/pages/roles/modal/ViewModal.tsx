@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { BaseModal } from "@/components/modals";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,7 @@ interface ViewModalProps {
 }
 
 export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
+  const { t } = useTranslation();
   const [role, setRole] = useState<Role | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -42,9 +44,9 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title="Role Details"
+      title={t("roles.view.roleDetails")}
       showSubmitButton={false}
-      closeButtonText="Close"
+      closeButtonText={t("close")}
       size="xl"
     >
       {isLoading ? (
@@ -65,7 +67,9 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
               </div>
             </div>
             <Badge variant={role.isActive ? "default" : "secondary"}>
-              {role.isActive ? "Active" : "Inactive"}
+              {role.isActive
+                ? t("roles.status.active")
+                : t("roles.status.inactive")}
             </Badge>
           </div>
 
@@ -83,7 +87,9 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
             <div className="p-3 bg-card border rounded-lg">
               <div className="flex items-center gap-2 text-muted-foreground mb-2">
                 <Key className="h-4 w-4" />
-                <span className="text-xs font-medium">Permissions</span>
+                <span className="text-xs font-medium">
+                  {t("roles.view.permissions")}
+                </span>
               </div>
               <p className="text-2xl font-bold">
                 {role.permissions_count || 0}
@@ -93,7 +99,9 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
             <div className="p-3 bg-card border rounded-lg">
               <div className="flex items-center gap-2 text-muted-foreground mb-2">
                 <Users className="h-4 w-4" />
-                <span className="text-xs font-medium">Assigned Users</span>
+                <span className="text-xs font-medium">
+                  {t("roles.view.assignedUsers")}
+                </span>
               </div>
               <p className="text-2xl font-bold">{role.users_count || 0}</p>
             </div>
@@ -101,7 +109,9 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
             <div className="p-3 bg-card border rounded-lg">
               <div className="flex items-center gap-2 text-muted-foreground mb-2">
                 <Calendar className="h-4 w-4" />
-                <span className="text-xs font-medium">Created</span>
+                <span className="text-xs font-medium">
+                  {t("roles.view.created")}
+                </span>
               </div>
               <p className="text-sm font-semibold">
                 {new Date(role.created_at).toLocaleDateString("en-US", {
@@ -117,9 +127,11 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
           {role.permissions && role.permissions.length > 0 && (
             <div className="border rounded-lg overflow-hidden">
               <div className="flex items-center justify-between px-4 py-3 bg-muted/50 border-b">
-                <h4 className="font-semibold text-sm">Assigned Permissions</h4>
+                <h4 className="font-semibold text-sm">
+                  {t("roles.view.assignedPermissions")}
+                </h4>
                 <Badge variant="secondary">
-                  {role.permissions.length} Total
+                  {role.permissions.length} {t("roles.view.total")}
                 </Badge>
               </div>
 
