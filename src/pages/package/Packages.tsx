@@ -53,7 +53,7 @@ export default function Packages() {
         await packageService.fetchLists(params.toString());
       } catch (error) {
         console.error("Failed to fetch packages:", error);
-        toast.error("Failed to load packages");
+        toast.error(t("packages.messages.failedToLoad"));
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     },
@@ -104,12 +104,12 @@ export default function Packages() {
     setIsDeleting(true);
     try {
       await packageService.deleteItem(selectedPackage.id);
-      toast.success("Package deleted successfully");
+      toast.success(t("packages.messages.packageDeleted"));
       await fetchPackages(currentPage);
       setShowDelete(false);
     } catch (error) {
       console.error("Error deleting package:", error);
-      toast.error("Failed to delete package");
+      toast.error(t("packages.messages.failedToDelete"));
     } finally {
       setIsDeleting(false);
     }
@@ -125,7 +125,7 @@ export default function Packages() {
               {t("packages.title")}
             </h1>
             <p className="text-muted-foreground mt-1">
-              Manage subscription packages and bundles
+              {t("packages.subtitle")}
             </p>
           </div>
           <div className="flex gap-3 sm:flex-row sm:items-center">
@@ -133,7 +133,7 @@ export default function Packages() {
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
-                  placeholder="Search packages..."
+                  placeholder={t("packages.searchPlaceholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-9 pr-9"
@@ -164,7 +164,7 @@ export default function Packages() {
               onClick={() => navigate("/packages/create")}
             >
               <Plus className="h-4 w-4" />
-              Add Package
+              {t("packages.addPackage")}
             </Button>
           </div>
         </CardContent>
@@ -195,16 +195,18 @@ export default function Packages() {
           <Card className="p-12">
             <div className="text-center">
               <PackageIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-4 text-lg font-semibold">No packages found</h3>
+              <h3 className="mt-4 text-lg font-semibold">
+                {t("packages.noPackagesFound")}
+              </h3>
               <p className="text-sm text-muted-foreground mt-2">
-                Get started by creating your first package
+                {t("packages.getStarted")}
               </p>
               <Button
                 className="mt-4"
                 onClick={() => navigate("/packages/create")}
               >
                 <Plus className="h-4 w-4 mr-2" />
-                Create Package
+                {t("packages.createPackage")}
               </Button>
             </div>
           </Card>
@@ -249,11 +251,13 @@ export default function Packages() {
                         variant={pkg.isActive ? "default" : "secondary"}
                         className="text-[10px] px-1.5 py-0"
                       >
-                        {pkg.isActive ? "Active" : "Inactive"}
+                        {pkg.isActive
+                          ? t("packages.status.active")
+                          : t("packages.status.inactive")}
                       </Badge>
                       {pkg.isFeatured && (
                         <Badge className="text-[10px] px-1.5 py-0">
-                          Featured
+                          {t("packages.status.featured")}
                         </Badge>
                       )}
                     </div>
@@ -373,8 +377,10 @@ export default function Packages() {
       <DeleteModal
         open={showDelete}
         onClose={() => setShowDelete(false)}
-        title="Delete Package"
-        description={`Are you sure you want to delete "${selectedPackage?.name}"? This action cannot be undone.`}
+        title={t("packages.delete.title")}
+        description={`${t("deleteConfirm")} "${selectedPackage?.name}"? ${t(
+          "deleteAftermath"
+        )}`}
         onConfirm={confirmDelete}
         isDeleting={isDeleting}
       />

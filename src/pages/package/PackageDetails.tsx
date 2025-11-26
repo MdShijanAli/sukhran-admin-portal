@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +18,7 @@ import { Package } from "@/lib/types";
 import ShareButton from "@/components/custom/ShareButton";
 
 export default function PackageDetails() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
   const [packageData, setPackageData] = useState<Package | null>(null);
@@ -36,7 +38,7 @@ export default function PackageDetails() {
       setPackageData(data);
     } catch (error) {
       console.error("Error fetching package details:", error);
-      toast.error("Failed to load package details");
+      toast.error(t("packages.messages.failedToLoadDetails"));
     } finally {
       setIsLoading(false);
     }
@@ -48,7 +50,7 @@ export default function PackageDetails() {
         <div className="flex flex-col items-center justify-center">
           <Loader2 className="h-12 w-12 animate-spin text-primary" />
           <p className="mt-4 text-muted-foreground">
-            Loading package details...
+            {t("packages.loadingPackageDetails")}
           </p>
         </div>
       </Card>
@@ -60,13 +62,15 @@ export default function PackageDetails() {
       <Card className="p-12">
         <div className="text-center">
           <PackageIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-          <h3 className="mt-4 text-lg font-semibold">Package not found</h3>
+          <h3 className="mt-4 text-lg font-semibold">
+            {t("packages.packageNotFound")}
+          </h3>
           <p className="text-sm text-muted-foreground mt-2">
-            The package you're looking for doesn't exist
+            {t("packages.packageNotFoundDesc")}
           </p>
           <Button className="mt-4" onClick={() => navigate("/packages")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Packages
+            {t("packages.backToPackages")}
           </Button>
         </div>
       </Card>
@@ -109,20 +113,24 @@ export default function PackageDetails() {
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold tracking-tight">Package Details</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            {t("packages.view.packageDetails")}
+          </h1>
           <p className="text-muted-foreground mt-1">
-            View complete package information
+            {t("packages.view.viewCompleteInfo")}
           </p>
         </div>
         <div className="flex gap-2">
           <ShareButton
-            title={`Check out ${packageData.name}`}
-            description={packageData.description || "Amazing package deal!"}
+            title={`${t("packages.view.checkOut")} ${packageData.name}`}
+            description={
+              packageData.description || t("packages.view.amazingPackageDeal")
+            }
             price={finalPrice}
           />
           <Button onClick={() => navigate(`/packages/edit/${packageData.id}`)}>
             <Edit className="h-4 w-4 mr-2" />
-            Edit Package
+            {t("packages.view.editPackage")}
           </Button>
         </div>
       </div>
@@ -137,11 +145,14 @@ export default function PackageDetails() {
                 <div className="flex-1">
                   <CardTitle className="text-2xl">{packageData.name}</CardTitle>
                   <p className="text-muted-foreground mt-2">
-                    {packageData.description || "No description provided"}
+                    {packageData.description ||
+                      t("packages.view.noDescription")}
                   </p>
                 </div>
                 <Badge variant={packageData.isActive ? "default" : "secondary"}>
-                  {packageData.isActive ? "Active" : "Inactive"}
+                  {packageData.isActive
+                    ? t("packages.status.active")
+                    : t("packages.status.inactive")}
                 </Badge>
               </div>
             </CardHeader>
@@ -160,23 +171,31 @@ export default function PackageDetails() {
               {/* Stats Grid */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                 <div className="rounded-lg border bg-card p-3">
-                  <p className="text-xs text-muted-foreground">Type</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t("packages.view.type")}
+                  </p>
                   <p className="text-lg font-semibold capitalize">
-                    {packageData.packageType}
+                    {t(`packages.type.${packageData.packageType}`)}
                   </p>
                 </div>
                 <div className="rounded-lg border bg-card p-3">
-                  <p className="text-xs text-muted-foreground">Display Order</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t("packages.view.displayOrder")}
+                  </p>
                   <p className="text-lg font-semibold">
                     {packageData.displayOrder}
                   </p>
                 </div>
                 <div className="rounded-lg border bg-card p-3">
-                  <p className="text-xs text-muted-foreground">Items</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t("packages.view.items")}
+                  </p>
                   <p className="text-lg font-semibold">{totalItems}</p>
                 </div>
                 <div className="rounded-lg border bg-card p-3">
-                  <p className="text-xs text-muted-foreground">Discount</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t("packages.view.discount")}
+                  </p>
                   <p className="text-lg font-semibold text-green-600">
                     {discountPercent}%
                   </p>
@@ -188,7 +207,9 @@ export default function PackageDetails() {
           {/* Package Items */}
           <Card>
             <CardHeader>
-              <CardTitle>Package Items ({totalItems})</CardTitle>
+              <CardTitle>
+                {t("packages.view.packageItems")} ({totalItems})
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {packageData.items && packageData.items.length > 0 ? (
@@ -221,14 +242,16 @@ export default function PackageDetails() {
                         </p>
                         <div className="flex items-center gap-4 mt-2 text-sm">
                           <div className="flex items-center gap-2">
-                            <span className="text-muted-foreground">Unit:</span>
+                            <span className="text-muted-foreground">
+                              {t("packages.view.unit")}
+                            </span>
                             <Badge variant="outline">
                               {item.sku.unitSize} {item.sku.unitName}
                             </Badge>
                           </div>
                           <div className="flex items-center gap-2">
                             <span className="text-muted-foreground">
-                              Quantity:
+                              {t("packages.view.quantity")}
                             </span>
                             <Badge variant="secondary">{item.quantity}</Badge>
                           </div>
@@ -251,7 +274,7 @@ export default function PackageDetails() {
                 <div className="text-center py-8">
                   <PackageIcon className="mx-auto h-12 w-12 text-muted-foreground" />
                   <p className="text-sm text-muted-foreground mt-2">
-                    No items in this package
+                    {t("packages.view.noItemsInPackage")}
                   </p>
                 </div>
               )}
@@ -261,7 +284,7 @@ export default function PackageDetails() {
           {/* Timestamps */}
           <Card>
             <CardHeader>
-              <CardTitle>Package Information</CardTitle>
+              <CardTitle>{t("packages.view.packageInformation")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
@@ -269,7 +292,9 @@ export default function PackageDetails() {
                   <div className="rounded-lg border bg-card p-3">
                     <div className="flex items-center gap-2 text-muted-foreground mb-1">
                       <Calendar className="h-4 w-4" />
-                      <span className="text-xs font-medium">Created</span>
+                      <span className="text-xs font-medium">
+                        {t("packages.view.created")}
+                      </span>
                     </div>
                     <p className="text-sm font-semibold">
                       {new Date(packageData.created_at).toLocaleDateString(
@@ -296,7 +321,9 @@ export default function PackageDetails() {
                   <div className="rounded-lg border bg-card p-3">
                     <div className="flex items-center gap-2 text-muted-foreground mb-1">
                       <Calendar className="h-4 w-4" />
-                      <span className="text-xs font-medium">Last Updated</span>
+                      <span className="text-xs font-medium">
+                        {t("packages.view.lastUpdated")}
+                      </span>
                     </div>
                     <p className="text-sm font-semibold">
                       {new Date(packageData.updated_at).toLocaleDateString(
@@ -329,13 +356,13 @@ export default function PackageDetails() {
           {/* Pricing Summary */}
           <Card>
             <CardHeader>
-              <CardTitle>Pricing Summary</CardTitle>
+              <CardTitle>{t("packages.view.pricingSummary")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">
-                    Total Items Value:
+                    {t("packages.view.totalItemsValue")}
                   </span>
                   <span className="font-medium">
                     ৳{totalItemsPrice.toFixed(2)}
@@ -343,7 +370,9 @@ export default function PackageDetails() {
                 </div>
                 {fixedPrice > 0 && fixedPrice !== totalItemsPrice && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Fixed Price:</span>
+                    <span className="text-muted-foreground">
+                      {t("packages.view.fixedPrice")}
+                    </span>
                     <span className="font-medium text-primary">
                       ৳{fixedPrice.toFixed(2)}
                     </span>
@@ -351,7 +380,9 @@ export default function PackageDetails() {
                 )}
                 {discountPercent > 0 && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Discount:</span>
+                    <span className="text-muted-foreground">
+                      {t("packages.view.discountLabel")}
+                    </span>
                     <span className="font-medium text-orange-600">
                       {discountPercent}%
                     </span>
@@ -359,7 +390,9 @@ export default function PackageDetails() {
                 )}
                 {savings > 0 && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">You Save:</span>
+                    <span className="text-muted-foreground">
+                      {t("packages.view.youSave")}
+                    </span>
                     <span className="font-medium text-green-600">
                       ৳{savings.toFixed(2)}
                     </span>
@@ -368,7 +401,7 @@ export default function PackageDetails() {
                 {calculatedDiscountPercent > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">
-                      Effective Discount:
+                      {t("packages.view.effectiveDiscount")}
                     </span>
                     <span className="font-medium text-green-600">
                       {calculatedDiscountPercent.toFixed(2)}%
@@ -380,7 +413,9 @@ export default function PackageDetails() {
               <Separator />
 
               <div className="flex justify-between items-center">
-                <span className="text-base font-medium">Final Price:</span>
+                <span className="text-base font-medium">
+                  {t("packages.view.finalPrice")}
+                </span>
                 <span className="text-2xl font-bold text-primary">
                   ৳{finalPrice.toFixed(2)}
                 </span>
@@ -391,25 +426,35 @@ export default function PackageDetails() {
           {/* Package Status */}
           <Card>
             <CardHeader>
-              <CardTitle>Status & Features</CardTitle>
+              <CardTitle>{t("packages.view.statusAndFeatures")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Status:</span>
+                <span className="text-sm text-muted-foreground">
+                  {t("packages.view.status")}
+                </span>
                 <Badge variant={packageData.isActive ? "default" : "secondary"}>
-                  {packageData.isActive ? "Active" : "Inactive"}
+                  {packageData.isActive
+                    ? t("packages.status.active")
+                    : t("packages.status.inactive")}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Featured:</span>
+                <span className="text-sm text-muted-foreground">
+                  {t("packages.view.featured")}
+                </span>
                 <Badge variant={packageData.isFeatured ? "default" : "outline"}>
-                  {packageData.isFeatured ? "Yes" : "No"}
+                  {packageData.isFeatured
+                    ? t("packages.view.yes")
+                    : t("packages.view.no")}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Type:</span>
+                <span className="text-sm text-muted-foreground">
+                  {t("packages.view.typeLabel")}
+                </span>
                 <Badge variant="outline" className="capitalize">
-                  {packageData.packageType}
+                  {t(`packages.type.${packageData.packageType}`)}
                 </Badge>
               </div>
             </CardContent>

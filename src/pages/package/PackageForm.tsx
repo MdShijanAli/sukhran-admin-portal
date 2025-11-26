@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,6 +40,7 @@ interface PackageItem {
 }
 
 export default function PackageForm() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditMode = !!id;
@@ -103,7 +105,7 @@ export default function PackageForm() {
       setProducts(productsData);
     } catch (error) {
       console.error("Error fetching products:", error);
-      toast.error("Failed to load products");
+      toast.error(t("packages.messages.failedToLoadProducts"));
     } finally {
       setIsSearching(false);
     }
@@ -147,7 +149,7 @@ export default function PackageForm() {
       }
     } catch (error) {
       console.error("Error fetching package details:", error);
-      toast.error("Failed to load package details");
+      toast.error(t("packages.messages.failedToLoadDetails"));
     } finally {
       setIsLoadingPackage(false);
     }
@@ -244,7 +246,7 @@ export default function PackageForm() {
 
     // Validation
     if (!formData.name.trim()) {
-      toast.error("Package name is required");
+      toast.error(t("packages.messages.packageNameRequired"));
       return;
     }
     // Validate at least one item with complete data
@@ -257,9 +259,7 @@ export default function PackageForm() {
     );
 
     if (!hasValidItem) {
-      toast.error(
-        "Please add at least one item with product, SKU, and quantity"
-      );
+      toast.error(t("packages.messages.addAtLeastOneItem"));
       return;
     }
 
@@ -295,16 +295,18 @@ export default function PackageForm() {
       if (isEditMode && id) {
         formDataToSubmit.append("_method", "PUT");
         await packageService.updateItem(id, formDataToSubmit);
-        toast.success("Package updated successfully");
+        toast.success(t("packages.messages.packageUpdated"));
       } else {
         await packageService.storeItem(formDataToSubmit);
-        toast.success("Package created successfully");
+        toast.success(t("packages.messages.packageCreated"));
       }
 
       navigate("/packages");
     } catch (error: any) {
       console.error("Error saving package:", error);
-      toast.error(error?.response?.data?.message || "Failed to save package");
+      toast.error(
+        error?.response?.data?.message || t("packages.messages.failedToSave")
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -336,7 +338,7 @@ export default function PackageForm() {
           <div className="flex flex-col items-center justify-center">
             <Loader2 className="h-12 w-12 animate-spin text-primary" />
             <p className="mt-4 text-muted-foreground">
-              Loading package details...
+              {t("packages.loadingPackageDetails")}
             </p>
           </div>
         </Card>
@@ -354,12 +356,14 @@ export default function PackageForm() {
             </Button>
             <div className="flex-1">
               <h1 className="text-3xl font-bold tracking-tight">
-                {isEditMode ? "Edit Package" : "Create New Package"}
+                {isEditMode
+                  ? t("packages.form.editPackage")
+                  : t("packages.form.createNewPackage")}
               </h1>
               <p className="text-muted-foreground mt-1">
                 {isEditMode
-                  ? "Update package details and items"
-                  : "Fill in the details to create a new package"}
+                  ? t("packages.form.updatePackageDetails")
+                  : t("packages.form.fillPackageDetails")}
               </p>
             </div>
             <div className="flex gap-2">
@@ -369,16 +373,20 @@ export default function PackageForm() {
                 onClick={() => navigate("/packages")}
                 disabled={isSubmitting}
               >
-                Cancel
+                {t("cancel")}
               </Button>
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
+                    {t("loading")}
                   </>
                 ) : (
-                  <>{isEditMode ? "Update Package" : "Create Package"}</>
+                  <>
+                    {isEditMode
+                      ? t("packages.form.updatePackage")
+                      : t("packages.createPackage")}
+                  </>
                 )}
               </Button>
             </div>
@@ -390,16 +398,17 @@ export default function PackageForm() {
               {/* Basic Information */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Basic Information</CardTitle>
+                  <CardTitle>{t("packages.form.basicInformation")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="space-y-2">
                     <Label htmlFor="name">
-                      Package Name <span className="text-destructive">*</span>
+                      {t("packages.form.packageName")}{" "}
+                      <span className="text-destructive">*</span>
                     </Label>
                     <Input
                       id="name"
-                      placeholder="Enter package name"
+                      placeholder={t("packages.form.enterPackageName")}
                       value={formData.name}
                       onChange={(e) => updateField("name", e.target.value)}
                       required
@@ -407,10 +416,12 @@ export default function PackageForm() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="description">Description</Label>
+                    <Label htmlFor="description">
+                      {t("packages.form.description")}
+                    </Label>
                     <Textarea
                       id="description"
-                      placeholder="Enter package description"
+                      placeholder={t("packages.form.enterDescription")}
                       value={formData.description}
                       onChange={(e) =>
                         updateField("description", e.target.value)
@@ -422,7 +433,8 @@ export default function PackageForm() {
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
                       <Label htmlFor="packageType">
-                        Package Type <span className="text-destructive">*</span>
+                        {t("packages.form.packageType")}{" "}
+                        <span className="text-destructive">*</span>
                       </Label>
                       <Select
                         value={formData.packageType}
@@ -431,17 +443,25 @@ export default function PackageForm() {
                         }
                       >
                         <SelectTrigger id="packageType">
-                          <SelectValue placeholder="Select type" />
+                          <SelectValue
+                            placeholder={t("packages.form.selectType")}
+                          />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="admin">Admin</SelectItem>
-                          <SelectItem value="custom">Custom</SelectItem>
+                          <SelectItem value="admin">
+                            {t("packages.type.admin")}
+                          </SelectItem>
+                          <SelectItem value="custom">
+                            {t("packages.type.custom")}
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="displayOrder">Display Order</Label>
+                      <Label htmlFor="displayOrder">
+                        {t("packages.form.displayOrder")}
+                      </Label>
                       <Input
                         id="displayOrder"
                         type="number"
@@ -460,7 +480,7 @@ export default function PackageForm() {
               <Card>
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <CardTitle>Package Items</CardTitle>
+                    <CardTitle>{t("packages.form.packageItems")}</CardTitle>
                     <Button
                       type="button"
                       variant="outline"
@@ -468,7 +488,7 @@ export default function PackageForm() {
                       onClick={addItem}
                     >
                       <Plus className="h-4 w-4 mr-1" />
-                      Add Item
+                      {t("packages.form.addItem")}
                     </Button>
                   </div>
                 </CardHeader>
@@ -484,7 +504,9 @@ export default function PackageForm() {
                       <Card key={index} className="p-4">
                         <div className="space-y-4">
                           <div className="flex items-center justify-between">
-                            <h4 className="font-medium">Item {index + 1}</h4>
+                            <h4 className="font-medium">
+                              {t("packages.form.item")} {index + 1}
+                            </h4>
                             {items.length > 1 && (
                               <Button
                                 type="button"
@@ -500,7 +522,7 @@ export default function PackageForm() {
                           <div className="grid gap-4 md:grid-cols-3">
                             <div className="space-y-2">
                               <Label>
-                                Product{" "}
+                                {t("packages.form.product")}{" "}
                                 <span className="text-destructive">*</span>
                               </Label>
                               <Select
@@ -510,12 +532,18 @@ export default function PackageForm() {
                                 }
                               >
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Select product" />
+                                  <SelectValue
+                                    placeholder={t(
+                                      "packages.form.selectProduct"
+                                    )}
+                                  />
                                 </SelectTrigger>
                                 <SelectContent>
                                   <div className="flex items-center border-b px-3 pb-2">
                                     <Input
-                                      placeholder="Search products..."
+                                      placeholder={t(
+                                        "packages.form.searchProducts"
+                                      )}
                                       value={productSearchQuery}
                                       onChange={(e) =>
                                         setProductSearchQuery(e.target.value)
@@ -527,11 +555,11 @@ export default function PackageForm() {
                                     {isSearching ? (
                                       <div className="py-6 text-center text-sm text-muted-foreground">
                                         <Loader2 className="h-4 w-4 animate-spin mx-auto mb-2" />
-                                        Searching...
+                                        {t("packages.form.searching")}
                                       </div>
                                     ) : products.length === 0 ? (
                                       <div className="py-6 text-center text-sm text-muted-foreground">
-                                        No products found
+                                        {t("packages.form.noProductsFound")}
                                       </div>
                                     ) : (
                                       products.map((product) => (
@@ -550,7 +578,8 @@ export default function PackageForm() {
 
                             <div className="space-y-2">
                               <Label>
-                                SKU <span className="text-destructive">*</span>
+                                {t("packages.form.sku")}{" "}
+                                <span className="text-destructive">*</span>
                               </Label>
                               <Select
                                 value={item.skuId}
@@ -560,7 +589,9 @@ export default function PackageForm() {
                                 disabled={!item.productId}
                               >
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Select SKU" />
+                                  <SelectValue
+                                    placeholder={t("packages.form.selectSku")}
+                                  />
                                 </SelectTrigger>
                                 <SelectContent>
                                   {availableSkus.map((sku) => (
@@ -577,7 +608,7 @@ export default function PackageForm() {
 
                             <div className="space-y-2">
                               <Label>
-                                Quantity{" "}
+                                {t("packages.form.quantity")}{" "}
                                 <span className="text-destructive">*</span>
                               </Label>
                               <Input
@@ -596,7 +627,7 @@ export default function PackageForm() {
                             <div className="rounded-lg bg-muted p-3 text-sm">
                               <div className="flex justify-between">
                                 <span className="text-muted-foreground">
-                                  Subtotal:
+                                  {t("packages.form.subtotal")}
                                 </span>
                                 <span className="font-medium">
                                   ৳
@@ -619,7 +650,7 @@ export default function PackageForm() {
               {/* Package Image */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Package Image</CardTitle>
+                  <CardTitle>{t("packages.form.packageImage")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {imagePreview ? (
@@ -646,7 +677,7 @@ export default function PackageForm() {
                         htmlFor="packageImg"
                         className="cursor-pointer text-sm text-muted-foreground"
                       >
-                        Click to upload package image
+                        {t("packages.form.clickToUpload")}
                       </Label>
                       <Input
                         id="packageImg"
@@ -666,17 +697,19 @@ export default function PackageForm() {
               {/* Pricing */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Pricing</CardTitle>
+                  <CardTitle>{t("packages.form.pricing")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor="fixedPrice">Fixed Price</Label>
+                      <Label htmlFor="fixedPrice">
+                        {t("packages.form.fixedPrice")}
+                      </Label>
                       <Input
                         id="fixedPrice"
                         type="number"
                         step="0.01"
-                        placeholder="0.00"
+                        placeholder={t("packages.form.enterFixedPrice")}
                         value={formData.fixedPrice}
                         onChange={(e) =>
                           updateField("fixedPrice", e.target.value)
@@ -685,12 +718,14 @@ export default function PackageForm() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="discountPercent">Discount Percent</Label>
+                      <Label htmlFor="discountPercent">
+                        {t("packages.form.discountPercent")}
+                      </Label>
                       <Input
                         id="discountPercent"
                         type="number"
                         step="0.01"
-                        placeholder="0"
+                        placeholder={t("packages.form.enterDiscount")}
                         value={formData.discountPercent}
                         onChange={(e) =>
                           updateField("discountPercent", e.target.value)
@@ -702,14 +737,14 @@ export default function PackageForm() {
                   {totalPrice > 0 && (
                     <div className="rounded-lg bg-muted p-4 space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span>Total Product Value:</span>
+                        <span>{t("packages.form.totalProductValue")}</span>
                         <span className="font-medium">
                           ৳{totalPrice.toFixed(2)}
                         </span>
                       </div>
                       {fixedPriceNum > 0 && (
                         <div className="flex justify-between text-sm">
-                          <span>Fixed Price:</span>
+                          <span>{t("packages.form.fixedPrice")}</span>
                           <span className="font-bold text-primary">
                             ৳{fixedPriceNum.toFixed(2)}
                           </span>
@@ -717,7 +752,10 @@ export default function PackageForm() {
                       )}
                       {discountPercentNum > 0 && (
                         <div className="flex justify-between text-sm">
-                          <span>After Discount ({discountPercentNum}%):</span>
+                          <span>
+                            {t("packages.form.afterDiscount")} (
+                            {discountPercentNum}%):
+                          </span>
                           <span className="font-bold text-green-600">
                             ৳{priceAfterDiscount.toFixed(2)}
                           </span>
@@ -725,7 +763,7 @@ export default function PackageForm() {
                       )}
                       {!discountPercentNum && fixedPriceNum > 0 && (
                         <div className="flex justify-between text-sm">
-                          <span>Final Price:</span>
+                          <span>{t("packages.form.finalPrice")}</span>
                           <span className="font-bold text-green-600">
                             ৳{priceAfterDiscount.toFixed(2)}
                           </span>
@@ -733,7 +771,7 @@ export default function PackageForm() {
                       )}
                       {!fixedPriceNum && discountPercentNum > 0 && (
                         <div className="flex justify-between text-sm">
-                          <span>Discounted Price:</span>
+                          <span>{t("packages.form.discountedPrice")}</span>
                           <span className="font-bold text-green-600">
                             ৳{priceAfterDiscount.toFixed(2)}
                           </span>
@@ -741,7 +779,9 @@ export default function PackageForm() {
                       )}
                       {savings > 0 && (
                         <div className="flex justify-between text-sm font-medium border-t pt-2 mt-2">
-                          <span className="text-green-600">You Save:</span>
+                          <span className="text-green-600">
+                            {t("packages.form.youSave")}
+                          </span>
                           <span className="text-green-600">
                             ৳{savings.toFixed(2)}
                           </span>
@@ -753,11 +793,13 @@ export default function PackageForm() {
               </Card>
               <Card className="">
                 <CardHeader>
-                  <CardTitle>Settings</CardTitle>
+                  <CardTitle>{t("packages.form.settings")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="isActive">Active Status</Label>
+                    <Label htmlFor="isActive">
+                      {t("packages.form.activeStatus")}
+                    </Label>
                     <Switch
                       id="isActive"
                       checked={formData.isActive}
@@ -768,7 +810,9 @@ export default function PackageForm() {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="isFeatured">Featured</Label>
+                    <Label htmlFor="isFeatured">
+                      {t("packages.form.featured")}
+                    </Label>
                     <Switch
                       id="isFeatured"
                       checked={formData.isFeatured}
@@ -779,34 +823,44 @@ export default function PackageForm() {
                   </div>
 
                   <div className="pt-4 border-t space-y-2">
-                    <h4 className="font-medium">Package Summary</h4>
+                    <h4 className="font-medium">
+                      {t("packages.form.packageSummary")}
+                    </h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Items:</span>
+                        <span className="text-muted-foreground">
+                          {t("packages.form.items")}
+                        </span>
                         <Badge variant="secondary">
                           {items.filter((i) => i.productId && i.skuId).length}
                         </Badge>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Type:</span>
+                        <span className="text-muted-foreground">
+                          {t("packages.form.typeLabel")}
+                        </span>
                         <Badge variant="outline" className="capitalize">
-                          {formData.packageType}
+                          {t(`packages.type.${formData.packageType}`)}
                         </Badge>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">Status:</span>
+                        <span className="text-muted-foreground">
+                          {t("packages.form.statusLabel")}
+                        </span>
                         <Badge
                           variant={formData.isActive ? "default" : "secondary"}
                         >
-                          {formData.isActive ? "Active" : "Inactive"}
+                          {formData.isActive
+                            ? t("packages.status.active")
+                            : t("packages.status.inactive")}
                         </Badge>
                       </div>
                       {formData.isFeatured && (
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">
-                            Featured:
+                            {t("packages.form.featuredLabel")}
                           </span>
-                          <Badge>Yes</Badge>
+                          <Badge>{t("packages.form.yes")}</Badge>
                         </div>
                       )}
                     </div>
