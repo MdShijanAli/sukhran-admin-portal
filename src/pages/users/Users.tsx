@@ -67,7 +67,7 @@ const Users = () => {
       params.append("subscription", filterData.subscription);
     }
     if (filterData.role) {
-      params.append("role", filterData.role);
+      params.append("role_id", filterData.role);
     }
     const queryString = params.toString();
     const fetchLists = async () => {
@@ -148,7 +148,7 @@ const Users = () => {
         { label: t("users.filter.allRoles"), value: "all" },
         ...roleStore.roles.map((role) => ({
           label: role.display_name,
-          value: role.name,
+          value: role.id,
         })),
       ],
       defaultValue: "all",
