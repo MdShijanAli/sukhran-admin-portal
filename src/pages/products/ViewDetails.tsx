@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import noProductImage from "@/assets/images/no_product_image.png";
 import TimeStaps from "@/components/custom/TimeStamps";
 import ShareButton from "@/components/custom/ShareButton";
+import { formatNumberWithCommas } from "@/lib/utils";
 
 interface ProductDetails {
   id: number;
@@ -395,7 +396,8 @@ const ProductViewDetails = () => {
                               {t("products.form.currentPrice")}
                             </p>
                             <p className="text-2xl font-bold text-primary">
-                              ৳{sku.pricing.currentPrice}
+                              ৳
+                              {formatNumberWithCommas(sku.pricing.currentPrice)}
                             </p>
                           </div>
                           {sku.pricing.originalPrice !==
@@ -405,7 +407,10 @@ const ProductViewDetails = () => {
                                 {t("products.form.originalPrice")}
                               </p>
                               <p className="text-lg line-through text-muted-foreground">
-                                ৳{sku.pricing.originalPrice}
+                                ৳
+                                {formatNumberWithCommas(
+                                  sku.pricing.originalPrice
+                                )}
                               </p>
                             </div>
                           )}
@@ -424,7 +429,10 @@ const ProductViewDetails = () => {
                               {t("products.view.unit")}
                             </p>
                             <p className="font-medium">
-                              {sku.unit.size} {sku.unit.name}
+                              {formatNumberWithCommas(sku.unit.size, {
+                                minDigit: 0,
+                              })}{" "}
+                              {sku.unit.name}
                             </p>
                           </div>
                           <div className="bg-muted p-3 rounded-lg">
@@ -432,7 +440,11 @@ const ProductViewDetails = () => {
                               <ShoppingCart className="h-3 w-3" />
                               {t("products.view.stock")}
                             </p>
-                            <p className="font-medium">{sku.stockQuantity}</p>
+                            <p className="font-medium">
+                              {formatNumberWithCommas(sku.stockQuantity, {
+                                minDigit: 0,
+                              })}
+                            </p>
                           </div>
                           <div className="bg-muted p-3 rounded-lg">
                             <p className="text-xs text-muted-foreground mb-1">

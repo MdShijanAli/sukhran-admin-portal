@@ -23,6 +23,7 @@ import noProductImage from "@/assets/images/no_product_image.png";
 import { useSidebarStore } from "@/stores/sidebarStore";
 import { Pagination } from "@/components/table/Pagination";
 import ShareButton from "@/components/custom/ShareButton";
+import { formatNumberWithCommas } from "@/lib/utils";
 
 const Products = () => {
   const { t } = useTranslation();
@@ -281,13 +282,19 @@ const Products = () => {
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="text-base font-bold text-primary">
-                              ৳{(firstSku as any).pricing?.currentPrice || 0}
+                              ৳
+                              {formatNumberWithCommas(
+                                (firstSku as any).pricing?.currentPrice || 0
+                              )}
                             </p>
                             {(firstSku as any).pricing?.originalPrice &&
                               (firstSku as any).pricing.originalPrice !==
                                 (firstSku as any).pricing.currentPrice && (
                                 <p className="text-[10px] text-muted-foreground line-through">
-                                  ৳{(firstSku as any).pricing.originalPrice}
+                                  ৳
+                                  {formatNumberWithCommas(
+                                    (firstSku as any).pricing.originalPrice
+                                  )}
                                 </p>
                               )}
                           </div>

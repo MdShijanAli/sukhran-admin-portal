@@ -16,6 +16,8 @@ import { toast } from "sonner";
 import packageService from "@/services/packageService";
 import { Package } from "@/lib/types";
 import ShareButton from "@/components/custom/ShareButton";
+import { formatNumberWithCommas } from "@/lib/utils";
+import TimeStaps from "@/components/custom/TimeStamps";
 
 export default function PackageDetails() {
   const { t } = useTranslation();
@@ -190,7 +192,9 @@ export default function PackageDetails() {
                   <p className="text-xs text-muted-foreground">
                     {t("packages.view.items")}
                   </p>
-                  <p className="text-lg font-semibold">{totalItems}</p>
+                  <p className="text-lg font-semibold">
+                    {formatNumberWithCommas(totalItems, { minDigit: 0 })}
+                  </p>
                 </div>
                 <div className="rounded-lg border bg-card p-3">
                   <p className="text-xs text-muted-foreground">
@@ -246,14 +250,21 @@ export default function PackageDetails() {
                               {t("packages.view.unit")}
                             </span>
                             <Badge variant="outline">
-                              {item.sku.unitSize} {item.sku.unitName}
+                              {formatNumberWithCommas(item.sku.unitSize, {
+                                minDigit: 0,
+                              })}{" "}
+                              {item.sku.unitName}
                             </Badge>
                           </div>
                           <div className="flex items-center gap-2">
                             <span className="text-muted-foreground">
                               {t("packages.view.quantity")}
                             </span>
-                            <Badge variant="secondary">{item.quantity}</Badge>
+                            <Badge variant="secondary">
+                              {formatNumberWithCommas(item.quantity, {
+                                minDigit: 0,
+                              })}
+                            </Badge>
                           </div>
                         </div>
                       </div>
@@ -264,7 +275,7 @@ export default function PackageDetails() {
                           ৳{item.price} × {item.quantity}
                         </p>
                         <p className="text-lg font-bold text-primary mt-1">
-                          ৳{item.subtotal.toFixed(2)}
+                          ৳{formatNumberWithCommas(item.subtotal)}
                         </p>
                       </div>
                     </div>
@@ -287,66 +298,7 @@ export default function PackageDetails() {
               <CardTitle>{t("packages.view.packageInformation")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 gap-4">
-                {packageData.created_at && (
-                  <div className="rounded-lg border bg-card p-3">
-                    <div className="flex items-center gap-2 text-muted-foreground mb-1">
-                      <Calendar className="h-4 w-4" />
-                      <span className="text-xs font-medium">
-                        {t("packages.view.created")}
-                      </span>
-                    </div>
-                    <p className="text-sm font-semibold">
-                      {new Date(packageData.created_at).toLocaleDateString(
-                        "en-US",
-                        {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        }
-                      )}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {new Date(packageData.created_at).toLocaleTimeString(
-                        "en-US",
-                        {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        }
-                      )}
-                    </p>
-                  </div>
-                )}
-                {packageData.updated_at && (
-                  <div className="rounded-lg border bg-card p-3">
-                    <div className="flex items-center gap-2 text-muted-foreground mb-1">
-                      <Calendar className="h-4 w-4" />
-                      <span className="text-xs font-medium">
-                        {t("packages.view.lastUpdated")}
-                      </span>
-                    </div>
-                    <p className="text-sm font-semibold">
-                      {new Date(packageData.updated_at).toLocaleDateString(
-                        "en-US",
-                        {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        }
-                      )}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {new Date(packageData.updated_at).toLocaleTimeString(
-                        "en-US",
-                        {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        }
-                      )}
-                    </p>
-                  </div>
-                )}
-              </div>
+              {packageData.updated_at && <TimeStaps item={packageData} />}
             </CardContent>
           </Card>
         </div>
@@ -365,7 +317,7 @@ export default function PackageDetails() {
                     {t("packages.view.totalItemsValue")}
                   </span>
                   <span className="font-medium">
-                    ৳{totalItemsPrice.toFixed(2)}
+                    ৳{formatNumberWithCommas(totalItemsPrice)}
                   </span>
                 </div>
                 {fixedPrice > 0 && fixedPrice !== totalItemsPrice && (
@@ -374,7 +326,7 @@ export default function PackageDetails() {
                       {t("packages.view.fixedPrice")}
                     </span>
                     <span className="font-medium text-primary">
-                      ৳{fixedPrice.toFixed(2)}
+                      ৳{formatNumberWithCommas(fixedPrice)}
                     </span>
                   </div>
                 )}
@@ -394,7 +346,7 @@ export default function PackageDetails() {
                       {t("packages.view.youSave")}
                     </span>
                     <span className="font-medium text-green-600">
-                      ৳{savings.toFixed(2)}
+                      ৳{formatNumberWithCommas(savings)}
                     </span>
                   </div>
                 )}
@@ -417,7 +369,7 @@ export default function PackageDetails() {
                   {t("packages.view.finalPrice")}
                 </span>
                 <span className="text-2xl font-bold text-primary">
-                  ৳{finalPrice.toFixed(2)}
+                  ৳{formatNumberWithCommas(finalPrice)}
                 </span>
               </div>
             </CardContent>

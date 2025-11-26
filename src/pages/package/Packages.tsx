@@ -23,6 +23,7 @@ import { Package } from "@/lib/types";
 import { useSidebarStore } from "@/stores/sidebarStore";
 import { Pagination } from "@/components/table/Pagination";
 import ShareButton from "@/components/custom/ShareButton";
+import { formatNumberWithCommas } from "@/lib/utils";
 
 export default function Packages() {
   const { t } = useTranslation();
@@ -282,7 +283,7 @@ export default function Packages() {
                         <div className="flex items-baseline gap-2">
                           {pricing.fixedPrice > 0 && (
                             <p className="text-sm text-muted-foreground line-through">
-                              ৳{pricing.fixedPrice.toFixed(2)}
+                              ৳{formatNumberWithCommas(pricing.fixedPrice)}
                             </p>
                           )}
                           {pricing.discountPercent > 0 && (
@@ -297,12 +298,12 @@ export default function Packages() {
                         <p className="text-xl font-bold text-green-600">
                           ৳
                           {pricing.currentPrice
-                            ? pricing.currentPrice.toFixed(2)
-                            : pricing.fixedPrice.toFixed(2)}
+                            ? formatNumberWithCommas(pricing.currentPrice)
+                            : formatNumberWithCommas(pricing.fixedPrice)}
                         </p>
                         {pricing.savings > 0 && (
                           <p className="text-xs text-green-600 font-medium">
-                            You save ৳{pricing.savings.toFixed(2)}
+                            You save ৳{formatNumberWithCommas(pricing.savings)}
                           </p>
                         )}
                       </div>
