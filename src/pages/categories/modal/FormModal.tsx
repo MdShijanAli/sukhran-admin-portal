@@ -6,6 +6,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import { useTranslation } from "react-i18next";
 import { BaseModal } from "@/components/modals/BaseModal";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -36,6 +37,7 @@ export default function FormModal({
   onClose,
   editData,
 }: CategoryDialogProps) {
+  const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [imagePreview, setImagePreview] = useState<string>("");
@@ -129,8 +131,8 @@ export default function FormModal({
       console.log("Result:", result);
       toast.success(
         isEditing
-          ? "Category updated successfully"
-          : "Category created successfully"
+          ? t("categories.messages.categoryUpdated")
+          : t("categories.messages.categoryCreated")
       );
       onClose();
     } catch (error) {
@@ -144,16 +146,25 @@ export default function FormModal({
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title={isEditing ? "Edit Category" : "Create New Category"}
+      title={
+        isEditing
+          ? t("categories.form.editCategory")
+          : t("categories.form.createCategory")
+      }
       onSubmit={handleSubmit}
       isSubmitting={isSubmitting}
-      submitButtonText={isEditing ? "Update Category" : "Create Category"}
+      submitButtonText={
+        isEditing
+          ? t("categories.form.updateCategory")
+          : t("categories.form.createCategory")
+      }
       size="2xl"
+      closeButtonText={t("cancel")}
     >
       <div className="grid gap-6">
         {/* Category Image */}
         <div className="space-y-2">
-          <Label htmlFor="imgUrl">Category Image</Label>
+          <Label htmlFor="imgUrl">{t("categories.form.categoryImage")}</Label>
           <Input
             id="imgUrl"
             type="file"
@@ -182,23 +193,25 @@ export default function FormModal({
 
         {/* Category Name */}
         <div className="space-y-2">
-          <Label htmlFor="name">Category Name *</Label>
+          <Label htmlFor="name">{t("categories.form.categoryName")} *</Label>
           <Input
             id="name"
             value={formData.name}
             onChange={(e) => updateField("name", e.target.value)}
-            placeholder="Enter category name"
+            placeholder={t("categories.form.enterCategoryName")}
           />
         </div>
 
         {/* Description */}
         <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
+          <Label htmlFor="description">
+            {t("categories.form.description")}
+          </Label>
           <Textarea
             id="description"
             value={formData.description}
             onChange={(e) => updateField("description", e.target.value)}
-            placeholder="Enter category description"
+            placeholder={t("categories.form.enterDescription")}
             rows={3}
           />
         </div>
@@ -206,7 +219,9 @@ export default function FormModal({
         {/* Display Order & Status */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="displayOrder">Display Order</Label>
+            <Label htmlFor="displayOrder">
+              {t("categories.form.displayOrder")}
+            </Label>
             <Input
               id="displayOrder"
               type="number"
@@ -222,7 +237,7 @@ export default function FormModal({
               checked={formData.isActive}
               onCheckedChange={(checked) => updateField("isActive", checked)}
             />
-            <Label htmlFor="isActive">Active</Label>
+            <Label htmlFor="isActive">{t("categories.form.active")}</Label>
           </div>
         </div>
       </div>

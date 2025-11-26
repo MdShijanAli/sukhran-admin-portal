@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { BaseModal } from "@/components/modals/BaseModal";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -47,6 +48,7 @@ export default function SubCategoryFormModal({
   selectedCategory,
   editData,
 }: SubCategoryFormModalProps) {
+  const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState<string>("");
   const [formData, setFormData] = useState<SubCategoryFormData>({
@@ -122,12 +124,12 @@ export default function SubCategoryFormModal({
 
   const handleSubmit = async () => {
     if (!formData.categoryId) {
-      toast.error("Please select a category");
+      toast.error(t("categories.messages.selectCategory"));
       return;
     }
 
     if (!formData.name) {
-      toast.error("Please enter sub-category name");
+      toast.error(t("categories.messages.enterSubCategoryName"));
       return;
     }
 
@@ -147,10 +149,10 @@ export default function SubCategoryFormModal({
 
       if (editData) {
         await categoryService.updateSubCategory(editData.id, formDataToSubmit);
-        toast.success("Sub-category updated successfully");
+        toast.success(t("categories.messages.subCategoryUpdated"));
       } else {
         await categoryService.storeSubCategory(formDataToSubmit);
-        toast.success("Sub-category created successfully");
+        toast.success(t("categories.messages.subCategoryCreated"));
       }
       await categoryService.fetchLists(); // Refresh categories list
       onClose();
@@ -158,8 +160,8 @@ export default function SubCategoryFormModal({
       console.error("Error submitting sub-category:", error);
       toast.error(
         editData
-          ? "Failed to update sub-category"
-          : "Failed to create sub-category"
+          ? t("categories.messages.failedToUpdateSubCategory")
+          : t("categories.messages.failedToCreateSubCategory")
       );
     } finally {
       setIsSubmitting(false);
@@ -170,18 +172,25 @@ export default function SubCategoryFormModal({
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title={editData ? "Edit Sub-Category" : "Add Sub-Category"}
+      title={
+        editData
+          ? t("categories.subCategory.editSubCategory")
+          : t("categories.subCategory.addSubCategory")
+      }
       onSubmit={handleSubmit}
       isSubmitting={isSubmitting}
       submitButtonText={
-        editData ? "Update Sub-Category" : "Create Sub-Category"
+        editData
+          ? t("categories.subCategory.updateSubCategory")
+          : t("categories.subCategory.createSubCategory")
       }
       size="2xl"
+      closeButtonText={t("cancel")}
     >
       <div className="grid gap-6">
         {/* Category Name (Read-only) */}
         <div className="space-y-2">
-          <Label>Parent Category</Label>
+          <Label>{t("categories.subCategory.parentCategory")}</Label>
           <Input
             value={selectedCategory?.name || ""}
             disabled
@@ -191,7 +200,9 @@ export default function SubCategoryFormModal({
 
         {/* Sub-Category Image */}
         <div className="space-y-2">
-          <Label htmlFor="subCategoryImg">Sub-Category Image</Label>
+          <Label htmlFor="subCategoryImg">
+            {t("categories.subCategory.subCategoryImage")}
+          </Label>
           <Input
             id="subCategoryImg"
             type="file"
@@ -220,23 +231,27 @@ export default function SubCategoryFormModal({
 
         {/* Sub-Category Name */}
         <div className="space-y-2">
-          <Label htmlFor="subCategoryName">Sub-Category Name *</Label>
+          <Label htmlFor="subCategoryName">
+            {t("categories.subCategory.subCategoryName")} *
+          </Label>
           <Input
             id="subCategoryName"
             value={formData.name}
             onChange={(e) => updateField("name", e.target.value)}
-            placeholder="Enter sub-category name"
+            placeholder={t("categories.subCategory.enterSubCategoryName")}
           />
         </div>
 
         {/* Description */}
         <div className="space-y-2">
-          <Label htmlFor="subCategoryDescription">Description</Label>
+          <Label htmlFor="subCategoryDescription">
+            {t("categories.subCategory.description")}
+          </Label>
           <Textarea
             id="subCategoryDescription"
             value={formData.description}
             onChange={(e) => updateField("description", e.target.value)}
-            placeholder="Enter sub-category description"
+            placeholder={t("categories.subCategory.enterDescription")}
             rows={3}
           />
         </div>
@@ -244,7 +259,9 @@ export default function SubCategoryFormModal({
         {/* Display Order & Status */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="subCategoryDisplayOrder">Display Order</Label>
+            <Label htmlFor="subCategoryDisplayOrder">
+              {t("categories.subCategory.displayOrder")}
+            </Label>
             <Input
               id="subCategoryDisplayOrder"
               type="number"
@@ -260,7 +277,9 @@ export default function SubCategoryFormModal({
               checked={formData.isActive}
               onCheckedChange={(checked) => updateField("isActive", checked)}
             />
-            <Label htmlFor="subCategoryIsActive">Active</Label>
+            <Label htmlFor="subCategoryIsActive">
+              {t("categories.subCategory.active")}
+            </Label>
           </div>
         </div>
       </div>

@@ -28,6 +28,8 @@
   "deleteConfirm": "Are you sure you want to delete",
   "deleteAftermath": "This action cannot be undone.",
   "info": "Info",
+  "lastUpdated": "Last Updated",
+  "created": "Created",
   "nav": {
     "dashboard": "Dashboard",
     "cxoDashboard": "CXO Dashboard",

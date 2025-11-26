@@ -2,6 +2,7 @@ import { BaseModal } from "@/components/modals/BaseModal";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 import { Calendar, Package, Layers, Edit, Trash2 } from "lucide-react";
 import { Category } from "@/stores/categoryStore";
 import { useEffect, useState } from "react";
@@ -45,6 +46,7 @@ export default function ViewModal({
   onClose,
   categoryId,
 }: ViewModalProps) {
+  const { t } = useTranslation();
   const [category, setCategory] = useState<CategoryDetails | null>(null);
   const [isCategoryLoading, setIsCategoryLoading] = useState(false);
   const [selectedSubCategory, setSelectedSubCategory] =
@@ -88,7 +90,7 @@ export default function ViewModal({
     setIsDeleting(true);
     try {
       await categoryService.deleteSubCategory(selectedSubCategory.id);
-      toast.success("Sub-category deleted successfully");
+      toast.success(t("categories.messages.subCategoryDeleted"));
       // Refresh category details
       if (categoryId) {
         const response = await categoryService.fetchDetails(categoryId);
@@ -99,7 +101,7 @@ export default function ViewModal({
       setShowDeleteSubCategory(false);
     } catch (error) {
       console.error("Error deleting sub-category:", error);
-      toast.error("Failed to delete sub-category");
+      toast.error(t("categories.messages.failedToDeleteSubCategory"));
     } finally {
       setIsDeleting(false);
     }
@@ -126,10 +128,11 @@ export default function ViewModal({
     <BaseModal
       open={open}
       onOpenChange={() => onClose(false)}
-      title="Category Details"
+      title={t("categories.view.categoryDetails")}
       size="2xl"
       showSubmitButton={false}
       loading={isCategoryLoading}
+      closeButtonText={t("close")}
     >
       <div className="space-y-6">
         {/* Image & Basic Info */}
@@ -146,12 +149,14 @@ export default function ViewModal({
               <h3 className="text-2xl font-bold">{category?.name}</h3>
               {category?.slug && (
                 <p className="text-sm text-muted-foreground">
-                  Slug: {category?.slug}
+                  {t("categories.view.slug")}: {category?.slug}
                 </p>
               )}
             </div>
             <Badge variant={category?.isActive ? "default" : "secondary"}>
-              {category?.isActive ? "Active" : "Inactive"}
+              {category?.isActive
+                ? t("categories.view.active")
+                : t("categories.view.inactive")}
             </Badge>
           </div>
         </div>
@@ -162,7 +167,9 @@ export default function ViewModal({
         {category?.description && (
           <>
             <div>
-              <h4 className="mb-2 font-semibold">Description</h4>
+              <h4 className="mb-2 font-semibold">
+                {t("categories.view.description")}
+              </h4>
               <p className="text-muted-foreground">{category.description}</p>
             </div>
             <Separator />
@@ -174,7 +181,9 @@ export default function ViewModal({
           <div className="rounded-lg border bg-card p-4">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Layers className="h-4 w-4" />
-              <span className="text-sm">Sub Categories</span>
+              <span className="text-sm">
+                {t("categories.view.subCategories")}
+              </span>
             </div>
             <p className="text-2xl font-bold">
               {category?.sub_categories?.length || 0}
@@ -184,7 +193,7 @@ export default function ViewModal({
           <div className="rounded-lg border bg-card p-4">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Package className="h-4 w-4" />
-              <span className="text-sm">Products</span>
+              <span className="text-sm">{t("categories.view.products")}</span>
             </div>
             <p className="text-2xl font-bold">
               {category?.products_count || 0}
@@ -193,7 +202,9 @@ export default function ViewModal({
 
           <div className="rounded-lg border bg-card p-4">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
-              <span className="text-sm">Display Order</span>
+              <span className="text-sm">
+                {t("categories.view.displayOrder")}
+              </span>
             </div>
             <p className="text-2xl font-bold">
               {category?.displayOrder || "-"}
@@ -209,7 +220,8 @@ export default function ViewModal({
             <div>
               <h4 className="mb-3 font-semibold flex items-center gap-2">
                 <Layers className="h-4 w-4" />
-                Sub Categories ({category.sub_categories.length})
+                {t("categories.view.subCategories")} (
+                {category.sub_categories.length})
               </h4>
               <div className="space-y-3">
                 {category.sub_categories.map((subCat) => (
@@ -245,7 +257,9 @@ export default function ViewModal({
                               }
                               className="flex-shrink-0"
                             >
-                              {subCat.isActive ? "Active" : "Inactive"}
+                              {subCat.isActive
+                                ? t("categories.view.active")
+                                : t("categories.view.inactive")}
                             </Badge>
                             <Button
                               size="icon"
@@ -271,10 +285,13 @@ export default function ViewModal({
                           </p>
                         )}
                         <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-                          <span>Display Order: {subCat.displayOrder}</span>
+                          <span>
+                            {t("categories.view.displayOrder")}:{" "}
+                            {subCat.displayOrder}
+                          </span>
                           <span>•</span>
                           <span>
-                            Created:{" "}
+                            {t("categories.view.created")}:{" "}
                             {new Date(subCat.created_at).toLocaleDateString()}
                           </span>
                         </div>
@@ -292,7 +309,9 @@ export default function ViewModal({
           <>
             <div className="text-center py-6 text-muted-foreground">
               <Layers className="h-8 w-8 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">No sub-categories found</p>
+              <p className="text-sm">
+                {t("categories.view.noSubCategoriesFound")}
+              </p>
             </div>
             <Separator />
           </>
@@ -314,8 +333,10 @@ export default function ViewModal({
       <DeleteModal
         open={showDeleteSubCategory}
         onClose={() => setShowDeleteSubCategory(false)}
-        title="Delete Sub-Category"
-        description={`Are you sure you want to delete "${selectedSubCategory?.name}"? This action cannot be undone.`}
+        title={t("categories.delete.subCategoryTitle")}
+        description={`${t("deleteConfirm")} "${selectedSubCategory?.name}"? ${t(
+          "deleteAftermath"
+        )}`}
         onConfirm={confirmDeleteSubCategory}
         isDeleting={isDeleting}
       />

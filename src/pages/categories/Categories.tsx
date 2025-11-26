@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { Edit, Eye, Plus, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "react-i18next";
 import FormModal from "./modal/FormModal";
 import ViewModal from "./modal/ViewModal";
 import SubCategoryFormModal from "./modal/SubCategoryFormModal";
@@ -16,6 +17,7 @@ import { DeleteModal } from "@/components/modals";
 import { toast } from "sonner";
 
 const Categories = () => {
+  const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
   );
@@ -57,10 +59,10 @@ const Categories = () => {
     setIsDeleting(true);
     try {
       await categoryService.deleteItem(selectedCategory.id);
-      toast.success("Category deleted successfully");
+      toast.success(t("categories.messages.categoryDeleted"));
     } catch (error) {
       console.error("Error deleting category:", error);
-      toast.error("Failed to delete category");
+      toast.error(t("categories.messages.failedToDelete"));
     } finally {
       setIsDeleting(false);
       setShowDelete(false);
@@ -70,24 +72,24 @@ const Categories = () => {
   // Define actions for dropdown menu
   const categoryActions: ActionItem<Category>[] = [
     {
-      label: "View Details",
+      label: t("categories.actions.viewDetails"),
       icon: Eye,
       onClick: handleViewDetails,
     },
     {
-      label: "Edit Category",
+      label: t("categories.actions.editCategory"),
       icon: Edit,
       onClick: handleEdit,
     },
     {
-      label: "Delete Category",
+      label: t("categories.actions.deleteCategory"),
       icon: Trash2,
       onClick: handleDelete,
       variant: "destructive",
       separator: true,
     },
     {
-      label: "Add Sub Category",
+      label: t("categories.actions.addSubCategory"),
       icon: Plus,
       onClick: (category) => {
         setSelectedCategory(category);
@@ -100,13 +102,13 @@ const Categories = () => {
   const columns: Column<Category>[] = [
     {
       key: "sl",
-      label: "Sl.",
+      label: t("categories.columns.sl"),
       render: (_, index) => index + 1,
       className: "text-center",
     },
     {
       key: "image_url",
-      label: "Image",
+      label: t("categories.columns.image"),
       render: (category) => (
         <img
           src={category.image_url || "/placeholder-image.png"}
@@ -117,39 +119,45 @@ const Categories = () => {
     },
     {
       key: "name",
-      label: "Name",
+      label: t("categories.columns.name"),
     },
     {
       key: "description",
-      label: "Description",
+      label: t("categories.columns.description"),
       className: "max-w-[300px]",
     },
     {
       key: "sub_categories_count",
-      label: "Sub Categories",
+      label: t("categories.columns.subCategories"),
       className: "text-center w-[140px]",
     },
     {
       key: "products_count",
-      label: "Products",
+      label: t("categories.columns.products"),
       className: "text-center",
     },
     {
       key: "status",
-      label: "Status",
+      label: t("categories.columns.status"),
       render: (category) => (
         <Badge variant={category.isActive ? "default" : "secondary"}>
-          {category.isActive ? "Active" : "Inactive"}
+          {category.isActive
+            ? t("categories.columns.active")
+            : t("categories.columns.inactive")}
         </Badge>
       ),
       className: "text-center",
     },
     {
       key: "actions",
-      label: "Actions",
+      label: t("categories.columns.actions"),
       className: "text-right",
       render: (category) => (
-        <DropdownMenuActions item={category} actions={categoryActions} />
+        <DropdownMenuActions
+          item={category}
+          actions={categoryActions}
+          menuLabel={t("categories.columns.actions")}
+        />
       ),
     },
   ];
@@ -157,22 +165,22 @@ const Categories = () => {
   return (
     <div className="animate-fade-in">
       <BaseTableList<Category>
-        title="Categories"
-        description="Manage your product categories"
+        title={t("categories.title")}
+        description={t("categories.subtitle")}
         headerActions={[
           {
-            label: "Add Category",
+            label: t("categories.addCategory"),
             icon: Plus,
             onClick: handleCreate,
             variant: "default",
           },
         ]}
-        searchPlaceholder="Search by name or description..."
+        searchPlaceholder={t("categories.searchPlaceholder")}
         enableSearch={true}
         columns={columns}
         service={categoryService}
         store={store}
-        emptyMessage="No categories found"
+        emptyMessage={t("categories.noCategoriesFound")}
         getRowKey={(category) => category.id}
         onRefresh={handleSetRefresh}
       />
@@ -199,8 +207,10 @@ const Categories = () => {
       <DeleteModal
         open={showDelete}
         onClose={setShowDelete}
-        title="Delete Category"
-        description={`Are you sure you want to delete this ${selectedCategory?.name} category? This action cannot be undone.`}
+        title={t("categories.delete.categoryTitle")}
+        description={`${t("deleteConfirm")} ${selectedCategory?.name} ${t(
+          "categories.delete.categoryTitle"
+        ).toLowerCase()}? ${t("deleteAftermath")}`}
         onConfirm={handleDeleteCategory}
         isDeleting={isDeleting}
       />
