@@ -26,11 +26,13 @@ import userService from "@/services/userService";
 import { toast } from "sonner";
 import noImage from "@/assets/images/avatar-ractangle.jpg";
 import { Switch } from "@/components/ui/switch";
-import FilterModal from "./modal/FilterModal";
+import FilterModal from "@/components/modals/FilterModal";
 import { Button } from "@/components/ui/button";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import constData from "@/lib/constData";
 import { useTranslation } from "react-i18next";
+import roleService from "@/services/roleService";
+import { useRoleStore } from "@/stores/roleStore";
 
 const Users = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -53,6 +55,7 @@ const Users = () => {
   });
 
   const store = useUserStore();
+  const roleStore = useRoleStore();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -85,6 +88,18 @@ const Users = () => {
     }
   }, [filterData.status, filterData.subscription, filterData.role]);
 
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        await roleService.fetchLists();
+      } catch (error) {
+        console.error("Error fetching user roles:", error);
+        toast.error("Failed to fetch user roles");
+      }
+    };
+    fetchRoles();
+  }, []);
+
   const handleApplyFilters = (filters: Record<string, string>) => {
     setFilterData(filters);
     // Apply filters to your data fetching logic
@@ -96,7 +111,7 @@ const Users = () => {
     setFilterData({
       status: "active",
       subscription: "all",
-      role: "all",
+      role: constData.roles.ADMIN,
     });
     toast.info("Filters cleared");
     setShowFilterModal(false);
@@ -130,10 +145,11 @@ const Users = () => {
       key: "role",
       label: t("users.filter.user_role"),
       options: [
-        { label: "All Roles", value: "all" },
-        { label: "Admin", value: "admin" },
-        { label: "Customer", value: "customer" },
-        { label: "Manager", value: "manager" },
+        { label: t("users.filter.allRoles"), value: "all" },
+        ...roleStore.roles.map((role) => ({
+          label: role.display_name,
+          value: role.name,
+        })),
       ],
       defaultValue: "all",
     },
