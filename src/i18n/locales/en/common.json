@@ -77,5 +77,24 @@
     "cancel": "Cancel",
     "loading": "Loading...",
     "noData": "No data available"
+  },
+  "pagination": {
+    "showing": "Showing",
+    "previous": "Previous",
+    "next": "Next",
+    "of": "of",
+    "results": "results",
+    "page": "Page"
+  },
+  "share": {
+    "share": "Share",
+    "shareOnSocial": "Share on Social Media",
+    "copyLink": "Copy Link",
+    "linkCopied": "Link copied to clipboard!",
+    "shareVia": "Share via",
+    "facebook": "Facebook",
+    "twitter": "Twitter",
+    "linkedin": "LinkedIn",
+    "whatsapp": "WhatsApp"
   }
 }

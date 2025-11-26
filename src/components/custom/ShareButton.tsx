@@ -7,6 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTranslation } from "react-i18next";
 import {
   Share2,
   Link as LinkIcon,
@@ -38,6 +39,8 @@ export default function ShareButton({
   className = "",
   iconOnly = false,
 }: ShareButtonProps) {
+  const { t } = useTranslation();
+
   const handleShare = (platform: string) => {
     const shareUrl = url || window.location.href;
     const shareTitle = title;
@@ -69,7 +72,7 @@ export default function ShareButton({
         break;
       case "copy":
         navigator.clipboard.writeText(shareUrl);
-        toast.success("Link copied to clipboard!");
+        toast.success(t("share.linkCopied"));
         return;
       default:
         return;
@@ -85,32 +88,32 @@ export default function ShareButton({
       <DropdownMenuTrigger asChild>
         <Button variant={variant} size={size} className={className}>
           <Share2 className={iconOnly ? "h-4 w-4" : "h-4 w-4 mr-2"} />
-          {!iconOnly && "Share"}
+          {!iconOnly && t("share.share")}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuLabel>Share on Social Media</DropdownMenuLabel>
+        <DropdownMenuLabel>{t("share.shareOnSocial")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => handleShare("facebook")}>
           <Facebook className="h-4 w-4 mr-2 text-blue-600" />
-          Facebook
+          {t("share.facebook")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => handleShare("twitter")}>
           <Twitter className="h-4 w-4 mr-2 text-sky-500" />
-          Twitter (X)
+          {t("share.twitter")} (X)
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => handleShare("linkedin")}>
           <Linkedin className="h-4 w-4 mr-2 text-blue-700" />
-          LinkedIn
+          {t("share.linkedin")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => handleShare("whatsapp")}>
           <MessageCircle className="h-4 w-4 mr-2 text-green-600" />
-          WhatsApp
+          {t("share.whatsapp")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => handleShare("copy")}>
           <LinkIcon className="h-4 w-4 mr-2" />
-          Copy Link
+          {t("share.copyLink")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

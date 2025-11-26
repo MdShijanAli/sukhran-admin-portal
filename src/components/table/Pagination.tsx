@@ -5,6 +5,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface PaginationProps {
   currentPage: number;
@@ -23,6 +24,7 @@ export function Pagination({
   onPageChange,
   showItemCount = true,
 }: PaginationProps) {
+  const { t } = useTranslation();
   const startItem =
     totalItems && itemsPerPage ? (currentPage - 1) * itemsPerPage + 1 : 0;
   const endItem =
@@ -36,11 +38,12 @@ export function Pagination({
       totalItems !== undefined &&
       itemsPerPage !== undefined ? (
         <div className="text-sm text-muted-foreground">
-          Showing {startItem} to {endItem} of {totalItems} results
+          {t("pagination.showing")} {startItem} {t("pagination.of")} {endItem}{" "}
+          {t("pagination.of")} {totalItems} {t("pagination.results")}
         </div>
       ) : (
         <div className="text-sm text-muted-foreground">
-          Page {currentPage} of {totalPages}
+          {t("pagination.page")} {currentPage} {t("pagination.of")} {totalPages}
         </div>
       )}
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -78,6 +79,7 @@ interface ProductDetails {
 }
 
 const ProductViewDetails = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [product, setProduct] = useState<ProductDetails | null>(null);
@@ -93,7 +95,7 @@ const ProductViewDetails = () => {
         setProduct(data);
       } catch (error) {
         console.error("Failed to fetch product details:", error);
-        toast.error("Failed to load product details");
+        toast.error(t("products.messages.failedToLoadDetails"));
       } finally {
         setIsLoading(false);
       }
@@ -107,7 +109,9 @@ const ProductViewDetails = () => {
         <CardContent className="flex items-center justify-center py-16">
           <div className="text-center">
             <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-            <p className="text-muted-foreground">Loading product details...</p>
+            <p className="text-muted-foreground">
+              {t("products.loadingDetails")}
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -120,13 +124,15 @@ const ProductViewDetails = () => {
         <CardContent className="flex items-center justify-center py-16">
           <div className="text-center">
             <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold">Product not found</h3>
+            <h3 className="text-lg font-semibold">
+              {t("products.productNotFound")}
+            </h3>
             <p className="text-muted-foreground mt-2">
-              The product you're looking for doesn't exist.
+              {t("products.productNotFoundDesc")}
             </p>
             <Button className="mt-4" onClick={() => navigate("/products")}>
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Products
+              {t("products.backToProducts")}
             </Button>
           </div>
         </CardContent>
@@ -166,7 +172,7 @@ const ProductViewDetails = () => {
                 onClick={() => navigate(`/products/edit/${product.id}`)}
               >
                 <Edit className="h-4 w-4 mr-2" />
-                Edit Product
+                {t("products.form.editProduct")}
               </Button>
             </div>
           </div>
@@ -179,7 +185,9 @@ const ProductViewDetails = () => {
         <div className="space-y-3">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Product Image</CardTitle>
+              <CardTitle className="text-lg">
+                {t("products.view.productImage")}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="aspect-square overflow-hidden rounded-lg bg-muted">
@@ -194,23 +202,35 @@ const ProductViewDetails = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Status</CardTitle>
+              <CardTitle className="text-lg">
+                {t("products.view.status")}
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Active</span>
+                <span className="text-sm text-muted-foreground">
+                  {t("products.view.active")}
+                </span>
                 <Badge variant={product.isActive ? "default" : "secondary"}>
-                  {product.isActive ? "Yes" : "No"}
+                  {product.isActive
+                    ? t("products.view.yes")
+                    : t("products.view.no")}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Featured</span>
+                <span className="text-sm text-muted-foreground">
+                  {t("products.view.featured")}
+                </span>
                 <Badge variant={product.isFeatured ? "destructive" : "outline"}>
-                  {product.isFeatured ? "Yes" : "No"}
+                  {product.isFeatured
+                    ? t("products.view.yes")
+                    : t("products.view.no")}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Type</span>
+                <span className="text-sm text-muted-foreground">
+                  {t("products.view.type")}
+                </span>
                 <Badge variant="outline" className="capitalize">
                   {product.productType}
                 </Badge>
@@ -220,11 +240,15 @@ const ProductViewDetails = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Categories</CardTitle>
+              <CardTitle className="text-lg">
+                {t("products.view.categories")}
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-xs text-muted-foreground mb-2">Category</p>
+                <p className="text-xs text-muted-foreground mb-2">
+                  {t("products.view.category")}
+                </p>
                 <div className="flex items-center gap-3">
                   {product.category.image_url && (
                     <img
@@ -244,7 +268,7 @@ const ProductViewDetails = () => {
               <Separator />
               <div>
                 <p className="text-xs text-muted-foreground mb-2">
-                  Sub-Category
+                  {t("products.view.subCategory")}
                 </p>
                 <div className="flex items-center gap-3">
                   {product.sub_category.image_url && (
@@ -269,7 +293,7 @@ const ProductViewDetails = () => {
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                Timestamps
+                {t("products.view.timestamps")}
               </CardTitle>
             </CardHeader>
             {/* Timestamps */}
@@ -281,28 +305,30 @@ const ProductViewDetails = () => {
         <div className="space-y-3 md:col-span-2">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Product Information</CardTitle>
+              <CardTitle className="text-lg">
+                {t("products.view.productInfo")}
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground mb-1">
-                  Description
+                  {t("products.view.description")}
                 </p>
                 <p className="text-sm">
-                  {product.description || "No description available"}
+                  {product.description || t("products.view.noDescription")}
                 </p>
               </div>
               <Separator />
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground mb-1">
-                    Product ID
+                    {t("products.view.productId")}
                   </p>
                   <p className="text-sm font-mono">{product.id}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-muted-foreground mb-1">
-                    Business ID
+                    {t("products.view.businessId")}
                   </p>
                   <p className="text-sm font-mono">{product.businessId}</p>
                 </div>
@@ -316,11 +342,13 @@ const ProductViewDetails = () => {
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Tag className="h-5 w-5" />
-                  Product Variants (SKUs)
+                  {t("products.view.productVariants")}
                 </CardTitle>
                 <Badge variant="secondary">
-                  {product.skus.length} Variant
-                  {product.skus.length !== 1 ? "s" : ""}
+                  {product.skus.length}{" "}
+                  {product.skus.length !== 1
+                    ? t("products.variants")
+                    : t("products.variant")}
                 </Badge>
               </div>
             </CardHeader>
@@ -354,7 +382,9 @@ const ProductViewDetails = () => {
                           <Badge
                             variant={sku.isInStock ? "default" : "destructive"}
                           >
-                            {sku.isInStock ? "In Stock" : "Out of Stock"}
+                            {sku.isInStock
+                              ? t("products.view.inStock")
+                              : t("products.view.outOfStock")}
                           </Badge>
                         </div>
 
@@ -362,7 +392,7 @@ const ProductViewDetails = () => {
                         <div className="flex items-center gap-4">
                           <div>
                             <p className="text-xs text-muted-foreground">
-                              Current Price
+                              {t("products.form.currentPrice")}
                             </p>
                             <p className="text-2xl font-bold text-primary">
                               ৳{sku.pricing.currentPrice}
@@ -372,7 +402,7 @@ const ProductViewDetails = () => {
                             sku.pricing.currentPrice && (
                             <div>
                               <p className="text-xs text-muted-foreground">
-                                Original Price
+                                {t("products.form.originalPrice")}
                               </p>
                               <p className="text-lg line-through text-muted-foreground">
                                 ৳{sku.pricing.originalPrice}
@@ -381,7 +411,8 @@ const ProductViewDetails = () => {
                           )}
                           {sku.pricing.discountPercent > 0 && (
                             <Badge variant="destructive" className="ml-auto">
-                              {sku.pricing.discountPercent}% OFF
+                              {sku.pricing.discountPercent}%{" "}
+                              {t("products.view.discount")}
                             </Badge>
                           )}
                         </div>
@@ -390,7 +421,7 @@ const ProductViewDetails = () => {
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                           <div className="bg-muted p-3 rounded-lg">
                             <p className="text-xs text-muted-foreground mb-1">
-                              Unit
+                              {t("products.view.unit")}
                             </p>
                             <p className="font-medium">
                               {sku.unit.size} {sku.unit.name}
@@ -399,13 +430,13 @@ const ProductViewDetails = () => {
                           <div className="bg-muted p-3 rounded-lg">
                             <p className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
                               <ShoppingCart className="h-3 w-3" />
-                              Stock
+                              {t("products.view.stock")}
                             </p>
                             <p className="font-medium">{sku.stockQuantity}</p>
                           </div>
                           <div className="bg-muted p-3 rounded-lg">
                             <p className="text-xs text-muted-foreground mb-1">
-                              Weight
+                              {t("products.view.weight")}
                             </p>
                             <p className="font-medium">
                               {sku.metaData.weight} kg
@@ -416,12 +447,12 @@ const ProductViewDetails = () => {
                         {/* Metadata */}
                         <div className="border-t pt-3">
                           <p className="text-xs font-medium text-muted-foreground mb-2">
-                            Dimensions & Details
+                            {t("products.view.metadata")}
                           </p>
                           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm">
                             <div>
                               <span className="text-muted-foreground">
-                                Color:
+                                {t("products.view.color")}:
                               </span>{" "}
                               <span className="font-medium">
                                 {sku.metaData.color}
@@ -429,7 +460,7 @@ const ProductViewDetails = () => {
                             </div>
                             <div>
                               <span className="text-muted-foreground">
-                                Length:
+                                {t("products.view.length")}:
                               </span>{" "}
                               <span className="font-medium">
                                 {sku.metaData.length} cm
@@ -437,7 +468,7 @@ const ProductViewDetails = () => {
                             </div>
                             <div>
                               <span className="text-muted-foreground">
-                                Width:
+                                {t("products.view.width")}:
                               </span>{" "}
                               <span className="font-medium">
                                 {sku.metaData.width} cm
@@ -445,7 +476,7 @@ const ProductViewDetails = () => {
                             </div>
                             <div>
                               <span className="text-muted-foreground">
-                                Height:
+                                {t("products.view.height")}:
                               </span>{" "}
                               <span className="font-medium">
                                 {sku.metaData.height} cm

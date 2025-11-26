@@ -5,6 +5,20 @@ import { initReactI18next } from "react-i18next";
 import en from "./locales/en/index.js";
 import bn from "./locales/bn/index.js";
 
+// Get stored language from localStorage
+const getStoredLanguage = () => {
+  try {
+    const stored = localStorage.getItem("theme-storage");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return parsed.state?.language || "en";
+    }
+  } catch (error) {
+    console.error("Error reading language from localStorage:", error);
+  }
+  return "en";
+};
+
 i18n.use(initReactI18next).init({
   resources: {
     en: {
@@ -14,7 +28,7 @@ i18n.use(initReactI18next).init({
       translation: bn,
     },
   },
-  lng: "en",
+  lng: getStoredLanguage(),
   fallbackLng: "en",
   interpolation: {
     escapeValue: false,

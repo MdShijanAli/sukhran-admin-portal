@@ -119,7 +119,7 @@ export default function ProductForm() {
       }
     } catch (error) {
       console.error("Failed to fetch sub-categories:", error);
-      toast.error("Failed to load sub-categories");
+      toast.error(t("products.messages.failedToLoadSubCategories"));
     } finally {
       setIsLoadingSubCategories(false);
     }
@@ -142,7 +142,7 @@ export default function ProductForm() {
       setCategories(categoriesData);
     } catch (error) {
       console.error("Failed to fetch categories:", error);
-      toast.error("Failed to load categories");
+      toast.error(t("products.messages.failedToLoadCategories"));
     } finally {
       setIsLoadingCategories(false);
     }
@@ -204,7 +204,7 @@ export default function ProductForm() {
       }
     } catch (error) {
       console.error("Failed to fetch product details:", error);
-      toast.error("Failed to load product details");
+      toast.error(t("products.messages.failedToLoadDetails"));
     } finally {
       setIsLoadingProduct(false);
     }
@@ -317,12 +317,12 @@ export default function ProductForm() {
 
     // Validation
     if (!formData.categoryId) {
-      toast.error("Please select a category");
+      toast.error(t("products.messages.selectCategory"));
       return;
     }
 
     if (!formData.name) {
-      toast.error("Please enter product name");
+      toast.error(t("products.messages.enterProductName"));
       return;
     }
 
@@ -337,9 +337,7 @@ export default function ProductForm() {
     );
 
     if (!hasValidSku) {
-      toast.error(
-        "Please add at least one SKU with name, unit, size, price, and stock"
-      );
+      toast.error(t("products.messages.addValidSku"));
       return;
     }
 
@@ -387,17 +385,19 @@ export default function ProductForm() {
 
       if (isEditMode && id) {
         await productService.updateItem(id, formDataToSubmit);
-        toast.success("Product updated successfully");
+        toast.success(t("products.messages.productUpdated"));
       } else {
         await productService.storeItem(formDataToSubmit);
-        toast.success("Product created successfully");
+        toast.success(t("products.messages.productCreated"));
       }
       await productService.fetchLists();
       navigate("/products");
     } catch (error) {
       console.error("Error submitting product:", error);
       toast.error(
-        isEditMode ? "Failed to update product" : "Failed to create product"
+        isEditMode
+          ? t("products.messages.failedToUpdate")
+          : t("products.messages.failedToCreate")
       );
     } finally {
       setIsSubmitting(false);
@@ -412,7 +412,7 @@ export default function ProductForm() {
             <div className="text-center">
               <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
               <p className="text-muted-foreground">
-                Loading product details...
+                {t("products.loadingDetails")}
               </p>
             </div>
           </CardContent>
@@ -422,10 +422,12 @@ export default function ProductForm() {
           <Card>
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
-                {isEditMode ? "Edit Product" : t("productCreate.basicInfo")}
+                {isEditMode
+                  ? t("products.form.editProduct")
+                  : t("products.form.productInfo")}
                 <Button onClick={() => navigate("/products")}>
                   <Undo2 />
-                  Back
+                  {t("products.backToProducts")}
                 </Button>
               </CardTitle>
             </CardHeader>
@@ -434,11 +436,11 @@ export default function ProductForm() {
                 {/* Product Name */}
                 <div className="grid gap-2">
                   <Label htmlFor="productName">
-                    {t("productCreate.productName")} *
+                    {t("products.form.productName")} *
                   </Label>
                   <Input
                     id="productName"
-                    placeholder={t("productCreate.productNamePlaceholder")}
+                    placeholder={t("products.form.enterProductName")}
                     value={formData.name}
                     onChange={(e) => updateField("name", e.target.value)}
                     required
@@ -448,7 +450,7 @@ export default function ProductForm() {
                 {/* Category */}
                 <div className="grid gap-2">
                   <Label htmlFor="category">
-                    {t("productCreate.category")} *
+                    {t("products.form.category")} *
                   </Label>
                   <Select
                     value={formData.categoryId}
@@ -460,8 +462,8 @@ export default function ProductForm() {
                       <SelectValue
                         placeholder={
                           isLoadingCategories
-                            ? "Loading..."
-                            : t("productCreate.selectCategory")
+                            ? t("loading")
+                            : t("products.form.selectCategory")
                         }
                       />
                     </SelectTrigger>
@@ -477,7 +479,9 @@ export default function ProductForm() {
 
                 {/* Sub Category */}
                 <div className="grid gap-2">
-                  <Label htmlFor="subCategory">Sub Category</Label>
+                  <Label htmlFor="subCategory">
+                    {t("products.form.subCategory")}
+                  </Label>
                   <Select
                     value={formData.subCategoryId}
                     onValueChange={(value) =>
@@ -489,10 +493,10 @@ export default function ProductForm() {
                       <SelectValue
                         placeholder={
                           isLoadingSubCategories
-                            ? "Loading..."
+                            ? t("loading")
                             : subCategories.length === 0
-                            ? "No sub-categories"
-                            : "Select sub-category"
+                            ? t("noData")
+                            : t("products.form.selectSubCategory")
                         }
                       />
                     </SelectTrigger>
@@ -511,7 +515,9 @@ export default function ProductForm() {
 
                 {/* Product Type */}
                 <div className="grid gap-2">
-                  <Label htmlFor="productType">Product Type *</Label>
+                  <Label htmlFor="productType">
+                    {t("products.form.productType")} *
+                  </Label>
                   <Select
                     value={formData.productType}
                     onValueChange={(
@@ -520,12 +526,20 @@ export default function ProductForm() {
                     required
                   >
                     <SelectTrigger id="productType">
-                      <SelectValue placeholder="Select type" />
+                      <SelectValue
+                        placeholder={t("products.form.productType")}
+                      />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="normal">Normal</SelectItem>
-                      <SelectItem value="subscription">Subscription</SelectItem>
-                      <SelectItem value="bundle">Bundle</SelectItem>
+                      <SelectItem value="normal">
+                        {t("products.form.normal")}
+                      </SelectItem>
+                      <SelectItem value="subscription">
+                        {t("products.form.subscription")}
+                      </SelectItem>
+                      <SelectItem value="bundle">
+                        {t("products.form.bundle")}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -534,11 +548,11 @@ export default function ProductForm() {
               {/* Description */}
               <div className="grid gap-2">
                 <Label htmlFor="description">
-                  {t("productCreate.description")}
+                  {t("products.form.description")}
                 </Label>
                 <Textarea
                   id="description"
-                  placeholder={t("productCreate.descriptionPlaceholder")}
+                  placeholder={t("products.form.enterDescription")}
                   value={formData.description}
                   onChange={(e) => updateField("description", e.target.value)}
                   rows={4}
@@ -548,7 +562,7 @@ export default function ProductForm() {
               {/* Product Image */}
               <div className="grid gap-2">
                 <Label htmlFor="productImg">
-                  {t("productCreate.productImage")}
+                  {t("products.form.productImage")}
                 </Label>
                 <Input
                   id="productImg"
@@ -586,7 +600,9 @@ export default function ProductForm() {
                       updateField("isActive", checked)
                     }
                   />
-                  <Label htmlFor="isActive">Active</Label>
+                  <Label htmlFor="isActive">
+                    {t("products.columns.active")}
+                  </Label>
                 </div>
 
                 <div className="flex items-center space-x-2">
@@ -597,7 +613,9 @@ export default function ProductForm() {
                       updateField("isFeatured", checked)
                     }
                   />
-                  <Label htmlFor="isFeatured">Featured</Label>
+                  <Label htmlFor="isFeatured">
+                    {t("products.columns.featured")}
+                  </Label>
                 </div>
               </div>
             </CardContent>
@@ -606,7 +624,7 @@ export default function ProductForm() {
           {/* SKUs Section */}
           <Card className="my-3">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Product SKUs</CardTitle>
+              <CardTitle>{t("products.form.skuInfo")}</CardTitle>
               <Button
                 type="button"
                 variant="outline"
@@ -614,7 +632,7 @@ export default function ProductForm() {
                 onClick={addSku}
               >
                 <Plus className="h-4 w-4 mr-1" />
-                Add SKU
+                {t("products.form.addSku")}
               </Button>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -635,15 +653,19 @@ export default function ProductForm() {
                     </Button>
                   )}
 
-                  <h4 className="font-medium">SKU {index + 1}</h4>
+                  <h4 className="font-medium">
+                    {t("products.skus")} {index + 1}
+                  </h4>
 
                   <div className="grid gap-4 md:grid-cols-3">
                     {/* SKU Name */}
                     <div className="grid gap-2">
-                      <Label htmlFor={`sku-name-${index}`}>SKU Name *</Label>
+                      <Label htmlFor={`sku-name-${index}`}>
+                        {t("products.form.skuName")} *
+                      </Label>
                       <Input
                         id={`sku-name-${index}`}
-                        placeholder="e.g., Large White"
+                        placeholder={t("products.form.enterSkuName")}
                         value={sku.name}
                         onChange={(e) =>
                           updateSku(index, "name", e.target.value)
@@ -654,7 +676,9 @@ export default function ProductForm() {
 
                     {/* Unit Name */}
                     <div className="grid gap-2">
-                      <Label htmlFor={`unit-name-${index}`}>Unit Name *</Label>
+                      <Label htmlFor={`unit-name-${index}`}>
+                        {t("products.form.unitName")} *
+                      </Label>
                       <Select
                         value={sku.unitName}
                         onValueChange={(value) =>
@@ -663,7 +687,9 @@ export default function ProductForm() {
                         required
                       >
                         <SelectTrigger id={`unit-name-${index}`}>
-                          <SelectValue placeholder="Select unit" />
+                          <SelectValue
+                            placeholder={t("products.form.selectUnit")}
+                          />
                         </SelectTrigger>
                         <SelectContent>
                           {unitNames.map((unit) => (
@@ -677,11 +703,13 @@ export default function ProductForm() {
 
                     {/* Unit Size */}
                     <div className="grid gap-2">
-                      <Label htmlFor={`unit-size-${index}`}>Unit Size *</Label>
+                      <Label htmlFor={`unit-size-${index}`}>
+                        {t("products.form.unitSize")} *
+                      </Label>
                       <Input
                         id={`unit-size-${index}`}
                         type="number"
-                        placeholder="e.g., 1,5,250"
+                        placeholder={t("products.form.enterUnitSize")}
                         value={sku.unitSize}
                         onChange={(e) =>
                           updateSku(index, "unitSize", e.target.value)
@@ -693,13 +721,13 @@ export default function ProductForm() {
                     {/* Current Price */}
                     <div className="grid gap-2">
                       <Label htmlFor={`current-price-${index}`}>
-                        Current Price *
+                        {t("products.form.currentPrice")} *
                       </Label>
                       <Input
                         id={`current-price-${index}`}
                         type="number"
                         step="0.01"
-                        placeholder="0.00"
+                        placeholder={t("products.form.enterCurrentPrice")}
                         value={sku.currentPrice || ""}
                         onChange={(e) =>
                           updateSku(
@@ -715,13 +743,13 @@ export default function ProductForm() {
                     {/* Original Price */}
                     <div className="grid gap-2">
                       <Label htmlFor={`original-price-${index}`}>
-                        Original Price
+                        {t("products.form.originalPrice")}
                       </Label>
                       <Input
                         id={`original-price-${index}`}
                         type="number"
                         step="0.01"
-                        placeholder="0.00"
+                        placeholder={t("products.form.enterOriginalPrice")}
                         value={sku.originalPrice || ""}
                         onChange={(e) =>
                           updateSku(
@@ -735,11 +763,13 @@ export default function ProductForm() {
 
                     {/* Stock Quantity */}
                     <div className="grid gap-2">
-                      <Label htmlFor={`stock-${index}`}>Stock Quantity *</Label>
+                      <Label htmlFor={`stock-${index}`}>
+                        {t("products.form.stockQuantity")} *
+                      </Label>
                       <Input
                         id={`stock-${index}`}
                         type="number"
-                        placeholder="0"
+                        placeholder={t("products.form.enterStockQuantity")}
                         value={sku.stockQuantity || ""}
                         onChange={(e) =>
                           updateSku(
@@ -754,12 +784,14 @@ export default function ProductForm() {
 
                     {/* Weight */}
                     <div className="grid gap-2">
-                      <Label htmlFor={`weight-${index}`}>Weight (kg)</Label>
+                      <Label htmlFor={`weight-${index}`}>
+                        {t("products.form.weight")}
+                      </Label>
                       <Input
                         id={`weight-${index}`}
                         type="number"
                         step="0.01"
-                        placeholder="0.00"
+                        placeholder={t("products.form.enterWeight")}
                         value={sku.weight || ""}
                         onChange={(e) =>
                           updateSku(index, "weight", Number(e.target.value))
@@ -769,10 +801,12 @@ export default function ProductForm() {
 
                     {/* Color */}
                     <div className="grid gap-2">
-                      <Label htmlFor={`color-${index}`}>Color</Label>
+                      <Label htmlFor={`color-${index}`}>
+                        {t("products.form.color")}
+                      </Label>
                       <Input
                         id={`color-${index}`}
-                        placeholder="e.g., White, Red"
+                        placeholder={t("products.form.enterColor")}
                         value={sku.color || ""}
                         onChange={(e) =>
                           updateSku(index, "color", e.target.value)
@@ -782,12 +816,14 @@ export default function ProductForm() {
 
                     {/* Length */}
                     <div className="grid gap-2">
-                      <Label htmlFor={`length-${index}`}>Length (cm)</Label>
+                      <Label htmlFor={`length-${index}`}>
+                        {t("products.form.length")}
+                      </Label>
                       <Input
                         id={`length-${index}`}
                         type="number"
                         step="0.01"
-                        placeholder="0.00"
+                        placeholder={t("products.form.enterLength")}
                         value={sku.length || ""}
                         onChange={(e) =>
                           updateSku(index, "length", Number(e.target.value))
@@ -797,12 +833,14 @@ export default function ProductForm() {
 
                     {/* Width */}
                     <div className="grid gap-2">
-                      <Label htmlFor={`width-${index}`}>Width (cm)</Label>
+                      <Label htmlFor={`width-${index}`}>
+                        {t("products.form.width")}
+                      </Label>
                       <Input
                         id={`width-${index}`}
                         type="number"
                         step="0.01"
-                        placeholder="0.00"
+                        placeholder={t("products.form.enterWidth")}
                         value={sku.width || ""}
                         onChange={(e) =>
                           updateSku(index, "width", Number(e.target.value))
@@ -812,12 +850,14 @@ export default function ProductForm() {
 
                     {/* Height */}
                     <div className="grid gap-2">
-                      <Label htmlFor={`height-${index}`}>Height (cm)</Label>
+                      <Label htmlFor={`height-${index}`}>
+                        {t("products.form.height")}
+                      </Label>
                       <Input
                         id={`height-${index}`}
                         type="number"
                         step="0.01"
-                        placeholder="0.00"
+                        placeholder={t("products.form.enterHeight")}
                         value={sku.height || ""}
                         onChange={(e) =>
                           updateSku(index, "height", Number(e.target.value))
@@ -828,7 +868,9 @@ export default function ProductForm() {
 
                   {/* SKU Image */}
                   <div className="grid gap-2">
-                    <Label htmlFor={`skuImg-${index}`}>SKU Image</Label>
+                    <Label htmlFor={`skuImg-${index}`}>
+                      {t("products.form.skuImage")}
+                    </Label>
                     <Input
                       id={`skuImg-${index}`}
                       type="file"
@@ -867,14 +909,14 @@ export default function ProductForm() {
               onClick={() => navigate("/products")}
               disabled={isSubmitting}
             >
-              {t("common.cancel")}
+              {t("cancel")}
             </Button>
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting
-                ? "Submitting..."
+                ? t("loading")
                 : isEditMode
-                ? "Update Product"
-                : t("productCreate.createProduct")}
+                ? t("products.form.updateProduct")
+                : t("products.form.createProduct")}
             </Button>
           </div>
         </form>

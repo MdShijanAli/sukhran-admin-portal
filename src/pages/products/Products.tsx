@@ -123,10 +123,10 @@ const Products = () => {
         <CardContent className="p-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">
-              {t("nav.products")}
+              {t("products.title")}
             </h1>
             <p className="text-muted-foreground mt-1">
-              Manage your product catalog and inventory
+              {t("products.subtitle")}
             </p>
           </div>
           <div className="flex gap-3 sm:flex-row sm:items-center">
@@ -134,7 +134,7 @@ const Products = () => {
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
-                  placeholder="Search products..."
+                  placeholder={t("products.searchPlaceholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-9 pr-9"
@@ -165,7 +165,7 @@ const Products = () => {
               onClick={() => navigate("/products/create")}
             >
               <Plus className="h-4 w-4" />
-              Add Product
+              {t("products.addProduct")}
             </Button>
           </div>
         </CardContent>
@@ -197,16 +197,18 @@ const Products = () => {
           <Card className="p-12">
             <div className="text-center">
               <Package className="mx-auto h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-4 text-lg font-semibold">No products found</h3>
+              <h3 className="mt-4 text-lg font-semibold">
+                {t("products.noProductsFound")}
+              </h3>
               <p className="text-muted-foreground mt-2">
-                Get started by creating a new product
+                {t("products.getStarted")}
               </p>
               <Button
                 className="mt-4 gap-2"
                 onClick={() => navigate("/products/create")}
               >
                 <Plus className="h-4 w-4" />
-                Add Product
+                {t("products.addProduct")}
               </Button>
             </div>
           </Card>
@@ -244,14 +246,16 @@ const Products = () => {
                           variant={product.isActive ? "default" : "secondary"}
                           className="text-[10px] px-1.5 py-0"
                         >
-                          {product.isActive ? "Active" : "Inactive"}
+                          {product.isActive
+                            ? t("products.columns.active")
+                            : t("products.columns.inactive")}
                         </Badge>
                         {product.isFeatured && (
                           <Badge
                             variant="destructive"
                             className="text-[10px] px-1.5 py-0"
                           >
-                            Featured
+                            {t("products.columns.featured")}
                           </Badge>
                         )}
                       </div>
@@ -260,7 +264,7 @@ const Products = () => {
                           className="absolute left-1 top-1 text-[10px] px-1.5 py-0"
                           variant="secondary"
                         >
-                          {product.skus?.length} SKUs
+                          {product.skus?.length} {t("products.skus")}
                         </Badge>
                       )}
                     </div>
@@ -295,7 +299,9 @@ const Products = () => {
                             }
                             className="text-[10px] px-1.5 py-0"
                           >
-                            {(firstSku as any).isInStock ? "In Stock" : "Out"}
+                            {(firstSku as any).isInStock
+                              ? t("products.view.inStock")
+                              : t("products.view.outOfStock")}
                           </Badge>
                         </div>
                       )}
@@ -370,8 +376,10 @@ const Products = () => {
       <DeleteModal
         open={showDelete}
         onClose={() => setShowDelete(false)}
-        title="Delete Product"
-        description={`Are you sure you want to delete "${selectedProduct?.name}"? This action cannot be undone.`}
+        title={t("products.delete.title")}
+        description={`${t("deleteConfirm")} "${selectedProduct?.name}"? ${t(
+          "deleteAftermath"
+        )}`}
         onConfirm={confirmDelete}
         isDeleting={isDeleting}
       />

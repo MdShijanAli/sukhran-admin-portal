@@ -124,7 +124,7 @@ export default function FormModal({
     // Fetch roles
     const fetchRoles = async () => {
       try {
-        const response = await roleService.fetchLists();
+        const response = await roleService.fetchLists("exclude_customer=1");
         const responseData = response as unknown as Record<string, unknown>;
         const rolesData =
           (responseData?.data as Role[]) || (response as unknown as Role[]);
