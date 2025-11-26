@@ -253,13 +253,13 @@ const Users = () => {
   const columns: Column<User>[] = [
     {
       key: "sl",
-      label: "Sl.",
+      label: t("users.columns.sl"),
       render: (_, index) => index + 1,
       className: "text-center",
     },
     {
       key: "image_url",
-      label: "Image",
+      label: t("users.columns.image"),
       render: (user) => (
         <img
           src={user.image_url || user.displayImage || noImage}
@@ -435,7 +435,9 @@ const Users = () => {
         open={showDelete}
         onClose={setShowDelete}
         title={t("users.delete.title")}
-        description={`Are you sure you want to delete ${selectedUser?.firstName} ${selectedUser?.lastName}? This action cannot be undone.`}
+        description={`${t("deleteConfirm")} ${selectedUser?.firstName} ${
+          selectedUser?.lastName
+        }? ${t("deleteAftermath")}`}
         onConfirm={handleDeleteUser}
         isDeleting={isDeleting}
       />

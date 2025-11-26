@@ -300,7 +300,7 @@ export default function FormModal({
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="gender">Gender</Label>
+            <Label htmlFor="gender">{t("users.form.gender")}</Label>
             <Select
               value={formData.gender}
               onValueChange={(value) =>

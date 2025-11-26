@@ -228,12 +228,12 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
             {/* Timestamps */}
             <div className="border rounded-lg p-4 space-y-3">
               <h4 className="font-semibold text-sm text-primary mb-3">
-                Timeline
+                {t("users.view.timeline")}
               </h4>
               <div className="space-y-2">
                 <div className="flex justify-between items-start">
                   <span className="text-xs text-muted-foreground">
-                    Created:
+                    {t("users.view.created")}:
                   </span>
                   <span className="text-sm font-medium">
                     {new Date(user.created_at).toLocaleDateString("en-US", {
@@ -245,7 +245,7 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
                 </div>
                 <div className="flex justify-between items-start">
                   <span className="text-xs text-muted-foreground">
-                    Last Updated:
+                    {t("users.view.lastUpdated")}:
                   </span>
                   <span className="text-sm font-medium">
                     {new Date(user.updated_at).toLocaleDateString("en-US", {

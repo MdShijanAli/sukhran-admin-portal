@@ -5,6 +5,8 @@
   "searchPlaceholder": "Search users...",
   "noUsersFound": "No users found",
   "columns": {
+    "sl": "SL.",
+    "image": "Image",
     "userName": "User Name",
     "email": "Email Address",
     "role": "Role",
