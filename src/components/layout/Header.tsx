@@ -130,9 +130,9 @@ export default function Header() {
           className="rounded-full"
         >
           {theme === "light" ? (
-            <Moon className="h-5 w-5" />
+            <Moon className="h-8 w-8" />
           ) : (
-            <Sun className="h-5 w-5" />
+            <Sun className="h-8 w-8" />
           )}
         </Button>
 
@@ -170,7 +170,7 @@ export default function Header() {
               size="icon"
               className="rounded-full relative"
             >
-              <Bell className="h-5 w-5" />
+              <Bell className="h-8 w-8" />
               {mockNotifications.filter((n) => !n.read).length > 0 && (
                 <span className="absolute top-1 right-1 h-2 w-2 bg-destructive rounded-full" />
               )}
