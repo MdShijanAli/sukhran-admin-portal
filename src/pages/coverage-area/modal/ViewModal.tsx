@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { BaseModal } from "@/components/modals/BaseModal";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -44,6 +45,7 @@ export default function ViewModal({
   onClose,
   areaId,
 }: CoverageAreaDetailsDialogProps) {
+  const { t } = useTranslation();
   const [area, setArea] = useState<CoverageAreaDetails | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -58,7 +60,7 @@ export default function ViewModal({
         setArea(apiResponse.data || (response as CoverageAreaDetails));
       } catch (error) {
         console.error("Failed to fetch coverage area details:", error);
-        toast.error("Failed to load coverage area details");
+        toast.error(t("coverage_area.messages.failedToLoad"));
       } finally {
         setIsLoading(false);
       }
@@ -71,7 +73,7 @@ export default function ViewModal({
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title="Coverage Area Details"
+      title={t("coverage_area.view.coverageAreaDetails")}
       size="2xl"
       showSubmitButton={false}
       loading={isLoading}
@@ -85,7 +87,9 @@ export default function ViewModal({
               <p className="text-muted-foreground">{area?.city}</p>
             </div>
             <Badge variant={area?.is_active ? "default" : "secondary"}>
-              {area?.is_active ? "Active" : "Inactive"}
+              {area?.is_active
+                ? t("coverage_area.status.active")
+                : t("coverage_area.status.inactive")}
             </Badge>
           </div>
         </div>
@@ -97,7 +101,9 @@ export default function ViewModal({
           <div className="rounded-lg border bg-card p-4">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Users className="h-4 w-4" />
-              <span className="text-sm">Addresses</span>
+              <span className="text-sm">
+                {t("coverage_area.view.addresses")}
+              </span>
             </div>
             <p className="text-2xl font-bold">{area?.addresses_count || 0}</p>
           </div>
@@ -105,7 +111,9 @@ export default function ViewModal({
           <div className="rounded-lg border bg-card p-4">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Circle className="h-4 w-4" />
-              <span className="text-sm">Coverage Radius</span>
+              <span className="text-sm">
+                {t("coverage_area.view.coverageRadius")}
+              </span>
             </div>
             <p className="text-2xl font-bold">{area?.radius_km} km</p>
           </div>
@@ -117,15 +125,19 @@ export default function ViewModal({
         <div className="space-y-4">
           <h4 className="font-semibold flex items-center gap-2">
             <MapPin className="h-4 w-4" />
-            Location Information
+            {t("coverage_area.view.locationInformation")}
           </h4>
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Latitude</p>
+              <p className="text-sm text-muted-foreground">
+                {t("coverage_area.view.latitude")}
+              </p>
               <p className="font-mono">{area?.latitude}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Longitude</p>
+              <p className="text-sm text-muted-foreground">
+                {t("coverage_area.view.longitude")}
+              </p>
               <p className="font-mono">{area?.longitude}</p>
             </div>
           </div>
@@ -139,7 +151,7 @@ export default function ViewModal({
             <div>
               <h4 className="mb-3 font-semibold flex items-center gap-2">
                 <Home className="h-4 w-4" />
-                Addresses ({area.addresses.length})
+                {t("coverage_area.view.addresses")} ({area.addresses.length})
               </h4>
               <div className="space-y-3">
                 {area.addresses.map((address) => (
@@ -153,7 +165,7 @@ export default function ViewModal({
                           <h5 className="font-semibold">{address.house}</h5>
                           {address.is_default && (
                             <Badge variant="default" className="text-xs">
-                              Default
+                              {t("coverage_area.view.default")}
                             </Badge>
                           )}
                           <Badge
@@ -165,19 +177,31 @@ export default function ViewModal({
                         </div>
                         <div className="text-sm text-muted-foreground space-y-1">
                           <p>
-                            Road: {address.road}, Block: {address.block}
+                            {t("coverage_area.view.road")} {address.road},{" "}
+                            {t("coverage_area.view.block")} {address.block}
                           </p>
-                          <p>Zip Code: {address.zip_code}</p>
+                          <p>
+                            {t("coverage_area.view.zipCode")} {address.zip_code}
+                          </p>
                           {address.landmark && (
-                            <p>Landmark: {address.landmark}</p>
+                            <p>
+                              {t("coverage_area.view.landmark")}{" "}
+                              {address.landmark}
+                            </p>
                           )}
-                          {address.label && <p>Label: {address.label}</p>}
+                          {address.label && (
+                            <p>
+                              {t("coverage_area.view.label")} {address.label}
+                            </p>
+                          )}
                         </div>
                         <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                          <span>User ID: {address.user_id}</span>
+                          <span>
+                            {t("coverage_area.view.userId")} {address.user_id}
+                          </span>
                           <span>•</span>
                           <span>
-                            Added:{" "}
+                            {t("coverage_area.view.added")}{" "}
                             {new Date(address.created_at).toLocaleDateString()}
                           </span>
                         </div>
@@ -195,7 +219,9 @@ export default function ViewModal({
           <>
             <div className="text-center py-6 text-muted-foreground">
               <Home className="h-8 w-8 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">No addresses found in this area</p>
+              <p className="text-sm">
+                {t("coverage_area.view.noAddressesFound")}
+              </p>
             </div>
             <Separator />
           </>

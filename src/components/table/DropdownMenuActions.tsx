@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LucideIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export interface ActionItem<T = unknown> {
   label: string;
@@ -37,14 +38,17 @@ export function DropdownMenuActions<T>({
   triggerIcon,
   triggerVariant = "ghost",
   triggerSize = "icon",
-  menuLabel = "Actions",
+  menuLabel,
   align = "end",
 }: DropdownMenuActionsProps<T>) {
+  const { t } = useTranslation();
   const visibleActions = actions.filter((action) => {
     if (action.show === undefined) return true;
     if (typeof action.show === "function") return action.show(item);
     return action.show;
   });
+
+  const menuLabelNode = menuLabel ? menuLabel : t("actions");
 
   if (visibleActions.length === 0) return null;
 
@@ -56,9 +60,9 @@ export function DropdownMenuActions<T>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align}>
-        {menuLabel && (
+        {menuLabelNode && (
           <>
-            <DropdownMenuLabel>{menuLabel}</DropdownMenuLabel>
+            <DropdownMenuLabel>{menuLabelNode}</DropdownMenuLabel>
             <DropdownMenuSeparator />
           </>
         )}

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { BaseModal } from "@/components/modals/BaseModal";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,6 +28,7 @@ export default function FormModal({
   onClose,
   editData,
 }: CoverageAreaDialogProps) {
+  const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<CoverageAreaFormData>({
@@ -72,23 +74,23 @@ export default function FormModal({
   const handleSubmit = async () => {
     // Validation
     if (!formData.name || formData.name.length < 2) {
-      toast.error("Name must be at least 2 characters");
+      toast.error(t("coverage_area.messages.nameTooShort"));
       return;
     }
     if (!formData.city || formData.city.length < 2) {
-      toast.error("City must be at least 2 characters");
+      toast.error(t("coverage_area.messages.cityTooShort"));
       return;
     }
     if (formData.latitude < -90 || formData.latitude > 90) {
-      toast.error("Latitude must be between -90 and 90");
+      toast.error(t("coverage_area.messages.invalidLatitude"));
       return;
     }
     if (formData.longitude < -180 || formData.longitude > 180) {
-      toast.error("Longitude must be between -180 and 180");
+      toast.error(t("coverage_area.messages.invalidLongitude"));
       return;
     }
     if (formData.radius_km < 0.1 || formData.radius_km > 100) {
-      toast.error("Radius must be between 0.1 and 100 km");
+      toast.error(t("coverage_area.messages.invalidRadius"));
       return;
     }
 
@@ -116,16 +118,16 @@ export default function FormModal({
       console.log("Result:", result);
       toast.success(
         isEditing
-          ? "Coverage area updated successfully"
-          : "Coverage area created successfully"
+          ? t("coverage_area.messages.areaUpdated")
+          : t("coverage_area.messages.areaCreated")
       );
       onClose();
     } catch (error) {
       console.error("Error submitting coverage area:", error);
       toast.error(
         isEditing
-          ? "Failed to update coverage area"
-          : "Failed to create coverage area"
+          ? t("coverage_area.messages.failedToUpdate")
+          : t("coverage_area.messages.failedToCreate")
       );
     } finally {
       setIsSubmitting(false);
@@ -136,31 +138,39 @@ export default function FormModal({
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title={isEditing ? "Edit Coverage Area" : "Create New Coverage Area"}
+      title={
+        isEditing
+          ? t("coverage_area.form.editCoverageArea")
+          : t("coverage_area.form.createNewCoverageArea")
+      }
       onSubmit={handleSubmit}
       isSubmitting={isSubmitting}
-      submitButtonText={isEditing ? "Update Area" : "Create Area"}
+      submitButtonText={
+        isEditing
+          ? t("coverage_area.form.updateArea")
+          : t("coverage_area.form.createArea")
+      }
       size="2xl"
     >
       <div className="grid gap-6">
         {/* Area Name and City */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Area Name *</Label>
+            <Label htmlFor="name">{t("coverage_area.form.areaName")} *</Label>
             <Input
               id="name"
               value={formData.name}
               onChange={(e) => updateField("name", e.target.value)}
-              placeholder="e.g., Gulshan"
+              placeholder={t("coverage_area.form.areaNamePlaceholder")}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="city">City *</Label>
+            <Label htmlFor="city">{t("coverage_area.form.city")} *</Label>
             <Input
               id="city"
               value={formData.city}
               onChange={(e) => updateField("city", e.target.value)}
-              placeholder="e.g., Dhaka"
+              placeholder={t("coverage_area.form.cityPlaceholder")}
             />
           </div>
         </div>
@@ -168,7 +178,7 @@ export default function FormModal({
         {/* Coordinates */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="latitude">Latitude</Label>
+            <Label htmlFor="latitude">{t("coverage_area.form.latitude")}</Label>
             <Input
               id="latitude"
               type="number"
@@ -177,12 +187,16 @@ export default function FormModal({
               onChange={(e) =>
                 updateField("latitude", parseFloat(e.target.value) || 0)
               }
-              placeholder="e.g., 23.7808"
+              placeholder={t("coverage_area.form.latitudePlaceholder")}
             />
-            <p className="text-xs text-muted-foreground">Between -90 and 90</p>
+            <p className="text-xs text-muted-foreground">
+              {t("coverage_area.form.latitudeHint")}
+            </p>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="longitude">Longitude</Label>
+            <Label htmlFor="longitude">
+              {t("coverage_area.form.longitude")}
+            </Label>
             <Input
               id="longitude"
               type="number"
@@ -191,17 +205,17 @@ export default function FormModal({
               onChange={(e) =>
                 updateField("longitude", parseFloat(e.target.value) || 0)
               }
-              placeholder="e.g., 90.4156"
+              placeholder={t("coverage_area.form.longitudePlaceholder")}
             />
             <p className="text-xs text-muted-foreground">
-              Between -180 and 180
+              {t("coverage_area.form.longitudeHint")}
             </p>
           </div>
         </div>
 
         {/* Radius */}
         <div className="space-y-2">
-          <Label htmlFor="radius_km">Radius (km)</Label>
+          <Label htmlFor="radius_km">{t("coverage_area.form.radiusKm")}</Label>
           <Input
             id="radius_km"
             type="number"
@@ -210,10 +224,10 @@ export default function FormModal({
             onChange={(e) =>
               updateField("radius_km", parseFloat(e.target.value) || 0)
             }
-            placeholder="e.g., 5"
+            placeholder={t("coverage_area.form.radiusPlaceholder")}
           />
           <p className="text-xs text-muted-foreground">
-            Service coverage radius in kilometers
+            {t("coverage_area.form.radiusHint")}
           </p>
         </div>
 
@@ -226,10 +240,10 @@ export default function FormModal({
           />
           <div>
             <Label htmlFor="is_active" className="text-base">
-              Active Status
+              {t("coverage_area.form.activeStatus")}
             </Label>
             <p className="text-sm text-muted-foreground">
-              Enable or disable this coverage area
+              {t("coverage_area.form.activeStatusHint")}
             </p>
           </div>
         </div>

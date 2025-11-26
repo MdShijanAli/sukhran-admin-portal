@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { Eye, Edit, Plus, Trash2, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
@@ -17,6 +18,7 @@ import { DeleteModal } from "@/components/modals";
 import { toast } from "sonner";
 
 const CoverageAreas = () => {
+  const { t } = useTranslation();
   const [selectedArea, setSelectedArea] = useState<CoverageArea | null>(null);
   const [dialogMode, setDialogMode] = useState<"create" | "edit" | null>(null);
   const [showDetails, setShowDetails] = useState(false);
@@ -56,10 +58,10 @@ const CoverageAreas = () => {
     setIsDeleting(true);
     try {
       await coverageAreaService.deleteItem(selectedArea.id);
-      toast.success("Coverage area deleted successfully");
+      toast.success(t("coverage_area.messages.areaDeleted"));
     } catch (error) {
       console.error("Error deleting coverage area:", error);
-      toast.error("Failed to delete coverage area");
+      toast.error(t("coverage_area.messages.failedToDelete"));
     } finally {
       setIsDeleting(false);
       setShowDelete(false);
@@ -71,12 +73,15 @@ const CoverageAreas = () => {
     try {
       await coverageAreaService.toggleActiveStatus(area);
       toast.success(
-        `Area ${!area.is_active ? "activated" : "deactivated"} successfully`
+        !area.is_active
+          ? t("coverage_area.messages.areaActivated")
+          : t("coverage_area.messages.areaDeactivated")
       );
     } catch (error) {
       console.error("Error toggling area status:", error);
       toast.error(
-        error?.response?.data?.message || "Failed to update area status"
+        error?.response?.data?.message ||
+          t("coverage_area.messages.failedToToggleStatus")
       );
     } finally {
       setTogglingAreaId(null);
@@ -86,17 +91,17 @@ const CoverageAreas = () => {
   // Define actions for dropdown menu
   const areaActions: ActionItem<CoverageArea>[] = [
     {
-      label: "View Details",
+      label: t("coverage_area.actions.viewDetails"),
       icon: Eye,
       onClick: handleViewDetails,
     },
     {
-      label: "Edit Area",
+      label: t("coverage_area.actions.editArea"),
       icon: Edit,
       onClick: handleEdit,
     },
     {
-      label: "Delete Area",
+      label: t("coverage_area.actions.deleteArea"),
       icon: Trash2,
       onClick: handleDelete,
       variant: "destructive",
@@ -116,22 +121,22 @@ const CoverageAreas = () => {
   const columns: Column<CoverageArea>[] = [
     {
       key: "sl",
-      label: "Sl.",
+      label: t("coverage_area.columns.sl"),
       render: (_, index) => index + 1,
       className: "text-center w-[60px]",
     },
     {
       key: "name",
-      label: "Name",
+      label: t("coverage_area.columns.name"),
       className: "font-medium",
     },
     {
       key: "city",
-      label: "City",
+      label: t("coverage_area.columns.city"),
     },
     {
       key: "coordinates",
-      label: "Coordinates",
+      label: t("coverage_area.columns.coordinates"),
       render: (area) => (
         <span className="text-sm text-muted-foreground">
           {parseFloat(area.latitude).toFixed(4)},{" "}
@@ -141,12 +146,12 @@ const CoverageAreas = () => {
     },
     {
       key: "radius_km",
-      label: "Radius (km)",
+      label: t("coverage_area.columns.radiusKm"),
       className: "text-center",
     },
     {
       key: "status",
-      label: "Status",
+      label: t("coverage_area.columns.status"),
       render: (area) => (
         <div className="flex items-center justify-center gap-2">
           <Switch
@@ -155,7 +160,9 @@ const CoverageAreas = () => {
             disabled={togglingAreaId === area.id}
           />
           <Badge variant={area.is_active ? "default" : "secondary"}>
-            {area.is_active ? "Active" : "Inactive"}
+            {area.is_active
+              ? t("coverage_area.status.active")
+              : t("coverage_area.status.inactive")}
           </Badge>
         </div>
       ),
@@ -163,7 +170,7 @@ const CoverageAreas = () => {
     },
     {
       key: "actions",
-      label: "Actions",
+      label: t("coverage_area.columns.actions"),
       className: "text-right",
       render: (area) => (
         <DropdownMenuActions item={area} actions={areaActions} />
@@ -173,25 +180,25 @@ const CoverageAreas = () => {
 
   const summaryLists = [
     {
-      title: "Total Areas",
+      title: t("coverage_area.totalAreas"),
       value: stats.total_areas,
       icon: MapPin,
       color: "text-muted-foreground",
     },
     {
-      title: "Active Areas",
+      title: t("coverage_area.activeAreas"),
       value: stats.active_areas,
       icon: MapPin,
       color: "text-green-600",
     },
     {
-      title: "Inactive Areas",
+      title: t("coverage_area.inactiveAreas"),
       value: stats.inactive_areas,
       icon: MapPin,
       color: "text-red-600",
     },
     {
-      title: "Cities",
+      title: t("coverage_area.cities"),
       value: stats.cities,
       icon: MapPin,
       color: "text-muted-foreground",
@@ -201,22 +208,22 @@ const CoverageAreas = () => {
   return (
     <div className="animate-fade-in">
       <BaseTableList<CoverageArea>
-        title="Coverage Areas"
-        description="Manage your service coverage areas"
+        title={t("coverage_area.title")}
+        description={t("coverage_area.subtitle")}
         headerActions={[
           {
-            label: "Add Coverage Area",
+            label: t("coverage_area.addCoverageArea"),
             icon: Plus,
             onClick: handleCreate,
             variant: "default",
           },
         ]}
-        searchPlaceholder="Search by area name or city..."
+        searchPlaceholder={t("coverage_area.searchPlaceholder")}
         enableSearch={true}
         columns={columns}
         service={coverageAreaService}
         store={store}
-        emptyMessage="No coverage areas found"
+        emptyMessage={t("coverage_area.noCoverageAreasFound")}
         getRowKey={(area) => area.id}
         onRefresh={handleSetRefresh}
         summaryLists={summaryLists}
@@ -238,8 +245,12 @@ const CoverageAreas = () => {
       <DeleteModal
         open={showDelete}
         onClose={() => setShowDelete(false)}
-        title="Delete Coverage Area"
-        description={`Are you sure you want to delete the coverage area "${selectedArea?.name}" in ${selectedArea?.city}? This action cannot be undone.`}
+        title={t("coverage_area.delete.title")}
+        description={`${t("coverage_area.delete.message")} "${
+          selectedArea?.name
+        }" ${t("in")} ${selectedArea?.city}? ${t(
+          "coverage_area.delete.cannotUndo"
+        )}`}
         onConfirm={handleDeleteArea}
         isDeleting={isDeleting}
       />

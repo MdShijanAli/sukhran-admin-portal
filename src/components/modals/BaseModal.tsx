@@ -70,7 +70,7 @@ export function BaseModal({
   title,
   children,
   showCloseButton = true,
-  closeButtonText = "Cancel",
+  closeButtonText,
   closeButtonVariant = "outline",
   onClose,
   showSubmitButton = true,
@@ -85,6 +85,7 @@ export function BaseModal({
   loading,
 }: BaseModalProps) {
   const { t } = useTranslation();
+  const closeButtonTextNode = closeButtonText || t("close");
   const handleClose = () => {
     if (onClose) {
       onClose();
@@ -128,7 +129,7 @@ export function BaseModal({
               onClick={handleClose}
               disabled={isSubmitting}
             >
-              {closeButtonText}
+              {closeButtonTextNode}
             </Button>
           )}
           {showSubmitButton && (

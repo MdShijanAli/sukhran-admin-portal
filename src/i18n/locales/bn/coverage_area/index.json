@@ -1,0 +1,90 @@
+{
+  "title": "কভারেজ এলাকা",
+  "subtitle": "আপনার সেবা কভারেজ এলাকা পরিচালনা করুন",
+  "addCoverageArea": "যোগ করুন",
+  "searchPlaceholder": "এলাকার নাম বা শহর দিয়ে খুঁজুন...",
+  "noCoverageAreasFound": "কোন কভারেজ এলাকা পাওয়া যায়নি",
+  "totalAreas": "মোট এলাকা",
+  "activeAreas": "সক্রিয় এলাকা",
+  "inactiveAreas": "নিষ্ক্রিয় এলাকা",
+  "cities": "শহর",
+  "status": {
+    "active": "সক্রিয়",
+    "inactive": "নিষ্ক্রিয়"
+  },
+  "columns": {
+    "sl": "ক্রমিক",
+    "name": "নাম",
+    "city": "শহর",
+    "coordinates": "স্থানাঙ্ক",
+    "radiusKm": "ব্যাসার্ধ (কিমি)",
+    "status": "স্ট্যাটাস",
+    "actions": "কার্যক্রম"
+  },
+  "actions": {
+    "viewDetails": "বিস্তারিত দেখুন",
+    "editArea": "এলাকা সম্পাদনা করুন",
+    "deleteArea": "এলাকা মুছুন"
+  },
+  "form": {
+    "createNewCoverageArea": "নতুন কভারেজ এলাকা তৈরি করুন",
+    "editCoverageArea": "কভারেজ এলাকা সম্পাদনা করুন",
+    "areaName": "এলাকার নাম",
+    "areaNamePlaceholder": "যেমন, গুলশান",
+    "city": "শহর",
+    "cityPlaceholder": "যেমন, ঢাকা",
+    "latitude": "অক্ষাংশ",
+    "latitudePlaceholder": "যেমন, ২৩.৭৮০৮",
+    "latitudeHint": "-৯০ এবং ৯০ এর মধ্যে",
+    "longitude": "দ্রাঘিমাংশ",
+    "longitudePlaceholder": "যেমন, ৯০.৪১৫৬",
+    "longitudeHint": "-১৮০ এবং ১৮০ এর মধ্যে",
+    "radiusKm": "ব্যাসার্ধ (কিমি)",
+    "radiusPlaceholder": "যেমন, ৫",
+    "radiusHint": "সেবা কভারেজ ব্যাসার্ধ কিলোমিটারে",
+    "activeStatus": "সক্রিয় স্ট্যাটাস",
+    "activeStatusHint": "এই কভারেজ এলাকা সক্রিয় বা নিষ্ক্রিয় করুন",
+    "updateArea": "এলাকা আপডেট করুন",
+    "createArea": "এলাকা তৈরি করুন"
+  },
+  "view": {
+    "coverageAreaDetails": "কভারেজ এলাকার বিবরণ",
+    "addresses": "ঠিকানা",
+    "coverageRadius": "কভারেজ ব্যাসার্ধ",
+    "locationInformation": "অবস্থানের তথ্য",
+    "latitude": "অক্ষাংশ",
+    "longitude": "দ্রাঘিমাংশ",
+    "addressesCount": "ঠিকানা",
+    "default": "ডিফল্ট",
+    "road": "রোড:",
+    "block": "ব্লক:",
+    "zipCode": "জিপ কোড:",
+    "landmark": "ল্যান্ডমার্ক:",
+    "label": "লেবেল:",
+    "userId": "ইউজার আইডি:",
+    "added": "যোগ করা হয়েছে:",
+    "noAddressesFound": "এই এলাকায় কোন ঠিকানা পাওয়া যায়নি"
+  },
+  "messages": {
+    "nameTooShort": "নাম কমপক্ষে ২টি অক্ষর হতে হবে",
+    "cityTooShort": "শহর কমপক্ষে ২টি অক্ষর হতে হবে",
+    "invalidLatitude": "অক্ষাংশ -৯০ এবং ৯০ এর মধ্যে হতে হবে",
+    "invalidLongitude": "দ্রাঘিমাংশ -১৮০ এবং ১৮০ এর মধ্যে হতে হবে",
+    "invalidRadius": "ব্যাসার্ধ ০.১ এবং ১০০ কিমি এর মধ্যে হতে হবে",
+    "areaCreated": "কভারেজ এলাকা সফলভাবে তৈরি হয়েছে",
+    "areaUpdated": "কভারেজ এলাকা সফলভাবে আপডেট হয়েছে",
+    "areaDeleted": "কভারেজ এলাকা সফলভাবে মুছে ফেলা হয়েছে",
+    "areaActivated": "এলাকা সফলভাবে সক্রিয় করা হয়েছে",
+    "areaDeactivated": "এলাকা সফলভাবে নিষ্ক্রিয় করা হয়েছে",
+    "failedToCreate": "কভারেজ এলাকা তৈরি করতে ব্যর্থ",
+    "failedToUpdate": "কভারেজ এলাকা আপডেট করতে ব্যর্থ",
+    "failedToDelete": "কভারেজ এলাকা মুছে ফেলতে ব্যর্থ",
+    "failedToLoad": "কভারেজ এলাকার বিবরণ লোড করতে ব্যর্থ",
+    "failedToToggleStatus": "এলাকার স্ট্যাটাস আপডেট করতে ব্যর্থ"
+  },
+  "delete": {
+    "title": "কভারেজ এলাকা মুছুন",
+    "message": "আপনি কি নিশ্চিত যে আপনি কভারেজ এলাকাটি মুছে ফেলতে চান",
+    "cannotUndo": "এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না।"
+  }
+}
