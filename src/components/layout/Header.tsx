@@ -28,6 +28,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import authService from "@/services/authService";
 import { toast } from "sonner";
 import { Notification } from "@/lib/types";
+import ENFlag from "@/assets/images/en.png";
+import BNFlag from "@/assets/images/bn.png";
 
 const mockNotifications: Notification[] = [
   {
@@ -140,8 +142,23 @@ export default function Header() {
           size="icon"
           onClick={toggleLanguage}
           className="rounded-full"
+          title={
+            i18n.language === "en" ? "Switch to বাংলা" : "Switch to English"
+          }
         >
-          <Globe className="h-5 w-5" />
+          {i18n.language === "en" ? (
+            <img
+              src={ENFlag}
+              alt="English"
+              className="h-6 w-6 rounded-full object-cover object-center"
+            />
+          ) : (
+            <img
+              src={BNFlag}
+              alt="Bangla"
+              className="h-6 w-6 rounded-full object-cover object-center"
+            />
+          )}
           <span className="sr-only">Toggle language</span>
         </Button>
 
