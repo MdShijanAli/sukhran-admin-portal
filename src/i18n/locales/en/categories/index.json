@@ -1,7 +1,7 @@
 {
   "title": "Categories",
   "subtitle": "Manage your product categories",
-  "addCategory": "Add Category",
+  "addCategory": "Add",
   "searchPlaceholder": "Search by name or description...",
   "noCategoriesFound": "No categories found",
   "columns": {

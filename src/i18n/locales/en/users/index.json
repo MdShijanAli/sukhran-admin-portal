@@ -1,7 +1,7 @@
 {
   "title": "User Management",
   "subtitle": "Manage platform users and their roles",
-  "addUser": "Add User",
+  "addUser": "Add",
   "searchPlaceholder": "Search users...",
   "noUsersFound": "No users found",
   "columns": {

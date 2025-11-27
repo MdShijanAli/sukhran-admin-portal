@@ -1,7 +1,7 @@
 {
   "title": "Role Management",
   "subtitle": "Manage roles and permissions",
-  "addRole": "Add Role",
+  "addRole": "Add",
   "searchPlaceholder": "Search by role name or description...",
   "noRolesFound": "No roles found",
   "totalRoles": "Total Roles",

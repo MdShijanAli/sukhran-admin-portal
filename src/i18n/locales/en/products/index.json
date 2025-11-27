@@ -1,7 +1,7 @@
 {
   "title": "Product Management",
   "subtitle": "Manage your product catalog and inventory",
-  "addProduct": "Add Product",
+  "addProduct": "Add",
   "searchPlaceholder": "Search products...",
   "noProductsFound": "No products found",
   "getStarted": "Get started by creating a new product",
