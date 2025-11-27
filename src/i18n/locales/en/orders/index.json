@@ -51,7 +51,8 @@
     "deleteOrder": "Delete Order",
     "assignAgent": "Assign Agent",
     "markDelivered": "Mark as Delivered",
-    "cancelOrder": "Cancel Order"
+    "cancelOrder": "Cancel Order",
+    "updateDeliveryTime": "Update Delivery Time"
   },
   "form": {
     "createNewOrder": "Create New Order",
@@ -99,6 +100,13 @@
     "note": "Note (Optional)",
     "notePlaceholder": "Add a note about this status change (e.g., Order dispatched via courier)"
   },
+  "updateDeliveryTime": {
+    "title": "Update Delivery Time",
+    "deliveryFrom": "Estimated Delivery From",
+    "deliveryTo": "Estimated Delivery To",
+    "reason": "Reason (Optional)",
+    "reasonPlaceholder": "Add a reason for this delivery time change (e.g., Supply chain delay due to weather conditions)"
+  },
   "view": {
     "orderDetails": "Order Details",
     "customerInfo": "Customer Information",
@@ -125,6 +133,9 @@
     "statusUpdated": "Order status updated successfully",
     "selectStatus": "Please select a status",
     "failedToUpdateStatus": "Failed to update order status",
+    "deliveryTimeUpdated": "Delivery time updated successfully",
+    "failedToUpdateDeliveryTime": "Failed to update delivery time",
+    "invalidDateRange": "Delivery 'from' date cannot be after 'to' date",
     "failedToCreate": "Failed to create order",
     "failedToUpdate": "Failed to update order",
     "failedToDelete": "Failed to delete order",

@@ -27,6 +27,7 @@ import { DeleteModal } from "@/components/modals";
 import FormModal from "./modal/FormModal";
 import ViewModal from "./modal/ViewModal";
 import UpdateOrderStatusModal from "./modal/UpdateOrderStatusModal";
+import UpdateDeliveryTimeModal from "./modal/UpdateDeliveryTimeModal";
 
 export default function Orders() {
   const { t } = useTranslation();
@@ -37,6 +38,8 @@ export default function Orders() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
+  const [showUpdateDeliveryTimeModal, setShowUpdateDeliveryTimeModal] =
+    useState(false);
 
   const store = useOrderStore();
 
@@ -67,6 +70,11 @@ export default function Orders() {
   const handleUpdateStatus = (order: Order) => {
     setSelectedOrder(order);
     setShowUpdateStatusModal(true);
+  };
+
+  const handleUpdateDeliveryTime = (order: Order) => {
+    setSelectedOrder(order);
+    setShowUpdateDeliveryTimeModal(true);
   };
 
   const handleDeleteOrder = async () => {
@@ -125,6 +133,12 @@ export default function Orders() {
       onClick: handleUpdateStatus,
     },
     {
+      label: t("orders.actions.updateDeliveryTime"),
+      icon: Clock,
+      onClick: handleUpdateDeliveryTime,
+      show: order.status !== "delivered" && order.status !== "cancelled",
+    },
+    {
       label: t("orders.actions.deleteOrder"),
       icon: Trash2,
       onClick: handleDelete,
@@ -145,7 +159,11 @@ export default function Orders() {
     {
       key: "order_number",
       label: t("orders.columns.orderNumber"),
-      render: (order) => <span className="font-medium">{order.orderId}</span>,
+      render: (order) => (
+        <div className="w-24">
+          <span className="font-medium">{order.orderId}</span>
+        </div>
+      ),
     },
     {
       key: "customer",
@@ -163,10 +181,13 @@ export default function Orders() {
       key: "items",
       label: t("orders.columns.items"),
       render: (order) => (
-        <Badge variant="outline">
-          {order.itemsCount || order.items?.length || 0} {t("orders.view.item")}
-          (s)
-        </Badge>
+        <div className="w-20">
+          <Badge variant="outline">
+            {order.itemsCount || order.items?.length || 0}{" "}
+            {t("orders.view.item")}
+            (s)
+          </Badge>
+        </div>
       ),
     },
     {
@@ -204,25 +225,29 @@ export default function Orders() {
       key: "date",
       label: t("orders.columns.date"),
       render: (order) => (
-        <span className="text-sm">{formatDate(order.created_at)}</span>
+        <div className="w-[100px]">
+          <span className="text-sm">{order.created_at}</span>
+        </div>
       ),
     },
     {
       key: "paymentStatus",
       label: t("orders.columns.paymentStatus"),
       render: (order) => (
-        <Badge
-          variant="outline"
-          className={
-            order.paymentStatus === "paid"
-              ? "border-success/20 text-success"
-              : order.paymentStatus === "failed"
-              ? "border-destructive/20 text-destructive"
-              : "border-warning/20 text-warning"
-          }
-        >
-          {t(`orders.paymentStatus.${order.paymentStatus}`)}
-        </Badge>
+        <div className="w-28 text-center">
+          <Badge
+            variant="outline"
+            className={
+              order.paymentStatus === "paid"
+                ? "border-success/20 text-success"
+                : order.paymentStatus === "failed"
+                ? "border-destructive/20 text-destructive"
+                : "border-warning/20 text-warning"
+            }
+          >
+            {t(`orders.paymentStatus.${order.paymentStatus}`)}
+          </Badge>
+        </div>
       ),
     },
     {
@@ -336,6 +361,13 @@ export default function Orders() {
         onClose={setShowUpdateStatusModal}
         orderId={selectedOrder?.id || null}
         status={selectedOrder?.status || ""}
+        onSuccess={() => refreshTable?.()}
+      />
+
+      <UpdateDeliveryTimeModal
+        open={showUpdateDeliveryTimeModal}
+        onClose={setShowUpdateDeliveryTimeModal}
+        orderId={selectedOrder?.id || null}
         onSuccess={() => refreshTable?.()}
       />
     </div>

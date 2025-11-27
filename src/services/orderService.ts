@@ -157,7 +157,7 @@ const orderService: OrderService = {
     }
   ) => {
     try {
-      const response = await apiClient.patch(
+      const response = await apiClient.put(
         apiRoutes.orders.updateDeliveryTime(id),
         data
       );
