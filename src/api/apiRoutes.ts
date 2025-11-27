@@ -100,4 +100,17 @@ export const apiRoutes = {
     getAll: createApiUrl("admin/permissions"),
     getById: (id: number | string) => createApiUrl(`admin/permissions/${id}`),
   },
+
+  orders: {
+    getAll: createApiUrl("admin/orders"),
+    getById: (id: number | string) => createApiUrl(`admin/orders/${id}`),
+    update: (id: number | string) => createApiUrl(`admin/orders/${id}`),
+    delete: (id: number | string) => createApiUrl(`admin/orders/${id}`),
+    create: createApiUrl("admin/orders"),
+    toggleOrderStatus: (id: number | string) =>
+      createApiUrl(`admin/orders/${id}/toggle-status`),
+    getStatistics: createApiUrl("admin/orders/statistics"),
+    assignAgent: (id: number | string) =>
+      createApiUrl(`admin/orders/${id}/assign-agent`),
+  },
 };

@@ -6,6 +6,7 @@ import packages from "./packages/index.json";
 import coverage_area from "./coverage_area/index.json";
 import roles from "./roles/index.json";
 import profile from "./profile/index.json";
+import orders from "./orders/index.json";
 
 /**
  * follow the file structure.
@@ -22,6 +23,7 @@ const combined = {
   coverage_area,
   roles,
   profile,
+  orders,
 };
 
 export default combined;
