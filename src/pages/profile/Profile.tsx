@@ -116,8 +116,8 @@ export default function Profile() {
   };
 
   return (
-    <div className=" max-w-6xl">
-      <div className="grid gap-6 md:grid-cols-3">
+    <div className="max-w-6xl">
+      <div className="grid gap-3 md:grid-cols-3">
         {/* Profile Avatar Card */}
         <Card className="md:col-span-1">
           <CardContent className="flex flex-col items-center space-y-4">

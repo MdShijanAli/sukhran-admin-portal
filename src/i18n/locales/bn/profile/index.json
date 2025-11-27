@@ -1,0 +1,32 @@
+{
+  "uploadAvatar": "অ্যাভাটার আপলোড করুন",
+  "personalInfo": "ব্যক্তিগত তথ্য",
+  "security": "নিরাপত্তা",
+  "theme": "থিম",
+  "name": "নাম",
+  "email": "ইমেইল",
+  "phone": "ফোন",
+  "location": "অবস্থান",
+  "role": "ভূমিকা",
+  "passwordRequirements": "পাসওয়ার্ড কমপক্ষে ৬টি অক্ষরের হতে হবে এবং অক্ষর, সংখ্যা এবং বিশেষ অক্ষরের মিশ্রণ থাকতে হবে।",
+  "currentPassword": "বর্তমান পাসওয়ার্ড",
+  "newPassword": "নতুন পাসওয়ার্ড",
+  "confirmPassword": "পাসওয়ার্ড নিশ্চিত করুন",
+  "changePassword": "পাসওয়ার্ড পরিবর্তন করুন",
+  "themeDescription": "আপনার ব্র্যান্ড রঙ এবং লোগো দিয়ে আপনার ড্যাশবোর্ডের চেহারা কাস্টমাইজ করুন।",
+  "companyLogo": "কোম্পানির লোগো",
+  "uploadLogo": "লোগো আপলোড করতে ক্লিক করুন",
+  "primaryColor": "প্রাথমিক রঙ",
+  "secondaryColor": "সেকেন্ডারি রঙ",
+  "colorPreview": "রঙের পূর্বরূপ",
+  "applyTheme": "থিম প্রয়োগ করুন",
+  "uploading": "আপলোড হচ্ছে...",
+  "messages": {
+    "logoUploaded": "লোগো সফলভাবে আপলোড হয়েছে",
+    "failedToUpload": "লোগো আপলোড করতে ব্যর্থ",
+    "passwordMismatch": "পাসওয়ার্ড মিলছে না",
+    "passwordTooShort": "পাসওয়ার্ড কমপক্ষে ৬টি অক্ষরের হতে হবে",
+    "profileUpdated": "প্রোফাইল সফলভাবে আপডেট হয়েছে",
+    "failedToUpdate": "প্রোফাইল আপডেট করতে ব্যর্থ"
+  }
+}

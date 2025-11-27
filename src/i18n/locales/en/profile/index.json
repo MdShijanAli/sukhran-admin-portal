@@ -1,0 +1,32 @@
+{
+  "uploadAvatar": "Upload Avatar",
+  "personalInfo": "Personal Info",
+  "security": "Security",
+  "theme": "Theme",
+  "name": "Name",
+  "email": "Email",
+  "phone": "Phone",
+  "location": "Location",
+  "role": "Role",
+  "passwordRequirements": "Password must be at least 6 characters long and contain a mix of letters, numbers, and special characters.",
+  "currentPassword": "Current Password",
+  "newPassword": "New Password",
+  "confirmPassword": "Confirm Password",
+  "changePassword": "Change Password",
+  "themeDescription": "Customize the appearance of your dashboard with your brand colors and logo.",
+  "companyLogo": "Company Logo",
+  "uploadLogo": "Click to upload logo",
+  "primaryColor": "Primary Color",
+  "secondaryColor": "Secondary Color",
+  "colorPreview": "Color Preview",
+  "applyTheme": "Apply Theme",
+  "uploading": "Uploading...",
+  "messages": {
+    "logoUploaded": "Logo uploaded successfully",
+    "failedToUpload": "Failed to upload logo",
+    "passwordMismatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "profileUpdated": "Profile updated successfully",
+    "failedToUpdate": "Failed to update profile"
+  }
+}
