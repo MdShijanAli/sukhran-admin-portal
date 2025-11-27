@@ -113,4 +113,19 @@ export const apiRoutes = {
     assignAgent: (id: number | string) =>
       createApiUrl(`admin/orders/${id}/assign-agent`),
   },
+
+  delivery: {
+    getAll: createApiUrl("admin/deliveries"),
+    getById: (id: number | string) => createApiUrl(`admin/deliveries/${id}`),
+    update: (id: number | string) => createApiUrl(`admin/deliveries/${id}`),
+    delete: (id: number | string) => createApiUrl(`admin/deliveries/${id}`),
+    create: createApiUrl("admin/deliveries"),
+    toggleDeliveryStatus: (id: number | string) =>
+      createApiUrl(`admin/deliveries/${id}/toggle-status`),
+    getStatistics: createApiUrl("admin/deliveries/statistics"),
+    assignDriver: (id: number | string) =>
+      createApiUrl(`admin/deliveries/${id}/assign-driver`),
+    updateLocation: (id: number | string) =>
+      createApiUrl(`admin/deliveries/${id}/update-location`),
+  },
 };

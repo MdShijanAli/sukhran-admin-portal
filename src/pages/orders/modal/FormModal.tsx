@@ -257,7 +257,7 @@ export default function FormModal({
       }
       size="4xl"
     >
-      <div className="grid gap-6 max-h-[70vh] overflow-y-auto pr-2">
+      <div className="grid gap-4">
         {/* Customer Information */}
         <div className="space-y-4">
           <h3 className="text-sm font-semibold border-b pb-2">

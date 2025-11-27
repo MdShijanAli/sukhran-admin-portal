@@ -1,355 +1,323 @@
+import { useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import { Badge } from "@/components/ui/badge";
 import {
-  Package,
+  Eye,
+  Edit,
+  Trash2,
+  Plus,
   MapPin,
   Clock,
-  CheckCircle,
-  XCircle,
   Truck,
-  Plus,
-  Pencil,
-  Trash2,
+  Package,
+  XCircle,
+  CheckCircle,
+  UserCheck,
 } from "lucide-react";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { BaseTableList, Column } from "@/components/table";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { toast } from "@/hooks/use-toast";
+  BaseTableList,
+  Column,
+  ActionItem,
+  DropdownMenuActions,
+} from "@/components/table";
+import { formatDate } from "@/lib/utils";
+import { Delivery, useDeliveryStore } from "@/stores/deliveryStore";
+import deliveryService from "@/services/deliveryService";
+import { toast } from "sonner";
+import { DeleteModal } from "@/components/modals";
 import FormModal from "./modal/FormModal";
 import TrackingModal from "./modal/TrackingModal";
-import DeleteModal from "@/components/modals/DeleteModal";
 
-interface Delivery {
-  id: string;
-  orderId: string;
-  customer: string;
-  address: string;
-  driver: string;
-  status: "pending" | "assigned" | "in-transit" | "delivered" | "failed";
-  scheduledTime: string;
-  deliveredTime?: string;
-}
-
-const mockDeliveries: Delivery[] = [
-  {
-    id: "DEL-001",
-    orderId: "ORD-2024-001",
-    customer: "Ahmed Hassan",
-    address: "House 12, Road 5, Dhanmondi, Dhaka",
-    driver: "Karim Rahman",
-    status: "in-transit",
-    scheduledTime: "2024-01-20 09:00 AM",
-  },
-  {
-    id: "DEL-002",
-    orderId: "ORD-2024-002",
-    customer: "Fatima Khan",
-    address: "Flat 3B, Gulshan Avenue, Dhaka",
-    driver: "Rahim Ali",
-    status: "delivered",
-    scheduledTime: "2024-01-20 08:30 AM",
-    deliveredTime: "2024-01-20 08:45 AM",
-  },
-  {
-    id: "DEL-003",
-    orderId: "ORD-2024-003",
-    customer: "Mohammad Islam",
-    address: "House 45, Banani DOHS, Dhaka",
-    driver: "Jamal Uddin",
-    status: "pending",
-    scheduledTime: "2024-01-20 10:00 AM",
-  },
-  {
-    id: "DEL-004",
-    orderId: "ORD-2024-004",
-    customer: "Nusrat Jahan",
-    address: "Apartment 7C, Bashundhara, Dhaka",
-    driver: "Selim Ahmed",
-    status: "assigned",
-    scheduledTime: "2024-01-20 11:00 AM",
-  },
-  {
-    id: "DEL-005",
-    orderId: "ORD-2024-005",
-    customer: "Rafiq Hossain",
-    address: "House 89, Uttara Sector 10, Dhaka",
-    driver: "Abdul Karim",
-    status: "failed",
-    scheduledTime: "2024-01-20 07:00 AM",
-  },
-];
-
-const statusConfig = {
-  pending: { label: "Pending", icon: Clock, variant: "secondary" as const },
-  assigned: { label: "Assigned", icon: Package, variant: "default" as const },
-  "in-transit": {
-    label: "In Transit",
-    icon: Truck,
-    variant: "default" as const,
-  },
-  delivered: {
-    label: "Delivered",
-    icon: CheckCircle,
-    variant: "default" as const,
-  },
-  failed: { label: "Failed", icon: XCircle, variant: "destructive" as const },
-};
-
-export default function Delivery() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [deliveries, setDeliveries] = useState<Delivery[]>(mockDeliveries);
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [isTrackingDialogOpen, setIsTrackingDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+export default function DeliveryPage() {
+  const { t } = useTranslation();
   const [selectedDelivery, setSelectedDelivery] = useState<Delivery | null>(
     null
   );
+  const [dialogMode, setDialogMode] = useState<"create" | "edit" | null>(null);
+  const [showTracking, setShowTracking] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
 
-  const stats = [
+  const store = useDeliveryStore();
+
+  const handleSetRefresh = useCallback((refreshFn: () => void) => {
+    setRefreshTable(() => refreshFn);
+  }, []);
+
+  const handleCreate = () => {
+    setSelectedDelivery(null);
+    setDialogMode("create");
+  };
+
+  const handleEdit = (delivery: Delivery) => {
+    setSelectedDelivery(delivery);
+    setDialogMode("edit");
+  };
+
+  const handleTrack = (delivery: Delivery) => {
+    setSelectedDelivery(delivery);
+    setShowTracking(true);
+  };
+
+  const handleDelete = (delivery: Delivery) => {
+    setSelectedDelivery(delivery);
+    setShowDelete(true);
+  };
+
+  const handleDeleteDelivery = async () => {
+    if (!selectedDelivery) return;
+    setIsDeleting(true);
+    try {
+      await deliveryService.deleteItem(selectedDelivery.id);
+      toast.success(t("delivery.messages.deliveryDeleted"));
+      refreshTable?.();
+    } catch (error) {
+      console.error("Error deleting delivery:", error);
+      toast.error(t("delivery.messages.failedToDelete"));
+    } finally {
+      setIsDeleting(false);
+      setShowDelete(false);
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "pending":
+        return "bg-warning/10 text-warning border-warning/20";
+      case "assigned":
+        return "bg-blue-500/10 text-blue-500 border-blue-500/20";
+      case "picked-up":
+        return "bg-indigo-500/10 text-indigo-500 border-indigo-500/20";
+      case "in-transit":
+        return "bg-primary/10 text-primary border-primary/20";
+      case "delivered":
+        return "bg-success/10 text-success border-success/20";
+      case "failed":
+      case "cancelled":
+        return "bg-destructive/10 text-destructive border-destructive/20";
+      default:
+        return "bg-muted text-muted-foreground";
+    }
+  };
+
+  // Define actions for dropdown menu
+  const deliveryActions = (delivery: Delivery): ActionItem<Delivery>[] => [
     {
-      title: "Pending Deliveries",
-      value: deliveries.filter((d) => d.status === "pending").length,
-      icon: Clock,
-      color: "text-yellow-500",
+      label: t("delivery.actions.trackDelivery"),
+      icon: MapPin,
+      onClick: handleTrack,
     },
     {
-      title: "In Transit",
-      value: deliveries.filter((d) => d.status === "in-transit").length,
-      icon: Truck,
-      color: "text-blue-500",
+      label: t("delivery.actions.viewDetails"),
+      icon: Eye,
+      onClick: handleTrack,
     },
     {
-      title: "Delivered Today",
-      value: deliveries.filter((d) => d.status === "delivered").length,
-      icon: CheckCircle,
-      color: "text-green-500",
+      label: t("delivery.actions.editDelivery"),
+      icon: Edit,
+      onClick: handleEdit,
+      show: delivery.status !== "delivered" && delivery.status !== "cancelled",
     },
     {
-      title: "Failed",
-      value: deliveries.filter((d) => d.status === "failed").length,
-      icon: XCircle,
-      color: "text-red-500",
+      label: t("delivery.actions.deleteDelivery"),
+      icon: Trash2,
+      onClick: handleDelete,
+      variant: "destructive",
+      separator: true,
+      show: delivery.status === "pending" || delivery.status === "cancelled",
     },
   ];
-
-  const filteredDeliveries = deliveries.filter((delivery) => {
-    const matchesSearch =
-      delivery.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      delivery.orderId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      delivery.driver.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus =
-      statusFilter === "all" || delivery.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
-
-  const handleCreateDelivery = () => {
-    setIsCreateDialogOpen(true);
-  };
-
-  const handleEditDelivery = (delivery: Delivery) => {
-    setIsCreateDialogOpen(true);
-    setSelectedDelivery(delivery);
-  };
-
-  const handleStatusChange = (
-    deliveryId: string,
-    newStatus: Delivery["status"]
-  ) => {
-    setDeliveries(
-      deliveries.map((d) => {
-        if (d.id === deliveryId) {
-          const updated = { ...d, status: newStatus };
-          if (newStatus === "delivered") {
-            updated.deliveredTime = new Date().toLocaleString();
-          }
-          return updated;
-        }
-        return d;
-      })
-    );
-    toast({
-      title: "Status Updated",
-      description: `Delivery status changed to ${statusConfig[newStatus].label}`,
-    });
-  };
-
-  const handleTrackDelivery = (delivery: Delivery) => {
-    setSelectedDelivery(delivery);
-    setIsTrackingDialogOpen(true);
-  };
-
-  const handleDeleteDelivery = (delivery: Delivery) => {
-    setSelectedDelivery(delivery);
-    setIsDeleteDialogOpen(true);
-  };
-
-  const confirmDelete = () => {
-    if (selectedDelivery) {
-      setDeliveries(deliveries.filter((d) => d.id !== selectedDelivery.id));
-      toast({
-        title: "Deleted",
-        description: "Delivery deleted successfully",
-      });
-    }
-    setIsDeleteDialogOpen(false);
-    setSelectedDelivery(null);
-  };
 
   // Define table columns
   const columns: Column<Delivery>[] = [
     {
-      key: "id",
-      label: "Delivery ID",
-      render: (delivery) => <span className="font-medium">{delivery.id}</span>,
+      key: "sl",
+      label: t("delivery.columns.sl"),
+      render: (_, index) => index + 1,
+      className: "text-center",
     },
     {
-      key: "orderId",
-      label: "Order ID",
+      key: "delivery_number",
+      label: t("delivery.columns.deliveryNumber"),
+      render: (delivery) => (
+        <span className="font-medium">{delivery.delivery_number}</span>
+      ),
+    },
+    {
+      key: "order_number",
+      label: t("delivery.columns.orderNumber"),
     },
     {
       key: "customer",
-      label: "Customer",
+      label: t("delivery.columns.customer"),
+      render: (delivery) => (
+        <div>
+          <p className="font-medium">{delivery.customer_name}</p>
+          <p className="text-xs text-muted-foreground">
+            {delivery.customer_phone}
+          </p>
+        </div>
+      ),
     },
     {
-      key: "address",
-      label: "Address",
-      className: "max-w-[200px]",
+      key: "delivery_address",
+      label: t("delivery.columns.address"),
       render: (delivery) => (
-        <span className="truncate block">{delivery.address}</span>
+        <span className="text-sm line-clamp-1">
+          {delivery.delivery_address}
+        </span>
       ),
     },
     {
       key: "driver",
-      label: "Driver",
+      label: t("delivery.columns.driver"),
+      render: (delivery) =>
+        delivery.driver_name ? (
+          <div>
+            <p className="font-medium">{delivery.driver_name}</p>
+            {delivery.driver_phone && (
+              <p className="text-xs text-muted-foreground">
+                {delivery.driver_phone}
+              </p>
+            )}
+          </div>
+        ) : (
+          <span className="text-muted-foreground">
+            {t("delivery.columns.unassigned")}
+          </span>
+        ),
     },
     {
-      key: "scheduledTime",
-      label: "Scheduled Time",
-    },
-    {
-      key: "status",
-      label: "Status",
+      key: "scheduled_time",
+      label: t("delivery.columns.scheduledTime"),
       render: (delivery) => (
-        <Select
-          value={delivery.status}
-          onValueChange={(value) =>
-            handleStatusChange(delivery.id, value as Delivery["status"])
-          }
-        >
-          <SelectTrigger className="w-[140px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="assigned">Assigned</SelectItem>
-            <SelectItem value="in-transit">In Transit</SelectItem>
-            <SelectItem value="delivered">Delivered</SelectItem>
-            <SelectItem value="failed">Failed</SelectItem>
-          </SelectContent>
-        </Select>
+        <span className="text-sm">{formatDate(delivery.scheduled_time)}</span>
       ),
     },
     {
+      key: "status",
+      label: t("delivery.columns.status"),
+      render: (delivery) => {
+        const statusKey =
+          delivery.status === "in-transit"
+            ? "inTransit"
+            : delivery.status === "picked-up"
+            ? "pickedUp"
+            : delivery.status;
+        return (
+          <Badge className={getStatusColor(delivery.status)}>
+            {t(`delivery.status.${statusKey}`)}
+          </Badge>
+        );
+      },
+      className: "text-center",
+    },
+    {
       key: "actions",
-      label: "Actions",
+      label: t("delivery.columns.actions"),
+      className: "text-right",
       render: (delivery) => (
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => handleTrackDelivery(delivery)}
-          >
-            <MapPin className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => handleEditDelivery(delivery)}
-          >
-            <Pencil className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => handleDeleteDelivery(delivery)}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
+        <DropdownMenuActions
+          item={delivery}
+          actions={deliveryActions(delivery)}
+        />
       ),
     },
   ];
 
-  const handleCloseDialog = () => {
-    setIsCreateDialogOpen(false);
-    setSelectedDelivery(null);
-  };
+  const summaryLists = [
+    {
+      title: t("delivery.totalDeliveries"),
+      value: store.statistics.total_deliveries,
+      icon: Package,
+      color: "text-muted-foreground",
+    },
+    {
+      title: t("delivery.pendingDeliveries"),
+      value: store.statistics.pending_deliveries,
+      icon: Clock,
+      color: "text-warning",
+    },
+    {
+      title: t("delivery.assignedDeliveries"),
+      value: store.statistics.assigned_deliveries,
+      icon: UserCheck,
+      color: "text-blue-500",
+    },
+    {
+      title: t("delivery.inTransitDeliveries"),
+      value: store.statistics.in_transit_deliveries,
+      icon: Truck,
+      color: "text-primary",
+    },
+    {
+      title: t("delivery.deliveredToday"),
+      value: store.statistics.delivered_today,
+      icon: CheckCircle,
+      color: "text-success",
+    },
+    {
+      title: t("delivery.failedDeliveries"),
+      value: store.statistics.failed_deliveries,
+      icon: XCircle,
+      color: "text-destructive",
+    },
+    {
+      title: t("delivery.cancelledDeliveries"),
+      value: store.statistics.cancelled_deliveries,
+      icon: XCircle,
+      color: "text-destructive",
+    },
+  ];
 
   return (
-    <div>
-      <BaseTableList
-        title="Delivery List"
-        description="View and manage all delivery orders"
+    <div className="animate-fade-in">
+      <BaseTableList<Delivery>
+        title={t("delivery.title")}
+        description={t("delivery.subtitle")}
         headerActions={[
           {
-            label: "Create Delivery",
+            label: t("delivery.addDelivery"),
             icon: Plus,
-            onClick: handleCreateDelivery,
+            onClick: handleCreate,
             variant: "default",
           },
         ]}
-        searchPlaceholder="Search by customer, order, or driver..."
-        searchValue={searchQuery}
-        onSearchChange={setSearchQuery}
-        filters={[
-          {
-            value: statusFilter,
-            options: [
-              { label: "All Status", value: "all" },
-              { label: "Pending", value: "pending" },
-              { label: "Assigned", value: "assigned" },
-              { label: "In Transit", value: "in-transit" },
-              { label: "Delivered", value: "delivered" },
-              { label: "Failed", value: "failed" },
-            ],
-            onChange: setStatusFilter,
-            placeholder: "Filter by status",
-            className: "w-[180px]",
-          },
-        ]}
+        searchPlaceholder={t("delivery.searchPlaceholder")}
+        enableSearch={true}
         columns={columns}
-        data={filteredDeliveries}
-        emptyMessage="No deliveries found"
+        service={deliveryService}
+        store={store}
+        emptyMessage={t("delivery.noDeliveriesFound")}
         getRowKey={(delivery) => delivery.id}
-        summaryLists={stats}
+        onRefresh={handleSetRefresh}
+        summaryLists={summaryLists}
       />
 
-      {/* Create/Edit Delivery Form Modal */}
+      {/* Dialogs */}
       <FormModal
-        open={isCreateDialogOpen}
-        onClose={handleCloseDialog}
-        editData={selectedDelivery}
+        open={dialogMode !== null}
+        onClose={() => setDialogMode(null)}
+        editData={selectedDelivery || undefined}
+        onSuccess={() => refreshTable?.()}
       />
 
-      {/* Tracking Dialog */}
       <TrackingModal
-        open={isTrackingDialogOpen}
-        onClose={setIsTrackingDialogOpen}
+        open={showTracking}
+        onClose={setShowTracking}
+        deliveryId={selectedDelivery?.id || null}
       />
 
-      {/* Delete Confirmation Dialog */}
       <DeleteModal
-        open={isDeleteDialogOpen}
-        onClose={setIsDeleteDialogOpen}
-        title="Delete Delivery"
-        description={`Are you sure you want to delete delivery ${selectedDelivery?.id}? This action cannot be undone.`}
-        onConfirm={confirmDelete}
+        open={showDelete}
+        onClose={setShowDelete}
+        title={t("delivery.delete.title")}
+        description={`${t("delivery.delete.message")} ${
+          selectedDelivery?.delivery_number
+        }? ${t("delivery.delete.cannotUndo")}`}
+        onConfirm={handleDeleteDelivery}
+        isDeleting={isDeleting}
       />
     </div>
   );

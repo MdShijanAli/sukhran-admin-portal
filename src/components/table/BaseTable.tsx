@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export interface Column<T> {
   key: string;
   label: string;
+  sortable?: boolean;
   render?: (item: T, index: number) => React.ReactNode;
   className?: string;
 }

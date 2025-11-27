@@ -244,7 +244,7 @@ export default function LoyaltyRewards() {
   };
 
   return (
-    <div className=" animate-fade-in">
+    <div className="animate-fade-in">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Loyalty & Rewards</h1>
@@ -263,7 +263,7 @@ export default function LoyaltyRewards() {
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-3 md:grid-cols-4 my-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -326,7 +326,7 @@ export default function LoyaltyRewards() {
         </Card>
       </div>
 
-      <Tabs defaultValue="settings" className="space-y-4">
+      <Tabs defaultValue="settings" className="space-y-3 my-3">
         <TabsList>
           <TabsTrigger value="settings">
             <Settings className="mr-2 h-4 w-4" />
@@ -343,8 +343,8 @@ export default function LoyaltyRewards() {
         </TabsList>
 
         {/* Reward Settings Tab */}
-        <TabsContent value="settings">
-          <Card>
+        <TabsContent value="settings" className="my-3">
+          <Card className="space-y-3">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
@@ -624,8 +624,8 @@ export default function LoyaltyRewards() {
         </TabsContent>
 
         {/* User Balances Tab */}
-        <TabsContent value="balances">
-          <Card>
+        <TabsContent value="balances" className="my-3">
+          <Card className="space-y-3">
             <CardHeader>
               <CardTitle>User Coin Balances</CardTitle>
               <CardDescription>
@@ -687,8 +687,8 @@ export default function LoyaltyRewards() {
         </TabsContent>
 
         {/* Transactions Tab */}
-        <TabsContent value="transactions">
-          <Card>
+        <TabsContent value="transactions" className="my-3">
+          <Card className="space-y-3">
             <CardHeader>
               <CardTitle>Transaction History</CardTitle>
               <CardDescription>
