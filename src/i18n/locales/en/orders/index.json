@@ -5,19 +5,20 @@
   "searchPlaceholder": "Search by order number, customer, or items...",
   "noOrdersFound": "No orders found",
   "totalOrders": "Total Orders",
-  "pendingOrders": "Pending",
-  "processingOrders": "Processing",
-  "deliveredOrders": "Delivered",
   "cancelledOrders": "Cancelled",
   "totalRevenue": "Total Revenue",
-  "pendingRevenue": "Pending Revenue",
+  "deliveredOrders": "Delivered",
+  "pendingOrders": "Pending",
+  "approvedOrders": "Approved",
+  "shippedOrders": "Shipped",
   "status": {
     "pending": "Pending",
-    "confirmed": "Confirmed",
-    "processing": "Processing",
-    "inTransit": "In Transit",
+    "approved": "Approved",
+    "shipped": "Shipped",
     "delivered": "Delivered",
-    "cancelled": "Cancelled"
+    "cancelled": "Cancelled",
+    "returned": "Returned",
+    "cancelled_at_delivery": "Cancelled at Delivery"
   },
   "paymentStatus": {
     "pending": "Pending",
@@ -38,13 +39,14 @@
     "total": "Total",
     "payment": "Payment",
     "status": "Status",
+    "paymentStatus": "Payment Status",
     "date": "Date",
-    "agent": "Agent",
     "actions": "Actions",
     "unassigned": "Unassigned"
   },
   "actions": {
     "viewDetails": "View Details",
+    "updateStatus": "Update Status",
     "editOrder": "Edit Order",
     "deleteOrder": "Delete Order",
     "assignAgent": "Assign Agent",
@@ -89,6 +91,14 @@
     "updateOrder": "Update Order",
     "createOrder": "Create Order"
   },
+  "updateStatus": {
+    "title": "Update Order Status",
+    "description": "Change the status of this order and add an optional note",
+    "status": "Order Status",
+    "selectStatus": "Select new status",
+    "note": "Note (Optional)",
+    "notePlaceholder": "Add a note about this status change (e.g., Order dispatched via courier)"
+  },
   "view": {
     "orderDetails": "Order Details",
     "customerInfo": "Customer Information",
@@ -113,6 +123,8 @@
     "orderCancelled": "Order cancelled successfully",
     "agentAssigned": "Delivery agent assigned successfully",
     "statusUpdated": "Order status updated successfully",
+    "selectStatus": "Please select a status",
+    "failedToUpdateStatus": "Failed to update order status",
     "failedToCreate": "Failed to create order",
     "failedToUpdate": "Failed to update order",
     "failedToDelete": "Failed to delete order",

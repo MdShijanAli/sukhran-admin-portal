@@ -9,9 +9,9 @@ import {
   Clock,
   Truck,
   ShoppingCart,
-  RefreshCcw,
   XCircle,
   Package,
+  CheckCircle,
 } from "lucide-react";
 import {
   BaseTableList,
@@ -26,6 +26,7 @@ import { toast } from "sonner";
 import { DeleteModal } from "@/components/modals";
 import FormModal from "./modal/FormModal";
 import ViewModal from "./modal/ViewModal";
+import UpdateOrderStatusModal from "./modal/UpdateOrderStatusModal";
 
 export default function Orders() {
   const { t } = useTranslation();
@@ -35,6 +36,7 @@ export default function Orders() {
   const [showDelete, setShowDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
+  const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
 
   const store = useOrderStore();
 
@@ -62,6 +64,11 @@ export default function Orders() {
     setShowDelete(true);
   };
 
+  const handleUpdateStatus = (order: Order) => {
+    setSelectedOrder(order);
+    setShowUpdateStatusModal(true);
+  };
+
   const handleDeleteOrder = async () => {
     if (!selectedOrder) return;
     setIsDeleting(true);
@@ -82,15 +89,14 @@ export default function Orders() {
     switch (status) {
       case "pending":
         return "bg-warning/10 text-warning border-warning/20";
-      case "confirmed":
+      case "approved":
         return "bg-blue-500/10 text-blue-500 border-blue-500/20";
-      case "processing":
+      case "shipped":
         return "bg-primary/10 text-primary border-primary/20";
-      case "in-transit":
-        return "bg-indigo-500/10 text-indigo-500 border-indigo-500/20";
       case "delivered":
         return "bg-success/10 text-success border-success/20";
       case "cancelled":
+      case "returned":
         return "bg-destructive/10 text-destructive border-destructive/20";
       default:
         return "bg-muted text-muted-foreground";
@@ -108,7 +114,15 @@ export default function Orders() {
       label: t("orders.actions.editOrder"),
       icon: Edit,
       onClick: handleEdit,
-      show: order.status !== "delivered" && order.status !== "cancelled",
+      show:
+        order.status !== "delivered" &&
+        order.status !== "cancelled" &&
+        order.status !== "returned",
+    },
+    {
+      label: t("orders.actions.updateStatus"),
+      icon: Edit,
+      onClick: handleUpdateStatus,
     },
     {
       label: t("orders.actions.deleteOrder"),
@@ -131,18 +145,16 @@ export default function Orders() {
     {
       key: "order_number",
       label: t("orders.columns.orderNumber"),
-      render: (order) => (
-        <span className="font-medium">{order.order_number}</span>
-      ),
+      render: (order) => <span className="font-medium">{order.orderId}</span>,
     },
     {
       key: "customer",
       label: t("orders.columns.customer"),
       render: (order) => (
         <div>
-          <p className="font-medium">{order.customer_name}</p>
+          <p className="font-medium">{order.customer.name}</p>
           <p className="text-xs text-muted-foreground">
-            {order.customer_phone}
+            {order.customer.mobile}
           </p>
         </div>
       ),
@@ -152,7 +164,8 @@ export default function Orders() {
       label: t("orders.columns.items"),
       render: (order) => (
         <Badge variant="outline">
-          {order.items?.length || 0} {t("orders.view.item")}(s)
+          {order.itemsCount || order.items?.length || 0} {t("orders.view.item")}
+          (s)
         </Badge>
       ),
     },
@@ -161,7 +174,10 @@ export default function Orders() {
       label: t("orders.columns.total"),
       render: (order) => (
         <span className="font-medium">
-          ৳{formatNumberWithCommas(order.total)}
+          ৳
+          {formatNumberWithCommas(
+            order.grandTotal || order.receipt?.grandTotal || 0
+          )}
         </span>
       ),
     },
@@ -170,7 +186,7 @@ export default function Orders() {
       label: t("orders.columns.payment"),
       render: (order) => (
         <Badge variant="outline">
-          {t(`orders.paymentMethod.${order.payment_method}`)}
+          {t(`orders.paymentMethod.${order.paymentMode}`)}
         </Badge>
       ),
     },
@@ -179,11 +195,7 @@ export default function Orders() {
       label: t("orders.columns.status"),
       render: (order) => (
         <Badge className={getStatusColor(order.status)}>
-          {t(
-            `orders.status.${
-              order.status === "in-transit" ? "inTransit" : order.status
-            }`
-          )}
+          {t(`orders.status.${order.status}`)}
         </Badge>
       ),
       className: "text-center",
@@ -196,16 +208,21 @@ export default function Orders() {
       ),
     },
     {
-      key: "agent",
-      label: t("orders.columns.agent"),
+      key: "paymentStatus",
+      label: t("orders.columns.paymentStatus"),
       render: (order) => (
-        <>
-          {order.delivery_agent_name || (
-            <span className="text-muted-foreground">
-              {t("orders.columns.unassigned")}
-            </span>
-          )}
-        </>
+        <Badge
+          variant="outline"
+          className={
+            order.paymentStatus === "paid"
+              ? "border-success/20 text-success"
+              : order.paymentStatus === "failed"
+              ? "border-destructive/20 text-destructive"
+              : "border-warning/20 text-warning"
+          }
+        >
+          {t(`orders.paymentStatus.${order.paymentStatus}`)}
+        </Badge>
       ),
     },
     {
@@ -227,31 +244,39 @@ export default function Orders() {
     },
     {
       title: t("orders.pendingOrders"),
-      value: store.statistics.pending_orders,
+      value: store.statistics.by_status.pending,
       icon: Clock,
       color: "text-warning",
     },
     {
-      title: t("orders.processingOrders"),
-      value: store.statistics.processing_orders,
-      icon: RefreshCcw,
+      title: t("orders.approvedOrders"),
+      value: store.statistics.by_status.approved,
+      icon: CheckCircle,
+      color: "text-blue-500",
+    },
+    {
+      title: t("orders.shippedOrders"),
+      value: store.statistics.by_status.shipped,
+      icon: Truck,
       color: "text-primary",
     },
     {
       title: t("orders.deliveredOrders"),
-      value: store.statistics.delivered_orders,
-      icon: Truck,
+      value: store.statistics.by_status.delivered,
+      icon: Package,
       color: "text-success",
     },
     {
       title: t("orders.cancelledOrders"),
-      value: store.statistics.cancelled_orders,
+      value: store.statistics.by_status.cancelled,
       icon: XCircle,
       color: "text-destructive",
     },
     {
       title: t("orders.totalRevenue"),
-      value: `৳${formatNumberWithCommas(store.statistics.total_revenue)}`,
+      value: `৳${formatNumberWithCommas(
+        parseFloat(store.statistics.total_revenue || "0")
+      )}`,
       icon: Package,
       color: "text-blue-600",
     },
@@ -304,6 +329,14 @@ export default function Orders() {
         }? ${t("orders.delete.cannotUndo")}`}
         onConfirm={handleDeleteOrder}
         isDeleting={isDeleting}
+      />
+
+      <UpdateOrderStatusModal
+        open={showUpdateStatusModal}
+        onClose={setShowUpdateStatusModal}
+        orderId={selectedOrder?.id || null}
+        status={selectedOrder?.status || ""}
+        onSuccess={() => refreshTable?.()}
       />
     </div>
   );

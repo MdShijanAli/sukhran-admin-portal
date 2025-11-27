@@ -107,11 +107,19 @@ export const apiRoutes = {
     update: (id: number | string) => createApiUrl(`admin/orders/${id}`),
     delete: (id: number | string) => createApiUrl(`admin/orders/${id}`),
     create: createApiUrl("admin/orders"),
-    toggleOrderStatus: (id: number | string) =>
-      createApiUrl(`admin/orders/${id}/toggle-status`),
+    updateStatus: (id: number | string) =>
+      createApiUrl(`admin/orders/${id}/status`),
     getStatistics: createApiUrl("admin/orders/statistics"),
-    assignAgent: (id: number | string) =>
-      createApiUrl(`admin/orders/${id}/assign-agent`),
+    addItem: (id: number | string) =>
+      createApiUrl(`admin/orders/${id}/items/add`),
+    removeItem: (orderId: number | string, itemId: number | string) =>
+      createApiUrl(`admin/orders/${orderId}/items/${itemId}`),
+    updateItemQuantity: (orderId: number | string, itemId: number | string) =>
+      createApiUrl(`admin/orders/${orderId}/items/${itemId}/quantity`),
+    updateDeliveryTime: (id: number | string) =>
+      createApiUrl(`admin/orders/${id}/delivery-time`),
+    getModifications: (id: number | string) =>
+      createApiUrl(`admin/orders/${id}/modifications`),
   },
 
   delivery: {

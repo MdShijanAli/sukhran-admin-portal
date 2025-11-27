@@ -45,15 +45,14 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
     switch (status) {
       case "pending":
         return "bg-warning/10 text-warning border-warning/20";
-      case "confirmed":
+      case "approved":
         return "bg-blue-500/10 text-blue-500 border-blue-500/20";
-      case "processing":
+      case "shipped":
         return "bg-primary/10 text-primary border-primary/20";
-      case "in-transit":
-        return "bg-indigo-500/10 text-indigo-500 border-indigo-500/20";
       case "delivered":
         return "bg-success/10 text-success border-success/20";
       case "cancelled":
+      case "returned":
         return "bg-destructive/10 text-destructive border-destructive/20";
       default:
         return "bg-muted text-muted-foreground";
@@ -68,8 +67,6 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
         return "bg-warning/10 text-warning border-warning/20";
       case "failed":
         return "bg-destructive/10 text-destructive border-destructive/20";
-      case "refunded":
-        return "bg-blue-500/10 text-blue-500 border-blue-500/20";
       default:
         return "bg-muted text-muted-foreground";
     }
@@ -82,7 +79,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
       title={t("orders.view.orderDetails")}
       showSubmitButton={false}
       closeButtonText={t("close")}
-      size="3xl"
+      size="2xl"
     >
       {isLoading ? (
         <div className="flex items-center justify-center py-8">
@@ -97,7 +94,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                 <Package className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold">{order.order_number}</h3>
+                <h3 className="text-lg font-semibold">{order.orderId}</h3>
                 <p className="text-sm text-muted-foreground">
                   {formatDate(order.created_at)}
                 </p>
@@ -105,14 +102,10 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
             </div>
             <div className="flex gap-2">
               <Badge className={getStatusColor(order.status)}>
-                {t(
-                  `orders.status.${
-                    order.status === "in-transit" ? "inTransit" : order.status
-                  }`
-                )}
+                {t(`orders.status.${order.status}`)}
               </Badge>
-              <Badge className={getPaymentStatusColor(order.payment_status)}>
-                {t(`orders.paymentStatus.${order.payment_status}`)}
+              <Badge className={getPaymentStatusColor(order.paymentStatus)}>
+                {t(`orders.paymentStatus.${order.paymentStatus}`)}
               </Badge>
             </div>
           </div>
@@ -130,21 +123,21 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                 <Label className="text-xs text-muted-foreground">
                   {t("name")}
                 </Label>
-                <p className="font-medium">{order.customer_name}</p>
+                <p className="font-medium">{order.customer.name}</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label className="text-xs text-muted-foreground">
                     {t("phone")}
                   </Label>
-                  <p className="font-medium">{order.customer_phone}</p>
+                  <p className="font-medium">{order.customer.mobile}</p>
                 </div>
-                {order.customer_email && (
+                {order.customer.email && (
                   <div>
                     <Label className="text-xs text-muted-foreground">
                       {t("email")}
                     </Label>
-                    <p className="font-medium">{order.customer_email}</p>
+                    <p className="font-medium">{order.customer.email}</p>
                   </div>
                 )}
               </div>
@@ -164,16 +157,10 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                 <Label className="text-xs text-muted-foreground">
                   {t("orders.form.deliveryAddress")}
                 </Label>
-                <p className="font-medium">{order.delivery_address}</p>
+                <p className="font-medium">
+                  {order.address.street || order.address.city || "N/A"}
+                </p>
               </div>
-              {order.delivery_agent_name && (
-                <div>
-                  <Label className="text-xs text-muted-foreground">
-                    {t("orders.form.deliveryAgent")}
-                  </Label>
-                  <p className="font-medium">{order.delivery_agent_name}</p>
-                </div>
-              )}
             </div>
           </div>
 
@@ -196,10 +183,14 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                       className="flex items-center justify-between p-3 bg-muted/30 rounded-lg"
                     >
                       <div className="flex-1">
-                        <p className="font-medium">{item.product_name}</p>
-                        {item.sku_name && (
+                        <p className="font-medium">
+                          {item.itemType === "product"
+                            ? item.product?.name || "Product"
+                            : "Package"}
+                        </p>
+                        {item.sku && (
                           <p className="text-xs text-muted-foreground">
-                            {item.sku_name}
+                            {item.sku.name}
                           </p>
                         )}
                       </div>
@@ -215,7 +206,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                             {t("orders.view.price")}
                           </Label>
                           <p className="font-medium">
-                            ৳{formatNumberWithCommas(item.unit_price)}
+                            ৳{formatNumberWithCommas(item.unitPrice)}
                           </p>
                         </div>
                         <div className="text-right">
@@ -223,7 +214,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                             {t("orders.view.total")}
                           </Label>
                           <p className="font-semibold">
-                            ৳{formatNumberWithCommas(item.total_price)}
+                            ৳{formatNumberWithCommas(item.itemCost)}
                           </p>
                         </div>
                       </div>
@@ -248,16 +239,16 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                   {t("orders.form.subtotal")}
                 </span>
                 <span className="font-medium">
-                  ৳{formatNumberWithCommas(order.subtotal)}
+                  ৳{formatNumberWithCommas(order.receipt.subTotal)}
                 </span>
               </div>
-              {order.discount > 0 && (
+              {order.receipt.discount > 0 && (
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">
                     {t("orders.form.discount")}
                   </span>
                   <span className="font-medium text-destructive">
-                    -৳{formatNumberWithCommas(order.discount)}
+                    -৳{formatNumberWithCommas(order.receipt.discount)}
                   </span>
                 </div>
               )}
@@ -266,7 +257,15 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                   {t("orders.form.deliveryFee")}
                 </span>
                 <span className="font-medium">
-                  ৳{formatNumberWithCommas(order.delivery_fee)}
+                  ৳{formatNumberWithCommas(order.receipt.deliveryCharge)}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">
+                  VAT ({order.receipt.vatPercentage}%)
+                </span>
+                <span className="font-medium">
+                  ৳{formatNumberWithCommas(order.receipt.vat)}
                 </span>
               </div>
               <div className="flex justify-between pt-3 border-t">
@@ -274,7 +273,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                   {t("orders.form.total")}
                 </span>
                 <span className="text-xl font-bold text-primary">
-                  ৳{formatNumberWithCommas(order.total)}
+                  ৳{formatNumberWithCommas(order.receipt.grandTotal)}
                 </span>
               </div>
             </div>
@@ -287,7 +286,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                 {t("orders.form.paymentMethod")}
               </Label>
               <p className="font-medium capitalize">
-                {t(`orders.paymentMethod.${order.payment_method}`)}
+                {t(`orders.paymentMethod.${order.paymentMode}`)}
               </p>
             </div>
             <div className="p-4 border rounded-lg">
@@ -295,52 +294,63 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                 {t("orders.form.orderStatus")}
               </Label>
               <p className="font-medium capitalize">
-                {t(
-                  `orders.status.${
-                    order.status === "in-transit" ? "inTransit" : order.status
-                  }`
-                )}
+                {t(`orders.status.${order.status}`)}
               </p>
             </div>
           </div>
 
           {/* Order Notes */}
-          {order.notes && (
-            <div className="p-4 bg-muted/50 border rounded-lg">
-              <Label className="text-xs text-muted-foreground">
-                {t("orders.form.notes")}
-              </Label>
-              <p className="text-sm mt-1">{order.notes}</p>
+          {(order.customerNotes || order.adminNotes) && (
+            <div className="space-y-3">
+              {order.customerNotes && (
+                <div className="p-4 bg-muted/50 border rounded-lg">
+                  <Label className="text-xs text-muted-foreground">
+                    Customer Notes
+                  </Label>
+                  <p className="text-sm mt-1">{order.customerNotes}</p>
+                </div>
+              )}
+              {order.adminNotes && (
+                <div className="p-4 bg-muted/50 border rounded-lg">
+                  <Label className="text-xs text-muted-foreground">
+                    Admin Notes
+                  </Label>
+                  <p className="text-sm mt-1">{order.adminNotes}</p>
+                </div>
+              )}
             </div>
           )}
 
           {/* Order Timeline */}
-          <div className="grid grid-cols-3 gap-3 text-sm">
-            <div className="p-3 bg-card border rounded-lg">
-              <Label className="text-xs text-muted-foreground">
-                {t("orders.view.createdAt")}
-              </Label>
-              <p className="font-medium text-xs">
-                {formatDate(order.created_at)}
-              </p>
-            </div>
-            <div className="p-3 bg-card border rounded-lg">
-              <Label className="text-xs text-muted-foreground">
-                {t("orders.view.updatedAt")}
-              </Label>
-              <p className="font-medium text-xs">
-                {formatDate(order.updated_at)}
-              </p>
-            </div>
-            {order.delivered_at && (
-              <div className="p-3 bg-card border rounded-lg">
-                <Label className="text-xs text-muted-foreground">
-                  {t("orders.view.deliveredAt")}
-                </Label>
-                <p className="font-medium text-xs">
-                  {formatDate(order.delivered_at)}
-                </p>
+          <div className="border rounded-lg p-4">
+            <h4 className="font-semibold text-sm mb-3">
+              {t("orders.view.orderHistory")}
+            </h4>
+            {order.timeline && order.timeline.length > 0 ? (
+              <div className="space-y-2">
+                {order.timeline.map((event, index) => (
+                  <div key={index} className="flex items-center gap-3 text-sm">
+                    <div className="w-2 h-2 rounded-full bg-primary" />
+                    <div className="flex-1">
+                      <p className="font-medium">
+                        {t(`orders.status.${event.status}`)}
+                      </p>
+                      {event.note && (
+                        <p className="text-xs text-muted-foreground">
+                          {event.note}
+                        </p>
+                      )}
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      {formatDate(event.timestamp)}
+                    </span>
+                  </div>
+                ))}
               </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                No timeline available
+              </p>
             )}
           </div>
         </div>

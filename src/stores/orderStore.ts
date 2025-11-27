@@ -3,54 +3,119 @@ import { createStore } from "./createStore";
 
 export interface OrderItem {
   id: number | string;
-  product_id: number | string;
-  product_name: string;
-  sku_id?: number | string;
-  sku_name?: string;
-  quantity: number;
-  unit_price: number;
-  total_price: number;
+  itemType: "product" | "package";
+  product: {
+    id: number | string;
+    name: string;
+  } | null;
+  sku: {
+    id: number | string;
+    name: string;
+  } | null;
+  quantity: string | number;
+  unitPrice: number;
+  itemCost: number;
+}
+
+export interface Customer {
+  id: number | string;
+  name: string;
+  email: string;
+  mobile: string;
+}
+
+export interface Address {
+  addressType: string | null;
+  street: string | null;
+  city: string | null;
+  state: string | null;
+  country: string | null;
+  postalCode: string | null;
+  coordinates: string | null;
+}
+
+export interface Receipt {
+  subTotal: number;
+  discount: number;
+  deliveryCharge: number;
+  vat: number;
+  vatPercentage: number;
+  grandTotal: number;
+}
+
+export interface DeliverySync {
+  sent: boolean;
+  sentAt?: string | null;
+  attempts: string | number;
+  lastAttemptAt?: string | null;
+  failed: boolean;
+  lastError?: string | null;
+}
+
+export interface Timeline {
+  status: string;
+  timestamp: string;
+  updatedBy: number | string;
+  note?: string;
 }
 
 export interface Order {
   id: number | string;
-  order_number: string;
-  customer_id: number | string;
-  customer_name: string;
-  customer_phone: string;
-  customer_email?: string;
-  delivery_address: string;
-  coverage_area_id?: number | string;
-  items: OrderItem[];
-  subtotal: number;
-  discount: number;
-  delivery_fee: number;
-  total: number;
-  payment_method: "cash" | "online" | "card";
-  payment_status: "pending" | "paid" | "failed" | "refunded";
+  orderId: string;
+  customer: Customer;
   status:
     | "pending"
-    | "confirmed"
-    | "processing"
-    | "in-transit"
+    | "approved"
+    | "shipped"
     | "delivered"
-    | "cancelled";
-  delivery_agent_id?: number | string;
-  delivery_agent_name?: string;
-  notes?: string;
+    | "cancelled"
+    | "returned";
+  paymentStatus: "pending" | "paid" | "failed";
+  paymentMode: "cash" | "online" | "card";
+  address: Address;
+  items: OrderItem[];
+  receipt: Receipt;
+  deliverySync: DeliverySync;
+  timeline: Timeline[];
+  customerNotes?: string | null;
+  adminNotes?: string | null;
+  estimatedDeliveryFrom?: string | null;
+  estimatedDeliveryTo?: string | null;
+  itemsCount?: number;
+  grandTotal?: number;
   created_at: string;
   updated_at: string;
-  delivered_at?: string;
 }
 
 export interface OrderStatistics {
   total_orders: number;
-  pending_orders: number;
-  processing_orders: number;
-  delivered_orders: number;
-  cancelled_orders: number;
-  total_revenue: number;
-  pending_revenue: number;
+  total_revenue: string;
+  by_status: {
+    pending: number;
+    approved: number;
+    shipped: number;
+    delivered: number;
+    cancelled: number;
+    returned: number;
+  };
+  by_payment_status: {
+    pending: number;
+    paid: number;
+    failed: number;
+  };
+  today: {
+    orders: number;
+    revenue: string;
+  };
+  this_month: {
+    orders: number;
+    revenue: string;
+  };
+  delivery_sync: {
+    sent: number;
+    pending: number;
+    failed: number;
+  };
 }
 
 interface OrderState {
@@ -73,12 +138,33 @@ export const useOrderStore = createStore<OrderState>(
     orders: [],
     statistics: {
       total_orders: 0,
-      pending_orders: 0,
-      processing_orders: 0,
-      delivered_orders: 0,
-      cancelled_orders: 0,
-      total_revenue: 0,
-      pending_revenue: 0,
+      total_revenue: "0",
+      by_status: {
+        pending: 0,
+        approved: 0,
+        shipped: 0,
+        delivered: 0,
+        cancelled: 0,
+        returned: 0,
+      },
+      by_payment_status: {
+        pending: 0,
+        paid: 0,
+        failed: 0,
+      },
+      today: {
+        orders: 0,
+        revenue: "0",
+      },
+      this_month: {
+        orders: 0,
+        revenue: "0",
+      },
+      delivery_sync: {
+        sent: 0,
+        pending: 0,
+        failed: 0,
+      },
     },
     pagination: {
       current_page: 1,
@@ -98,8 +184,7 @@ export const useOrderStore = createStore<OrderState>(
       set({
         orders,
         statistics:
-          (data as { statistics: OrderStatistics })?.statistics ||
-          get().statistics,
+          (data as { stats: OrderStatistics })?.stats || get().statistics,
         isLoading: false,
         error: null,
         pagination:

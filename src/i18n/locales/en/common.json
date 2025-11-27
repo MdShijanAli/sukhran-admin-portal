@@ -8,6 +8,8 @@
   "restore": "Restore",
   "save": "Save",
   "cancel": "Cancel",
+  "update": "Update",
+  "updating": "Updating...",
   "loading": "Loading...",
   "noData": "No data available",
   "close": "Close",

@@ -6,18 +6,18 @@
   "noOrdersFound": "কোন অর্ডার পাওয়া যায়নি",
   "totalOrders": "মোট অর্ডার",
   "pendingOrders": "মুলতুবি",
-  "processingOrders": "প্রক্রিয়াধীন",
-  "deliveredOrders": "ডেলিভারি সম্পন্ন",
   "cancelledOrders": "বাতিল",
   "totalRevenue": "মোট রাজস্ব",
-  "pendingRevenue": "মুলতুবি রাজস্ব",
+  "deliveredOrders": "ডেলিভারি সম্পন্ন",
+  "approvedOrders": "অনুমোদিত",
+  "shippedOrders": "প্রেরিত",
   "status": {
     "pending": "মুলতুবি",
-    "confirmed": "নিশ্চিত",
-    "processing": "প্রক্রিয়াধীন",
-    "inTransit": "পথে",
+    "approved": "অনুমোদিত",
+    "shipped": "প্রেরিত",
     "delivered": "ডেলিভারি সম্পন্ন",
-    "cancelled": "বাতিল"
+    "cancelled": "বাতিল",
+    "returned": "ফেরত"
   },
   "paymentStatus": {
     "pending": "মুলতুবি",
@@ -38,13 +38,14 @@
     "total": "মোট",
     "payment": "পেমেন্ট",
     "status": "স্ট্যাটাস",
+    "paymentStatus": "পেমেন্ট স্ট্যাটাস",
     "date": "তারিখ",
-    "agent": "এজেন্ট",
     "actions": "কার্যক্রম",
     "unassigned": "নির্ধারিত নয়"
   },
   "actions": {
     "viewDetails": "বিস্তারিত দেখুন",
+    "updateStatus": "স্ট্যাটাস আপডেট করুন",
     "editOrder": "অর্ডার সম্পাদনা করুন",
     "deleteOrder": "অর্ডার মুছুন",
     "assignAgent": "এজেন্ট নির্ধারণ করুন",
@@ -89,6 +90,14 @@
     "updateOrder": "অর্ডার আপডেট করুন",
     "createOrder": "অর্ডার তৈরি করুন"
   },
+  "updateStatus": {
+    "title": "অর্ডার স্ট্যাটাস আপডেট করুন",
+    "description": "এই অর্ডারের স্ট্যাটাস পরিবর্তন করুন এবং একটি ঐচ্ছিক নোট যোগ করুন",
+    "status": "অর্ডার স্ট্যাটাস",
+    "selectStatus": "নতুন স্ট্যাটাস নির্বাচন করুন",
+    "note": "নোট (ঐচ্ছিক)",
+    "notePlaceholder": "এই স্ট্যাটাস পরিবর্তন সম্পর্কে একটি নোট যোগ করুন (যেমন: কুরিয়ারের মাধ্যমে অর্ডার প্রেরিত)"
+  },
   "view": {
     "orderDetails": "অর্ডার বিবরণ",
     "customerInfo": "গ্রাহক তথ্য",
@@ -113,6 +122,8 @@
     "orderCancelled": "অর্ডার সফলভাবে বাতিল হয়েছে",
     "agentAssigned": "ডেলিভারি এজেন্ট সফলভাবে নির্ধারিত হয়েছে",
     "statusUpdated": "অর্ডার স্ট্যাটাস আপডেট হয়েছে",
+    "selectStatus": "অনুগ্রহ করে একটি স্ট্যাটাস নির্বাচন করুন",
+    "failedToUpdateStatus": "অর্ডার স্ট্যাটাস আপডেট করতে ব্যর্থ",
     "failedToCreate": "অর্ডার তৈরি করতে ব্যর্থ",
     "failedToUpdate": "অর্ডার আপডেট করতে ব্যর্থ",
     "failedToDelete": "অর্ডার মুছে ফেলতে ব্যর্থ",
