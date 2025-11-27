@@ -143,7 +143,9 @@ export default function Profile() {
               </Avatar>
               {uploadingLogo && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full">
-                  <div className="text-white text-sm">Uploading...</div>
+                  <div className="text-white text-sm">
+                    {t("profile.uploading")}
+                  </div>
                 </div>
               )}
             </div>
