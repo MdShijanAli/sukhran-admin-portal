@@ -23,10 +23,12 @@
     "pending": "মুলতুবি",
     "paid": "পরিশোধিত",
     "failed": "ব্যর্থ",
+    "cancelled": "বাতিল",
     "refunded": "ফেরত"
   },
   "paymentMethod": {
     "cash": "ক্যাশ",
+    "cod": "ক্যাশ অন ডেলিভারি",
     "online": "অনলাইন",
     "card": "কার্ড"
   },
@@ -139,7 +141,10 @@
     "failedToUpdate": "অর্ডার আপডেট করতে ব্যর্থ",
     "failedToDelete": "অর্ডার মুছে ফেলতে ব্যর্থ",
     "failedToCancel": "অর্ডার বাতিল করতে ব্যর্থ",
-    "failedToAssignAgent": "ডেলিভারি এজেন্ট নির্ধারণ করতে ব্যর্থ"
+    "failedToAssignAgent": "ডেলিভারি এজেন্ট নির্ধারণ করতে ব্যর্থ",
+    "failedToFetchFiltered": "ফিল্টার করা অর্ডার আনতে ব্যর্থ",
+    "filtersApplied": "ফিল্টার সফলভাবে প্রয়োগ করা হয়েছে",
+    "filtersCleared": "ফিল্টার মুছে ফেলা হয়েছে"
   },
   "delete": {
     "title": "অর্ডার মুছুন",
@@ -151,6 +156,11 @@
     "allPaymentMethods": "সব পেমেন্ট পদ্ধতি",
     "allPaymentStatuses": "সব পেমেন্ট স্ট্যাটাস",
     "filterByStatus": "স্ট্যাটাস দিয়ে ফিল্টার করুন",
-    "filterByPayment": "পেমেন্ট দিয়ে ফিল্টার করুন"
+    "filterByPayment": "পেমেন্ট দিয়ে ফিল্টার করুন",
+    "orderStatus": "অর্ডার স্ট্যাটাস",
+    "paymentStatus": "পেমেন্ট স্ট্যাটাস",
+    "paymentMode": "পেমেন্ট মোড",
+    "apply": "ফিল্টার প্রয়োগ করুন",
+    "clear": "ফিল্টার মুছুন"
   }
 }

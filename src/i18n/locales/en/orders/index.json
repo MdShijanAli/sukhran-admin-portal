@@ -24,10 +24,12 @@
     "pending": "Pending",
     "paid": "Paid",
     "failed": "Failed",
+    "cancelled": "Cancelled",
     "refunded": "Refunded"
   },
   "paymentMethod": {
     "cash": "Cash",
+    "cod": "Cash on Delivery",
     "online": "Online",
     "card": "Card"
   },
@@ -140,7 +142,10 @@
     "failedToUpdate": "Failed to update order",
     "failedToDelete": "Failed to delete order",
     "failedToCancel": "Failed to cancel order",
-    "failedToAssignAgent": "Failed to assign delivery agent"
+    "failedToAssignAgent": "Failed to assign delivery agent",
+    "failedToFetchFiltered": "Failed to fetch filtered orders",
+    "filtersApplied": "Filters applied successfully",
+    "filtersCleared": "Filters cleared"
   },
   "delete": {
     "title": "Delete Order",
@@ -148,10 +153,15 @@
     "cannotUndo": "This action cannot be undone."
   },
   "filter": {
-    "allStatuses": "All Status",
+    "allStatuses": "All Statuses",
     "allPaymentMethods": "All Payment Methods",
-    "allPaymentStatuses": "All Payment Status",
+    "allPaymentStatuses": "All Payment Statuses",
     "filterByStatus": "Filter by status",
-    "filterByPayment": "Filter by payment"
+    "filterByPayment": "Filter by payment",
+    "orderStatus": "Order Status",
+    "paymentStatus": "Payment Status",
+    "paymentMode": "Payment Mode",
+    "apply": "Apply Filters",
+    "clear": "Clear Filters"
   }
 }

@@ -1,17 +1,18 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Eye,
   Edit,
   Trash2,
-  Plus,
   Clock,
   Truck,
   ShoppingCart,
   XCircle,
   Package,
   CheckCircle,
+  Filter,
 } from "lucide-react";
 import {
   BaseTableList,
@@ -19,11 +20,12 @@ import {
   ActionItem,
   DropdownMenuActions,
 } from "@/components/table";
-import { formatDate, formatNumberWithCommas } from "@/lib/utils";
+import { formatNumberWithCommas } from "@/lib/utils";
 import { Order, useOrderStore } from "@/stores/orderStore";
 import orderService from "@/services/orderService";
 import { toast } from "sonner";
 import { DeleteModal } from "@/components/modals";
+import FilterModal from "@/components/modals/FilterModal";
 import FormModal from "./modal/FormModal";
 import ViewModal from "./modal/ViewModal";
 import UpdateOrderStatusModal from "./modal/UpdateOrderStatusModal";
@@ -40,8 +42,106 @@ export default function Orders() {
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [showUpdateDeliveryTimeModal, setShowUpdateDeliveryTimeModal] =
     useState(false);
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [filterData, setFilterData] = useState<Record<string, string>>({
+    status: "",
+    payment_status: "",
+    payment_mode: "",
+  });
 
   const store = useOrderStore();
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (filterData.status) {
+      params.append("status", filterData.status);
+    }
+    if (filterData.payment_status) {
+      params.append("payment_status", filterData.payment_status);
+    }
+    if (filterData.payment_mode) {
+      params.append("payment_mode", filterData.payment_mode);
+    }
+    const queryString = params.toString();
+    const fetchLists = async () => {
+      store.setLoading(true);
+      try {
+        await orderService.fetchLists(queryString);
+      } catch (error) {
+        console.error("Error fetching filtered order list:", error);
+        toast.error(t("orders.messages.failedToFetchFiltered"));
+      } finally {
+        store.setLoading(false);
+      }
+    };
+    if (!queryString) {
+      return;
+    } else {
+      fetchLists();
+    }
+  }, [filterData.status, filterData.payment_status, filterData.payment_mode]);
+
+  const handleApplyFilters = (filters: Record<string, string>) => {
+    console.log("Applying filters:", filters);
+    setFilterData(filters);
+    console.log("Applied filters:", filters);
+    toast.success(t("orders.messages.filtersApplied"));
+  };
+
+  const handleClearFilters = () => {
+    setFilterData({
+      status: "all",
+      payment_status: "all",
+      payment_mode: "all",
+    });
+    toast.info(t("orders.messages.filtersCleared"));
+    setShowFilterModal(false);
+  };
+
+  // Filter configurations
+  const orderFilterConfigs = [
+    {
+      key: "status",
+      label: t("orders.filter.orderStatus"),
+      options: [
+        { label: t("orders.filter.allStatuses"), value: "all" },
+        { label: t("orders.status.pending"), value: "pending" },
+        { label: t("orders.status.approved"), value: "approved" },
+        { label: t("orders.status.shipped"), value: "shipped" },
+        { label: t("orders.status.delivered"), value: "delivered" },
+        { label: t("orders.status.cancelled"), value: "cancelled" },
+        {
+          label: t("orders.status.cancelled_at_delivery"),
+          value: "cancelled_at_delivery",
+        },
+        { label: t("orders.status.returned"), value: "returned" },
+      ],
+      defaultValue: "all",
+    },
+    {
+      key: "payment_status",
+      label: t("orders.filter.paymentStatus"),
+      options: [
+        { label: t("orders.filter.allPaymentStatuses"), value: "all" },
+        { label: t("orders.paymentStatus.pending"), value: "pending" },
+        { label: t("orders.paymentStatus.paid"), value: "paid" },
+        { label: t("orders.paymentStatus.failed"), value: "failed" },
+        { label: t("orders.paymentStatus.cancelled"), value: "cancelled" },
+        { label: t("orders.paymentStatus.refunded"), value: "refunded" },
+      ],
+      defaultValue: "all",
+    },
+    {
+      key: "payment_mode",
+      label: t("orders.filter.paymentMode"),
+      options: [
+        { label: t("orders.filter.allPaymentMethods"), value: "all" },
+        { label: t("orders.paymentMethod.cod"), value: "cod" },
+        { label: t("orders.paymentMethod.online"), value: "online" },
+      ],
+      defaultValue: "all",
+    },
+  ];
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {
     setRefreshTable(() => refreshFn);
@@ -312,14 +412,20 @@ export default function Orders() {
       <BaseTableList<Order>
         title={t("orders.title")}
         description={t("orders.subtitle")}
-        headerActions={[
-          {
-            label: t("orders.addOrder"),
-            icon: Plus,
-            onClick: handleCreate,
-            variant: "default",
-          },
-        ]}
+        // headerActions={[
+        //   {
+        //     label: t("orders.addOrder"),
+        //     icon: Plus,
+        //     onClick: handleCreate,
+        //     variant: "default",
+        //   },
+        // ]}
+        toolbarActions={
+          <Button variant="outline" onClick={() => setShowFilterModal(true)}>
+            <Filter className="mr-2 h-4 w-4" />
+            {t("filter")}
+          </Button>
+        }
         searchPlaceholder={t("orders.searchPlaceholder")}
         enableSearch={true}
         columns={columns}
@@ -367,8 +473,21 @@ export default function Orders() {
       <UpdateDeliveryTimeModal
         open={showUpdateDeliveryTimeModal}
         onClose={setShowUpdateDeliveryTimeModal}
-        orderId={selectedOrder?.id || null}
+        orderId={selectedOrder?.orderId || null}
         onSuccess={() => refreshTable?.()}
+      />
+
+      {/* Filter Modal */}
+      <FilterModal
+        open={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        title={t("filter")}
+        filters={orderFilterConfigs}
+        currentFilters={filterData}
+        onApplyFilters={handleApplyFilters}
+        onClearFilters={handleClearFilters}
+        submitButtonText={t("orders.filter.apply")}
+        clearButtonText={t("orders.filter.clear")}
       />
     </div>
   );
