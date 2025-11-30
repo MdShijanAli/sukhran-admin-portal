@@ -283,7 +283,7 @@ export function BaseTableList<T>({
   return (
     <div className="space-y-3">
       {summaryLists.length > 0 && (
-        <div className="grid gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {summaryLists.map((stat) => (
             <Card key={stat.title}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -308,18 +308,18 @@ export function BaseTableList<T>({
 
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <CardTitle>{title}</CardTitle>
               {description && <CardDescription>{description}</CardDescription>}
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 flex-wrap">
               {/* Toolbar: Search, Filters, and Actions */}
               {(enableSearch || filters || toolbarActions) && (
-                <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex flex-row items-start sm:items-center gap-2 flex-wrap w-full sm:w-auto">
                   {/* Search Input */}
                   {enableSearch && (
-                    <div className="relative w-[300px] max-w-[500px]">
+                    <div className="relative w-full sm:w-[250px] lg:w-[300px]">
                       <Input
                         placeholder={searchPlaceholder}
                         value={searchQuery}
@@ -361,7 +361,9 @@ export function BaseTableList<T>({
                           }}
                         >
                           <SelectTrigger
-                            className={filter.className || "w-[180px]"}
+                            className={
+                              filter.className || "w-full sm:w-[180px]"
+                            }
                           >
                             <SelectValue
                               placeholder={filter.placeholder || "Select..."}
@@ -385,32 +387,39 @@ export function BaseTableList<T>({
                   {toolbarActions}
                 </div>
               )}
-              <Button
-                variant="default"
-                onClick={handleRefresh}
-                disabled={isRefreshing}
-              >
-                <RefreshCw
-                  className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
-                />
-              </Button>
-              {headerActions && headerActions.length > 0 && (
-                <div className="flex items-center gap-2">
-                  {headerActions.map((action, index) => {
-                    const Icon = action.icon;
-                    return (
-                      <Button
-                        key={index}
-                        onClick={action.onClick}
-                        variant={action.variant || "default"}
-                      >
-                        {Icon && <Icon className="h-4 w-4 mr-2" />}
-                        {action.label}
-                      </Button>
-                    );
-                  })}
-                </div>
-              )}
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <Button
+                  variant="default"
+                  size="icon"
+                  onClick={handleRefresh}
+                  disabled={isRefreshing}
+                  className="shrink-0"
+                >
+                  <RefreshCw
+                    className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+                  />
+                </Button>
+                {headerActions && headerActions.length > 0 && (
+                  <div className="flex items-center gap-2 flex-wrap flex-1 sm:flex-initial">
+                    {headerActions.map((action, index) => {
+                      const Icon = action.icon;
+                      return (
+                        <Button
+                          key={index}
+                          onClick={action.onClick}
+                          variant={action.variant || "default"}
+                          className="flex-1 sm:flex-initial"
+                        >
+                          {Icon && <Icon className="h-4 w-4 sm:mr-2" />}
+                          <span className="hidden sm:inline">
+                            {action.label}
+                          </span>
+                        </Button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
             {headerSlots}
           </div>

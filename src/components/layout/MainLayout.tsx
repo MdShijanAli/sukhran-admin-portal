@@ -3,9 +3,26 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { useSidebarStore } from "@/stores/sidebarStore";
 import { cn } from "@/lib/utils";
+import { useEffect } from "react";
 
 export default function MainLayout() {
-  const { isCollapsed } = useSidebarStore();
+  const { isCollapsed, setCollapsed } = useSidebarStore();
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024) {
+        setCollapsed(true);
+      } else {
+        setCollapsed(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [window.innerWidth]);
 
   return (
     <div className="min-h-screen bg-background">
