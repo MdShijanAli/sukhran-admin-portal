@@ -7,10 +7,13 @@ export interface OrderItem {
   product: {
     id: number | string;
     name: string;
+    image_url?: string;
   } | null;
   sku: {
     id: number | string;
     name: string;
+    unitName?: string;
+    unitSize?: number;
   } | null;
   quantity: string | number;
   unitPrice: number;
@@ -25,13 +28,13 @@ export interface Customer {
 }
 
 export interface Address {
-  addressType: string | null;
   street: string | null;
+  area: string | null;
   city: string | null;
   state: string | null;
-  country: string | null;
   postalCode: string | null;
-  coordinates: string | null;
+  landmark: string | null;
+  type: string | null;
 }
 
 export interface Receipt {
@@ -55,8 +58,17 @@ export interface DeliverySync {
 export interface Timeline {
   status: string;
   timestamp: string;
-  updatedBy: number | string;
+  updatedBy?: number | string;
   note?: string;
+}
+
+export interface EstimatedDelivery {
+  from: string;
+  to: string;
+  fromFormatted?: string;
+  toFormatted?: string;
+  fromISO?: string;
+  toISO?: string;
 }
 
 export interface Order {
@@ -71,12 +83,13 @@ export interface Order {
     | "cancelled"
     | "returned";
   paymentStatus: "pending" | "paid" | "failed";
-  paymentMode: "cash" | "online" | "card";
+  paymentMode: "cash" | "cod" | "online" | "card";
   address: Address;
   items: OrderItem[];
   receipt: Receipt;
+  estimatedDelivery?: EstimatedDelivery;
   deliverySync: DeliverySync;
-  timeline: Timeline[];
+  timeline: Timeline[] | null;
   customerNotes?: string | null;
   adminNotes?: string | null;
   estimatedDeliveryFrom?: string | null;

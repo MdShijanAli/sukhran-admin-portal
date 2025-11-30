@@ -193,24 +193,6 @@ export default function Orders() {
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "pending":
-        return "bg-warning/10 text-warning border-warning/20";
-      case "approved":
-        return "bg-blue-500/10 text-blue-500 border-blue-500/20";
-      case "shipped":
-        return "bg-primary/10 text-primary border-primary/20";
-      case "delivered":
-        return "bg-success/10 text-success border-success/20";
-      case "cancelled":
-      case "returned":
-        return "bg-destructive/10 text-destructive border-destructive/20";
-      default:
-        return "bg-muted text-muted-foreground";
-    }
-  };
-
   // Define actions for dropdown menu
   const orderActions = (order: Order): ActionItem<Order>[] => [
     {
@@ -282,11 +264,7 @@ export default function Orders() {
       label: t("orders.columns.items"),
       render: (order) => (
         <div className="w-20">
-          <Badge variant="outline">
-            {order.itemsCount || order.items?.length || 0}{" "}
-            {t("orders.view.item")}
-            (s)
-          </Badge>
+          <Badge variant="outline">{order.itemsCount || 0}</Badge>
         </div>
       ),
     },
@@ -315,7 +293,7 @@ export default function Orders() {
       key: "status",
       label: t("orders.columns.status"),
       render: (order) => (
-        <Badge className={getStatusColor(order.status)}>
+        <Badge variant={order.status}>
           {t(`orders.status.${order.status}`)}
         </Badge>
       ),
