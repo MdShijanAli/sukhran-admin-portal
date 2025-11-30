@@ -3,6 +3,7 @@ import { createStore } from "./createStore";
 
 interface AuthState {
   user: User | null;
+  permissions?: string[];
   isAuthenticated: boolean;
   access_token?: string;
   refresh_token?: string;
@@ -12,10 +13,17 @@ interface AuthState {
 export const useAuthStore = createStore<AuthState>(
   (set) => ({
     user: null,
+    permissions: [],
     isAuthenticated: false,
     access_token: null,
     refresh_token: null,
-    setState: (state: Partial<AuthState>) => set(state),
+    setState: (state: Partial<AuthState>) => {
+      console.log("Users----->", state);
+      set({
+        ...state,
+        permissions: state.user?.permissions ?? [],
+      });
+    },
   }),
   "auth-storage",
   true

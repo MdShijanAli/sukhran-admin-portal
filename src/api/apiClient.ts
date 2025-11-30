@@ -41,6 +41,7 @@ async function refreshAccessToken(): Promise<string | null> {
         if (!refreshToken) {
           useAuthStore.getState().setState({
             user: null,
+            permissions: [],
             isAuthenticated: false,
             access_token: null,
             refresh_token: null,
@@ -70,6 +71,7 @@ async function refreshAccessToken(): Promise<string | null> {
       } catch (err) {
         useAuthStore.getState().setState({
           user: null,
+          permissions: [],
           isAuthenticated: false,
           access_token: null,
           refresh_token: null,

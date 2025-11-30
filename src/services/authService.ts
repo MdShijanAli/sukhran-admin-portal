@@ -32,6 +32,7 @@ const authService = {
       // Update store (single source of truth)
       useAuthStore.setState({
         user,
+        permissions: user?.permissions ?? [],
         isAuthenticated: true,
         access_token,
         refresh_token,
@@ -55,6 +56,7 @@ const authService = {
       // Update store with fetched user data
       useAuthStore.setState({
         user: user.user,
+        permissions: user.user?.permissions ?? [],
         isAuthenticated: true,
       });
 
@@ -89,6 +91,7 @@ const authService = {
       // Clear auth store (single source of truth)
       useAuthStore.setState({
         user: null,
+        permissions: [],
         isAuthenticated: false,
         access_token: null,
         refresh_token: null,

@@ -15,6 +15,7 @@ export interface User {
   image_url?: string;
   preferredName?: string;
   role: Role;
+  permissions?: string[];
   avatar?: string;
 }
 
