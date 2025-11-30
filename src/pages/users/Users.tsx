@@ -289,7 +289,9 @@ const Users = () => {
     {
       key: "name",
       label: t("users.columns.userName"),
-      render: (user) => `${user.firstName} ${user.lastName}`,
+      render: (user) => (
+        <p className="w-[100px]">{`${user.firstName} ${user.lastName}`}</p>
+      ),
     },
     {
       key: "email",
