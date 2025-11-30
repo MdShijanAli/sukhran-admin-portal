@@ -195,7 +195,7 @@ export default function Sidebar() {
             onClick={toggleSidebar}
             className={`absolute ${
               isCollapsed ? "top-1/2" : "top-8"
-            } -right-4 transform -translate-y-1/2 rounded-lg p-1 bg-sidebar-accent transition-all duration-500 ease-in-out hover:scale-110`}
+            } hidden lg:block -right-4 transform -translate-y-1/2 rounded-lg p-1 bg-sidebar-accent transition-all duration-500 ease-in-out hover:scale-110`}
           >
             {isCollapsed ? (
               <ChevronRight className="h-5 w-5 text-sidebar-foreground" />
