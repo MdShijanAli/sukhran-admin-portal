@@ -147,7 +147,7 @@ const Users = () => {
       options: [
         { label: t("users.filter.allRoles"), value: "all" },
         ...roleStore.roles.map((role) => ({
-          label: role.display_name,
+          label: role?.display_name,
           value: role.id,
         })),
       ],
@@ -308,7 +308,7 @@ const Users = () => {
               : "outline"
           }
         >
-          {user.role.display_name}
+          {user?.role?.display_name}
         </Badge>
       ),
       className: "text-center",
