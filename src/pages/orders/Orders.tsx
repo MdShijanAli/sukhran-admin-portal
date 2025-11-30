@@ -30,7 +30,7 @@ import FormModal from "./modal/FormModal";
 import ViewModal from "./modal/ViewModal";
 import UpdateOrderStatusModal from "./modal/UpdateOrderStatusModal";
 import UpdateDeliveryTimeModal from "./modal/UpdateDeliveryTimeModal";
-import { usePermissionCheck } from "@/lib/withPermission";
+import { usePermissionCheck } from "@/hoc/withPermission";
 import permissions from "@/lib/permissions";
 
 export default function Orders() {

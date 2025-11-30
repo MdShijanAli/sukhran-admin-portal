@@ -103,5 +103,11 @@
     "twitter": "Twitter",
     "linkedin": "LinkedIn",
     "whatsapp": "WhatsApp"
+  },
+    "noPermission": {
+    "title": "Access Denied",
+    "message": "You don't have permission to access this page. Please contact your administrator if you believe this is an error.",
+    "goBack": "Go Back",
+    "goHome": "Go to Dashboard"
   }
 }

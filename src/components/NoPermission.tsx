@@ -45,7 +45,7 @@ export default function NoPermission({
             </p>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 w-full">
+            <div className="flex flex-col justify-center sm:flex-row gap-3 w-full">
               {showBackButton && (
                 <Button
                   variant="outline"
