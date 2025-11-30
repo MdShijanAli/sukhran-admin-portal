@@ -122,7 +122,44 @@ Your API should return user permissions in this format:
 
 ## Usage Examples
 
-### 1. Sidebar Navigation (Module-Level)
+### 1. Page-Level Permission Check (Recommended)
+
+**Using `usePermissionCheck` Hook:**
+
+```typescript
+import { usePermissionCheck } from "@/lib/withPermission";
+import permissions from "@/lib/permissions";
+
+export default function Orders() {
+  const { t } = useTranslation();
+
+  // Check permission at the start of component
+  const permissionCheck = usePermissionCheck(permissions.orders.view);
+  if (permissionCheck) return permissionCheck;
+
+  // Rest of your component code...
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+
+  return <div>{/* Your page content */}</div>;
+}
+```
+
+**Using HOC `withPermission`:**
+
+```typescript
+import { withPermission } from "@/lib/withPermission";
+import permissions from "@/lib/permissions";
+
+function Orders() {
+  // Your component code...
+  return <div>Orders Page</div>;
+}
+
+// Wrap component with permission check
+export default withPermission(Orders, permissions.orders.view);
+```
+
+### 2. Sidebar Navigation (Module-Level)
 
 **File:** `src/components/layout/Sidebar.tsx`
 
@@ -157,7 +194,7 @@ export default function Sidebar() {
 }
 ```
 
-### 2. Action Buttons (Component-Level)
+### 3. Action Buttons (Component-Level)
 
 **File:** `src/pages/orders/Orders.tsx`
 
@@ -190,7 +227,7 @@ export default function Orders() {
 }
 ```
 
-### 3. Dropdown Actions (Row-Level)
+### 4. Dropdown Actions (Row-Level)
 
 **File:** `src/pages/orders/Orders.tsx`
 
@@ -287,7 +324,67 @@ export default function OrderDetails() {
 }
 ```
 
-### 5. Form Modal Actions
+### 5. NoPermission Component
+
+When a user tries to access a page without permission, show a professional error page:
+
+**Using `usePermissionCheck` (Recommended):**
+
+```typescript
+import { usePermissionCheck } from "@/lib/withPermission";
+import permissions from "@/lib/permissions";
+
+export default function Orders() {
+  // This will return NoPermission component if user lacks permission
+  const permissionCheck = usePermissionCheck(permissions.orders.view);
+  if (permissionCheck) return permissionCheck;
+
+  // Your normal component code continues...
+  return <div>Orders Page</div>;
+}
+```
+
+**Using `NoPermission` directly:**
+
+```typescript
+import NoPermission from "@/components/NoPermission";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
+
+export default function Orders() {
+  const { hasPermission } = usePermissions();
+
+  if (!hasPermission(permissions.orders.view)) {
+    return <NoPermission />;
+  }
+
+  return <div>Orders Page</div>;
+}
+```
+
+**Custom NoPermission messages:**
+
+```typescript
+import NoPermission from "@/components/NoPermission";
+
+return (
+  <NoPermission
+    title="Orders Access Required"
+    message="You need special permission to view orders. Contact your manager to request access."
+    showBackButton={true}
+    showHomeButton={true}
+  />
+);
+```
+
+    </div>
+
+);
+}
+
+````
+
+### 6. Form Modal Actions
 
 **File:** `src/pages/orders/Orders.tsx`
 
@@ -338,7 +435,7 @@ export default function Orders() {
     </>
   );
 }
-```
+````
 
 ---
 

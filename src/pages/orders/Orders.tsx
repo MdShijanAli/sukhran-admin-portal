@@ -30,9 +30,16 @@ import FormModal from "./modal/FormModal";
 import ViewModal from "./modal/ViewModal";
 import UpdateOrderStatusModal from "./modal/UpdateOrderStatusModal";
 import UpdateDeliveryTimeModal from "./modal/UpdateDeliveryTimeModal";
+import { usePermissionCheck } from "@/lib/withPermission";
+import permissions from "@/lib/permissions";
 
 export default function Orders() {
   const { t } = useTranslation();
+
+  // Check permission at the start of component
+  const permissionCheck = usePermissionCheck(permissions.orders.view);
+  if (permissionCheck) return permissionCheck;
+
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [dialogMode, setDialogMode] = useState<"create" | "edit" | null>(null);
   const [showDetails, setShowDetails] = useState(false);

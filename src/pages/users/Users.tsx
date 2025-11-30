@@ -33,8 +33,13 @@ import constData from "@/lib/constData";
 import { useTranslation } from "react-i18next";
 import roleService from "@/services/roleService";
 import { useRoleStore } from "@/stores/roleStore";
+import { usePermissionCheck } from "@/lib/withPermission";
+import permissions from "@/lib/permissions";
 
 const Users = () => {
+  // Check permission at the start of component
+  const permissionCheck = usePermissionCheck(permissions.users.view);
+  if (permissionCheck) return permissionCheck;
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [dialogMode, setDialogMode] = useState<"create" | "edit" | null>(null);
   const [showDetails, setShowDetails] = useState(false);

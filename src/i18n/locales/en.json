@@ -49,6 +49,12 @@
     "loading": "Loading...",
     "noData": "No data available"
   },
+  "noPermission": {
+    "title": "Access Denied",
+    "message": "You don't have permission to access this page. Please contact your administrator if you believe this is an error.",
+    "goBack": "Go Back",
+    "goHome": "Go to Dashboard"
+  },
   "dashboard": {
     "todayOrders": "Today's Orders",
     "totalRevenue": "Total Revenue",
