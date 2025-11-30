@@ -8,9 +8,12 @@ This guide explains how to implement and use the permission-based access control
 
 1. [Architecture](#architecture)
 2. [Setup](#setup)
-3. [Usage Examples](#usage-examples)
-4. [Implementation Patterns](#implementation-patterns)
-5. [Best Practices](#best-practices)
+3. [Quick Start](#quick-start)
+4. [Usage Examples](#usage-examples)
+5. [Implementation Patterns](#implementation-patterns)
+6. [Complete Examples](#complete-examples)
+7. [Best Practices](#best-practices)
+8. [Testing Checklist](#testing-checklist)
 
 ---
 
@@ -117,6 +120,28 @@ Your API should return user permissions in this format:
 ```
 
 **Note:** Users with `role.name === "super_admin"` automatically have access to all features without needing explicit permissions in the array. The permissions array can be empty or omitted for super_admin users.
+
+---
+
+## Quick Start
+
+### Add Permission Check to Any Page (2 Lines!)
+
+```typescript
+import { usePermissionCheck } from "@/lib/withPermission";
+import permissions from "@/lib/permissions";
+
+export default function YourPage() {
+  // Add these 2 lines at the start
+  const permissionCheck = usePermissionCheck(permissions.yourModule.view);
+  if (permissionCheck) return permissionCheck;
+
+  // Your normal component code continues...
+  return <div>Your Page Content</div>;
+}
+```
+
+That's it! The NoPermission component will automatically show if the user doesn't have access.
 
 ---
 
@@ -514,6 +539,180 @@ const canEditOrder = (order: Order) => {
     <Button onClick={() => handleEdit(order)}>Edit</Button>
   );
 }
+```
+
+---
+
+## Complete Examples
+
+### Example 1: Orders Page (Full Implementation)
+
+```typescript
+// src/pages/orders/Orders.tsx
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Eye, Edit, Trash2, Plus, Clock } from "lucide-react";
+import { BaseTableList, ActionItem } from "@/components/table";
+import { usePermissionCheck } from "@/lib/withPermission";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
+import { Order, useOrderStore } from "@/stores/orderStore";
+import orderService from "@/services/orderService";
+import { toast } from "sonner";
+
+export default function Orders() {
+  const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
+
+  // Page-level permission check
+  const permissionCheck = usePermissionCheck(permissions.orders.view);
+  if (permissionCheck) return permissionCheck;
+
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [showFormModal, setShowFormModal] = useState(false);
+
+  // Handler with permission check
+  const handleCreate = () => {
+    if (!hasPermission(permissions.orders.create)) {
+      toast.error("You don't have permission to create orders");
+      return;
+    }
+    setShowFormModal(true);
+  };
+
+  // Define actions with permissions
+  const orderActions = (order: Order): ActionItem<Order>[] => [
+    {
+      label: "View Details",
+      icon: Eye,
+      onClick: (order) => {
+        setSelectedOrder(order);
+        setShowViewModal(true);
+      },
+    },
+    {
+      label: "Edit Order",
+      icon: Edit,
+      onClick: handleEdit,
+      show: hasPermission(permissions.orders.edit),
+    },
+    {
+      label: "Update Status",
+      icon: Clock,
+      onClick: handleUpdateStatus,
+      show: hasPermission(permissions.orders.updateStatus),
+    },
+    {
+      label: "Delete Order",
+      icon: Trash2,
+      onClick: handleDelete,
+      variant: "destructive",
+      show: hasPermission(permissions.orders.delete),
+    },
+  ];
+
+  return (
+    <BaseTableList<Order>
+      title={t("orders.title")}
+      headerActions={
+        hasPermission(permissions.orders.create)
+          ? [{ label: t("orders.addOrder"), icon: Plus, onClick: handleCreate }]
+          : []
+      }
+      columns={columns}
+      service={orderService}
+      store={useOrderStore()}
+    />
+  );
+}
+```
+
+### Example 2: Settings Page with Section Permissions
+
+```typescript
+// src/pages/Settings.tsx
+import { usePermissionCheck } from "@/lib/withPermission";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
+
+export default function Settings() {
+  const { hasPermission } = usePermissions();
+
+  // Page-level permission check
+  const permissionCheck = usePermissionCheck(permissions.settings.view);
+  if (permissionCheck) return permissionCheck;
+
+  return (
+    <div>
+      <h1>Settings</h1>
+
+      {/* General settings - always visible */}
+      <section>
+        <h2>General Settings</h2>
+        {/* ... */}
+      </section>
+
+      {/* Admin-only settings */}
+      {hasPermission(permissions.settings.update) && (
+        <section>
+          <h2>Advanced Settings</h2>
+          {/* ... */}
+        </section>
+      )}
+
+      {/* Super admin only */}
+      {hasPermission(permissions.settings.delete) && (
+        <section>
+          <h2>Danger Zone</h2>
+          {/* ... */}
+        </section>
+      )}
+    </div>
+  );
+}
+```
+
+### Example 3: Custom Permission Gate Component
+
+```typescript
+// src/components/PermissionGate.tsx
+import usePermissions from "@/hooks/use-permissions";
+
+interface PermissionGateProps {
+  permission: string;
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+}
+
+export function PermissionGate({
+  permission,
+  children,
+  fallback = null,
+}: PermissionGateProps) {
+  const { hasPermission } = usePermissions();
+
+  if (!hasPermission(permission)) {
+    return <>{fallback}</>;
+  }
+
+  return <>{children}</>;
+}
+
+// Usage:
+import { PermissionGate } from "@/components/PermissionGate";
+import permissions from "@/lib/permissions";
+
+<PermissionGate permission={permissions.orders.create}>
+  <Button onClick={handleCreate}>Create Order</Button>
+</PermissionGate>;
+
+// With fallback:
+<PermissionGate
+  permission={permissions.orders.create}
+  fallback={<Button disabled>Create Order (No Permission)</Button>}
+>
+  <Button onClick={handleCreate}>Create Order</Button>
+</PermissionGate>;
 ```
 
 ---
@@ -948,6 +1147,57 @@ Here's the complete list of available permissions:
 - Verify permission names in menuItems
 - Ensure auth store has permissions loaded
 - For super_admin users, verify role name is exactly "super_admin"
+
+---
+
+## Testing Checklist
+
+### Implementation Checklist
+
+- [ ] Add permission check to all protected pages
+- [ ] Update sidebar menu items with permissions
+- [ ] Add permission checks to action buttons
+- [ ] Add permission checks to dropdown actions
+- [ ] Add permission checks in handler functions
+- [ ] Test with super_admin role
+- [ ] Test with regular user roles
+- [ ] Test with no permissions
+
+### Files to Update
+
+1. ✅ `src/hooks/use-permissions.ts` - Super_admin check implemented
+2. ✅ `src/lib/permissions.ts` - All module permissions defined
+3. ✅ `src/lib/withPermission.tsx` - Helper functions created
+4. ✅ `src/components/NoPermission.tsx` - Error component created
+5. ✅ `src/components/layout/Sidebar.tsx` - Using permissions
+6. ✅ `src/pages/orders/Orders.tsx` - Example implementation
+7. ⏳ `src/pages/users/Users.tsx` - Add permission check
+8. ⏳ `src/pages/products/Products.tsx` - Add permission check
+9. ⏳ Other page files - Add permission checks as needed
+
+### User Experience Testing
+
+- [ ] Super admin can access all pages
+- [ ] Regular users with no permissions see NoPermission component
+- [ ] Users with specific permissions see only allowed features
+- [ ] Sidebar only shows items user has access to
+- [ ] Action buttons are hidden for unauthorized actions
+- [ ] Dropdown actions respect permissions
+- [ ] Direct URL navigation shows NoPermission if no access
+- [ ] Toast messages shown for unauthorized actions
+- [ ] NoPermission component has working "Go Back" button
+- [ ] NoPermission component has working "Go to Dashboard" button
+
+### Permission Test Scenarios
+
+Create test users with these permission sets:
+
+1. **Super Admin**: `role.name = "super_admin"` (no explicit permissions needed)
+2. **Full Admin**: All permissions in permissions array
+3. **Manager**: View + Edit permissions for most modules
+4. **Operator**: View only permissions
+5. **Limited User**: Only specific module permissions (e.g., only orders.view)
+6. **No Permissions**: Empty permissions array
 
 ---
 
