@@ -1,6 +1,6 @@
 import { createApiService, ApiService } from "./createApiService";
 import { apiRoutes } from "@/api/apiRoutes";
-import { useRoleStore, Role } from "@/stores/roleStore";
+import { useRoleStore, Role, PermissionModule } from "@/stores/roleStore";
 import apiClient from "@/api/apiClient";
 
 // Create base API service with all CRUD operations
@@ -40,6 +40,17 @@ const roleService: RoleService = {
   getAllPermissions: async () => {
     try {
       const response = await apiClient.get(apiRoutes.permissions.getAll);
+      console.log("Get all permissions response:", response.data);
+      if (response && response.status === 200) {
+        const responseData = response.data as {
+          data: PermissionModule[];
+          total: number;
+        };
+        useRoleStore.getState().setPermissions({
+          data: responseData.data,
+          total: responseData.total,
+        });
+      }
       return response.data;
     } catch (error) {
       console.error("Error fetching permissions:", error);

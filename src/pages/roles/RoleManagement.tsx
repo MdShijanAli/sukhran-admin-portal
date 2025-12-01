@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Eye,
@@ -19,7 +19,7 @@ import {
 import { DeleteModal } from "@/components/modals";
 import FormModal from "./modal/FormModal";
 import ViewModal from "./modal/ViewModal";
-import { Role, useRoleStore } from "@/stores/roleStore";
+import { PermissionModule, Role, useRoleStore } from "@/stores/roleStore";
 import roleService from "@/services/roleService";
 import { toast } from "sonner";
 import constData from "@/lib/constData";
@@ -38,6 +38,19 @@ const RoleManagement = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
+
+  // Fetch permissions on mount
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        await roleService.getAllPermissions();
+      } catch (error) {
+        console.error("Error fetching permissions:", error);
+        toast.error(t("roles.messages.failedToLoadPermissions"));
+      }
+    };
+    fetchPermissions();
+  }, []);
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {
     setRefreshTable(() => refreshFn);
@@ -141,7 +154,8 @@ const RoleManagement = () => {
       label: t("roles.columns.permissions"),
       render: (role) => (
         <Badge variant="outline" className="text-center">
-          {role.permissions_count || role.permissions?.length || 0}
+          {role.permissions_count || role.permissions?.length || 0}/
+          {store.totalPermissions}
         </Badge>
       ),
       className: "text-center",

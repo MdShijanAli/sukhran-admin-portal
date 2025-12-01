@@ -39,11 +39,14 @@ export interface Role {
 
 interface RoleState {
   roles: Role[];
+  permissions: PermissionModule[];
+  totalPermissions: number;
   statistics: statistics;
   pagination: PaginationMeta;
   isLoading: boolean;
   error: string | null;
   setItems: (roles: unknown) => void;
+  setPermissions: (data: { data: PermissionModule[]; total: number }) => void;
   addItem: (role: unknown) => void;
   updateItem: (id: number | string, role: unknown) => void;
   removeItem: (id: number | string) => void;
@@ -55,6 +58,8 @@ interface RoleState {
 export const useRoleStore = createStore<RoleState>(
   (set, get) => ({
     roles: [],
+    permissions: [],
+    totalPermissions: 0,
     statistics: {
       total_roles: 0,
       active_roles: 0,
@@ -96,6 +101,16 @@ export const useRoleStore = createStore<RoleState>(
         isLoading: false,
         error: null,
       }));
+    },
+
+    setPermissions: ({
+      data,
+      total,
+    }: {
+      data: PermissionModule[];
+      total: number;
+    }) => {
+      set({ permissions: data, totalPermissions: total });
     },
 
     updateItem: (id: number | string, data: unknown) => {

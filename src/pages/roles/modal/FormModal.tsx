@@ -6,7 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Role, Permission, PermissionModule } from "@/stores/roleStore";
+import {
+  Role,
+  Permission,
+  PermissionModule,
+  useRoleStore,
+} from "@/stores/roleStore";
 import roleService from "@/services/roleService";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
@@ -39,12 +44,10 @@ export default function FormModal({
   onSuccess,
 }: FormModalProps) {
   const { t } = useTranslation();
+  const { permissions, totalPermissions } = useRoleStore();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [permissionModules, setPermissionModules] = useState<
-    PermissionModule[]
-  >([]);
-  const [isLoadingPermissions, setIsLoadingPermissions] = useState(false);
   const [formData, setFormData] = useState<RoleFormData>({
     name: "",
     display_name: "",
@@ -52,28 +55,6 @@ export default function FormModal({
     isActive: true,
     permission_ids: [],
   });
-
-  // Fetch permissions on mount
-  useEffect(() => {
-    const fetchPermissions = async () => {
-      setIsLoadingPermissions(true);
-      try {
-        const response = await roleService.getAllPermissions();
-        const permissionsData =
-          (response as { data?: PermissionModule[] })?.data || [];
-        setPermissionModules(permissionsData);
-      } catch (error) {
-        console.error("Error fetching permissions:", error);
-        toast.error(t("roles.messages.failedToLoadPermissions"));
-      } finally {
-        setIsLoadingPermissions(false);
-      }
-    };
-
-    if (open) {
-      fetchPermissions();
-    }
-  }, [open]);
 
   const handleSubmit = async () => {
     // Validate required fields
@@ -146,7 +127,7 @@ export default function FormModal({
   };
 
   const handleSelectAll = () => {
-    const allPermissionIds = permissionModules.flatMap((module) =>
+    const allPermissionIds = permissions.flatMap((module) =>
       module.permissions.map((p) => p.id)
     );
     if (formData.permission_ids.length === allPermissionIds.length) {
@@ -188,7 +169,7 @@ export default function FormModal({
   };
 
   const getTotalPermissions = () => {
-    return permissionModules.reduce(
+    return permissions.reduce(
       (total, module) => total + module.permissions.length,
       0
     );
@@ -207,7 +188,6 @@ export default function FormModal({
         isEditing ? t("roles.form.updateRole") : t("roles.form.createRole")
       }
       size="2xl"
-      loading={isLoadingPermissions}
     >
       <div className="grid gap-4">
         <div className="grid grid-cols-2 gap-4">
@@ -297,13 +277,13 @@ export default function FormModal({
           </div>
 
           <div className="max-h-[400px] overflow-y-auto border rounded-lg">
-            {permissionModules.length === 0 && !isLoadingPermissions && (
+            {permissions.length === 0 && (
               <p className="text-sm text-muted-foreground text-center py-8">
                 {t("roles.form.noPermissionsAvailable")}
               </p>
             )}
             <Accordion type="multiple" className="w-full">
-              {permissionModules.map((module) => {
+              {permissions.map((module) => {
                 const modulePermissionIds = module.permissions.map((p) => p.id);
                 const selectedCount = modulePermissionIds.filter((id) =>
                   formData.permission_ids.includes(id)
@@ -327,7 +307,7 @@ export default function FormModal({
                             {module.module}
                           </span>
                           <Badge variant="outline" className="text-xs">
-                            {selectedCount} / {module.permissions.length}
+                            {selectedCount} / {totalPermissions}
                           </Badge>
                         </div>
                       </AccordionTrigger>
