@@ -24,11 +24,16 @@ import { useSidebarStore } from "@/stores/sidebarStore";
 import { Pagination } from "@/components/table/Pagination";
 import ShareButton from "@/components/custom/ShareButton";
 import { formatNumberWithCommas } from "@/lib/utils";
+import { withPermission } from "@/hoc/withPermission";
+import permissions from "@/lib/permissions";
+import usePermissions from "@/hooks/use-permissions";
 
 const Products = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const store = useProductStore();
+  const { hasPermission } = usePermissions();
+
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showDelete, setShowDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -161,13 +166,15 @@ const Products = () => {
                 />
               </Button>
             </div>
-            <Button
-              className="gap-2"
-              onClick={() => navigate("/products/create")}
-            >
-              <Plus className="h-4 w-4" />
-              {t("products.addProduct")}
-            </Button>
+            {hasPermission(permissions.products.create) && (
+              <Button
+                className="gap-2"
+                onClick={() => navigate("/products/create")}
+              >
+                <Plus className="h-4 w-4" />
+                {t("products.addProduct")}
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -335,22 +342,27 @@ const Products = () => {
                           iconOnly
                           className="flex-1 h-8 text-xs"
                         />
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex-1 h-8 text-xs"
-                          onClick={() => handleEdit(product)}
-                        >
-                          <Edit className="h-3.5 w-3.5" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex-1 h-8 text-xs"
-                          onClick={() => handleDelete(product)}
-                        >
-                          <Trash2 className="h-3.5 w-3.5 text-destructive" />
-                        </Button>
+                        {hasPermission(permissions.products.edit) && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="flex-1 h-8 text-xs"
+                            onClick={() => handleEdit(product)}
+                          >
+                            <Edit className="h-3.5 w-3.5" />
+                          </Button>
+                        )}
+
+                        {hasPermission(permissions.products.delete) && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="flex-1 h-8 text-xs"
+                            onClick={() => handleDelete(product)}
+                          >
+                            <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </CardContent>
@@ -394,4 +406,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default withPermission(Products, permissions.products.view);
