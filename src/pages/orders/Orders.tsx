@@ -30,15 +30,14 @@ import FormModal from "./modal/FormModal";
 import ViewModal from "./modal/ViewModal";
 import UpdateOrderStatusModal from "./modal/UpdateOrderStatusModal";
 import UpdateDeliveryTimeModal from "./modal/UpdateDeliveryTimeModal";
-import { usePermissionCheck } from "@/hoc/withPermission";
+import { withPermission } from "@/hoc/withPermission";
 import permissions from "@/lib/permissions";
+import usePermissions from "@/hooks/use-permissions";
 
-export default function Orders() {
+function Orders() {
   const { t } = useTranslation();
-
-  // Check permission at the start of component
-  const permissionCheck = usePermissionCheck(permissions.orders.view);
-  if (permissionCheck) return permissionCheck;
+  const store = useOrderStore();
+  const { hasPermission } = usePermissions();
 
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [dialogMode, setDialogMode] = useState<"create" | "edit" | null>(null);
@@ -55,8 +54,6 @@ export default function Orders() {
     payment_status: "",
     payment_mode: "",
   });
-
-  const store = useOrderStore();
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -212,6 +209,7 @@ export default function Orders() {
       icon: Edit,
       onClick: handleEdit,
       show:
+        hasPermission(permissions.orders.edit) &&
         order.status !== "delivered" &&
         order.status !== "cancelled" &&
         order.status !== "returned",
@@ -220,12 +218,17 @@ export default function Orders() {
       label: t("orders.actions.updateStatus"),
       icon: Edit,
       onClick: handleUpdateStatus,
+      show: hasPermission(permissions.orders.edit),
     },
     {
       label: t("orders.actions.updateDeliveryTime"),
       icon: Clock,
       onClick: handleUpdateDeliveryTime,
-      show: order.status !== "delivered" && order.status !== "cancelled",
+      show:
+        hasPermission(permissions.orders.edit) &&
+        order.status !== "delivered" &&
+        order.status !== "cancelled",
+      separator: true, // Show separator after this item
     },
     {
       label: t("orders.actions.deleteOrder"),
@@ -233,7 +236,9 @@ export default function Orders() {
       onClick: handleDelete,
       variant: "destructive",
       separator: true,
-      show: order.status === "pending" || order.status === "cancelled",
+      show:
+        hasPermission(permissions.orders.delete) &&
+        (order.status === "pending" || order.status === "cancelled"),
     },
   ];
 
@@ -477,3 +482,5 @@ export default function Orders() {
     </div>
   );
 }
+
+export default withPermission(Orders, permissions.orders.view);
