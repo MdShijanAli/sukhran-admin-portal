@@ -32,7 +32,7 @@ export default function Settings() {
       </div>
 
       <Tabs defaultValue="business" className="w-full mt-3">
-        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7">
+        <TabsList className="flex flex-wrap lg:grid w-full grid-cols-3 lg:grid-cols-7">
           <TabsTrigger value="business" className="gap-2">
             <Building2 className="h-4 w-4" />
             <span className="hidden sm:inline">

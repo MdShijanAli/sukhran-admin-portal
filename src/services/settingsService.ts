@@ -13,6 +13,23 @@ interface SubscriptionSettingResponse {
   }>;
 }
 
+interface Setting {
+  key: string;
+  value: string | number | boolean;
+  type: "string" | "float" | "boolean" | "integer";
+  description: string;
+}
+
+interface SettingsGroup {
+  group: string;
+  settings: Setting[];
+}
+
+interface GeneralSettingsResponse {
+  success: boolean;
+  data: SettingsGroup[];
+}
+
 const settingsService = {
   // Get subscription settings
   getSubscriptionSettings: async (): Promise<SubscriptionSettingResponse> => {
@@ -51,6 +68,33 @@ const settingsService = {
       return response.data;
     } catch (error) {
       console.error("Error updating preferred delivery dates:", error);
+      throw error;
+    }
+  },
+
+  // Get general settings
+  getGeneralSettings: async (): Promise<GeneralSettingsResponse> => {
+    try {
+      const response = await apiClient.get<GeneralSettingsResponse>(
+        apiRoutes.settings.generalSettings
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching general settings:", error);
+      throw error;
+    }
+  },
+
+  // Update individual setting
+  updateSetting: async (key: string, value: string | number | boolean) => {
+    try {
+      const response = await apiClient.put(
+        apiRoutes.settings.updateSetting(key),
+        { value: String(value) }
+      );
+      return response.data;
+    } catch (error) {
+      console.error(`Error updating setting ${key}:`, error);
       throw error;
     }
   },

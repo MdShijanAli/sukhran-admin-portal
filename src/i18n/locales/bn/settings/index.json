@@ -27,7 +27,19 @@
     "businessAddress": "ব্যবসায়িক ঠিকানা",
     "taxId": "ট্যাক্স আইডি / ব্যবসা নম্বর",
     "currency": "ডিফল্ট মুদ্রা",
-    "timezone": "টাইমজোন"
+    "timezone": "টাইমজোন",
+    "regional": "আঞ্চলিক সেটিংস",
+    "regionalDescription": "মুদ্রা এবং টাইমজোন পছন্দসমূহ কনফিগার করুন",
+    "pricing": "মূল্য নির্ধারণ সেটিংস",
+    "pricingDescription": "ভ্যাট এবং সর্বনিম্ন অর্ডার পরিমাণ কনফিগার করুন",
+    "vatPercentage": "ভ্যাট শতাংশ (%)",
+    "vatDescription": "অর্ডারে প্রযোজ্য ট্যাক্স শতাংশ",
+    "minOrderAmount": "সর্বনিম্ন অর্ডার পরিমাণ (৳)",
+    "minOrderDescription": "অর্ডার করার জন্য প্রয়োজনীয় সর্বনিম্ন পরিমাণ",
+    "package": "প্যাকেজ সেটিংস",
+    "packageDescription": "কাস্টম প্যাকেজের প্রয়োজনীয়তা কনফিগার করুন",
+    "minCustomPackageAmount": "সর্বনিম্ন কাস্টম প্যাকেজ পরিমাণ (৳)",
+    "minCustomPackageDescription": "কাস্টম প্যাকেজের জন্য প্রয়োজনীয় সর্বনিম্ন পরিমাণ"
   },
   "notifications": {
     "tab": "বিজ্ঞপ্তি",
@@ -85,7 +97,18 @@
     "express": "এক্সপ্রেস শিপিং",
     "standardCost": "স্ট্যান্ডার্ড শিপিং খরচ (৳)",
     "expressCost": "এক্সপ্রেস শিপিং খরচ (৳)",
-    "freeShippingThreshold": "বিনামূল্যে শিপিং থ্রেশহোল্ড (৳)"
+    "freeShippingThreshold": "ফ্রি শিপিং থ্রেশহোল্ড (৳)",
+    "deliveryCharge": "ডেলিভারি চার্জ",
+    "deliveryChargeDescription": "স্ট্যান্ডার্ড ডেলিভারি চার্জ কনফিগার করুন",
+    "chargeAmount": "ডেলিভারি চার্জ পরিমাণ (৳)",
+    "chargeHint": "অর্ডারের জন্য স্ট্যান্ডার্ড ডেলিভারি চার্জ",
+    "freeShipping": "ফ্রি শিপিং সেটিংস",
+    "freeShippingDescription": "ফ্রি শিপিং থ্রেশহোল্ড এবং টগল কনফিগার করুন",
+    "enableFreeShipping": "ফ্রি শিপিং সক্ষম করুন",
+    "enableFreeShippingDescription": "নির্দিষ্ট পরিমাণের উপরে ফ্রি শিপিং প্রদান করুন",
+    "thresholdHint": "এই পরিমাণের উপরে অর্ডার ফ্রি শিপিং পায়",
+    "methods": "শিপিং পদ্ধতি",
+    "methodsDescription": "উপলব্ধ শিপিং পদ্ধতি কনফিগার করুন"
   },
   "email": {
     "tab": "ইমেল",
@@ -98,7 +121,11 @@
     "fromEmail": "প্রেরক ইমেল",
     "fromName": "প্রেরকের নাম",
     "testEmail": "টেস্ট ইমেল পাঠান",
-    "testEmailSent": "টেস্ট ইমেল পাঠানো হয়েছে। আপনার ইনবক্স চেক করুন।"
+    "testEmailSent": "টেস্ট ইমেল পাঠানো হয়েছে। আপনার ইনবক্স চেক করুন।",
+    "orderNotifications": "অর্ডার বিজ্ঞপ্তি",
+    "orderNotificationsDescription": "অর্ডার বিজ্ঞপ্তির জন্য ইমেল ঠিকানা কনফিগার করুন",
+    "notificationEmail": "অর্ডার বিজ্ঞপ্তি ইমেল",
+    "notificationEmailHint": "অর্ডার বিজ্ঞপ্তি গ্রহণ করার জন্য ইমেল ঠিকানা"
   },
   "subscription": {
     "tab": "সাবস্ক্রিপশন",

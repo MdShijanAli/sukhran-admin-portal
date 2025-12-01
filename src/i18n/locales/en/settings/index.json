@@ -27,7 +27,19 @@
     "businessAddress": "Business Address",
     "taxId": "Tax ID / Business Number",
     "currency": "Default Currency",
-    "timezone": "Timezone"
+    "timezone": "Timezone",
+    "regional": "Regional Settings",
+    "regionalDescription": "Configure currency and timezone preferences",
+    "pricing": "Pricing Settings",
+    "pricingDescription": "Configure VAT and minimum order amounts",
+    "vatPercentage": "VAT Percentage (%)",
+    "vatDescription": "Tax percentage applied to orders",
+    "minOrderAmount": "Minimum Order Amount (৳)",
+    "minOrderDescription": "Minimum amount required to place an order",
+    "package": "Package Settings",
+    "packageDescription": "Configure custom package requirements",
+    "minCustomPackageAmount": "Minimum Custom Package Amount (৳)",
+    "minCustomPackageDescription": "Minimum amount required for custom packages"
   },
   "notifications": {
     "tab": "Notifications",
@@ -85,7 +97,18 @@
     "express": "Express Shipping",
     "standardCost": "Standard Shipping Cost (৳)",
     "expressCost": "Express Shipping Cost (৳)",
-    "freeShippingThreshold": "Free Shipping Threshold (৳)"
+    "freeShippingThreshold": "Free Shipping Threshold (৳)",
+    "deliveryCharge": "Delivery Charge",
+    "deliveryChargeDescription": "Configure standard delivery charges",
+    "chargeAmount": "Delivery Charge Amount (৳)",
+    "chargeHint": "The standard delivery charge for orders",
+    "freeShipping": "Free Shipping Settings",
+    "freeShippingDescription": "Configure free shipping threshold and toggle",
+    "enableFreeShipping": "Enable Free Shipping",
+    "enableFreeShippingDescription": "Offer free shipping above a certain amount",
+    "thresholdHint": "Orders above this amount get free shipping",
+    "methods": "Shipping Methods",
+    "methodsDescription": "Configure available shipping methods"
   },
   "email": {
     "tab": "Email",
@@ -98,7 +121,11 @@
     "fromEmail": "From Email",
     "fromName": "From Name",
     "testEmail": "Send Test Email",
-    "testEmailSent": "Test email has been sent. Check your inbox."
+    "testEmailSent": "Test email has been sent. Check your inbox.",
+    "orderNotifications": "Order Notifications",
+    "orderNotificationsDescription": "Configure email address for order notifications",
+    "notificationEmail": "Order Notification Email",
+    "notificationEmailHint": "Email address to receive order notifications"
   },
   "subscription": {
     "tab": "Subscription",

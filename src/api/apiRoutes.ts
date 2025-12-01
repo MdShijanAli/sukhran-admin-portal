@@ -138,6 +138,7 @@ export const apiRoutes = {
   },
 
   settings: {
+    generalSettings: createApiUrl("admin/settings"),
     subscriptionSettings: createApiUrl("admin/subscription-settings"),
     updateDeliveryFrequencies: createApiUrl(
       "admin/subscription-settings/delivery_frequencies"
@@ -145,5 +146,6 @@ export const apiRoutes = {
     updatePreferredDeliveryDates: createApiUrl(
       "admin/subscription-settings/preferred_delivery_dates"
     ),
+    updateSetting: (key: string) => createApiUrl(`admin/settings/${key}`),
   },
 };
