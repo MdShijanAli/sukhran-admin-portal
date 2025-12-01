@@ -15,9 +15,15 @@ import { useCategoryStore, Category } from "@/stores/categoryStore";
 import categoryService from "@/services/categoryService";
 import { DeleteModal } from "@/components/modals";
 import { toast } from "sonner";
+import permissions from "@/lib/permissions";
+import { withPermission } from "@/hoc/withPermission";
+import usePermissions from "@/hooks/use-permissions";
 
 const Categories = () => {
   const { t } = useTranslation();
+  const store = useCategoryStore();
+  const { hasPermission } = usePermissions();
+
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
   );
@@ -27,8 +33,6 @@ const Categories = () => {
   const [showAddSubCategory, setShowAddSubCategory] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
-
-  const store = useCategoryStore();
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {
     setRefreshTable(() => refreshFn);
@@ -80,6 +84,7 @@ const Categories = () => {
       label: t("categories.actions.editCategory"),
       icon: Edit,
       onClick: handleEdit,
+      show: hasPermission(permissions.categories.edit),
     },
     {
       label: t("categories.actions.deleteCategory"),
@@ -87,6 +92,7 @@ const Categories = () => {
       onClick: handleDelete,
       variant: "destructive",
       separator: true,
+      show: hasPermission(permissions.categories.delete),
     },
     {
       label: t("categories.actions.addSubCategory"),
@@ -95,6 +101,7 @@ const Categories = () => {
         setSelectedCategory(category);
         setShowAddSubCategory(true);
       },
+      show: hasPermission(permissions.categories.create),
     },
   ];
 
@@ -167,14 +174,16 @@ const Categories = () => {
       <BaseTableList<Category>
         title={t("categories.title")}
         description={t("categories.subtitle")}
-        headerActions={[
-          {
-            label: t("categories.addCategory"),
-            icon: Plus,
-            onClick: handleCreate,
-            variant: "default",
-          },
-        ]}
+        headerActions={
+          hasPermission(permissions.categories.create) && [
+            {
+              label: t("categories.addCategory"),
+              icon: Plus,
+              onClick: handleCreate,
+              variant: "default",
+            },
+          ]
+        }
         searchPlaceholder={t("categories.searchPlaceholder")}
         enableSearch={true}
         columns={columns}
@@ -218,4 +227,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default withPermission(Categories, permissions.categories.view);
