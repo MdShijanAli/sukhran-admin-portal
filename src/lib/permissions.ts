@@ -74,6 +74,7 @@ const permissions = {
     create: "coverage_areas.create",
     edit: "coverage_areas.update",
     delete: "coverage_areas.delete",
+    bulk_action: "coverage_areas.bulk_action",
   },
 
   // Financial

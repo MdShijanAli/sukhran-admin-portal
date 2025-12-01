@@ -16,9 +16,15 @@ import FormModal from "./modal/FormModal";
 import ViewModal from "./modal/ViewModal";
 import { DeleteModal } from "@/components/modals";
 import { toast } from "sonner";
+import permissions from "@/lib/permissions";
+import { withPermission } from "@/hoc/withPermission";
+import usePermissions from "@/hooks/use-permissions";
 
 const CoverageAreas = () => {
   const { t } = useTranslation();
+  const store = useCoverageAreaStore();
+  const { hasPermission } = usePermissions();
+
   const [selectedArea, setSelectedArea] = useState<CoverageArea | null>(null);
   const [dialogMode, setDialogMode] = useState<"create" | "edit" | null>(null);
   const [showDetails, setShowDetails] = useState(false);
@@ -26,8 +32,6 @@ const CoverageAreas = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
   const [togglingAreaId, setTogglingAreaId] = useState<number | null>(null);
-
-  const store = useCoverageAreaStore();
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {
     setRefreshTable(() => refreshFn);
@@ -99,13 +103,14 @@ const CoverageAreas = () => {
       label: t("coverage_area.actions.editArea"),
       icon: Edit,
       onClick: handleEdit,
+      show: hasPermission(permissions.coverageAreas.edit),
     },
     {
       label: t("coverage_area.actions.deleteArea"),
       icon: Trash2,
       onClick: handleDelete,
       variant: "destructive",
-      separator: true,
+      show: hasPermission(permissions.coverageAreas.delete),
     },
   ];
 
@@ -210,14 +215,16 @@ const CoverageAreas = () => {
       <BaseTableList<CoverageArea>
         title={t("coverage_area.title")}
         description={t("coverage_area.subtitle")}
-        headerActions={[
-          {
-            label: t("coverage_area.addCoverageArea"),
-            icon: Plus,
-            onClick: handleCreate,
-            variant: "default",
-          },
-        ]}
+        headerActions={
+          hasPermission(permissions.coverageAreas.create) && [
+            {
+              label: t("coverage_area.addCoverageArea"),
+              icon: Plus,
+              onClick: handleCreate,
+              variant: "default",
+            },
+          ]
+        }
         searchPlaceholder={t("coverage_area.searchPlaceholder")}
         enableSearch={true}
         columns={columns}
@@ -258,4 +265,4 @@ const CoverageAreas = () => {
   );
 };
 
-export default CoverageAreas;
+export default withPermission(CoverageAreas, permissions.coverageAreas.view);
