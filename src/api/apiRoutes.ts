@@ -136,4 +136,14 @@ export const apiRoutes = {
     updateLocation: (id: number | string) =>
       createApiUrl(`admin/deliveries/${id}/update-location`),
   },
+
+  settings: {
+    subscriptionSettings: createApiUrl("admin/subscription-settings"),
+    updateDeliveryFrequencies: createApiUrl(
+      "admin/subscription-settings/delivery_frequencies"
+    ),
+    updatePreferredDeliveryDates: createApiUrl(
+      "admin/subscription-settings/preferred_delivery_dates"
+    ),
+  },
 };

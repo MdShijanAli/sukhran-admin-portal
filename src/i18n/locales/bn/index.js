@@ -8,6 +8,7 @@ import roles from "./roles/index.json";
 import profile from "./profile/index.json";
 import orders from "./orders/index.json";
 import delivery from "./delivery/index.json";
+import settings from "./settings/index.json";
 
 /**
  * follow the file structure.
@@ -26,6 +27,7 @@ const combined = {
   profile,
   orders,
   delivery,
+  settings,
 };
 
 export default combined;

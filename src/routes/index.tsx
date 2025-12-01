@@ -23,7 +23,7 @@ import Coupons from "@/pages/Coupons";
 import Returns from "@/pages/Returns";
 import RoleManagement from "@/pages/roles/RoleManagement";
 import Notifications from "@/pages/Notifications";
-import Settings from "@/pages/Settings";
+import Settings from "@/pages/settings/Settings";
 import LoyaltyRewards from "@/pages/LoyaltyRewards";
 import Family from "@/pages/Family";
 import Analytics from "@/pages/Analytics";

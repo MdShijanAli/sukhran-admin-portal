@@ -1,0 +1,132 @@
+{
+  "title": "Settings",
+  "description": "Manage your store settings and preferences",
+  "actions": {
+    "save": "Save Changes",
+    "cancel": "Cancel",
+    "add": "Add",
+    "testEmail": "Send Test Email"
+  },
+  "messages": {
+    "businessSettingsSaved": "Business settings have been updated successfully",
+    "notificationsSaved": "Your notification preferences have been saved",
+    "systemSaved": "System preferences have been saved successfully",
+    "paymentSaved": "Payment configuration has been updated",
+    "shippingSaved": "Shipping configuration has been updated",
+    "emailSaved": "SMTP configuration has been updated",
+    "fetchError": "Failed to fetch settings",
+    "saveError": "Failed to save settings"
+  },
+  "business": {
+    "tab": "Business",
+    "title": "Business Information",
+    "description": "Update your store's business details and contact information",
+    "businessName": "Business Name",
+    "businessEmail": "Business Email",
+    "businessPhone": "Business Phone",
+    "businessAddress": "Business Address",
+    "taxId": "Tax ID / Business Number",
+    "currency": "Default Currency",
+    "timezone": "Timezone"
+  },
+  "notifications": {
+    "tab": "Notifications",
+    "title": "Notification Preferences",
+    "description": "Choose what notifications you want to receive",
+    "emailNotifications": "Email Notifications",
+    "emailNotificationsDesc": "Receive email notifications for important events",
+    "orderNotifications": "Order Notifications",
+    "orderNotificationsDesc": "Get notified when new orders are placed",
+    "lowStockAlerts": "Low Stock Alerts",
+    "lowStockAlertsDesc": "Alert when product stock is running low",
+    "customerSignups": "Customer Signups",
+    "customerSignupsDesc": "Notify when new customers register",
+    "weeklyReports": "Weekly Reports",
+    "weeklyReportsDesc": "Receive weekly performance reports via email",
+    "paymentAlerts": "Payment Alerts",
+    "paymentAlertsDesc": "Get notified about payment confirmations and failures"
+  },
+  "system": {
+    "tab": "System",
+    "title": "System Configuration",
+    "description": "Configure system behavior and preferences",
+    "autoApproveOrders": "Auto-approve Orders",
+    "autoApproveOrdersDesc": "Automatically approve orders when placed",
+    "maintenanceMode": "Maintenance Mode",
+    "maintenanceModeDesc": "Put the store in maintenance mode",
+    "showOutOfStock": "Show Out of Stock Products",
+    "showOutOfStockDesc": "Display products that are out of stock",
+    "allowGuestCheckout": "Allow Guest Checkout",
+    "allowGuestCheckoutDesc": "Let customers checkout without registration",
+    "enableReviews": "Enable Product Reviews",
+    "enableReviewsDesc": "Allow customers to leave product reviews",
+    "enableWishlist": "Enable Wishlist",
+    "enableWishlistDesc": "Allow customers to create wishlists",
+    "lowStockThreshold": "Low Stock Threshold",
+    "orderPrefix": "Order Number Prefix"
+  },
+  "payment": {
+    "tab": "Payment",
+    "title": "Payment Configuration",
+    "description": "Configure payment methods and gateways",
+    "gateway": "Primary Payment Gateway",
+    "enableCOD": "Enable Cash on Delivery",
+    "enableCODDesc": "Allow customers to pay with cash on delivery",
+    "enableBankTransfer": "Enable Bank Transfer",
+    "enableBankTransferDesc": "Allow direct bank transfer payments",
+    "minOrderAmount": "Minimum Order Amount (৳)"
+  },
+  "shipping": {
+    "tab": "Shipping",
+    "title": "Shipping Configuration",
+    "description": "Configure shipping methods and costs",
+    "defaultMethod": "Default Shipping Method",
+    "standard": "Standard Shipping",
+    "express": "Express Shipping",
+    "standardCost": "Standard Shipping Cost (৳)",
+    "expressCost": "Express Shipping Cost (৳)",
+    "freeShippingThreshold": "Free Shipping Threshold (৳)"
+  },
+  "email": {
+    "tab": "Email",
+    "title": "Email Configuration",
+    "description": "Configure SMTP settings for sending emails",
+    "smtpHost": "SMTP Host",
+    "smtpPort": "SMTP Port",
+    "smtpUsername": "SMTP Username",
+    "smtpPassword": "SMTP Password",
+    "fromEmail": "From Email",
+    "fromName": "From Name",
+    "testEmail": "Send Test Email",
+    "testEmailSent": "Test email has been sent. Check your inbox."
+  },
+  "subscription": {
+    "tab": "Subscription",
+    "messages": {
+      "frequenciesSaved": "Delivery frequencies updated successfully",
+      "datesSaved": "Preferred delivery dates updated successfully"
+    },
+    "deliveryFrequencies": {
+      "title": "Delivery Frequencies",
+      "description": "Configure available delivery frequency options for subscriptions",
+      "addPlaceholder": "Enter frequency (e.g., daily, weekly)"
+    },
+    "preferredDates": {
+      "title": "Preferred Delivery Dates",
+      "description": "Configure available preferred delivery date options",
+      "keyPlaceholder": "Enter key (e.g., monday, 15th)",
+      "valuePlaceholder": "Enter description (e.g., Every Monday)"
+    },
+    "durationOptions": {
+      "title": "Duration Options",
+      "description": "Available subscription duration in months",
+      "addPlaceholder": "Enter duration in months",
+      "months": "months"
+    },
+    "cancellation": {
+      "title": "Cancellation Policy",
+      "description": "Configure subscription cancellation settings",
+      "noticeDays": "Minimum Days Notice Required for Cancellation"
+    }
+  }
+}
