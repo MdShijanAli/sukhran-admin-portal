@@ -121,7 +121,8 @@
       "title": "সময়কাল অপশন",
       "description": "মাসে উপলব্ধ সাবস্ক্রিপশনের সময়কাল",
       "addPlaceholder": "মাসে সময়কাল লিখুন",
-      "months": "মাস"
+      "months": "মাস",
+      "days": "দিন"
     },
     "cancellation": {
       "title": "বাতিলকরণ নীতি",

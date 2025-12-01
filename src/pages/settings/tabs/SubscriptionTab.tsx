@@ -43,7 +43,6 @@ export default function SubscriptionTab() {
 
   // Duration Options
   const [durationOptions, setDurationOptions] = useState<number[]>([]);
-  const [newDuration, setNewDuration] = useState("");
 
   // Cancellation Notice Days
   const [cancellationDays, setCancellationDays] = useState<number>(7);
@@ -152,22 +151,6 @@ export default function SubscriptionTab() {
     setPreferredDates(updated);
   };
 
-  const addDuration = () => {
-    const duration = parseInt(newDuration);
-    if (
-      !isNaN(duration) &&
-      duration > 0 &&
-      !durationOptions.includes(duration)
-    ) {
-      setDurationOptions([...durationOptions, duration].sort((a, b) => a - b));
-      setNewDuration("");
-    }
-  };
-
-  const removeDuration = (duration: number) => {
-    setDurationOptions(durationOptions.filter((d) => d !== duration));
-  };
-
   if (isLoading) {
     return (
       <Card>
@@ -185,7 +168,7 @@ export default function SubscriptionTab() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="grid gap-4 md:grid-cols-2">
       {/* Delivery Frequencies */}
       <Card>
         <CardHeader>
@@ -197,24 +180,27 @@ export default function SubscriptionTab() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex flex-wrap gap-2">
+          <ul className="space-y-2">
             {deliveryFrequencies.map((frequency) => (
-              <div
+              <li
                 key={frequency}
-                className="flex items-center gap-2 bg-secondary px-3 py-1.5 rounded-md"
+                className="flex items-center justify-between p-2 hover:bg-secondary/50 rounded-md transition-colors"
               >
-                <span className="text-sm capitalize">{frequency}</span>
+                <div className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                  <span className="text-sm capitalize">{frequency}</span>
+                </div>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-5 w-5"
+                  className="h-7 w-7"
                   onClick={() => removeFrequency(frequency)}
                 >
-                  <Trash2 className="h-3 w-3" />
+                  <Trash2 className="h-3.5 w-3.5" />
                 </Button>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
 
           <div className="flex gap-2">
             <Input
@@ -251,28 +237,32 @@ export default function SubscriptionTab() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
+          <ul className="space-y-2">
             {Object.entries(preferredDates).map(([key, value]) => (
-              <div
+              <li
                 key={key}
-                className="flex items-center justify-between p-3 bg-secondary rounded-md"
+                className="flex items-center justify-between p-2 hover:bg-secondary/50 rounded-md transition-colors"
               >
-                <div>
-                  <p className="text-sm font-medium">{key}</p>
-                  <p className="text-xs text-muted-foreground">{value}</p>
+                <div className="flex items-start gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5" />
+                  <div>
+                    <p className="text-sm font-medium">{key}</p>
+                    <p className="text-xs text-muted-foreground">{value}</p>
+                  </div>
                 </div>
                 <Button
                   variant="ghost"
                   size="icon"
+                  className="h-7 w-7"
                   onClick={() => removePreferredDate(key)}
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-3.5 w-3.5" />
                 </Button>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
 
-          <div className="grid gap-2 md:grid-cols-2">
+          <div className="grid gap-2">
             <Input
               placeholder={t(
                 "settings.subscription.preferredDates.keyPlaceholder"
@@ -312,43 +302,17 @@ export default function SubscriptionTab() {
             {t("settings.subscription.durationOptions.description")}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex flex-wrap gap-2">
+        <CardContent>
+          <ul className="flex flex-wrap items-center gap-2">
             {durationOptions.map((duration) => (
-              <div
-                key={duration}
-                className="flex items-center gap-2 bg-secondary px-3 py-1.5 rounded-md"
-              >
+              <li key={duration} className="flex items-center gap-2 p-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                 <span className="text-sm">
                   {duration} {t("settings.subscription.durationOptions.months")}
                 </span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-5 w-5"
-                  onClick={() => removeDuration(duration)}
-                >
-                  <Trash2 className="h-3 w-3" />
-                </Button>
-              </div>
+              </li>
             ))}
-          </div>
-
-          <div className="flex gap-2">
-            <Input
-              type="number"
-              placeholder={t(
-                "settings.subscription.durationOptions.addPlaceholder"
-              )}
-              value={newDuration}
-              onChange={(e) => setNewDuration(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && addDuration()}
-            />
-            <Button onClick={addDuration}>
-              <Plus className="h-4 w-4 mr-2" />
-              {t("settings.actions.add")}
-            </Button>
-          </div>
+          </ul>
         </CardContent>
       </Card>
 
@@ -360,19 +324,17 @@ export default function SubscriptionTab() {
             {t("settings.subscription.cancellation.description")}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="cancellationDays">
+        <CardContent>
+          <div className="flex items-center justify-between p-3 bg-secondary/50 rounded-md">
+            <Label className="font-medium">
               {t("settings.subscription.cancellation.noticeDays")}
             </Label>
-            <Input
-              id="cancellationDays"
-              type="number"
-              value={cancellationDays}
-              onChange={(e) =>
-                setCancellationDays(parseInt(e.target.value) || 0)
-              }
-            />
+            <span className="font-semibold">
+              {cancellationDays}{" "}
+              {t("settings.subscription.durationOptions.days", {
+                defaultValue: "days",
+              })}
+            </span>
           </div>
         </CardContent>
       </Card>

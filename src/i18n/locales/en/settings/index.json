@@ -121,7 +121,8 @@
       "title": "Duration Options",
       "description": "Available subscription duration in months",
       "addPlaceholder": "Enter duration in months",
-      "months": "months"
+      "months": "months",
+      "days": "days"
     },
     "cancellation": {
       "title": "Cancellation Policy",
