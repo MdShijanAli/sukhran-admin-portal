@@ -24,11 +24,16 @@ import { useSidebarStore } from "@/stores/sidebarStore";
 import { Pagination } from "@/components/table/Pagination";
 import ShareButton from "@/components/custom/ShareButton";
 import { formatNumberWithCommas } from "@/lib/utils";
+import permissions from "@/lib/permissions";
+import { withPermission } from "@/hoc/withPermission";
+import usePermissions from "@/hooks/use-permissions";
 
-export default function Packages() {
+function Packages() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const store = usePackageStore();
+  const { hasPermission } = usePermissions();
+
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const [showDelete, setShowDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -55,8 +60,9 @@ export default function Packages() {
       } catch (error) {
         console.error("Failed to fetch packages:", error);
         toast.error(t("packages.messages.failedToLoad"));
+      } finally {
+        store.setLoading?.(false);
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [searchQuery]
   );
@@ -160,13 +166,15 @@ export default function Packages() {
                 />
               </Button>
             </div>
-            <Button
-              className="gap-2"
-              onClick={() => navigate("/packages/create")}
-            >
-              <Plus className="h-4 w-4" />
-              {t("packages.addPackage")}
-            </Button>
+            {hasPermission(permissions.packages.create) && (
+              <Button
+                className="gap-2"
+                onClick={() => navigate("/packages/create")}
+              >
+                <Plus className="h-4 w-4" />
+                {t("packages.addPackage")}
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -330,22 +338,27 @@ export default function Packages() {
                           iconOnly
                           className="flex-1 h-8 text-xs"
                         />
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleEdit(pkg)}
-                          className="flex-1 h-8 text-xs"
-                        >
-                          <Edit className="h-3.5 w-3.5" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDelete(pkg)}
-                          className="flex-1 h-8 text-xs"
-                        >
-                          <Trash2 className="h-3.5 w-3.5 text-destructive" />
-                        </Button>
+                        {hasPermission(permissions.packages.edit) && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEdit(pkg)}
+                            className="flex-1 h-8 text-xs"
+                          >
+                            <Edit className="h-3.5 w-3.5" />
+                          </Button>
+                        )}
+                        ️
+                        {hasPermission(permissions.packages.delete) && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDelete(pkg)}
+                            className="flex-1 h-8 text-xs"
+                          >
+                            <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </CardContent>
@@ -388,3 +401,5 @@ export default function Packages() {
     </div>
   );
 }
+
+export default withPermission(Packages, permissions.packages.view);
