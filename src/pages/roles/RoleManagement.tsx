@@ -22,22 +22,22 @@ import ViewModal from "./modal/ViewModal";
 import { Role, useRoleStore } from "@/stores/roleStore";
 import roleService from "@/services/roleService";
 import { toast } from "sonner";
-import { Switch } from "@/components/ui/switch";
 import constData from "@/lib/constData";
+import { withPermission } from "@/hoc/withPermission";
+import permissions from "@/lib/permissions";
+import usePermissions from "@/hooks/use-permissions";
 
 const RoleManagement = () => {
   const { t } = useTranslation();
+  const store = useRoleStore();
+  const { hasPermission } = usePermissions();
+
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [dialogMode, setDialogMode] = useState<"create" | "edit" | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
-  const [togglingRoleId, setTogglingRoleId] = useState<number | string | null>(
-    null
-  );
-
-  const store = useRoleStore();
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {
     setRefreshTable(() => refreshFn);
@@ -79,26 +79,6 @@ const RoleManagement = () => {
     }
   };
 
-  const handleStatusToggle = async (role: Role) => {
-    setTogglingRoleId(role.id);
-    try {
-      await roleService.toggleRoleStatus(role.id);
-      toast.success(
-        !role.isActive
-          ? t("roles.messages.roleActivated")
-          : t("roles.messages.roleDeactivated")
-      );
-    } catch (error) {
-      console.error("Error toggling role status:", error);
-      toast.error(
-        error?.response?.data?.message ||
-          t("roles.messages.failedToToggleStatus")
-      );
-    } finally {
-      setTogglingRoleId(null);
-    }
-  };
-
   // Define actions for dropdown menu
   const roleActions = (role: Role): ActionItem<Role>[] => [
     {
@@ -111,6 +91,7 @@ const RoleManagement = () => {
       label: t("roles.actions.editRole"),
       icon: Edit,
       show:
+        hasPermission(permissions.roles.edit) &&
         role.name !== constData.roles.SUPER_ADMIN &&
         role.name !== constData.roles.CUSTOMER, // Prevent editing super admin and admin roles
       onClick: handleEdit,
@@ -119,7 +100,10 @@ const RoleManagement = () => {
       label: t("roles.actions.deleteRole"),
       icon: Trash2,
       onClick: handleDelete,
-      show: role.users_count === 0 && role.name !== constData.roles.CUSTOMER, // Only show delete if no users assigned
+      show:
+        hasPermission(permissions.roles.delete) &&
+        role.users_count === 0 &&
+        role.name !== constData.roles.CUSTOMER, // Only show delete if no users assigned
       variant: "destructive",
       separator: true,
     },
@@ -234,14 +218,16 @@ const RoleManagement = () => {
       <BaseTableList<Role>
         title={t("roles.title")}
         description={t("roles.subtitle")}
-        headerActions={[
-          {
-            label: t("roles.addRole"),
-            icon: Plus,
-            onClick: handleCreate,
-            variant: "default",
-          },
-        ]}
+        headerActions={
+          hasPermission(permissions.roles.create) && [
+            {
+              label: t("roles.addRole"),
+              icon: Plus,
+              onClick: handleCreate,
+              variant: "default",
+            },
+          ]
+        }
         searchPlaceholder={t("roles.searchPlaceholder")}
         enableSearch={true}
         columns={columns}
@@ -281,4 +267,4 @@ const RoleManagement = () => {
   );
 };
 
-export default RoleManagement;
+export default withPermission(RoleManagement, permissions.roles.view);
