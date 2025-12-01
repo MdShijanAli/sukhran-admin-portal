@@ -35,6 +35,7 @@ import roleService from "@/services/roleService";
 import { useRoleStore } from "@/stores/roleStore";
 import { withPermission } from "@/hoc/withPermission";
 import permissions from "@/lib/permissions";
+import usePermissions from "@/hooks/use-permissions";
 
 const Users = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -59,6 +60,7 @@ const Users = () => {
   const store = useUserStore();
   const roleStore = useRoleStore();
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -249,12 +251,16 @@ const Users = () => {
       label: t("edit"),
       icon: Edit,
       onClick: handleEdit,
+      show: hasPermission(permissions.users.edit),
     },
     {
       label: t("delete"),
       icon: Trash2,
       onClick: handleDelete,
-      show: !user.isDeleted && user.role.name !== constData.roles.ADMIN,
+      show:
+        !user.isDeleted &&
+        user.role.name !== constData.roles.ADMIN &&
+        hasPermission(permissions.users.delete),
       variant: "destructive",
       separator: true,
     },
@@ -262,7 +268,7 @@ const Users = () => {
       label: t("restore"),
       icon: FolderSync,
       onClick: handleRestore,
-      show: user.isDeleted,
+      show: user.isDeleted && hasPermission(permissions.users.restore),
       variant: "default",
     },
   ];
@@ -330,11 +336,13 @@ const Users = () => {
             <div className="flex items-center justify-end gap-2">
               {user.role.name !== constData.roles.ADMIN ? (
                 <>
-                  <Switch
-                    checked={user.isActive}
-                    onCheckedChange={() => handleStatusToggle(user)}
-                    disabled={togglingUserId === user.id}
-                  />
+                  {hasPermission(permissions.users.delete) && (
+                    <Switch
+                      checked={user.isActive}
+                      onCheckedChange={() => handleStatusToggle(user)}
+                      disabled={togglingUserId === user.id}
+                    />
+                  )}
                   <Badge variant={user.isActive ? "default" : "outline"}>
                     {user.isActive
                       ? t("users.columns.active")
@@ -412,14 +420,16 @@ const Users = () => {
       <BaseTableList<User>
         title={t("users.title")}
         description={t("users.subtitle")}
-        headerActions={[
-          {
-            label: t("add"),
-            icon: Plus,
-            onClick: handleCreate,
-            variant: "default",
-          },
-        ]}
+        headerActions={
+          hasPermission(permissions.users.create) && [
+            {
+              label: t("add"),
+              icon: Plus,
+              onClick: handleCreate,
+              variant: "default",
+            },
+          ]
+        }
         toolbarActions={
           <Button variant="outline" onClick={() => setShowFilterModal(true)}>
             <Filter className="mr-2 h-4 w-4" />

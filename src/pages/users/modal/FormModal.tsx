@@ -16,6 +16,8 @@ import userService from "@/services/userService";
 import roleService from "@/services/roleService";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+import { Eye, EyeClosed, EyeOffIcon } from "lucide-react";
 
 interface UserFormData {
   firstName: string;
@@ -47,6 +49,7 @@ export default function FormModal({
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [roles, setRoles] = useState<Role[]>([]);
   const [formData, setFormData] = useState<UserFormData>({
     firstName: "",
@@ -284,10 +287,10 @@ export default function FormModal({
         </div>
 
         {!isEditing && (
-          <div className="space-y-2">
+          <div className="space-y-2 relative">
             <Label htmlFor="password">{t("users.form.password")}</Label>
             <Input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               value={formData.password}
               onChange={(e) =>
@@ -295,6 +298,17 @@ export default function FormModal({
               }
               placeholder={t("users.form.enterPassword")}
             />
+            {showPassword ? (
+              <EyeClosed
+                className="absolute right-3 top-8 cursor-pointer"
+                onClick={() => setShowPassword(false)}
+              />
+            ) : (
+              <EyeOffIcon
+                className="absolute right-3 top-8 cursor-pointer"
+                onClick={() => setShowPassword(true)}
+              />
+            )}
           </div>
         )}
 
