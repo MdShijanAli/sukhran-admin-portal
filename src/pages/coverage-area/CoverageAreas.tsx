@@ -19,6 +19,14 @@ import { toast } from "sonner";
 import permissions from "@/lib/permissions";
 import { withPermission } from "@/hoc/withPermission";
 import usePermissions from "@/hooks/use-permissions";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const CoverageAreas = () => {
   const { t } = useTranslation();
@@ -32,10 +40,30 @@ const CoverageAreas = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
   const [togglingAreaId, setTogglingAreaId] = useState<number | null>(null);
+  const [isBulkActionLoading, setIsBulkActionLoading] = useState(false);
+
+  // Checkbox state
+  const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>(
+    []
+  );
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {
     setRefreshTable(() => refreshFn);
   }, []);
+
+  // Handle selection change
+  const handleSelectionChange = useCallback(
+    (keys: (string | number)[]) => {
+      setSelectedRowKeys(keys);
+      console.log("Selected rows:", keys);
+      // You can also get the full objects here if needed
+      const selectedAreas = (store.coverageAreas || []).filter((area) =>
+        keys.includes(area.id)
+      );
+      console.log("Selected area objects:", selectedAreas);
+    },
+    [store.coverageAreas]
+  );
 
   const handleCreate = () => {
     setSelectedArea(null);
@@ -69,6 +97,45 @@ const CoverageAreas = () => {
     } finally {
       setIsDeleting(false);
       setShowDelete(false);
+    }
+  };
+
+  const handleBulkAction = async (action: string) => {
+    if (selectedRowKeys.length === 0) return;
+
+    setIsBulkActionLoading(true);
+    try {
+      const ids = selectedRowKeys.map((key) => Number(key));
+      await coverageAreaService.bulkActions({
+        ids,
+        action,
+      });
+
+      if (action === "activate") {
+        toast.success(
+          t("coverage_area.messages.bulkActivateSuccess", {
+            count: selectedRowKeys.length,
+          })
+        );
+      } else if (action === "deactivate") {
+        toast.success(
+          t("coverage_area.messages.bulkDeactivateSuccess", {
+            count: selectedRowKeys.length,
+          })
+        );
+      }
+
+      // Clear selection and refresh table
+      setSelectedRowKeys([]);
+      refreshTable?.();
+    } catch (error) {
+      console.error("Error performing bulk action:", error);
+      toast.error(
+        error?.response?.data?.message ||
+          t("coverage_area.messages.bulkActionFailed")
+      );
+    } finally {
+      setIsBulkActionLoading(false);
     }
   };
 
@@ -225,6 +292,32 @@ const CoverageAreas = () => {
             },
           ]
         }
+        headerSlots={
+          selectedRowKeys.length > 0 &&
+          hasPermission(permissions.coverageAreas.bulk_action) && (
+            <Select
+              onValueChange={handleBulkAction}
+              disabled={isBulkActionLoading}
+            >
+              <SelectTrigger className="w-[120px]">
+                <SelectValue
+                  placeholder={t("coverage_area.bulkActions.placeholder")}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="activate">
+                  {t("coverage_area.bulkActions.activate")}
+                </SelectItem>
+                <SelectItem value="deactivate">
+                  {t("coverage_area.bulkActions.deactivate")}
+                </SelectItem>
+                <SelectItem value="delete">
+                  {t("coverage_area.bulkActions.delete")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          )
+        }
         searchPlaceholder={t("coverage_area.searchPlaceholder")}
         enableSearch={true}
         columns={columns}
@@ -234,6 +327,10 @@ const CoverageAreas = () => {
         getRowKey={(area) => area.id}
         onRefresh={handleSetRefresh}
         summaryLists={summaryLists}
+        // Checkbox props
+        enableCheckbox={true}
+        selectedRows={selectedRowKeys}
+        onSelectionChange={handleSelectionChange}
       />
 
       {/* Dialogs */}

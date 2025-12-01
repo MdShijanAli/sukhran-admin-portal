@@ -2,6 +2,8 @@
   "title": "Coverage Areas",
   "subtitle": "Manage your service coverage areas",
   "addCoverageArea": "Add",
+  "deleteAll": "Delete All",
+  "selected": "selected",
   "searchPlaceholder": "Search by area name or city...",
   "noCoverageAreasFound": "No coverage areas found",
   "totalAreas": "Total Areas",
@@ -25,6 +27,12 @@
     "viewDetails": "View Details",
     "editArea": "Edit Area",
     "deleteArea": "Delete Area"
+  },
+  "bulkActions": {
+    "placeholder": "Bulk Actions",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "delete": "Delete"
   },
   "form": {
     "createNewCoverageArea": "Create New Coverage Area",
@@ -80,11 +88,20 @@
     "failedToUpdate": "Failed to update coverage area",
     "failedToDelete": "Failed to delete coverage area",
     "failedToLoad": "Failed to load coverage area details",
-    "failedToToggleStatus": "Failed to update area status"
+    "failedToToggleStatus": "Failed to update area status",
+    "bulkActivateSuccess": "{{count}} areas activated successfully",
+    "bulkDeactivateSuccess": "{{count}} areas deactivated successfully",
+    "bulkDeleteSuccess": "Selected areas deleted successfully",
+    "bulkDeleteFailed": "Failed to delete selected areas",
+    "bulkActionFailed": "Failed to perform bulk action"
   },
   "delete": {
     "title": "Delete Coverage Area",
     "message": "Are you sure you want to delete the coverage area",
     "cannotUndo": "This action cannot be undone."
+  },
+  "deleteAllArea": {
+    "title": "Delete Selected Coverage Areas",
+    "message": "Are you sure you want to delete the selected coverage areas? This action cannot be undone."
   }
 }

@@ -76,6 +76,7 @@ export const apiRoutes = {
     delete: (id: number | string) => createApiUrl(`admin/coverage-areas/${id}`),
     toggleCoverageAreaStatus: (id: number | string) =>
       createApiUrl(`admin/coverage-areas/${id}/toggle-status`),
+    bulkActions: createApiUrl("admin/coverage-areas/bulk-action"),
   },
 
   packages: {

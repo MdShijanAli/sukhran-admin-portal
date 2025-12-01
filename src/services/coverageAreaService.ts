@@ -13,6 +13,10 @@ const apiService = createApiService<CoverageArea>(
 interface CoverageAreaService extends ApiService<CoverageArea> {
   toggleActiveStatus: (area: CoverageArea) => Promise<unknown>;
   updateCoverageArea: (id: number | string, data: unknown) => Promise<unknown>;
+  bulkActions: (actionData: {
+    ids: number[];
+    action: string;
+  }) => Promise<unknown>;
 }
 
 const coverageAreaService: CoverageAreaService = {
@@ -49,6 +53,20 @@ const coverageAreaService: CoverageAreaService = {
       return response;
     } catch (error) {
       console.error("Error updating coverage area:", error);
+      throw error;
+    }
+  },
+
+  bulkActions: async (actionData: { ids: number[]; action: string }) => {
+    try {
+      const response = await apiClient.post(
+        apiRoutes.coverageAreas.bulkActions,
+        actionData
+      );
+      console.log("Bulk actions response:", response.data);
+      return response;
+    } catch (error) {
+      console.error("Error performing bulk actions on coverage areas:", error);
       throw error;
     }
   },

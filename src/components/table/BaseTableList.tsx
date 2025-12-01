@@ -92,6 +92,12 @@ export interface BaseTableListProps<T> {
   getRowKey: (item: T) => string | number;
   rowClassName?: (item: T) => string;
 
+  // Checkbox props
+  enableCheckbox?: boolean;
+  checkboxCondition?: (item: T) => boolean;
+  selectedRows?: (string | number)[];
+  onSelectionChange?: (selectedKeys: (string | number)[]) => void;
+
   // Pagination
   showPagination?: boolean;
 
@@ -126,6 +132,10 @@ export function BaseTableList<T>({
   emptyMessage,
   getRowKey,
   rowClassName,
+  enableCheckbox = false,
+  checkboxCondition,
+  selectedRows,
+  onSelectionChange,
   showPagination = false,
   summaryLists = [],
   summaryLoading = false,
@@ -419,9 +429,9 @@ export function BaseTableList<T>({
                     })}
                   </div>
                 )}
+                {headerSlots}
               </div>
             </div>
-            {headerSlots}
           </div>
         </CardHeader>
         <CardContent>
@@ -433,6 +443,10 @@ export function BaseTableList<T>({
             emptyMessage={emptyMessage}
             getRowKey={getRowKey}
             rowClassName={rowClassName}
+            enableCheckbox={enableCheckbox}
+            checkboxCondition={checkboxCondition}
+            selectedRows={selectedRows}
+            onSelectionChange={onSelectionChange}
           />
 
           {/* Pagination */}
