@@ -19,7 +19,7 @@ import {
 import { DeleteModal } from "@/components/modals";
 import FormModal from "./modal/FormModal";
 import ViewModal from "./modal/ViewModal";
-import { PermissionModule, Role, useRoleStore } from "@/stores/roleStore";
+import { Role, useRoleStore } from "@/stores/roleStore";
 import roleService from "@/services/roleService";
 import { toast } from "sonner";
 import constData from "@/lib/constData";

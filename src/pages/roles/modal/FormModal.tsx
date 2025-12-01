@@ -6,12 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import {
-  Role,
-  Permission,
-  PermissionModule,
-  useRoleStore,
-} from "@/stores/roleStore";
+import { Role, Permission, useRoleStore } from "@/stores/roleStore";
 import roleService from "@/services/roleService";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
@@ -55,6 +50,22 @@ export default function FormModal({
     isActive: true,
     permission_ids: [],
   });
+
+  // Fetch permissions on mount
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        await roleService.getAllPermissions();
+      } catch (error) {
+        console.error("Error fetching permissions:", error);
+        toast.error(t("roles.messages.failedToLoadPermissions"));
+      }
+    };
+
+    if (open && permissions.length === 0) {
+      fetchPermissions();
+    }
+  }, [open, permissions.length]);
 
   const handleSubmit = async () => {
     // Validate required fields
