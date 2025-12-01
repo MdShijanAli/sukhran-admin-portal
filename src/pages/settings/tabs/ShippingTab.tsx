@@ -9,21 +9,18 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import settingsService from "@/services/settingsService";
 import { Skeleton } from "@/components/ui/skeleton";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
 
 export default function ShippingTab() {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -31,10 +28,6 @@ export default function ShippingTab() {
   const [deliveryCharge, setDeliveryCharge] = useState<number>(0);
   const [freeShippingThreshold, setFreeShippingThreshold] = useState<number>(0);
   const [enableFreeShipping, setEnableFreeShipping] = useState<boolean>(false);
-
-  // Local Settings (not in API yet)
-  const [defaultShippingMethod, setDefaultShippingMethod] =
-    useState("standard");
 
   useEffect(() => {
     fetchSettings();
@@ -109,10 +102,6 @@ export default function ShippingTab() {
     }
   };
 
-  const handleSave = () => {
-    toast.success(t("settings.messages.shippingSaved"));
-  };
-
   if (isLoading) {
     return (
       <div className="grid gap-3 md:grid-cols-2">
@@ -161,9 +150,11 @@ export default function ShippingTab() {
                 value={deliveryCharge}
                 onChange={(e) => setDeliveryCharge(Number(e.target.value))}
               />
-              <Button onClick={handleSaveDeliveryCharge} disabled={isSaving}>
-                {t("settings.actions.save")}
-              </Button>
+              {hasPermission(permissions.settings.edit) && (
+                <Button onClick={handleSaveDeliveryCharge} disabled={isSaving}>
+                  {t("settings.actions.save")}
+                </Button>
+              )}
             </div>
             <p className="text-xs text-muted-foreground">
               {t("settings.shipping.chargeHint")}
@@ -211,9 +202,11 @@ export default function ShippingTab() {
                     setFreeShippingThreshold(Number(e.target.value))
                   }
                 />
-                <Button onClick={handleSaveFreeShipping} disabled={isSaving}>
-                  {t("settings.actions.save")}
-                </Button>
+                {hasPermission(permissions.settings.edit) && (
+                  <Button onClick={handleSaveFreeShipping} disabled={isSaving}>
+                    {t("settings.actions.save")}
+                  </Button>
+                )}
               </div>
               <p className="text-xs text-muted-foreground">
                 {t("settings.shipping.thresholdHint")}

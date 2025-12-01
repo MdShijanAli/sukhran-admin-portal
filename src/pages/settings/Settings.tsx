@@ -16,8 +16,10 @@ import PaymentTab from "./tabs/PaymentTab";
 import ShippingTab from "./tabs/ShippingTab";
 import EmailTab from "./tabs/EmailTab";
 import SubscriptionTab from "./tabs/SubscriptionTab";
+import permissions from "@/lib/permissions";
+import { withPermission } from "@/hoc/withPermission";
 
-export default function Settings() {
+function Settings() {
   const { t } = useTranslation();
 
   return (
@@ -104,3 +106,5 @@ export default function Settings() {
     </div>
   );
 }
+
+export default withPermission(Settings, permissions.settings.view);

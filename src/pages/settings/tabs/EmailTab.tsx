@@ -13,9 +13,13 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import settingsService from "@/services/settingsService";
 import { Skeleton } from "@/components/ui/skeleton";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
 
 export default function EmailTab() {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -131,9 +135,14 @@ export default function EmailTab() {
                 onChange={(e) => setOrderNotificationEmail(e.target.value)}
                 placeholder="orders@example.com"
               />
-              <Button onClick={handleSaveNotificationEmail} disabled={isSaving}>
-                {t("settings.actions.save")}
-              </Button>
+              {hasPermission(permissions.settings.edit) && (
+                <Button
+                  onClick={handleSaveNotificationEmail}
+                  disabled={isSaving}
+                >
+                  {t("settings.actions.save")}
+                </Button>
+              )}
             </div>
             <p className="text-xs text-muted-foreground">
               {t("settings.email.notificationEmailHint")}
@@ -212,12 +221,16 @@ export default function EmailTab() {
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={handleTestEmail}>
-              {t("settings.email.testEmail")}
-            </Button>
-            <Button onClick={handleSave} disabled={isSaving}>
-              {t("settings.actions.save")}
-            </Button>
+            {hasPermission(permissions.settings.edit) && (
+              <>
+                <Button variant="outline" onClick={handleTestEmail}>
+                  {t("settings.email.testEmail")}
+                </Button>
+                <Button onClick={handleSave} disabled={isSaving}>
+                  {t("settings.actions.save")}
+                </Button>
+              </>
+            )}
           </div>
         </CardContent>
       </Card>

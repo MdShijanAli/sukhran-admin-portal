@@ -10,23 +10,17 @@ import {
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, Trash2, Save } from "lucide-react";
 import { toast } from "sonner";
 import settingsService from "@/services/settingsService";
 import { Skeleton } from "@/components/ui/skeleton";
-
-interface SubscriptionSetting {
-  id: number;
-  key: string;
-  value: string[] | Record<string, string> | number;
-  description: string;
-  created_at: string;
-  updated_at: string;
-}
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
 
 export default function SubscriptionTab() {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -190,38 +184,44 @@ export default function SubscriptionTab() {
                   <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                   <span className="text-sm capitalize">{frequency}</span>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7"
-                  onClick={() => removeFrequency(frequency)}
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </Button>
+                {hasPermission(permissions.settings.delete) && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7"
+                    onClick={() => removeFrequency(frequency)}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                )}
               </li>
             ))}
           </ul>
 
-          <div className="flex gap-2">
-            <Input
-              placeholder={t(
-                "settings.subscription.deliveryFrequencies.addPlaceholder"
-              )}
-              value={newFrequency}
-              onChange={(e) => setNewFrequency(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && addFrequency()}
-            />
-            <Button onClick={addFrequency}>
-              <Plus className="h-4 w-4 mr-2" />
-              {t("settings.actions.add")}
-            </Button>
-          </div>
+          {hasPermission(permissions.settings.create) && (
+            <div className="flex gap-2">
+              <Input
+                placeholder={t(
+                  "settings.subscription.deliveryFrequencies.addPlaceholder"
+                )}
+                value={newFrequency}
+                onChange={(e) => setNewFrequency(e.target.value)}
+                onKeyPress={(e) => e.key === "Enter" && addFrequency()}
+              />
+              <Button onClick={addFrequency}>
+                <Plus className="h-4 w-4 mr-2" />
+                {t("settings.actions.add")}
+              </Button>
+            </div>
+          )}
 
           <div className="flex justify-end">
-            <Button onClick={handleSaveFrequencies} disabled={isSaving}>
-              <Save className="h-4 w-4 mr-2" />
-              {t("settings.actions.save")}
-            </Button>
+            {hasPermission(permissions.settings.edit) && (
+              <Button onClick={handleSaveFrequencies} disabled={isSaving}>
+                <Save className="h-4 w-4 mr-2" />
+                {t("settings.actions.save")}
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -250,44 +250,53 @@ export default function SubscriptionTab() {
                     <p className="text-xs text-muted-foreground">{value}</p>
                   </div>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7"
-                  onClick={() => removePreferredDate(key)}
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </Button>
+                {hasPermission(permissions.settings.delete) && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7"
+                    onClick={() => removePreferredDate(key)}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                )}
               </li>
             ))}
           </ul>
 
-          <div className="grid gap-2">
-            <Input
-              placeholder={t(
-                "settings.subscription.preferredDates.keyPlaceholder"
-              )}
-              value={newDateKey}
-              onChange={(e) => setNewDateKey(e.target.value)}
-            />
-            <Input
-              placeholder={t(
-                "settings.subscription.preferredDates.valuePlaceholder"
-              )}
-              value={newDateValue}
-              onChange={(e) => setNewDateValue(e.target.value)}
-            />
-          </div>
+          {hasPermission(permissions.settings.create) && (
+            <div className="grid gap-2">
+              <Input
+                placeholder={t(
+                  "settings.subscription.preferredDates.keyPlaceholder"
+                )}
+                value={newDateKey}
+                onChange={(e) => setNewDateKey(e.target.value)}
+              />
+              <Input
+                placeholder={t(
+                  "settings.subscription.preferredDates.valuePlaceholder"
+                )}
+                value={newDateValue}
+                onChange={(e) => setNewDateValue(e.target.value)}
+              />
+            </div>
+          )}
 
           <div className="flex justify-between">
-            <Button onClick={addPreferredDate} variant="outline">
-              <Plus className="h-4 w-4 mr-2" />
-              {t("settings.actions.add")}
-            </Button>
-            <Button onClick={handleSavePreferredDates} disabled={isSaving}>
-              <Save className="h-4 w-4 mr-2" />
-              {t("settings.actions.save")}
-            </Button>
+            {hasPermission(permissions.settings.create) && (
+              <Button onClick={addPreferredDate} variant="outline">
+                <Plus className="h-4 w-4 mr-2" />
+                {t("settings.actions.add")}
+              </Button>
+            )}
+
+            {hasPermission(permissions.settings.edit) && (
+              <Button onClick={handleSavePreferredDates} disabled={isSaving}>
+                <Save className="h-4 w-4 mr-2" />
+                {t("settings.actions.save")}
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>

@@ -20,12 +20,15 @@ import {
 import { toast } from "sonner";
 import settingsService from "@/services/settingsService";
 import { Skeleton } from "@/components/ui/skeleton";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
 
 export default function BusinessTab() {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-
   const [businessName, setBusinessName] = useState("My E-Commerce Store");
   const [businessEmail, setBusinessEmail] = useState("business@example.com");
   const [businessPhone, setBusinessPhone] = useState("+880 1712-345678");
@@ -210,9 +213,11 @@ export default function BusinessTab() {
             />
           </div>
           <div className="flex justify-end">
-            <Button onClick={handleSave} disabled={isSaving}>
-              {t("settings.actions.save")}
-            </Button>
+            {hasPermission(permissions.settings.edit) && (
+              <Button onClick={handleSave} disabled={isSaving}>
+                {t("settings.actions.save")}
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -252,9 +257,11 @@ export default function BusinessTab() {
             </Select>
           </div>
           <div className="flex justify-end">
-            <Button onClick={handleSave} disabled={isSaving}>
-              {t("settings.actions.save")}
-            </Button>
+            {hasPermission(permissions.settings.edit) && (
+              <Button onClick={handleSave} disabled={isSaving}>
+                {t("settings.actions.save")}
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -280,9 +287,11 @@ export default function BusinessTab() {
                 value={vatPercentage}
                 onChange={(e) => setVatPercentage(Number(e.target.value))}
               />
-              <Button onClick={handleSaveVAT} disabled={isSaving}>
-                {t("settings.actions.save")}
-              </Button>
+              {hasPermission(permissions.settings.edit) && (
+                <Button onClick={handleSaveVAT} disabled={isSaving}>
+                  {t("settings.actions.save")}
+                </Button>
+              )}
             </div>
             <p className="text-xs text-muted-foreground">
               {t("settings.business.vatDescription")}
@@ -300,9 +309,11 @@ export default function BusinessTab() {
                 value={minOrderAmount}
                 onChange={(e) => setMinOrderAmount(Number(e.target.value))}
               />
-              <Button onClick={handleSaveMinOrder} disabled={isSaving}>
-                {t("settings.actions.save")}
-              </Button>
+              {hasPermission(permissions.settings.edit) && (
+                <Button onClick={handleSaveMinOrder} disabled={isSaving}>
+                  {t("settings.actions.save")}
+                </Button>
+              )}
             </div>
             <p className="text-xs text-muted-foreground">
               {t("settings.business.minOrderDescription")}
@@ -333,9 +344,11 @@ export default function BusinessTab() {
                   setMinCustomPackageAmount(Number(e.target.value))
                 }
               />
-              <Button onClick={handleSaveMinPackage} disabled={isSaving}>
-                {t("settings.actions.save")}
-              </Button>
+              {hasPermission(permissions.settings.edit) && (
+                <Button onClick={handleSaveMinPackage} disabled={isSaving}>
+                  {t("settings.actions.save")}
+                </Button>
+              )}
             </div>
             <p className="text-xs text-muted-foreground">
               {t("settings.business.minCustomPackageDescription")}
