@@ -31,7 +31,7 @@ export default function Settings() {
         </p>
       </div>
 
-      <Tabs defaultValue="business" className="w-full mt-6">
+      <Tabs defaultValue="business" className="w-full mt-3">
         <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7">
           <TabsTrigger value="business" className="gap-2">
             <Building2 className="h-4 w-4" />
@@ -73,31 +73,31 @@ export default function Settings() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="business" className="space-y-4 mt-6">
+        <TabsContent value="business" className="space-y-3">
           <BusinessTab />
         </TabsContent>
 
-        <TabsContent value="notifications" className="space-y-4 mt-6">
+        <TabsContent value="notifications" className="space-y-3">
           <NotificationsTab />
         </TabsContent>
 
-        <TabsContent value="system" className="space-y-4 mt-6">
+        <TabsContent value="system" className="space-y-3">
           <SystemTab />
         </TabsContent>
 
-        <TabsContent value="payment" className="space-y-4 mt-6">
+        <TabsContent value="payment" className="space-y-3">
           <PaymentTab />
         </TabsContent>
 
-        <TabsContent value="shipping" className="space-y-4 mt-6">
+        <TabsContent value="shipping" className="space-y-3">
           <ShippingTab />
         </TabsContent>
 
-        <TabsContent value="email" className="space-y-4 mt-6">
+        <TabsContent value="email" className="space-y-3">
           <EmailTab />
         </TabsContent>
 
-        <TabsContent value="subscription" className="space-y-4 mt-6">
+        <TabsContent value="subscription" className="space-y-3">
           <SubscriptionTab />
         </TabsContent>
       </Tabs>

@@ -168,7 +168,7 @@ export default function SubscriptionTab() {
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="grid gap-3 md:grid-cols-2">
       {/* Delivery Frequencies */}
       <Card>
         <CardHeader>
@@ -179,7 +179,7 @@ export default function SubscriptionTab() {
             {t("settings.subscription.deliveryFrequencies.description")}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-3">
           <ul className="space-y-2">
             {deliveryFrequencies.map((frequency) => (
               <li
@@ -236,7 +236,7 @@ export default function SubscriptionTab() {
             {t("settings.subscription.preferredDates.description")}
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-3">
           <ul className="space-y-2">
             {Object.entries(preferredDates).map(([key, value]) => (
               <li
