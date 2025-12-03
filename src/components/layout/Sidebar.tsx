@@ -128,12 +128,12 @@ const menuItems = [
     path: "/family",
     permission: permissions.family.view,
   },
-  {
-    icon: RefreshCw,
-    label: "nav.returns",
-    path: "/returns",
-    permission: permissions.returns.view,
-  },
+  // {
+  //   icon: RefreshCw,
+  //   label: "nav.returns",
+  //   path: "/returns",
+  //   permission: permissions.returns.view,
+  // },
   {
     icon: Shield,
     label: "nav.roles",

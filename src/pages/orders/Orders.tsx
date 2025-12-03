@@ -296,10 +296,13 @@ function Orders() {
       key: "payment",
       label: t("orders.columns.payment"),
       render: (order) => (
-        <Badge variant="outline">
-          {t(`orders.paymentMethod.${order.paymentMode}`)}
-        </Badge>
+        <div className="w-[120px] text-center">
+          <Badge variant="outline">
+            {t(`orders.paymentMethod.${order.paymentMode}`)}
+          </Badge>
+        </div>
       ),
+      className: "text-center",
     },
     {
       key: "status",

@@ -93,7 +93,7 @@ const Coupons = () => {
     try {
       await couponService.toggleStatus(coupon);
       toast.success(t("coupon.messages.statusUpdated"));
-      if (refreshTable) refreshTable();
+      // if (refreshTable) refreshTable();
     } catch (error) {
       console.error("Error toggling coupon status:", error);
       toast.error(t("coupon.messages.failedToToggle"));
@@ -195,13 +195,15 @@ const Coupons = () => {
     {
       key: "name",
       label: t("coupon.columns.name"),
-      className: "font-medium w-[200px]",
+      render: (coupon) => (
+        <div className="text-sm font-medium w-[100px]">{coupon.name}</div>
+      ),
     },
     {
       key: "discount",
       label: t("coupon.columns.discount"),
       render: (coupon) => (
-        <div className="flex items-center gap-2 ">
+        <div className="flex items-center gap-2 w-[100px]">
           <span className="font-semibold text-primary">
             {coupon.discount.formatted}
           </span>
