@@ -165,6 +165,7 @@ export function BaseTableList<T>({
     store.users ||
     store.coverageAreas ||
     store.roles ||
+    store.coupons ||
     []) as T[];
   const isLoading = store.isLoading || false;
   const pagination = store.pagination;

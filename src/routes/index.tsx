@@ -19,7 +19,7 @@ import Reports from "@/pages/Reports";
 import Delivery from "@/pages/delivery/Delivery";
 import Financial from "@/pages/financial/Financial";
 import Support from "@/pages/Support";
-import Coupons from "@/pages/Coupons";
+import Coupons from "@/pages/coupon/Coupons";
 import Returns from "@/pages/Returns";
 import RoleManagement from "@/pages/roles/RoleManagement";
 import Notifications from "@/pages/Notifications";

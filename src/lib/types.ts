@@ -195,3 +195,74 @@ export interface PackageFormData {
     quantity: number;
   }[];
 }
+
+export interface CouponFormData {
+  code: string;
+  name: string;
+  discount_type: "percentage" | "fixed";
+  description?: string;
+  discount_value: number;
+  max_discount_amount?: number;
+  min_order_amount: number;
+  valid_from: string;
+  valid_to: string;
+  usage_limit_total: number;
+  usage_limit_per_user: number;
+  isActive: boolean;
+}
+
+export interface Coupon {
+  id: number;
+  code: string;
+  name: string;
+  description: string | null;
+  discount: {
+    type: "percentage" | "fixed";
+    value: number;
+    max_amount: number | null;
+    formatted: string;
+  };
+  min_order_amount: number;
+  validity: {
+    from: string;
+    to: string;
+    is_valid_now: boolean;
+    is_expired: boolean;
+    is_upcoming: boolean;
+  };
+  usage: {
+    limit_total: string;
+    limit_per_user: string;
+    count: string;
+    remaining: number;
+    total_discount_given: number;
+  };
+  isActive: boolean;
+  created_by: string;
+  updated_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CouponStats {
+  total_coupons: number;
+  active_coupons: number;
+  inactive_coupons: number;
+  expired_coupons: number;
+  valid_now: number;
+  upcoming: number;
+  usage: {
+    total_usage: number;
+    total_discount_given: number;
+  };
+  most_used_coupon: Coupon | null;
+  highest_discount_coupon: Coupon | null;
+}
+
+export interface CouponPaginationMeta {
+  current_page: number;
+  total: number;
+  per_page: number;
+  last_page: number;
+  statistics?: CouponStats;
+}

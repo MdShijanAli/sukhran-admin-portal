@@ -9,6 +9,7 @@ import profile from "./profile/index.json";
 import orders from "./orders/index.json";
 import delivery from "./delivery/index.json";
 import settings from "./settings/index.json";
+import coupon from "./coupon/index.json";
 
 /**
  * follow the file structure.
@@ -28,6 +29,7 @@ const combined = {
   orders,
   delivery,
   settings,
+  coupon,
 };
 
 export default combined;

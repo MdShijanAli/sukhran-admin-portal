@@ -149,4 +149,14 @@ export const apiRoutes = {
     ),
     updateSetting: (key: string) => createApiUrl(`admin/settings/${key}`),
   },
+
+  coupons: {
+    getAll: createApiUrl("admin/coupons"),
+    getById: (id: number | string) => createApiUrl(`admin/coupons/${id}`),
+    create: createApiUrl("admin/coupons"),
+    update: (id: number | string) => createApiUrl(`admin/coupons/${id}`),
+    delete: (id: number | string) => createApiUrl(`admin/coupons/${id}`),
+    toggleStatus: (id: number | string) =>
+      createApiUrl(`admin/coupons/${id}/toggle-status`),
+  },
 };
