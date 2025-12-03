@@ -48,7 +48,7 @@
     "subscriptions": "Subscriptions",
     "orders": "Orders",
     "delivery": "Delivery",
-    "financial": "Financial",
+    "transactions": "Transactions",
     "loyaltyRewards": "Loyalty & Rewards",
     "marketing": "Marketing",
     "support": "Customer Support",
@@ -104,7 +104,7 @@
     "linkedin": "LinkedIn",
     "whatsapp": "WhatsApp"
   },
-    "noPermission": {
+  "noPermission": {
     "title": "Access Denied",
     "message": "You don't have permission to access this page. Please contact your administrator if you believe this is an error.",
     "goBack": "Go Back",

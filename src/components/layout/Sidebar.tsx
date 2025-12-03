@@ -82,9 +82,9 @@ const menuItems = [
   },
   {
     icon: DollarSign,
-    label: "nav.financial",
-    path: "/financial",
-    permission: permissions.financial.view,
+    label: "nav.transactions",
+    path: "/transactions",
+    permission: permissions.transactions.view,
   },
   {
     icon: Coins,

@@ -78,9 +78,9 @@ const permissions = {
   },
 
   // Financial
-  financial: {
-    view: "financial.view",
-    export: "financial.export",
+  transactions: {
+    view: "transactions.view",
+    export: "transactions.export",
   },
 
   // Loyalty & Rewards

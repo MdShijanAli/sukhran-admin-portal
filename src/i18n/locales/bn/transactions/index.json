@@ -1,0 +1,63 @@
+{
+  "title": "লেনদেন",
+  "subtitle": "সকল পেমেন্ট লেনদেন দেখুন এবং পরিচালনা করুন",
+  "searchPlaceholder": "লেনদেন আইডি, গ্রাহক বা অর্ডার দ্বারা অনুসন্ধান করুন...",
+  "emptyState": "কোন লেনদেন পাওয়া যায়নি",
+  "noOrder": "কোন অর্ডার নেই",
+  "columns": {
+    "sl": "ক্রমিক",
+    "transactionId": "লেনদেন আইডি",
+    "customer": "গ্রাহক",
+    "order": "অর্ডার আইডি",
+    "amount": "পরিমাণ",
+    "gateway": "পেমেন্ট গেটওয়ে",
+    "status": "অবস্থা",
+    "date": "তারিখ"
+  },
+  "status": {
+    "success": "সফল",
+    "pending": "অপেক্ষমাণ",
+    "failed": "ব্যর্থ",
+    "refunded": "ফেরত"
+  },
+  "summary": {
+    "totalTransactions": "মোট লেনদেন",
+    "totalAmount": "মোট পরিমাণ",
+    "successful": "সফল",
+    "pending": "অপেক্ষমাণ",
+    "failed": "ব্যর্থ",
+    "thisMonth": "এই মাস"
+  },
+  "view": {
+    "title": "লেনদেনের বিবরণ",
+    "customer": {
+      "title": "গ্রাহক তথ্য",
+      "name": "নাম",
+      "email": "ইমেইল"
+    },
+    "payment": {
+      "title": "পেমেন্ট তথ্য",
+      "gateway": "পেমেন্ট গেটওয়ে",
+      "cardType": "কার্ডের ধরন",
+      "cardBrand": "কার্ড ব্র্যান্ড",
+      "bankTransactionId": "ব্যাংক লেনদেন আইডি"
+    },
+    "order": {
+      "title": "অর্ডার তথ্য",
+      "orderId": "অর্ডার আইডি",
+      "noOrder": "এই লেনদেনের সাথে কোন অর্ডার সংযুক্ত নেই"
+    },
+    "transaction": {
+      "title": "লেনদেনের বিবরণ",
+      "transactionId": "লেনদেন আইডি",
+      "currency": "মুদ্রা",
+      "createdAt": "তৈরির তারিখ"
+    }
+  },
+  "modal": {
+    "close": "বন্ধ করুন"
+  },
+  "messages": {
+    "loadError": "লেনদেনের বিবরণ লোড করতে ব্যর্থ"
+  }
+}

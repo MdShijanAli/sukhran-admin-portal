@@ -266,3 +266,47 @@ export interface CouponPaginationMeta {
   last_page: number;
   statistics?: CouponStats;
 }
+
+export interface Transaction {
+  id: number;
+  transactionId: string;
+  order: {
+    orderId: string;
+  } | null;
+  customer: {
+    name: string;
+    email: string;
+  };
+  amount: number;
+  currency: string;
+  status: "success" | "pending" | "failed" | "refunded";
+  paymentGateway: string;
+  cardType: string | null;
+  cardBrand: string | null;
+  bankTransactionId: string | null;
+  created_at: string;
+}
+
+export interface TransactionStats {
+  total_transactions: number;
+  total_amount: string;
+  successful: number;
+  failed: number;
+  refunded: number;
+  by_gateway: {
+    sslcommerz: number;
+    cod: number;
+  };
+  today: {
+    transactions: number;
+    amount: number;
+  };
+  this_month: {
+    transactions: number;
+    amount: string;
+  };
+}
+
+export interface TransactionPaginationMeta extends PaginationMeta {
+  stats?: TransactionStats;
+}

@@ -35,7 +35,7 @@
   "lastUpdated": "শেষ আপডেট",
   "created": "তৈরি",
   "info": "তথ্য",
-    "nav": {
+  "nav": {
     "dashboard": "ড্যাশবোর্ড",
     "cxoDashboard": "সিএক্সও ড্যাশবোর্ড",
     "operationalDashboard": "অপারেশনাল ড্যাশবোর্ড",
@@ -48,7 +48,7 @@
     "subscriptions": "সাবস্ক্রিপশন",
     "orders": "অর্ডার",
     "delivery": "ডেলিভারি",
-    "financial": "আর্থিক",
+    "transactions": "লেনদেন",
     "loyaltyRewards": "লয়ালটি এবং রিওয়ার্ডস",
     "marketing": "মার্কেটিং",
     "support": "গ্রাহক সহায়তা",
@@ -103,7 +103,7 @@
     "linkedin": "লিঙ্কডইন",
     "whatsapp": "হোয়াটসঅ্যাপ"
   },
-    "noPermission": {
+  "noPermission": {
     "title": "প্রবেশাধিকার অস্বীকৃত",
     "message": "এই পৃষ্ঠা অ্যাক্সেস করার অনুমতি আপনার নেই। আপনি যদি মনে করেন এটি একটি ত্রুটি, তাহলে আপনার প্রশাসকের সাথে যোগাযোগ করুন।",
     "goBack": "ফিরে যান",

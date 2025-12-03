@@ -10,6 +10,7 @@ import orders from "./orders/index.json";
 import delivery from "./delivery/index.json";
 import settings from "./settings/index.json";
 import coupon from "./coupon/index.json";
+import transactions from "./transactions/index.json";
 
 /**
  * follow the file structure.
@@ -30,6 +31,7 @@ const combined = {
   delivery,
   settings,
   coupon,
+  transactions,
 };
 
 export default combined;

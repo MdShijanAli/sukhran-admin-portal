@@ -17,7 +17,7 @@ import PackageDetails from "@/pages/package/PackageDetails";
 import Profile from "@/pages/profile/Profile";
 import Reports from "@/pages/Reports";
 import Delivery from "@/pages/delivery/Delivery";
-import Financial from "@/pages/financial/Financial";
+import Transactions from "@/pages/transactions/Transactions";
 import Support from "@/pages/Support";
 import Coupons from "@/pages/coupon/Coupons";
 import Returns from "@/pages/Returns";
@@ -188,10 +188,10 @@ const AppRoutes: React.FC = () => {
           }
         />
         <Route
-          path="financial"
+          path="transactions"
           element={
             <PrivateRoute>
-              <Financial />
+              <Transactions />
             </PrivateRoute>
           }
         />

@@ -159,4 +159,10 @@ export const apiRoutes = {
     toggleStatus: (id: number | string) =>
       createApiUrl(`admin/coupons/${id}/toggle-status`),
   },
+
+  transactions: {
+    getAll: createApiUrl("admin/transactions"),
+    getById: (id: number | string) => createApiUrl(`admin/transactions/${id}`),
+    getStatistics: createApiUrl("admin/transactions/statistics"),
+  },
 };
