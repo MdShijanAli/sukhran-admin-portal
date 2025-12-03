@@ -30,31 +30,44 @@
   },
   "view": {
     "title": "লেনদেনের বিবরণ",
-    "customer": {
-      "title": "গ্রাহক তথ্য",
-      "name": "নাম",
-      "email": "ইমেইল"
-    },
-    "payment": {
-      "title": "পেমেন্ট তথ্য",
-      "gateway": "পেমেন্ট গেটওয়ে",
-      "cardType": "কার্ডের ধরন",
-      "cardBrand": "কার্ড ব্র্যান্ড",
-      "bankTransactionId": "ব্যাংক লেনদেন আইডি"
-    },
-    "order": {
-      "title": "অর্ডার তথ্য",
-      "orderId": "অর্ডার আইডি",
-      "noOrder": "এই লেনদেনের সাথে কোন অর্ডার সংযুক্ত নেই"
-    },
-    "transaction": {
-      "title": "লেনদেনের বিবরণ",
-      "transactionId": "লেনদেন আইডি",
-      "currency": "মুদ্রা",
-      "createdAt": "তৈরির তারিখ"
-    }
+    "amount": "পরিমাণ",
+    "customerInfo": "গ্রাহক তথ্য",
+    "name": "নাম",
+    "email": "ইমেইল",
+    "mobile": "মোবাইল",
+    "paymentInfo": "পেমেন্ট তথ্য",
+    "gateway": "পেমেন্ট গেটওয়ে",
+    "gatewayTxnId": "গেটওয়ে লেনদেন আইডি",
+    "bankTxnId": "ব্যাংক লেনদেন আইডি",
+    "cardType": "কার্ডের ধরন",
+    "cardBrand": "কার্ড ব্র্যান্ড",
+    "cardIssuer": "কার্ড ইস্যুকারী",
+    "cardIssuerCountry": "কার্ড ইস্যুকারী দেশ",
+    "gatewayResponseInfo": "গেটওয়ে রেসপন্স বিবরণ",
+    "cardSubBrand": "কার্ড সাব ব্র্যান্ড",
+    "riskLevel": "ঝুঁকি স্তর",
+    "riskTitle": "ঝুঁকি স্ট্যাটাস",
+    "storeAmount": "স্টোর পরিমাণ",
+    "gatewayStatus": "গেটওয়ে স্ট্যাটাস",
+    "transactionDate": "লেনদেনের তারিখ",
+    "orderInfo": "অর্ডার তথ্য",
+    "orderId": "অর্ডার আইডি",
+    "orderStatus": "অর্ডার অবস্থা",
+    "noOrder": "এই লেনদেনের সাথে কোন অর্ডার সংযুক্ত নেই",
+    "transactionDetails": "লেনদেনের বিবরণ",
+    "transactionId": "লেনদেন আইডি",
+    "currency": "মুদ্রা",
+    "createdAt": "তৈরির তারিখ",
+    "updatedAt": "আপডেটের তারিখ",
+    "refundInfo": "ফেরত তথ্য",
+    "refundAmount": "ফেরত পরিমাণ",
+    "refundedAt": "ফেরতের তারিখ",
+    "refundReason": "ফেরতের কারণ",
+    "failureInfo": "ব্যর্থতার তথ্য",
+    "failureReason": "ব্যর্থতার কারণ"
   },
   "modal": {
+    "viewDetails": "বিস্তারিত দেখুন",
     "close": "বন্ধ করুন"
   },
   "messages": {

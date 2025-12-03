@@ -15,6 +15,7 @@ import {
   Clock,
   Package,
 } from "lucide-react";
+import { formatDDMMYYY, formatNumberWithCommas } from "@/lib/utils";
 
 interface ViewModalProps {
   open: boolean;
@@ -38,8 +39,9 @@ export default function ViewModal({
       try {
         const response = await transactionService.fetchDetails(transactionId);
         const responseData = response as unknown as Record<string, unknown>;
+        console.log("Transaction Details Response:", responseData);
         const transactionData =
-          (responseData?.data as Transaction) ||
+          (responseData?.transaction as Transaction) ||
           (response as unknown as Transaction);
         setTransaction(transactionData);
       } catch (error) {
@@ -93,7 +95,7 @@ export default function ViewModal({
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title={t("transactions.modal.view")}
+      title={t("transactions.modal.viewDetails")}
       showSubmitButton={false}
       closeButtonText={t("transactions.modal.close")}
       size="2xl"
@@ -112,7 +114,7 @@ export default function ViewModal({
                   {transaction.transactionId}
                 </h3>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {transaction.created_at}
+                  {formatDDMMYYY(transaction.created_at)}
                 </p>
               </div>
               {getStatusBadge(transaction.status)}
@@ -123,7 +125,8 @@ export default function ViewModal({
                 {t("transactions.view.amount")}
               </span>
               <span className="text-2xl font-bold text-primary">
-                {transaction.currency} {transaction.amount.toLocaleString()}
+                {transaction.currency}{" "}
+                {formatNumberWithCommas(transaction.amount)}
               </span>
             </div>
           </div>
@@ -153,6 +156,14 @@ export default function ViewModal({
                     {transaction.customer.email}
                   </span>
                 </div>
+                <div className="flex justify-between items-start">
+                  <span className="text-sm text-muted-foreground">
+                    {t("transactions.view.mobile")}:
+                  </span>
+                  <span className="text-sm font-medium text-right">
+                    {transaction.customer.mobile}
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -171,6 +182,26 @@ export default function ViewModal({
                     {transaction.paymentGateway}
                   </span>
                 </div>
+                {transaction.gatewayTransactionId && (
+                  <div className="flex justify-between items-start">
+                    <span className="text-sm text-muted-foreground">
+                      {t("transactions.view.gatewayTxnId")}:
+                    </span>
+                    <span className="text-sm font-medium text-right font-mono text-xs">
+                      {transaction.gatewayTransactionId}
+                    </span>
+                  </div>
+                )}
+                {transaction.bankTransactionId && (
+                  <div className="flex justify-between items-start">
+                    <span className="text-sm text-muted-foreground">
+                      {t("transactions.view.bankTxnId")}:
+                    </span>
+                    <span className="text-sm font-medium text-right font-mono text-xs">
+                      {transaction.bankTransactionId}
+                    </span>
+                  </div>
+                )}
                 {transaction.cardType && (
                   <div className="flex justify-between items-start">
                     <span className="text-sm text-muted-foreground">
@@ -191,18 +222,119 @@ export default function ViewModal({
                     </span>
                   </div>
                 )}
-                {transaction.bankTransactionId && (
+                {transaction.cardIssuer && (
                   <div className="flex justify-between items-start">
                     <span className="text-sm text-muted-foreground">
-                      {t("transactions.view.bankTxnId")}:
+                      {t("transactions.view.cardIssuer")}:
                     </span>
-                    <span className="text-sm font-medium text-right font-mono">
-                      {transaction.bankTransactionId}
+                    <span className="text-sm font-medium text-right">
+                      {transaction.cardIssuer}
+                    </span>
+                  </div>
+                )}
+                {transaction.cardIssuerCountry && (
+                  <div className="flex justify-between items-start">
+                    <span className="text-sm text-muted-foreground">
+                      {t("transactions.view.cardIssuerCountry")}:
+                    </span>
+                    <span className="text-sm font-medium text-right">
+                      {transaction.cardIssuerCountry}
                     </span>
                   </div>
                 )}
               </div>
             </div>
+
+            {/* Gateway Response Details */}
+            {transaction.gatewayResponse && (
+              <div className="border rounded-lg p-4 space-y-3 md:col-span-2">
+                <h4 className="font-semibold text-sm text-primary flex items-center gap-2">
+                  <CreditCard className="h-4 w-4" />
+                  {t("transactions.view.gatewayResponseInfo")}
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {transaction.gatewayResponse.card_sub_brand && (
+                    <div className="flex justify-between items-start">
+                      <span className="text-sm text-muted-foreground">
+                        {t("transactions.view.cardSubBrand")}:
+                      </span>
+                      <span className="text-sm font-medium text-right">
+                        {transaction.gatewayResponse.card_sub_brand as string}
+                      </span>
+                    </div>
+                  )}
+                  {transaction.gatewayResponse.risk_level !== undefined && (
+                    <div className="flex justify-between items-start">
+                      <span className="text-sm text-muted-foreground">
+                        {t("transactions.view.riskLevel")}:
+                      </span>
+                      <span className="text-sm font-medium text-right">
+                        {transaction.gatewayResponse.risk_level as string}
+                      </span>
+                    </div>
+                  )}
+                  {transaction.gatewayResponse.risk_title && (
+                    <div className="flex justify-between items-start">
+                      <span className="text-sm text-muted-foreground">
+                        {t("transactions.view.riskTitle")}:
+                      </span>
+                      <Badge
+                        variant={
+                          transaction.gatewayResponse.risk_title === "Safe"
+                            ? "default"
+                            : "destructive"
+                        }
+                        className="text-xs"
+                      >
+                        {transaction.gatewayResponse.risk_title as string}
+                      </Badge>
+                    </div>
+                  )}
+                  {transaction.gatewayResponse.store_amount && (
+                    <div className="flex justify-between items-start">
+                      <span className="text-sm text-muted-foreground">
+                        {t("transactions.view.storeAmount")}:
+                      </span>
+                      <span className="text-sm font-medium text-right">
+                        {transaction.currency}{" "}
+                        {formatNumberWithCommas(
+                          parseFloat(
+                            transaction.gatewayResponse.store_amount as string
+                          )
+                        )}
+                      </span>
+                    </div>
+                  )}
+                  {transaction.gatewayResponse.status && (
+                    <div className="flex justify-between items-start">
+                      <span className="text-sm text-muted-foreground">
+                        {t("transactions.view.gatewayStatus")}:
+                      </span>
+                      <Badge
+                        variant={
+                          transaction.gatewayResponse.status === "VALID"
+                            ? "default"
+                            : "secondary"
+                        }
+                        className="text-xs"
+                      >
+                        {transaction.gatewayResponse.status as string}
+                      </Badge>
+                    </div>
+                  )}
+                  {transaction.gatewayResponse.tran_date && (
+                    <div className="flex justify-between items-start">
+                      <span className="text-sm text-muted-foreground">
+                        {t("transactions.view.transactionDate")}:
+                      </span>
+                      <span className="text-sm font-medium text-right">
+                        {transaction.gatewayResponse.tran_date as string}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Order Information */}
             {transaction.order ? (
@@ -219,6 +351,14 @@ export default function ViewModal({
                     <span className="text-sm font-medium text-right font-mono">
                       {transaction.order.orderId}
                     </span>
+                  </div>
+                  <div className="flex justify-between items-start">
+                    <span className="text-sm text-muted-foreground">
+                      {t("transactions.view.orderStatus")}:
+                    </span>
+                    <Badge variant="outline" className="text-xs">
+                      {transaction.order.status}
+                    </Badge>
                   </div>
                 </div>
               </div>
@@ -247,7 +387,7 @@ export default function ViewModal({
                   <span className="text-sm text-muted-foreground">
                     {t("transactions.view.transactionId")}:
                   </span>
-                  <span className="text-sm font-medium text-right font-mono">
+                  <span className="text-sm font-medium text-right font-mono text-xs">
                     {transaction.transactionId}
                   </span>
                 </div>
@@ -267,9 +407,78 @@ export default function ViewModal({
                     {transaction.created_at}
                   </span>
                 </div>
+                <div className="flex justify-between items-start">
+                  <span className="text-sm text-muted-foreground">
+                    {t("transactions.view.updatedAt")}:
+                  </span>
+                  <span className="text-sm font-medium text-right">
+                    {transaction.updated_at}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
+
+          {/* Refund Information - Only show if transaction is refunded */}
+          {transaction.status === "refunded" && (
+            <div className="border border-blue-200 bg-blue-50 rounded-lg p-4 space-y-3">
+              <h4 className="font-semibold text-sm text-blue-700 flex items-center gap-2">
+                <DollarSign className="h-4 w-4" />
+                {t("transactions.view.refundInfo")}
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {transaction.refundAmount && (
+                  <div className="flex justify-between items-start">
+                    <span className="text-sm text-muted-foreground">
+                      {t("transactions.view.refundAmount")}:
+                    </span>
+                    <span className="text-sm font-medium text-right">
+                      {transaction.currency}{" "}
+                      {formatNumberWithCommas(transaction.refundAmount)}
+                    </span>
+                  </div>
+                )}
+                {transaction.refundedAt && (
+                  <div className="flex justify-between items-start">
+                    <span className="text-sm text-muted-foreground">
+                      {t("transactions.view.refundedAt")}:
+                    </span>
+                    <span className="text-sm font-medium text-right">
+                      {transaction.refundedAt}
+                    </span>
+                  </div>
+                )}
+                {transaction.refundReason && (
+                  <div className="col-span-full">
+                    <span className="text-sm text-muted-foreground block mb-1">
+                      {t("transactions.view.refundReason")}:
+                    </span>
+                    <p className="text-sm font-medium bg-white p-2 rounded">
+                      {transaction.refundReason}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Failure Information - Only show if transaction failed */}
+          {transaction.status === "failed" && transaction.failureReason && (
+            <div className="border border-red-200 bg-red-50 rounded-lg p-4 space-y-3">
+              <h4 className="font-semibold text-sm text-red-700 flex items-center gap-2">
+                <XCircle className="h-4 w-4" />
+                {t("transactions.view.failureInfo")}
+              </h4>
+              <div>
+                <span className="text-sm text-muted-foreground block mb-1">
+                  {t("transactions.view.failureReason")}:
+                </span>
+                <p className="text-sm font-medium bg-white p-2 rounded">
+                  {transaction.failureReason}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       ) : null}
     </BaseModal>

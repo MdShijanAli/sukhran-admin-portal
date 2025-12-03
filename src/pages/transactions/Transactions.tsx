@@ -23,6 +23,7 @@ import { BaseTableList } from "@/components/table";
 import permissions from "@/lib/permissions";
 import usePermissions from "@/hooks/use-permissions";
 import { withPermission } from "@/hoc/withPermission";
+import { formatNumberWithCommas } from "@/lib/utils";
 
 const Transactions = () => {
   const { t } = useTranslation();
@@ -116,6 +117,9 @@ const Transactions = () => {
           <p className="text-xs text-muted-foreground">
             {transaction.customer.email}
           </p>
+          <p className="text-xs text-muted-foreground">
+            {transaction.customer.mobile}
+          </p>
         </div>
       ),
     },
@@ -140,9 +144,9 @@ const Transactions = () => {
       key: "amount",
       label: t("transactions.columns.amount"),
       render: (transaction) => (
-        <div className="flex items-center gap-1 w-[80px]">
+        <div className="flex items-center gap-1 w-[100px]">
           <span className="font-semibold text-primary">
-            {transaction.currency} {transaction.amount.toLocaleString()}
+            {transaction.currency} {formatNumberWithCommas(transaction.amount)}
           </span>
         </div>
       ),

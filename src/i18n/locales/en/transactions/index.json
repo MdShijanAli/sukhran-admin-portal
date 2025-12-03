@@ -30,31 +30,44 @@
   },
   "view": {
     "title": "Transaction Details",
-    "customer": {
-      "title": "Customer Information",
-      "name": "Name",
-      "email": "Email"
-    },
-    "payment": {
-      "title": "Payment Information",
-      "gateway": "Payment Gateway",
-      "cardType": "Card Type",
-      "cardBrand": "Card Brand",
-      "bankTransactionId": "Bank Transaction ID"
-    },
-    "order": {
-      "title": "Order Information",
-      "orderId": "Order ID",
-      "noOrder": "No order associated with this transaction"
-    },
-    "transaction": {
-      "title": "Transaction Details",
-      "transactionId": "Transaction ID",
-      "currency": "Currency",
-      "createdAt": "Created At"
-    }
+    "amount": "Amount",
+    "customerInfo": "Customer Information",
+    "name": "Name",
+    "email": "Email",
+    "mobile": "Mobile",
+    "paymentInfo": "Payment Information",
+    "gateway": "Payment Gateway",
+    "gatewayTxnId": "Gateway Transaction ID",
+    "bankTxnId": "Bank Transaction ID",
+    "cardType": "Card Type",
+    "cardBrand": "Card Brand",
+    "cardIssuer": "Card Issuer",
+    "cardIssuerCountry": "Card Issuer Country",
+    "gatewayResponseInfo": "Gateway Response Details",
+    "cardSubBrand": "Card Sub Brand",
+    "riskLevel": "Risk Level",
+    "riskTitle": "Risk Status",
+    "storeAmount": "Store Amount",
+    "gatewayStatus": "Gateway Status",
+    "transactionDate": "Transaction Date",
+    "orderInfo": "Order Information",
+    "orderId": "Order ID",
+    "orderStatus": "Order Status",
+    "noOrder": "No order associated with this transaction",
+    "transactionDetails": "Transaction Details",
+    "transactionId": "Transaction ID",
+    "currency": "Currency",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "refundInfo": "Refund Information",
+    "refundAmount": "Refund Amount",
+    "refundedAt": "Refunded At",
+    "refundReason": "Refund Reason",
+    "failureInfo": "Failure Information",
+    "failureReason": "Failure Reason"
   },
   "modal": {
+    "viewDetails": "View Details",
     "close": "Close"
   },
   "messages": {

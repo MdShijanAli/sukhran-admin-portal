@@ -272,19 +272,37 @@ export interface Transaction {
   transactionId: string;
   order: {
     orderId: string;
+    status: string;
   } | null;
   customer: {
+    id: number;
     name: string;
     email: string;
+    mobile: string;
   };
   amount: number;
   currency: string;
   status: "success" | "pending" | "failed" | "refunded";
   paymentGateway: string;
+  gatewayTransactionId: string | null;
+  bankTransactionId: string | null;
   cardType: string | null;
   cardBrand: string | null;
-  bankTransactionId: string | null;
+  cardIssuer: string | null;
+  cardIssuerCountry: string | null;
+  cardSubBrand?: string | null;
+  riskLevel?: string | null;
+  riskTitle?: string | null;
+  storeAmount?: string | null;
+  gatewayStatus?: string | null;
+  gatewayResponse: Record<string, unknown> | null;
+  refundAmount: number | null;
+  refundedAt: string | null;
+  refundedBy: number | null;
+  refundReason: string | null;
+  failureReason: string | null;
   created_at: string;
+  updated_at: string;
 }
 
 export interface TransactionStats {
