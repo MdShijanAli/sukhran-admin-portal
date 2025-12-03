@@ -328,7 +328,7 @@ const CoverageAreas = () => {
         onRefresh={handleSetRefresh}
         summaryLists={summaryLists}
         // Checkbox props
-        enableCheckbox={true}
+        enableCheckbox={false}
         selectedRows={selectedRowKeys}
         onSelectionChange={handleSelectionChange}
       />

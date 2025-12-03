@@ -29,6 +29,7 @@ import { cn } from "@/lib/utils";
 import { useThemeStore } from "@/stores/themeStore";
 import usePermissions from "@/hooks/use-permissions";
 import permissions from "@/lib/permissions";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 const menuItems = [
   {
@@ -224,7 +225,18 @@ export default function Sidebar() {
                       )
                     }
                   >
-                    <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
+                    {isCollapsed ? (
+                      <Tooltip delayDuration={100}>
+                        <TooltipTrigger asChild>
+                          <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
+                        </TooltipTrigger>
+                        <TooltipContent side="right">
+                          {t(item.label)}
+                        </TooltipContent>
+                      </Tooltip>
+                    ) : (
+                      <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
+                    )}
                     {!isCollapsed && (
                       <span className="transition-opacity duration-300 ease-in-out">
                         {t(item.label)}
