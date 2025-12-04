@@ -23,10 +23,10 @@ import {
   Clock,
   Tag,
   ExternalLink,
+  BarChart3,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -67,6 +67,9 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { useContentStore, ContentItem, ContentType, ContentStatus } from '@/stores/contentStore';
+import { RichTextEditor } from '@/components/content/RichTextEditor';
+import { ImageUpload } from '@/components/content/ImageUpload';
+import { ContentAnalytics } from '@/components/content/ContentAnalytics';
 
 const contentCategories = [
   { id: 'health-tips', label: 'Health Tips & Recipes', types: ['health-tip', 'recipe'], icon: Heart },
@@ -112,13 +115,14 @@ const getPriorityBadgeVariant = (priority?: string) => {
 export default function ContentManagement() {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const { contents, addContent, updateContent, deleteContent, publishContent, archiveContent, duplicateContent } = useContentStore();
+  const { contents, addContent, updateContent, deleteContent, publishContent, archiveContent, duplicateContent, getAnalytics } = useContentStore();
   
   const [activeTab, setActiveTab] = useState('health-tips');
   const [searchQuery, setSearchQuery] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
   const [selectedContent, setSelectedContent] = useState<ContentItem | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isScheduling, setIsScheduling] = useState(false);
@@ -190,6 +194,11 @@ export default function ContentManagement() {
   const handlePreview = (content: ContentItem) => {
     setSelectedContent(content);
     setIsPreviewOpen(true);
+  };
+
+  const handleAnalytics = (content: ContentItem) => {
+    setSelectedContent(content);
+    setIsAnalyticsOpen(true);
   };
 
   const handleDelete = (content: ContentItem) => {
@@ -407,6 +416,15 @@ export default function ContentManagement() {
                               <Button
                                 variant="ghost"
                                 size="icon"
+                                onClick={() => handleAnalytics(content)}
+                                title="Analytics"
+                                className="text-blue-600 hover:text-blue-700"
+                              >
+                                <BarChart3 className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
                                 onClick={() => handlePreview(content)}
                                 title="Preview"
                               >
@@ -536,23 +554,18 @@ export default function ContentManagement() {
 
             <div className="space-y-2">
               <Label>Content *</Label>
-              <Textarea
+              <RichTextEditor
                 value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                onChange={(value) => setFormData({ ...formData, content: value })}
                 placeholder="Enter content body"
-                rows={6}
               />
             </div>
 
             {(activeTab !== 'legal') && (
-              <div className="space-y-2">
-                <Label>Image URL</Label>
-                <Input
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="Enter image URL"
-                />
-              </div>
+              <ImageUpload
+                value={formData.image}
+                onChange={(value) => setFormData({ ...formData, image: value })}
+              />
             )}
 
             {(activeTab === 'banners') && (
@@ -646,9 +659,10 @@ export default function ContentManagement() {
                 )}
               </div>
               <h2 className="text-2xl font-bold">{selectedContent.title}</h2>
-              <p className="text-muted-foreground whitespace-pre-wrap">
-                {selectedContent.content}
-              </p>
+              <div 
+                className="prose prose-sm max-w-none dark:prose-invert text-muted-foreground"
+                dangerouslySetInnerHTML={{ __html: selectedContent.content }}
+              />
               {selectedContent.tags && selectedContent.tags.length > 0 && (
                 <div className="flex items-center gap-2">
                   <Tag className="h-4 w-4 text-muted-foreground" />
@@ -696,6 +710,27 @@ export default function ContentManagement() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Analytics Dialog */}
+      <Dialog open={isAnalyticsOpen} onOpenChange={setIsAnalyticsOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5 text-primary" />
+              Content Analytics
+            </DialogTitle>
+            <DialogDescription>
+              Performance metrics for "{selectedContent?.title}"
+            </DialogDescription>
+          </DialogHeader>
+          {selectedContent && (
+            <ContentAnalytics
+              content={selectedContent}
+              analytics={getAnalytics(selectedContent.id)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -3,6 +3,22 @@ import { create } from 'zustand';
 export type ContentType = 'health-tip' | 'recipe' | 'banner' | 'promo' | 'terms' | 'privacy' | 'nutrition-guide' | 'meal-plan' | 'emergency' | 'announcement';
 export type ContentStatus = 'draft' | 'scheduled' | 'published' | 'archived';
 
+export interface DailyStat {
+  date: string;
+  views: number;
+  clicks: number;
+}
+
+export interface ContentAnalytics {
+  contentId: string;
+  views: number;
+  clicks: number;
+  avgTimeSpent: number;
+  viewsTrend: number;
+  clicksTrend: number;
+  dailyStats: DailyStat[];
+}
+
 export interface ContentItem {
   id: string;
   type: ContentType;
@@ -23,12 +39,14 @@ export interface ContentItem {
 
 interface ContentStore {
   contents: ContentItem[];
+  analytics: Record<string, ContentAnalytics>;
   addContent: (content: Omit<ContentItem, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateContent: (id: string, content: Partial<ContentItem>) => void;
   deleteContent: (id: string) => void;
   publishContent: (id: string) => void;
   archiveContent: (id: string) => void;
   duplicateContent: (id: string) => void;
+  getAnalytics: (id: string) => ContentAnalytics;
 }
 
 const mockContents: ContentItem[] = [
@@ -159,20 +177,62 @@ const mockContents: ContentItem[] = [
   },
 ];
 
-export const useContentStore = create<ContentStore>((set) => ({
-  contents: mockContents,
+// Generate mock analytics for content
+const generateMockAnalytics = (contentId: string): ContentAnalytics => {
+  const baseViews = Math.floor(Math.random() * 5000) + 500;
+  const baseClicks = Math.floor(baseViews * (Math.random() * 0.15 + 0.02));
   
-  addContent: (content) => set((state) => ({
-    contents: [
-      ...state.contents,
-      {
-        ...content,
-        id: Date.now().toString(),
-        createdAt: new Date().toISOString().split('T')[0],
-        updatedAt: new Date().toISOString().split('T')[0],
+  const dailyStats: DailyStat[] = [];
+  const today = new Date();
+  
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    dailyStats.push({
+      date: date.toISOString().split('T')[0],
+      views: Math.floor(baseViews / 7 * (0.5 + Math.random())),
+      clicks: Math.floor(baseClicks / 7 * (0.5 + Math.random())),
+    });
+  }
+
+  return {
+    contentId,
+    views: baseViews,
+    clicks: baseClicks,
+    avgTimeSpent: Math.floor(Math.random() * 180) + 30,
+    viewsTrend: Math.floor(Math.random() * 40) - 10,
+    clicksTrend: Math.floor(Math.random() * 40) - 10,
+    dailyStats,
+  };
+};
+
+const mockAnalytics: Record<string, ContentAnalytics> = {};
+mockContents.forEach(content => {
+  mockAnalytics[content.id] = generateMockAnalytics(content.id);
+});
+
+export const useContentStore = create<ContentStore>((set, get) => ({
+  contents: mockContents,
+  analytics: mockAnalytics,
+  
+  addContent: (content) => set((state) => {
+    const newId = Date.now().toString();
+    return {
+      contents: [
+        ...state.contents,
+        {
+          ...content,
+          id: newId,
+          createdAt: new Date().toISOString().split('T')[0],
+          updatedAt: new Date().toISOString().split('T')[0],
+        },
+      ],
+      analytics: {
+        ...state.analytics,
+        [newId]: generateMockAnalytics(newId),
       },
-    ],
-  })),
+    };
+  }),
   
   updateContent: (id, content) => set((state) => ({
     contents: state.contents.map((item) =>
@@ -182,9 +242,13 @@ export const useContentStore = create<ContentStore>((set) => ({
     ),
   })),
   
-  deleteContent: (id) => set((state) => ({
-    contents: state.contents.filter((item) => item.id !== id),
-  })),
+  deleteContent: (id) => set((state) => {
+    const { [id]: removed, ...remainingAnalytics } = state.analytics;
+    return {
+      contents: state.contents.filter((item) => item.id !== id),
+      analytics: remainingAnalytics,
+    };
+  }),
   
   publishContent: (id) => set((state) => ({
     contents: state.contents.map((item) =>
@@ -215,12 +279,13 @@ export const useContentStore = create<ContentStore>((set) => ({
     const original = state.contents.find((item) => item.id === id);
     if (!original) return state;
     
+    const newId = Date.now().toString();
     return {
       contents: [
         ...state.contents,
         {
           ...original,
-          id: Date.now().toString(),
+          id: newId,
           title: `${original.title} (Copy)`,
           status: 'draft' as ContentStatus,
           publishDate: undefined,
@@ -229,6 +294,15 @@ export const useContentStore = create<ContentStore>((set) => ({
           updatedAt: new Date().toISOString().split('T')[0],
         },
       ],
+      analytics: {
+        ...state.analytics,
+        [newId]: generateMockAnalytics(newId),
+      },
     };
   }),
+
+  getAnalytics: (id) => {
+    const state = get();
+    return state.analytics[id] || generateMockAnalytics(id);
+  },
 }));
