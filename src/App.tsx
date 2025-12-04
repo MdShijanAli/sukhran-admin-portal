@@ -32,6 +32,7 @@ import LoyaltyRewards from './pages/LoyaltyRewards';
 import Family from './pages/Family';
 import Analytics from './pages/Analytics';
 import Marketing from './pages/Marketing';
+import ContentManagement from './pages/ContentManagement';
 
 const queryClient = new QueryClient();
 
@@ -90,6 +91,7 @@ const App = () => {
               <Route path="marketing" element={<Marketing />} />
               <Route path="role-management" element={<RoleManagement />} />
               <Route path="notifications" element={<Notifications />} />
+              <Route path="content" element={<ContentManagement />} />
               <Route path="settings" element={<Settings />} />
               <Route index element={<Navigate to="/dashboard" replace />} />
             </Route>
