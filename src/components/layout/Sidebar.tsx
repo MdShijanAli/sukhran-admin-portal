@@ -119,7 +119,7 @@ const menuItems = [
   {
     icon: FileText,
     label: "nav.content",
-    path: "/content",
+    path: "/content-management",
     permission: permissions.content.view,
   },
   {
