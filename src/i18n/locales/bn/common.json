@@ -61,7 +61,8 @@
     "roles": "রোল ম্যানেজমেন্ট",
     "notifications": "নোটিফিকেশন",
     "settings": "সেটিংস",
-    "reports": "রিপোর্ট"
+    "reports": "রিপোর্ট",
+    "packageSettings": "প্যাকেজ সেটিংস"
   },
   "auth": {
     "login": "লগইন",

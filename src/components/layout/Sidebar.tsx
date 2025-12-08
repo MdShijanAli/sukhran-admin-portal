@@ -22,6 +22,9 @@ import {
   Coins,
   Mail,
   MapPin,
+  Settings2,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useSidebarStore } from "@/stores/sidebarStore";
@@ -30,6 +33,7 @@ import { useThemeStore } from "@/stores/themeStore";
 import usePermissions from "@/hooks/use-permissions";
 import permissions from "@/lib/permissions";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { useState } from "react";
 
 const menuItems = [
   {
@@ -61,6 +65,20 @@ const menuItems = [
     label: "nav.packages",
     path: "/packages",
     permission: permissions.packages.view,
+    subItems: [
+      {
+        icon: Package,
+        label: "nav.packages",
+        path: "/packages",
+        permission: permissions.packages.view,
+      },
+      {
+        icon: Settings2,
+        label: "nav.packageSettings",
+        path: "/packages/settings",
+        permission: permissions.packages.view,
+      },
+    ],
   },
   {
     icon: ShoppingCart,
@@ -165,6 +183,15 @@ export default function Sidebar() {
   const { isCollapsed, toggleSidebar } = useSidebarStore();
   const { language } = useThemeStore();
   const { hasPermission } = usePermissions();
+  const [expandedItems, setExpandedItems] = useState<string[]>([]);
+
+  const toggleExpand = (path: string) => {
+    setExpandedItems((prev) =>
+      prev.includes(path)
+        ? prev.filter((item) => item !== path)
+        : [...prev, path]
+    );
+  };
 
   return (
     <aside
@@ -211,40 +238,123 @@ export default function Sidebar() {
           <ul className="space-y-1 px-2">
             {menuItems
               .filter((item) => hasPermission(item.permission))
-              .map((item) => (
-                <li key={item.path}>
-                  <NavLink
-                    to={item.path}
-                    className={({ isActive }) =>
-                      cn(
-                        "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-300 ease-in-out",
-                        "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                        isActive
-                          ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                          : "text-sidebar-foreground"
-                      )
-                    }
-                  >
-                    {isCollapsed ? (
-                      <Tooltip delayDuration={100}>
-                        <TooltipTrigger asChild>
-                          <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
-                        </TooltipTrigger>
-                        <TooltipContent side="right">
-                          {t(item.label)}
-                        </TooltipContent>
-                      </Tooltip>
+              .map((item) => {
+                const hasSubItems = item.subItems && item.subItems.length > 0;
+                const isExpanded = expandedItems.includes(item.path);
+
+                return (
+                  <li key={item.path}>
+                    {hasSubItems ? (
+                      <>
+                        {/* Parent Item with Submenu */}
+                        <button
+                          onClick={() => toggleExpand(item.path)}
+                          className={cn(
+                            "w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-300 ease-in-out",
+                            "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                            "text-sidebar-foreground"
+                          )}
+                        >
+                          {isCollapsed ? (
+                            <Tooltip delayDuration={100}>
+                              <TooltipTrigger asChild>
+                                <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
+                              </TooltipTrigger>
+                              <TooltipContent side="right">
+                                {t(item.label)}
+                              </TooltipContent>
+                            </Tooltip>
+                          ) : (
+                            <>
+                              <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
+                              <span className="flex-1 text-left transition-opacity duration-300 ease-in-out">
+                                {t(item.label)}
+                              </span>
+                              {isExpanded ? (
+                                <ChevronUp className="h-4 w-4 transition-transform duration-500" />
+                              ) : (
+                                <ChevronDown className="h-4 w-4 transition-transform duration-500" />
+                              )}
+                            </>
+                          )}
+                        </button>
+
+                        {/* Submenu Items */}
+                        {!isCollapsed && (
+                          <div
+                            className={cn(
+                              "overflow-hidden transition-all duration-500 ease-in-out",
+                              isExpanded
+                                ? "max-h-96 opacity-100"
+                                : "max-h-0 opacity-0"
+                            )}
+                          >
+                            <ul className="mt-1 space-y-1 ml-4 pl-4 border-l-2 border-sidebar-accent/30">
+                              {item.subItems
+                                ?.filter((subItem) =>
+                                  hasPermission(subItem.permission)
+                                )
+                                .map((subItem) => (
+                                  <li key={subItem.path}>
+                                    <NavLink
+                                      to={subItem.path}
+                                      className={({ isActive }) =>
+                                        cn(
+                                          "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-300 ease-in-out",
+                                          "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                                          isActive
+                                            ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                                            : "text-sidebar-foreground"
+                                        )
+                                      }
+                                    >
+                                      <subItem.icon className="h-4 w-4 flex-shrink-0" />
+                                      <span className="transition-opacity duration-300 ease-in-out">
+                                        {t(subItem.label)}
+                                      </span>
+                                    </NavLink>
+                                  </li>
+                                ))}
+                            </ul>
+                          </div>
+                        )}
+                      </>
                     ) : (
-                      <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
+                      /* Regular Item without Submenu */
+                      <NavLink
+                        to={item.path}
+                        className={({ isActive }) =>
+                          cn(
+                            "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-300 ease-in-out",
+                            "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                            isActive
+                              ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                              : "text-sidebar-foreground"
+                          )
+                        }
+                      >
+                        {isCollapsed ? (
+                          <Tooltip delayDuration={100}>
+                            <TooltipTrigger asChild>
+                              <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
+                            </TooltipTrigger>
+                            <TooltipContent side="right">
+                              {t(item.label)}
+                            </TooltipContent>
+                          </Tooltip>
+                        ) : (
+                          <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
+                        )}
+                        {!isCollapsed && (
+                          <span className="transition-opacity duration-300 ease-in-out">
+                            {t(item.label)}
+                          </span>
+                        )}
+                      </NavLink>
                     )}
-                    {!isCollapsed && (
-                      <span className="transition-opacity duration-300 ease-in-out">
-                        {t(item.label)}
-                      </span>
-                    )}
-                  </NavLink>
-                </li>
-              ))}
+                  </li>
+                );
+              })}
           </ul>
         </nav>
       </div>
