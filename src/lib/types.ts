@@ -169,6 +169,7 @@ export interface Package {
   image_url: string | null;
   packageType: "admin" | "custom";
   fixedPrice: number;
+  coinsReward: number;
   discountPercent: number;
   pricing?: PackagePricing;
   displayOrder: string;
@@ -327,4 +328,42 @@ export interface TransactionStats {
 
 export interface TransactionPaginationMeta extends PaginationMeta {
   stats?: TransactionStats;
+}
+
+// Package Settings Types
+export interface PackageSetting {
+  id: number;
+  key: string;
+  value: string;
+  description: string;
+  businessId: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ScheduleOption {
+  id?: number;
+  option_type: "schedule_months" | "frequency_per_month" | "delivery_time";
+  value: string;
+  label: string;
+  display_order: number;
+  isActive: boolean;
+  isDefault: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface PackageScheduleOptions {
+  schedule_months: ScheduleOption[];
+  frequency_per_month: ScheduleOption[];
+  delivery_time: ScheduleOption[];
+}
+
+export interface ScheduleOptionFormData {
+  option_type: "schedule_months" | "frequency_per_month" | "delivery_time";
+  value: string;
+  label: string;
+  display_order: number;
+  isActive: boolean;
+  isDefault: boolean;
 }

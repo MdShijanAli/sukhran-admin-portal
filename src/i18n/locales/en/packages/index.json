@@ -22,6 +22,7 @@
   "form": {
     "createNewPackage": "Create New Package",
     "editPackage": "Edit Package",
+    "coinsReward": "Coins Reward",
     "updatePackage": "Update Package",
     "fillPackageDetails": "Fill in the details to create a new package",
     "updatePackageDetails": "Update package details and items",
@@ -77,6 +78,7 @@
     "amazingPackageDeal": "Amazing package deal!",
     "noDescription": "No description provided",
     "type": "Type",
+    "coinsReward": "Coins Reward",
     "displayOrder": "Display Order",
     "items": "Items",
     "discount": "Discount",

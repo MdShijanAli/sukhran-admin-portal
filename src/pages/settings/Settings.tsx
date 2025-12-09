@@ -34,7 +34,7 @@ function Settings() {
       </div>
 
       <Tabs defaultValue="business" className="w-full mt-3">
-        <TabsList className="flex flex-wrap lg:grid w-full grid-cols-3 lg:grid-cols-7">
+        <TabsList className="flex flex-wrap lg:justify-between lg:grid w-full grid-cols-3 lg:grid-cols-6">
           <TabsTrigger value="business" className="gap-2">
             <Building2 className="h-4 w-4" />
             <span className="hidden sm:inline">
@@ -67,12 +67,12 @@ function Settings() {
             <Mail className="h-4 w-4" />
             <span className="hidden sm:inline">{t("settings.email.tab")}</span>
           </TabsTrigger>
-          <TabsTrigger value="subscription" className="gap-2">
+          {/* <TabsTrigger value="subscription" className="gap-2">
             <Package className="h-4 w-4" />
             <span className="hidden sm:inline">
               {t("settings.subscription.tab")}
             </span>
-          </TabsTrigger>
+          </TabsTrigger> */}
         </TabsList>
 
         <TabsContent value="business" className="space-y-3">
@@ -99,9 +99,9 @@ function Settings() {
           <EmailTab />
         </TabsContent>
 
-        <TabsContent value="subscription" className="space-y-3">
+        {/* <TabsContent value="subscription" className="space-y-3">
           <SubscriptionTab />
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
     </div>
   );

@@ -26,6 +26,7 @@ interface PackageFormData {
   description: string;
   packageType: "admin" | "custom";
   fixedPrice: string;
+  coinsReward: number;
   discountPercent: string;
   displayOrder: string;
   isActive: boolean;
@@ -58,6 +59,7 @@ export default function PackageForm() {
     description: "",
     packageType: "admin",
     fixedPrice: "",
+    coinsReward: 0,
     discountPercent: "0",
     displayOrder: "0",
     isActive: true,
@@ -125,6 +127,7 @@ export default function PackageForm() {
           packageData.pricing?.fixedPrice?.toString() ||
           packageData.fixedPrice?.toString() ||
           "",
+        coinsReward: packageData.coinsReward || 0,
         discountPercent:
           packageData.pricing?.discountPercent?.toString() ||
           packageData.discountPercent?.toString() ||
@@ -273,6 +276,7 @@ export default function PackageForm() {
       formDataToSubmit.append("description", formData.description);
       formDataToSubmit.append("packageType", formData.packageType);
       formDataToSubmit.append("fixedPrice", formData.fixedPrice);
+      formDataToSubmit.append("coinsReward", formData.coinsReward.toString());
       formDataToSubmit.append("discountPercent", formData.discountPercent);
       formDataToSubmit.append("displayOrder", formData.displayOrder);
       formDataToSubmit.append("isActive", formData.isActive ? "1" : "0");
@@ -789,6 +793,21 @@ export default function PackageForm() {
                       )}
                     </div>
                   )}
+
+                  <div className="grid grid-cols-2 items-center justify-between">
+                    <Label htmlFor="coinsReward">
+                      {t("packages.form.coinsReward")}
+                    </Label>
+                    <Input
+                      id="coinsReward"
+                      type="number"
+                      value={formData.coinsReward}
+                      min={0}
+                      onChange={(e) =>
+                        updateField("coinsReward", parseInt(e.target.value))
+                      }
+                    />
+                  </div>
                 </CardContent>
               </Card>
               <Card className="">

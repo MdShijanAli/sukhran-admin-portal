@@ -32,6 +32,7 @@ import Categories from "@/pages/categories/Categories";
 import ProductViewDetails from "@/pages/products/ViewDetails";
 import CoverageAreas from "@/pages/coverage-area/CoverageAreas";
 import ContentManagement from "@/pages/ContentManagement";
+import PackageSettings from "@/pages/package/settings/PackageSettings";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -153,6 +154,14 @@ const AppRoutes: React.FC = () => {
           element={
             <PrivateRoute>
               <PackageDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="package/settings"
+          element={
+            <PrivateRoute>
+              <PackageSettings />
             </PrivateRoute>
           }
         />

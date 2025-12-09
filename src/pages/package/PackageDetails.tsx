@@ -11,6 +11,7 @@ import {
   Loader2,
   Package as PackageIcon,
   Calendar,
+  Coins,
 } from "lucide-react";
 import { toast } from "sonner";
 import packageService from "@/services/packageService";
@@ -370,6 +371,15 @@ export default function PackageDetails() {
                 </span>
                 <span className="text-2xl font-bold text-primary">
                   ৳{formatNumberWithCommas(finalPrice)}
+                </span>
+              </div>
+              <div className="flex justify-between items-center p-3 rounded-lg bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-950/20 dark:to-yellow-950/20 border border-amber-200 dark:border-amber-800">
+                <span className="text-base font-medium flex items-center gap-2">
+                  {t("packages.view.coinsReward")}
+                </span>
+                <span className="text-2xl font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                  <Coins className="h-5 w-5" />
+                  {packageData.coinsReward}
                 </span>
               </div>
             </CardContent>

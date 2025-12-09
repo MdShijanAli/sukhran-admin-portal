@@ -222,140 +222,111 @@ export default function BusinessTab() {
         </CardContent>
       </Card>
 
-      {/* Regional Settings */}
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("settings.business.regional")}</CardTitle>
-          <CardDescription>
-            {t("settings.business.regionalDescription")}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="currency">{t("settings.business.currency")}</Label>
-            <Select value={currency} onValueChange={setCurrency}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="BDT">BDT - Bangladeshi Taka</SelectItem>
-                <SelectItem value="USD">USD - US Dollar</SelectItem>
-                <SelectItem value="EUR">EUR - Euro</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="timezone">{t("settings.business.timezone")}</Label>
-            <Select value={timezone} onValueChange={setTimezone}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Asia/Dhaka">Asia/Dhaka</SelectItem>
-                <SelectItem value="UTC">UTC</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex justify-end">
-            {hasPermission(permissions.settings.edit) && (
-              <Button onClick={handleSave} disabled={isSaving}>
-                {t("settings.actions.save")}
-              </Button>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Pricing Settings */}
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("settings.business.pricing")}</CardTitle>
-          <CardDescription>
-            {t("settings.business.pricingDescription")}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="vatPercentage">
-              {t("settings.business.vatPercentage")}
-            </Label>
-            <div className="flex gap-2">
-              <Input
-                id="vatPercentage"
-                type="number"
-                step="0.1"
-                value={vatPercentage}
-                onChange={(e) => setVatPercentage(Number(e.target.value))}
-              />
+      <div className="space-y-3">
+        {/* Regional Settings */}
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("settings.business.regional")}</CardTitle>
+            <CardDescription>
+              {t("settings.business.regionalDescription")}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="currency">
+                {t("settings.business.currency")}
+              </Label>
+              <Select value={currency} onValueChange={setCurrency}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="BDT">BDT - Bangladeshi Taka</SelectItem>
+                  <SelectItem value="USD">USD - US Dollar</SelectItem>
+                  <SelectItem value="EUR">EUR - Euro</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="timezone">
+                {t("settings.business.timezone")}
+              </Label>
+              <Select value={timezone} onValueChange={setTimezone}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Asia/Dhaka">Asia/Dhaka</SelectItem>
+                  <SelectItem value="UTC">UTC</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex justify-end">
               {hasPermission(permissions.settings.edit) && (
-                <Button onClick={handleSaveVAT} disabled={isSaving}>
+                <Button onClick={handleSave} disabled={isSaving}>
                   {t("settings.actions.save")}
                 </Button>
               )}
             </div>
-            <p className="text-xs text-muted-foreground">
-              {t("settings.business.vatDescription")}
-            </p>
-          </div>
+          </CardContent>
+        </Card>
 
-          <div className="space-y-2">
-            <Label htmlFor="minOrderAmount">
-              {t("settings.business.minOrderAmount")}
-            </Label>
-            <div className="flex gap-2">
-              <Input
-                id="minOrderAmount"
-                type="number"
-                value={minOrderAmount}
-                onChange={(e) => setMinOrderAmount(Number(e.target.value))}
-              />
-              {hasPermission(permissions.settings.edit) && (
-                <Button onClick={handleSaveMinOrder} disabled={isSaving}>
-                  {t("settings.actions.save")}
-                </Button>
-              )}
+        {/* Pricing Settings */}
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("settings.business.pricing")}</CardTitle>
+            <CardDescription>
+              {t("settings.business.pricingDescription")}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="vatPercentage">
+                {t("settings.business.vatPercentage")}
+              </Label>
+              <div className="flex gap-2">
+                <Input
+                  id="vatPercentage"
+                  type="number"
+                  step="0.1"
+                  value={vatPercentage}
+                  onChange={(e) => setVatPercentage(Number(e.target.value))}
+                />
+                {hasPermission(permissions.settings.edit) && (
+                  <Button onClick={handleSaveVAT} disabled={isSaving}>
+                    {t("settings.actions.save")}
+                  </Button>
+                )}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {t("settings.business.vatDescription")}
+              </p>
             </div>
-            <p className="text-xs text-muted-foreground">
-              {t("settings.business.minOrderDescription")}
-            </p>
-          </div>
-        </CardContent>
-      </Card>
 
-      {/* Package Settings */}
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("settings.business.package")}</CardTitle>
-          <CardDescription>
-            {t("settings.business.packageDescription")}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="minCustomPackageAmount">
-              {t("settings.business.minCustomPackageAmount")}
-            </Label>
-            <div className="flex gap-2">
-              <Input
-                id="minCustomPackageAmount"
-                type="number"
-                value={minCustomPackageAmount}
-                onChange={(e) =>
-                  setMinCustomPackageAmount(Number(e.target.value))
-                }
-              />
-              {hasPermission(permissions.settings.edit) && (
-                <Button onClick={handleSaveMinPackage} disabled={isSaving}>
-                  {t("settings.actions.save")}
-                </Button>
-              )}
+            <div className="space-y-2">
+              <Label htmlFor="minOrderAmount">
+                {t("settings.business.minOrderAmount")}
+              </Label>
+              <div className="flex gap-2">
+                <Input
+                  id="minOrderAmount"
+                  type="number"
+                  value={minOrderAmount}
+                  onChange={(e) => setMinOrderAmount(Number(e.target.value))}
+                />
+                {hasPermission(permissions.settings.edit) && (
+                  <Button onClick={handleSaveMinOrder} disabled={isSaving}>
+                    {t("settings.actions.save")}
+                  </Button>
+                )}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {t("settings.business.minOrderDescription")}
+              </p>
             </div>
-            <p className="text-xs text-muted-foreground">
-              {t("settings.business.minCustomPackageDescription")}
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

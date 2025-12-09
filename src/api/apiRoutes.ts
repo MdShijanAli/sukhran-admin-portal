@@ -85,6 +85,18 @@ export const apiRoutes = {
     create: createApiUrl("admin/packages"),
     update: (id: number | string) => createApiUrl(`admin/packages/${id}`),
     delete: (id: number | string) => createApiUrl(`admin/packages/${id}`),
+    packageSettings: createApiUrl("admin/package-settings"),
+    updatePackageSettings: createApiUrl(
+      "admin/package-settings/custom_package_min_amount"
+    ),
+    enablePackageSettings: createApiUrl(
+      "admin/package-settings/custom_package_enabled"
+    ),
+    packageSchedule: createApiUrl("admin/package-schedule-options"),
+    setupSchedule: createApiUrl("admin/package-schedule-options/bulk"),
+    packageScheduleBulkToggle: createApiUrl(
+      "admin/package-schedule-options/bulk-toggle"
+    ),
   },
 
   roles: {

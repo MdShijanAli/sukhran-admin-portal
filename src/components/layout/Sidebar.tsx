@@ -75,7 +75,7 @@ const menuItems = [
       {
         icon: Settings2,
         label: "nav.packageSettings",
-        path: "/packages/settings",
+        path: "/package/settings",
         permission: permissions.packages.view,
       },
     ],
