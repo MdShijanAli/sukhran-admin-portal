@@ -227,8 +227,11 @@ export default function PackageSettings() {
   };
 
   const handleEnabledChange = async (checked: boolean) => {
+    console.log("settings", settings);
+    // return;
     try {
       const result = await packageSettingsService.enablePackageSettings(
+        settings[1].id,
         checked
       );
       toast.success(t("packageSettings.messages.statusUpdated"));
@@ -424,21 +427,23 @@ export default function PackageSettings() {
             </div>
           ) : (
             <>
-              <div className="space-y-2">
-                <Label htmlFor="minAmount">
-                  {t("packageSettings.customPackageMinAmount")}
-                </Label>
-                <Input
-                  id="minAmount"
-                  type="number"
-                  value={customPackageMinAmount}
-                  onChange={(e) => setCustomPackageMinAmount(e.target.value)}
-                  placeholder={t("packageSettings.enterMinAmount")}
-                />
-                <p className="text-sm text-muted-foreground">
-                  {t("packageSettings.minAmountDesc")}
-                </p>
-              </div>
+              {customPackageEnabled && (
+                <div className="space-y-2">
+                  <Label htmlFor="minAmount">
+                    {t("packageSettings.customPackageMinAmount")}
+                  </Label>
+                  <Input
+                    id="minAmount"
+                    type="number"
+                    value={customPackageMinAmount}
+                    onChange={(e) => setCustomPackageMinAmount(e.target.value)}
+                    placeholder={t("packageSettings.enterMinAmount")}
+                  />
+                  <p className="text-sm text-muted-foreground">
+                    {t("packageSettings.minAmountDesc")}
+                  </p>
+                </div>
+              )}
 
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
@@ -456,13 +461,15 @@ export default function PackageSettings() {
                 />
               </div>
 
-              <Button
-                onClick={handleSaveGeneralSettings}
-                disabled={isSavingSettings}
-              >
-                <Save className="h-4 w-4 mr-2" />
-                {t("packageSettings.saveSettings")}
-              </Button>
+              {customPackageEnabled && (
+                <Button
+                  onClick={handleSaveGeneralSettings}
+                  disabled={isSavingSettings}
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  {t("packageSettings.saveSettings")}
+                </Button>
+              )}
             </>
           )}
         </CardContent>

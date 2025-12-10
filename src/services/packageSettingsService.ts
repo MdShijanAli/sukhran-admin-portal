@@ -13,7 +13,7 @@ interface PackageSettingsService {
   ) => Promise<unknown>;
   deleteScheduleOptions: (ids: number[]) => Promise<unknown>;
   bulkToggleSchedule: (ids: number[], isActive: boolean) => Promise<unknown>;
-  enablePackageSettings: (enabled: boolean) => Promise<unknown>;
+  enablePackageSettings: (id: number, enabled: boolean) => Promise<unknown>;
 }
 
 const packageSettingsService: PackageSettingsService = {
@@ -50,7 +50,7 @@ const packageSettingsService: PackageSettingsService = {
     }
   },
 
-  enablePackageSettings: async (enabled: boolean) => {
+  enablePackageSettings: async (id: number, enabled: boolean) => {
     const store = usePackageSettingsStore.getState();
     try {
       store.setLoading(true);
@@ -58,6 +58,9 @@ const packageSettingsService: PackageSettingsService = {
         apiRoutes.packages.enablePackageSettings,
         { value: enabled.toString() }
       );
+      if (response.status === 200) {
+        store.updateSetting(id, enabled.toString());
+      }
       return response.data;
     } catch (error) {
       store.setError("Failed to update enabled setting");
