@@ -14,6 +14,7 @@ import {
   Trash2,
   Eye,
   X,
+  Coins,
 } from "lucide-react";
 import { toast } from "sonner";
 import { usePackageStore } from "@/stores/packageStore";
@@ -288,12 +289,13 @@ function Packages() {
 
                       {/* Price Section */}
                       <div className="pt-1 space-y-1">
-                        <div className="flex items-baseline gap-2">
-                          {pricing.fixedPrice > 0 && (
-                            <p className="text-sm text-muted-foreground line-through">
-                              ৳{formatNumberWithCommas(pricing.fixedPrice)}
-                            </p>
-                          )}
+                        <div className="flex items-center gap-2">
+                          {pricing.fixedPrice !== pricing.currentPrice &&
+                            pricing.fixedPrice > 0 && (
+                              <p className="text-sm text-muted-foreground line-through">
+                                ৳{formatNumberWithCommas(pricing.fixedPrice)}
+                              </p>
+                            )}
                           {pricing.discountPercent > 0 && (
                             <Badge
                               variant="destructive"
@@ -301,6 +303,12 @@ function Packages() {
                             >
                               {pricing.discountPercent}% OFF
                             </Badge>
+                          )}
+                          {pkg.coinsReward > 0 && (
+                            <span className="text-sm font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                              <Coins className="h-4 w-4" />
+                              {pkg.coinsReward}
+                            </span>
                           )}
                         </div>
                         <p className="text-xl font-bold text-green-600">

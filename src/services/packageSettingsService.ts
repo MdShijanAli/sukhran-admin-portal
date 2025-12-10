@@ -27,6 +27,8 @@ const packageSettingsService: PackageSettingsService = {
     } catch (error) {
       store.setError("Failed to fetch package settings");
       throw error;
+    } finally {
+      store.setLoading(false);
     }
   },
 
@@ -43,6 +45,8 @@ const packageSettingsService: PackageSettingsService = {
     } catch (error) {
       store.setError("Failed to update setting");
       throw error;
+    } finally {
+      store.setLoading(false);
     }
   },
 
@@ -52,12 +56,14 @@ const packageSettingsService: PackageSettingsService = {
       store.setLoading(true);
       const response = await apiClient.put(
         apiRoutes.packages.enablePackageSettings,
-        { enabled }
+        { value: enabled.toString() }
       );
       return response.data;
     } catch (error) {
       store.setError("Failed to update enabled setting");
       throw error;
+    } finally {
+      store.setLoading(false);
     }
   },
 
@@ -71,6 +77,8 @@ const packageSettingsService: PackageSettingsService = {
     } catch (error) {
       store.setError("Failed to fetch schedule options");
       throw error;
+    } finally {
+      store.setLoading(false);
     }
   },
 
@@ -87,6 +95,8 @@ const packageSettingsService: PackageSettingsService = {
     } catch (error) {
       store.setError("Failed to setup schedule");
       throw error;
+    } finally {
+      store.setLoading(false);
     }
   },
 
@@ -105,6 +115,8 @@ const packageSettingsService: PackageSettingsService = {
     } catch (error) {
       store.setError("Failed to modify schedule");
       throw error;
+    } finally {
+      store.setLoading(false);
     }
   },
 
@@ -132,6 +144,8 @@ const packageSettingsService: PackageSettingsService = {
     } catch (error) {
       store.setError("Failed to delete schedule options");
       throw error;
+    } finally {
+      store.setLoading(false);
     }
   },
 
@@ -152,6 +166,8 @@ const packageSettingsService: PackageSettingsService = {
     } catch (error) {
       store.setError("Failed to toggle schedule status");
       throw error;
+    } finally {
+      store.setLoading(false);
     }
   },
 };

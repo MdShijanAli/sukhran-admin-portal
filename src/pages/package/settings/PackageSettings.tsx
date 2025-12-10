@@ -226,6 +226,18 @@ export default function PackageSettings() {
     }
   };
 
+  const handleEnabledChange = async (checked: boolean) => {
+    try {
+      const result = await packageSettingsService.enablePackageSettings(
+        checked
+      );
+      toast.success(t("packageSettings.messages.statusUpdated"));
+    } catch (error) {
+      console.error("Failed to toggle enabled status:", error);
+      toast.error(t("packageSettings.messages.failedToToggle"));
+    }
+  };
+
   const handleToggleOption = async (option: ScheduleOption) => {
     try {
       await packageSettingsService.modifySchedule([
@@ -440,7 +452,7 @@ export default function PackageSettings() {
                 <Switch
                   id="enabled"
                   checked={customPackageEnabled}
-                  onCheckedChange={setCustomPackageEnabled}
+                  onCheckedChange={handleEnabledChange}
                 />
               </div>
 
