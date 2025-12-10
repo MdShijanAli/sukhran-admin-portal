@@ -109,7 +109,7 @@ const packageSettingsService: PackageSettingsService = {
     const store = usePackageSettingsStore.getState();
     try {
       store.setLoading(true);
-      const response = await apiClient.post(apiRoutes.packages.setupSchedule, {
+      const response = await apiClient.put(apiRoutes.packages.setupSchedule, {
         options,
       });
       // Refetch to get updated data
@@ -127,7 +127,7 @@ const packageSettingsService: PackageSettingsService = {
     const store = usePackageSettingsStore.getState();
     try {
       store.setLoading(true);
-      const response = await apiClient.post(apiRoutes.packages.setupSchedule, {
+      const response = await apiClient.put(apiRoutes.packages.setupSchedule, {
         ids,
       });
       // Remove from store
