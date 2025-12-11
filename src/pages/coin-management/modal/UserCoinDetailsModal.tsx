@@ -132,7 +132,7 @@ export default function UserCoinDetailsModal({
                   </div>
                   <div className="flex-shrink-0">
                     <img
-                      src={details.user.image || defaultUserImage}
+                      src={details.user.image_url || defaultUserImage}
                       alt={details.user.name}
                       className="w-40 h-40 rounded-lg object-cover border"
                     />

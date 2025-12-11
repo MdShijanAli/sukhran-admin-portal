@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Column } from "@/components/table/BaseTable";
 import {
@@ -16,11 +16,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TopHolder } from "@/lib/types";
-import { Coins, Send, Eye } from "lucide-react";
+import { Coins, Send, Eye, SendIcon } from "lucide-react";
 import { formatNumberWithCommas } from "@/lib/utils";
 import SendCoinModal from "../modal/SendCoinModal";
 import UserCoinDetailsModal from "../modal/UserCoinDetailsModal";
@@ -133,10 +132,23 @@ export default function UserBalances({
     <>
       <Card>
         <CardHeader>
-          <CardTitle>{t("coinManagement.userBalances.title")}</CardTitle>
-          <CardDescription>
-            {t("coinManagement.userBalances.description")}
-          </CardDescription>
+          <div className="flex justify-between items-center">
+            <div>
+              <CardTitle>{t("coinManagement.userBalances.title")}</CardTitle>
+              <CardDescription>
+                {t("coinManagement.userBalances.description")}
+              </CardDescription>
+            </div>
+            <Button
+              onClick={() => {
+                setSelectedUser(null);
+                setShowSendCoinModal(true);
+              }}
+            >
+              <SendIcon className="h-4 w-4 mr-2" />
+              {t("coinManagement.userBalances.sendCoins")}
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="rounded-md border">
@@ -205,6 +217,7 @@ export default function UserBalances({
           onRefresh();
         }}
         selectedUser={selectedUser}
+        topHolders={topHolders}
       />
 
       {selectedUser && (
