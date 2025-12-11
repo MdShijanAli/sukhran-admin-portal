@@ -81,6 +81,7 @@
   "sendCoin": {
     "title": "Send Coins to User",
     "description": "Award coins to a user for special promotions or rewards",
+    "selectedUser": "Recipient User",
     "selectUser": "Select User",
     "selectUserPlaceholder": "Choose a user...",
     "amount": "Amount",

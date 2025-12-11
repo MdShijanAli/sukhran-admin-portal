@@ -204,7 +204,7 @@ export default function UserBalances({
         onSuccess={() => {
           onRefresh();
         }}
-        topHolders={topHolders}
+        selectedUser={selectedUser}
       />
 
       {selectedUser && (
