@@ -2,7 +2,7 @@ export interface Role {
   id: string;
   display_name: string;
   description?: string;
-  name: "admin" | "cxo" | "operator";
+  name: "admin" | "cxo" | "operator" | "customer";
 }
 
 export interface User {
