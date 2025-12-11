@@ -126,6 +126,7 @@
     "coinsSentError": "কয়েন পাঠাতে ব্যর্থ",
     "fillAllFields": "অনুগ্রহ করে সমস্ত প্রয়োজনীয় ক্ষেত্র পূরণ করুন",
     "invalidAmount": "অনুগ্রহ করে একটি বৈধ পরিমাণ লিখুন",
+    "reasonMinLength": "কারণ অন্তত ১০টি অক্ষর হতে হবে",
     "statisticsLoadError": "পরিসংখ্যান লোড করতে ব্যর্থ",
     "transactionsLoadError": "লেনদেন লোড করতে ব্যর্থ",
     "userBalancesLoadError": "ব্যবহারকারী ব্যালেন্স লোড করতে ব্যর্থ"

@@ -24,6 +24,7 @@ import { UserCoinDetails } from "@/lib/types";
 import { Coins, TrendingUp, TrendingDown, Wallet } from "lucide-react";
 import { formatNumberWithCommas } from "@/lib/utils";
 import coinService from "@/services/coinService";
+import defaultUserImage from "@/assets/images/avatar-ractangle.jpg";
 
 interface UserCoinDetailsModalProps {
   open: boolean;
@@ -85,9 +86,9 @@ export default function UserCoinDetailsModal({
       closeButtonText={t("coinManagement.userDetails.close")}
       size="2xl"
     >
-      <div className="space-y-6">
+      <div className="space-y-3">
         {loading && !details ? (
-          <div className="space-y-4">
+          <div className="space-y-3">
             <Skeleton className="h-32 w-full" />
             <Skeleton className="h-32 w-full" />
             <Skeleton className="h-32 w-full" />
@@ -106,24 +107,35 @@ export default function UserCoinDetailsModal({
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">
-                      {t("coinManagement.userDetails.name")}
-                    </p>
-                    <p className="font-medium">{details.user.name}</p>
+                <div className="flex gap-4 items-start">
+                  <div className="flex-1 space-y-3">
+                    <div>
+                      <p className="text-sm text-muted-foreground">
+                        {t("coinManagement.userDetails.name")}
+                      </p>
+                      <p className="font-medium">{details.user.name}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">
+                        {t("coinManagement.userDetails.email")}
+                      </p>
+                      <p className="font-medium text-sm">
+                        {details.user.email}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">
+                        {t("coinManagement.userDetails.mobile")}
+                      </p>
+                      <p className="font-medium">{details.user.mobile}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">
-                      {t("coinManagement.userDetails.email")}
-                    </p>
-                    <p className="font-medium text-sm">{details.user.email}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">
-                      {t("coinManagement.userDetails.mobile")}
-                    </p>
-                    <p className="font-medium">{details.user.mobile}</p>
+                  <div className="flex-shrink-0">
+                    <img
+                      src={details.user.image || defaultUserImage}
+                      alt={details.user.name}
+                      className="w-40 h-40 rounded-lg object-cover border"
+                    />
                   </div>
                 </div>
               </CardContent>
@@ -137,7 +149,7 @@ export default function UserCoinDetailsModal({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-3">
                   <div className="flex flex-col items-center p-4 bg-amber-50 dark:bg-amber-950 rounded-lg">
                     <Coins className="h-6 w-6 text-amber-600 mb-2" />
                     <p className="text-sm text-muted-foreground">
@@ -177,7 +189,7 @@ export default function UserCoinDetailsModal({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-3">
                   <div className="flex items-center gap-3 p-3 border rounded-lg">
                     <TrendingUp className="h-5 w-5 text-green-600" />
                     <div>
@@ -332,7 +344,7 @@ export default function UserCoinDetailsModal({
 
                 {/* Pagination */}
                 {details.pagination.last_page > 1 && (
-                  <div className="flex items-center justify-between mt-4">
+                  <div className="flex items-center justify-between mt-3">
                     <p className="text-sm text-muted-foreground">
                       Showing {(currentPage - 1) * 10 + 1} to{" "}
                       {Math.min(currentPage * 10, details.pagination.total)} of{" "}

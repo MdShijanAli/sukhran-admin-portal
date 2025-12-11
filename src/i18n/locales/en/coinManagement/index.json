@@ -126,6 +126,7 @@
     "coinsSentError": "Failed to send coins",
     "fillAllFields": "Please fill in all required fields",
     "invalidAmount": "Please enter a valid amount",
+    "reasonMinLength": "Reason must be at least 10 characters",
     "statisticsLoadError": "Failed to load statistics",
     "transactionsLoadError": "Failed to load transactions",
     "userBalancesLoadError": "Failed to load user balances"

@@ -374,6 +374,7 @@ export interface CoinUser {
   name: string;
   email: string;
   mobile?: string;
+  image: string | null;
 }
 
 export interface CoinTransaction {

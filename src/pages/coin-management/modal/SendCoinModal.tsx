@@ -26,6 +26,7 @@ export default function SendCoinModal({
 }: SendCoinModalProps) {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [reasonError, setReasonError] = useState<string>("");
   const [formData, setFormData] = useState<SendCoinPayload>({
     user_id: selectedUser?.user.id || 0,
     amount: 0,
@@ -44,6 +45,11 @@ export default function SendCoinModal({
       return;
     }
 
+    if (formData.reason.length < 10) {
+      setReasonError(t("coinManagement.messages.reasonMinLength"));
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       await coinService.sendCoin(formData);
@@ -52,7 +58,12 @@ export default function SendCoinModal({
       onClose();
     } catch (error) {
       console.error("Error sending coins:", error);
-      toast.error(t("coinManagement.messages.coinsSentError"));
+      toast.error(
+        t(
+          error.response.data.error_message ||
+            "coinManagement.messages.coinsSentError"
+        )
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -65,12 +76,14 @@ export default function SendCoinModal({
         amount: 0,
         reason: "",
       });
+      setReasonError("");
     } else if (!open) {
       setFormData({
         user_id: 0,
         amount: 0,
         reason: "",
       });
+      setReasonError("");
     }
   }, [open, selectedUser]);
 
@@ -142,12 +155,23 @@ export default function SendCoinModal({
           <Textarea
             id="reason"
             value={formData.reason}
-            onChange={(e) =>
-              setFormData({ ...formData, reason: e.target.value })
-            }
+            onChange={(e) => {
+              const value = e.target.value;
+              setFormData({ ...formData, reason: value });
+              if (value.length > 0 && value.length < 10) {
+                setReasonError(t("coinManagement.messages.reasonMinLength"));
+              } else {
+                setReasonError("");
+              }
+            }}
             placeholder={t("coinManagement.sendCoin.reasonPlaceholder")}
             rows={4}
+            className={reasonError ? "border-red-500" : ""}
           />
+          {reasonError && <p className="text-sm text-red-500">{reasonError}</p>}
+          <p className="text-xs text-muted-foreground">
+            {formData.reason.length}/10 characters minimum
+          </p>
         </div>
       </div>
     </BaseModal>
