@@ -106,9 +106,9 @@ const menuItems = [
   },
   {
     icon: Coins,
-    label: "nav.loyaltyRewards",
-    path: "/loyalty-rewards",
-    permission: permissions.loyaltyRewards.view,
+    label: "nav.coinManagement",
+    path: "/coin-management",
+    permission: permissions.coinManagement.view,
   },
   {
     icon: Mail,

@@ -367,3 +367,100 @@ export interface ScheduleOptionFormData {
   isActive: boolean;
   isDefault: boolean;
 }
+
+// Coin Management Types
+export interface CoinUser {
+  id: number;
+  name: string;
+  email: string;
+  mobile?: string;
+}
+
+export interface CoinTransaction {
+  id: number;
+  user: CoinUser;
+  type: "earned" | "spent";
+  amount: number;
+  reason: string;
+  description: string;
+  balance_after: number;
+  reference_id: string | null;
+  created_at: string;
+}
+
+export interface CoinBalance {
+  total_coins: number;
+  locked_coins: number;
+  available_coins: number;
+}
+
+export interface CoinStatistics {
+  total_earned: number;
+  total_spent: number;
+  net_coins: number;
+}
+
+export interface UserCoinDetails {
+  user: CoinUser;
+  balance: CoinBalance;
+  statistics: CoinStatistics;
+  transactions: CoinTransaction[];
+  pagination: PaginationMeta;
+}
+
+export interface TopHolder {
+  user: CoinUser;
+  total_coins: number;
+  locked_coins: number;
+  available_coins: number;
+}
+
+export interface CoinOverview {
+  total_coins_in_circulation: number;
+  total_locked_coins: number;
+  total_available_coins: number;
+  users_with_coins: number;
+  coin_value: string;
+}
+
+export interface PeriodStats {
+  earned: number;
+  spent: number;
+  net: number;
+}
+
+export interface ReasonBreakdown {
+  reason: string;
+  total: number;
+  count: number;
+}
+
+export interface CoinBreakdown {
+  earned_by_reason: ReasonBreakdown[];
+  spent_by_reason: ReasonBreakdown[];
+}
+
+export interface DailyTrend {
+  date: string;
+  earned: number;
+  spent: number;
+  net: number;
+}
+
+export interface CoinStatisticsResponse {
+  overview: CoinOverview;
+  today: PeriodStats;
+  this_week: PeriodStats;
+  this_month: PeriodStats;
+  all_time: PeriodStats;
+  breakdown: CoinBreakdown;
+  top_holders: TopHolder[];
+  recent_transactions: CoinTransaction[];
+  daily_trend: DailyTrend[];
+}
+
+export interface SendCoinPayload {
+  user_id: number;
+  amount: number;
+  reason: string;
+}

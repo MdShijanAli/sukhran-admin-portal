@@ -35,6 +35,7 @@
   "lastUpdated": "শেষ আপডেট",
   "created": "তৈরি",
   "info": "তথ্য",
+  "refreshSuccess": "রিফ্রেশ সফল",
   "nav": {
     "dashboard": "ড্যাশবোর্ড",
     "cxoDashboard": "সিএক্সও ড্যাশবোর্ড",
@@ -49,7 +50,7 @@
     "orders": "অর্ডার",
     "delivery": "ডেলিভারি",
     "transactions": "লেনদেন",
-    "loyaltyRewards": "লয়ালটি এবং রিওয়ার্ডস",
+    "coinManagement": "কয়েন ম্যানেজমেন্ট",
     "marketing": "মার্কেটিং",
     "support": "গ্রাহক সহায়তা",
     "analytics": "বিশ্লেষণ",

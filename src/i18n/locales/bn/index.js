@@ -12,6 +12,7 @@ import delivery from "./delivery/index.json";
 import settings from "./settings/index.json";
 import coupon from "./coupon/index.json";
 import transactions from "./transactions/index.json";
+import coinManagement from "./coinManagement/index.json";
 
 /**
  * follow the file structure.
@@ -34,6 +35,7 @@ const combined = {
   settings,
   coupon,
   transactions,
+  coinManagement,
 };
 
 export default combined;

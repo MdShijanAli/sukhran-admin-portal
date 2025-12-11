@@ -84,11 +84,11 @@ const permissions = {
   },
 
   // Loyalty & Rewards
-  loyaltyRewards: {
-    view: "loyalty_rewards.view",
-    create: "loyalty_rewards.create",
-    edit: "loyalty_rewards.update",
-    delete: "loyalty_rewards.delete",
+  coinManagement: {
+    view: "coin_management.view",
+    create: "coin_management.create",
+    edit: "coin_management.update",
+    delete: "coin_management.delete",
   },
 
   // Marketing

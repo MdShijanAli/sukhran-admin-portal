@@ -1,0 +1,132 @@
+{
+  "title": "Coin Management",
+  "description": "Manage reward coins, policies, and user balances",
+  "subtitle": "View statistics, send coins, and manage user balances",
+  "refresh": "Refresh",
+  "active": "Active",
+  "inactive": "Inactive",
+
+  "tabs": {
+    "statistics": "Statistics",
+    "userBalances": "User Balances",
+    "allTransactions": "All Transactions"
+  },
+
+  "statistics": {
+    "title": "Coin Statistics",
+    "overview": "Overview",
+    "totalCoins": "Total Coins in Circulation",
+    "lockedCoins": "Locked Coins",
+    "availableCoins": "Available Coins",
+    "usersWithCoins": "Users with Coins",
+    "coinValue": "Coin Value",
+    "today": "Today",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "allTime": "All Time",
+    "earned": "Earned",
+    "spent": "Spent",
+    "net": "Net",
+    "topHolders": "Top Coin Holders",
+    "recentTransactions": "Recent Transactions",
+    "user": "User",
+    "balance": "Balance",
+    "noData": "No data available"
+  },
+
+  "userBalances": {
+    "title": "User Coin Balances",
+    "description": "View and manage user reward balances",
+    "searchPlaceholder": "Search by name or email...",
+    "columns": {
+      "sl": "SL",
+      "user": "User",
+      "email": "Email",
+      "mobile": "Mobile",
+      "currentBalance": "Current Balance",
+      "totalEarned": "Total Earned",
+      "totalSpent": "Total Spent",
+      "lastActivity": "Last Activity",
+      "actions": "Actions"
+    },
+    "sendCoins": "Send Coins",
+    "viewDetails": "View Details",
+    "noUsers": "No users found",
+    "loading": "Loading user balances..."
+  },
+
+  "transactions": {
+    "title": "All Coin Transactions",
+    "description": "View all coin transactions across users",
+    "searchPlaceholder": "Search by user or description...",
+    "columns": {
+      "sl": "SL",
+      "id": "ID",
+      "user": "User",
+      "type": "Type",
+      "amount": "Amount",
+      "reason": "Reason",
+      "description": "Description",
+      "balanceAfter": "Balance After",
+      "date": "Date"
+    },
+    "types": {
+      "earned": "Earned",
+      "spent": "Spent"
+    },
+    "noTransactions": "No transactions found",
+    "loading": "Loading transactions..."
+  },
+
+  "sendCoin": {
+    "title": "Send Coins to User",
+    "description": "Award coins to a user for special promotions or rewards",
+    "selectUser": "Select User",
+    "selectUserPlaceholder": "Choose a user...",
+    "amount": "Amount",
+    "amountPlaceholder": "Enter coin amount",
+    "reason": "Reason",
+    "reasonPlaceholder": "e.g., Special promotion, Birthday bonus, Referral reward",
+    "cancel": "Cancel",
+    "send": "Send Coins",
+    "sending": "Sending...",
+    "searchUsers": "Search users..."
+  },
+
+  "userDetails": {
+    "title": "User Coin Details",
+    "loading": "Loading user details...",
+    "error": "Failed to load user details",
+    "userInfo": "User Information",
+    "name": "Name",
+    "email": "Email",
+    "mobile": "Mobile",
+    "balance": "Balance Information",
+    "totalCoins": "Total Coins",
+    "lockedCoins": "Locked Coins",
+    "availableCoins": "Available Coins",
+    "statistics": "Statistics",
+    "totalEarned": "Total Earned",
+    "totalSpent": "Total Spent",
+    "netCoins": "Net Coins",
+    "transactionHistory": "Transaction History",
+    "noTransactions": "No transactions found",
+    "close": "Close",
+    "type": "Type",
+    "amount": "Amount",
+    "reason": "Reason",
+    "description": "Description",
+    "balanceAfter": "Balance After",
+    "date": "Date"
+  },
+
+  "messages": {
+    "coinsSentSuccess": "Coins sent successfully",
+    "coinsSentError": "Failed to send coins",
+    "fillAllFields": "Please fill in all required fields",
+    "invalidAmount": "Please enter a valid amount",
+    "statisticsLoadError": "Failed to load statistics",
+    "transactionsLoadError": "Failed to load transactions",
+    "userBalancesLoadError": "Failed to load user balances"
+  }
+}

@@ -24,7 +24,7 @@ import Returns from "@/pages/Returns";
 import RoleManagement from "@/pages/roles/RoleManagement";
 import Notifications from "@/pages/Notifications";
 import Settings from "@/pages/settings/Settings";
-import LoyaltyRewards from "@/pages/LoyaltyRewards";
+import CoinManagement from "@/pages/coin-management/CoinManagement";
 import Family from "@/pages/Family";
 import Analytics from "@/pages/Analytics";
 import Marketing from "@/pages/Marketing";
@@ -240,10 +240,10 @@ const AppRoutes: React.FC = () => {
           }
         />
         <Route
-          path="loyalty-rewards"
+          path="coin-management"
           element={
             <PrivateRoute>
-              <LoyaltyRewards />
+              <CoinManagement />
             </PrivateRoute>
           }
         />
@@ -296,6 +296,7 @@ const AppRoutes: React.FC = () => {
           }
         />
         <Route index element={<Navigate to="/dashboard" replace />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
