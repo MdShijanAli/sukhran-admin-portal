@@ -39,7 +39,10 @@ export default function SetDeliveryDateModal({
       onClose();
     } catch (error) {
       console.error("Error setting delivery date:", error);
-      toast.error(t("orders.packageOrders.messages.failedToSetDate"));
+      toast.error(
+        error.response.data.error_message ||
+          t("orders.packageOrders.messages.failedToSetDate")
+      );
     } finally {
       setIsSubmitting(false);
     }

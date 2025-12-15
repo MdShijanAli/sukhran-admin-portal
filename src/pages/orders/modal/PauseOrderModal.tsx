@@ -10,6 +10,7 @@ interface PauseOrderModalProps {
   open: boolean;
   onClose: () => void;
   orderId: number;
+  orderNumber?: string;
   onSuccess: () => void;
 }
 
@@ -17,12 +18,19 @@ export default function PauseOrderModal({
   open,
   onClose,
   orderId,
+  orderNumber,
   onSuccess,
 }: PauseOrderModalProps) {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reason, setReason] = useState("");
   const [error, setError] = useState("");
+
+  const handleClose = () => {
+    setReason("");
+    setError("");
+    onClose();
+  };
 
   const handleSubmit = async () => {
     if (!reason.trim()) {
@@ -43,7 +51,7 @@ export default function PauseOrderModal({
       await orderService.pausePackageOrder(orderId, { reason: reason.trim() });
       toast.success(t("orders.packageOrders.messages.orderPaused"));
       onSuccess();
-      onClose();
+      handleClose();
     } catch (error) {
       console.error("Error pausing order:", error);
       toast.error(t("orders.packageOrders.messages.failedToPause"));
@@ -55,7 +63,7 @@ export default function PauseOrderModal({
   return (
     <BaseModal
       open={open}
-      onOpenChange={onClose}
+      onOpenChange={handleClose}
       title={t("orders.packageOrders.modals.pauseOrder.title")}
       onSubmit={handleSubmit}
       isSubmitting={isSubmitting}

@@ -10,6 +10,7 @@ interface ResumeOrderModalProps {
   open: boolean;
   onClose: () => void;
   orderId: number;
+  orderNumber?: string;
   onSuccess: () => void;
 }
 
@@ -17,12 +18,19 @@ export default function ResumeOrderModal({
   open,
   onClose,
   orderId,
+  orderNumber,
   onSuccess,
 }: ResumeOrderModalProps) {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reason, setReason] = useState("");
   const [error, setError] = useState("");
+
+  const handleClose = () => {
+    setReason("");
+    setError("");
+    onClose();
+  };
 
   const handleSubmit = async () => {
     if (!reason.trim()) {
@@ -43,7 +51,7 @@ export default function ResumeOrderModal({
       await orderService.resumePackageOrder(orderId, { reason: reason.trim() });
       toast.success(t("orders.packageOrders.messages.orderResumed"));
       onSuccess();
-      onClose();
+      handleClose();
     } catch (error) {
       console.error("Error resuming order:", error);
       toast.error(t("orders.packageOrders.messages.failedToResume"));
@@ -55,7 +63,7 @@ export default function ResumeOrderModal({
   return (
     <BaseModal
       open={open}
-      onOpenChange={onClose}
+      onOpenChange={handleClose}
       title={t("orders.packageOrders.modals.resumeOrder.title")}
       onSubmit={handleSubmit}
       isSubmitting={isSubmitting}

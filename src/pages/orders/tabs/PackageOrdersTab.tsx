@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { PackageOrder, PackageOrderBatch } from "@/lib/types";
 import { usePackageOrderStore } from "@/stores/packageOrderStore";
@@ -11,6 +11,7 @@ import PackageBatchDetailsModal from "../modal/PackageBatchDetailsModal";
 import { ActionItem, DropdownMenuActions } from "@/components/table";
 import usePermissions from "@/hooks/use-permissions";
 import permissions from "@/lib/permissions";
+import UpdateDeliveryTimeModal from "../modal/UpdateDeliveryTimeModal";
 
 export default function PackageOrdersTab() {
   const { t } = useTranslation();
@@ -20,11 +21,26 @@ export default function PackageOrdersTab() {
   );
   const [showDetails, setShowDetails] = useState(false);
   const { hasPermission } = usePermissions();
+  const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<PackageOrderBatch | null>(
+    null
+  );
+  const [showUpdateDeliveryTimeModal, setShowUpdateDeliveryTimeModal] =
+    useState(false);
 
   const handleViewDetails = (batch: PackageOrderBatch) => {
     setSelectedBatch(batch);
     setShowDetails(true);
   };
+
+  //   const handleUpdateDeliveryTime = (order: PackageOrderBatch) => {
+  //     setSelectedOrder(order);
+  //     setShowUpdateDeliveryTimeModal(true);
+  //   };
+
+  const handleSetRefresh = useCallback((refreshFn: () => void) => {
+    setRefreshTable(() => refreshFn);
+  }, []);
 
   // Define actions for dropdown menu
   const orderActions = (
@@ -188,6 +204,7 @@ export default function PackageOrdersTab() {
         service={orderService}
         serviceMethod={orderService.fetchPackageOrders}
         store={store}
+        onRefresh={handleSetRefresh}
         emptyMessage={t("orders.packageOrders.noOrders")}
         getRowKey={(batch) => batch.batch_id}
       />
@@ -200,6 +217,13 @@ export default function PackageOrdersTab() {
         }}
         batchId={selectedBatch?.batch_id || null}
       />
+
+      {/* <UpdateDeliveryTimeModal
+        open={showUpdateDeliveryTimeModal}
+        onClose={setShowUpdateDeliveryTimeModal}
+        orderId={selectedOrder?.batch_id || null}
+        onSuccess={() => refreshTable?.()}
+      /> */}
     </>
   );
 }

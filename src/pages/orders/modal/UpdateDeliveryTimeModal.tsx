@@ -10,7 +10,7 @@ import orderService from "@/services/orderService";
 interface UpdateDeliveryTimeModalProps {
   open: boolean;
   onClose: (value: boolean) => void;
-  orderId: number | null;
+  orderId: number | string | null;
   onSuccess?: () => void;
 }
 

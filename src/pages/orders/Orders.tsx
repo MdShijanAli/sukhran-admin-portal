@@ -310,9 +310,11 @@ function Orders() {
       key: "status",
       label: t("orders.columns.status"),
       render: (order) => (
-        <Badge variant={order.status}>
-          {t(`orders.status.${order.status}`)}
-        </Badge>
+        <div className="w-[150px]">
+          <Badge variant={order.status}>
+            {t(`orders.status.${order.status}`)}
+          </Badge>
+        </div>
       ),
       className: "text-center",
     },

@@ -12,6 +12,7 @@ interface CancelOrderModalProps {
   open: boolean;
   onClose: () => void;
   orderId: number;
+  orderNumber?: string;
   onSuccess: () => void;
 }
 
@@ -19,12 +20,19 @@ export default function CancelOrderModal({
   open,
   onClose,
   orderId,
+  orderNumber,
   onSuccess,
 }: CancelOrderModalProps) {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reason, setReason] = useState("");
   const [error, setError] = useState("");
+
+  const handleClose = () => {
+    setReason("");
+    setError("");
+    onClose();
+  };
 
   const handleSubmit = async () => {
     if (!reason.trim()) {
@@ -45,7 +53,7 @@ export default function CancelOrderModal({
       await orderService.cancelPackageOrder(orderId, { reason: reason.trim() });
       toast.success(t("orders.packageOrders.messages.orderCancelled"));
       onSuccess();
-      onClose();
+      handleClose();
     } catch (error) {
       console.error("Error cancelling order:", error);
       toast.error(t("orders.packageOrders.messages.failedToCancel"));
@@ -57,7 +65,7 @@ export default function CancelOrderModal({
   return (
     <BaseModal
       open={open}
-      onOpenChange={onClose}
+      onOpenChange={handleClose}
       title={t("orders.packageOrders.modals.cancelOrder.title")}
       onSubmit={handleSubmit}
       isSubmitting={isSubmitting}

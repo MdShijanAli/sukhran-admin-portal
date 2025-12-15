@@ -18,7 +18,9 @@
     "delivered": "Delivered",
     "cancelled": "Cancelled",
     "returned": "Returned",
-    "cancelled_at_delivery": "Cancelled at Delivery"
+    "paused": "Paused",
+    "cancelled_at_delivery": "Cancelled at Delivery",
+    "confirmed": "Confirmed"
   },
   "paymentStatus": {
     "pending": "Pending",
@@ -36,6 +38,7 @@
   "columns": {
     "sl": "Sl.",
     "orderNumber": "Order #",
+    "orderID": "Order ID",
     "customer": "Customer",
     "items": "Items",
     "total": "Total",
@@ -56,7 +59,11 @@
     "cancelOrder": "Cancel Order",
     "updateDeliveryTime": "Update Delivery Time",
     "orders": "Orders",
-    "package_orders": "Package Orders"
+    "package_orders": "Package Orders",
+    "actions": "Actions",
+    "edit": "Edit",
+    "pauseOrder": "Pause Order",
+    "setDeliveryDate": "Set Delivery Date"
   },
   "form": {
     "createNewOrder": "Create New Order",
@@ -172,6 +179,7 @@
   },
   "packageOrders": {
     "title": "Package Orders",
+    "quantity": "Quantity",
     "subtitle": "Manage subscription package orders",
     "batchId": "Batch ID",
     "customer": "Customer",
@@ -220,30 +228,50 @@
       },
       "modifyItems": {
         "title": "Modify Order Items",
+        "items": "Items",
+        "product": "Product",
         "sku": "SKU ID",
         "quantity": "Quantity",
         "reason": "Reason",
         "reasonPlaceholder": "Enter reason for modification",
         "addItem": "Add Item",
-        "removeItem": "Remove"
+        "removeItem": "Remove",
+        "validation": {
+          "minimumOneItem": "Order must have at least one item",
+          "reasonRequired": "Reason is required",
+          "reasonMinLength": "Reason must be at least 10 characters long"
+        }
       },
       "pauseOrder": {
         "title": "Pause Order",
         "message": "Are you sure you want to pause this order?",
         "reason": "Reason",
-        "reasonPlaceholder": "Enter reason for pausing"
+        "reasonPlaceholder": "Enter reason for pausing",
+        "validation": {
+          "reasonRequired": "Reason is required",
+          "reasonMinLength": "Reason must be at least 10 characters long"
+        }
       },
       "resumeOrder": {
         "title": "Resume Order",
         "message": "Are you sure you want to resume this order?",
         "reason": "Reason",
-        "reasonPlaceholder": "Enter reason for resuming"
+        "reasonPlaceholder": "Enter reason for resuming",
+        "validation": {
+          "reasonRequired": "Reason is required",
+          "reasonMinLength": "Reason must be at least 10 characters long"
+        }
       },
       "cancelOrder": {
         "title": "Cancel Order",
         "message": "Are you sure you want to cancel this order?",
         "reason": "Reason",
-        "reasonPlaceholder": "Enter reason for cancellation"
+        "reasonPlaceholder": "Enter reason for cancellation",
+        "warning": "This action cannot be undone. The order will be permanently cancelled.",
+        "validation": {
+          "reasonRequired": "Reason is required",
+          "reasonMinLength": "Reason must be at least 10 characters long"
+        }
       }
     }
   }

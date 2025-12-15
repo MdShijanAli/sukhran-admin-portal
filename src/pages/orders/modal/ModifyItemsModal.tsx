@@ -36,14 +36,10 @@ export default function ModifyItemsModal({
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [items, setItems] = useState<PackageOrderItem[]>([]);
-  const [reason, setReason] = useState("");
-  const [error, setError] = useState("");
 
   useEffect(() => {
     if (open) {
       setItems([...currentItems]);
-      setReason("");
-      setError("");
     }
   }, [open, currentItems]);
 
@@ -64,34 +60,24 @@ export default function ModifyItemsModal({
   };
 
   const handleSubmit = async () => {
-    if (!reason.trim()) {
-      setError(
-        t("orders.packageOrders.modals.modifyItems.validation.reasonRequired")
-      );
-      return;
-    }
-    if (reason.trim().length < 10) {
-      setError(
-        t("orders.packageOrders.modals.modifyItems.validation.reasonMinLength")
-      );
-      return;
-    }
-
     setIsSubmitting(true);
     try {
       await orderService.modifyPackageOrderItems(orderId, {
-        items: items.map((item) => ({
+        addons: items.map((item) => ({
+          product_id: parseInt(item.product_id),
           sku_id: parseInt(item.sku_id),
           quantity: parseInt(item.quantity),
         })),
-        reason: reason.trim(),
       });
       toast.success(t("orders.packageOrders.messages.itemsModified"));
       onSuccess();
       onClose();
     } catch (error) {
       console.error("Error modifying items:", error);
-      toast.error(t("orders.packageOrders.messages.failedToModify"));
+      toast.error(
+        error.response.data.error_message ||
+          t("orders.packageOrders.messages.failedToModify")
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -120,13 +106,20 @@ export default function ModifyItemsModal({
                   <TableHead className="w-32">
                     {t("orders.packageOrders.modals.modifyItems.quantity")}
                   </TableHead>
-                  <TableHead className="w-24">{t("actions.actions")}</TableHead>
+                  <TableHead className="w-24">{t("actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {items.map((item, index) => (
                   <TableRow key={`${item.product_id}-${item.sku_id}`}>
-                    <TableCell>
+                    <TableCell className="flex items-center gap-3">
+                      <div className="w-12 h-12">
+                        <img
+                          className="w-full h-full object-cover object-top"
+                          src={item.image || ""}
+                          alt={item.product_name}
+                        />
+                      </div>
                       <div>
                         <div className="font-medium">{item.product_name}</div>
                         <div className="text-sm text-gray-500">
@@ -167,25 +160,6 @@ export default function ModifyItemsModal({
               </TableBody>
             </Table>
           </div>
-        </div>
-
-        <div>
-          <Label htmlFor="reason">
-            {t("orders.packageOrders.modals.modifyItems.reason")} *
-          </Label>
-          <Textarea
-            id="reason"
-            value={reason}
-            onChange={(e) => {
-              setReason(e.target.value);
-              setError("");
-            }}
-            placeholder={t(
-              "orders.packageOrders.modals.modifyItems.reasonPlaceholder"
-            )}
-            rows={3}
-          />
-          {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
         </div>
       </div>
     </BaseModal>

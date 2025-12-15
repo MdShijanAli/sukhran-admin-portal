@@ -493,6 +493,7 @@ export interface PackageOrderItem {
   quantity: string;
   unit_price: number;
   item_cost: number;
+  image?: string | null;
 }
 
 export interface PackageOrder {
@@ -540,11 +541,11 @@ export interface SetDeliveryDatePayload {
 }
 
 export interface ModifyItemsPayload {
-  items: Array<{
+  addons: Array<{
+    product_id: number;
     sku_id: number;
     quantity: number;
   }>;
-  reason: string;
 }
 
 export interface PauseOrderPayload {

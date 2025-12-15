@@ -17,7 +17,10 @@
     "shipped": "প্রেরিত",
     "delivered": "ডেলিভারি সম্পন্ন",
     "cancelled": "বাতিল",
-    "returned": "ফেরত"
+    "returned": "ফেরত",
+    "paused": "বন্ধ",
+    "cancelled_at_delivery": "ডেলিভারিতে বাতিল",
+    "confirmed": "নিশ্চিত"
   },
   "paymentStatus": {
     "pending": "মুলতুবি",
@@ -35,6 +38,7 @@
   "columns": {
     "sl": "ক্রমিক",
     "orderNumber": "অর্ডার #",
+    "orderID": "অর্ডার আইডি",
     "customer": "গ্রাহক",
     "items": "আইটেম",
     "total": "মোট",
@@ -55,7 +59,11 @@
     "cancelOrder": "অর্ডার বাতিল করুন",
     "updateDeliveryTime": "ডেলিভারি সময় আপডেট করুন",
     "orders": "অর্ডারসমূহ",
-    "package_orders": "প্যাকেজ অর্ডারসমূহ"
+    "package_orders": "প্যাকেজ অর্ডারসমূহ",
+    "actions": "কার্যক্রম",
+    "edit": "সম্পাদনা",
+    "pauseOrder": "অর্ডার বন্ধ করুন",
+    "setDeliveryDate": "ডেলিভারির তারিখ নির্ধারণ করুন"
   },
   "form": {
     "createNewOrder": "নতুন অর্ডার তৈরি করুন",
@@ -171,6 +179,7 @@
   },
   "packageOrders": {
     "title": "প্যাকেজ অর্ডার",
+    "quantity": "পরিমাণ",
     "subtitle": "সাবস্ক্রিপশন প্যাকেজ অর্ডার পরিচালনা করুন",
     "batchId": "ব্যাচ আইডি",
     "customer": "গ্রাহক",
@@ -219,30 +228,50 @@
       },
       "modifyItems": {
         "title": "অর্ডার আইটেম পরিবর্তন করুন",
+        "items": "আইটেমগুলি",
+        "product": "পণ্য",
         "sku": "SKU আইডি",
         "quantity": "পরিমাণ",
         "reason": "কারণ",
         "reasonPlaceholder": "পরিবর্তনের কারণ লিখুন",
         "addItem": "আইটেম যোগ করুন",
-        "removeItem": "সরান"
+        "removeItem": "সরান",
+        "validation": {
+          "minimumOneItem": "অর্ডারে কমপক্ষে একটি আইটেম থাকতে হবে",
+          "reasonRequired": "কারণ আবশ্যক",
+          "reasonMinLength": "কারণ কমপক্ষে 10 অক্ষরের হতে হবে"
+        }
       },
       "pauseOrder": {
         "title": "অর্ডার বন্ধ করুন",
         "message": "আপনি কি নিশ্চিত এই অর্ডার বন্ধ করতে চান?",
         "reason": "কারণ",
-        "reasonPlaceholder": "বন্ধ করার কারণ লিখুন"
+        "reasonPlaceholder": "বন্ধ করার কারণ লিখুন",
+        "validation": {
+          "reasonRequired": "কারণ আবশ্যক",
+          "reasonMinLength": "কারণ কমপক্ষে 10 অক্ষরের হতে হবে"
+        }
       },
       "resumeOrder": {
         "title": "অর্ডার পুনরায় শুরু করুন",
         "message": "আপনি কি নিশ্চিত এই অর্ডার পুনরায় শুরু করতে চান?",
         "reason": "কারণ",
-        "reasonPlaceholder": "পুনরায় শুরু করার কারণ লিখুন"
+        "reasonPlaceholder": "পুনরায় শুরু করার কারণ লিখুন",
+        "validation": {
+          "reasonRequired": "কারণ আবশ্যক",
+          "reasonMinLength": "কারণ কমপক্ষে 10 অক্ষরের হতে হবে"
+        }
       },
       "cancelOrder": {
         "title": "অর্ডার বাতিল করুন",
         "message": "আপনি কি নিশ্চিত এই অর্ডার বাতিল করতে চান?",
         "reason": "কারণ",
-        "reasonPlaceholder": "বাতিল করার কারণ লিখুন"
+        "reasonPlaceholder": "বাতিল করার কারণ লিখুন",
+        "warning": "এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না। অর্ডারটি স্থায়ীভাবে বাতিল করা হবে।",
+        "validation": {
+          "reasonRequired": "কারণ আবশ্যক",
+          "reasonMinLength": "কারণ কমপক্ষে 10 অক্ষরের হতে হবে"
+        }
       }
     }
   }
