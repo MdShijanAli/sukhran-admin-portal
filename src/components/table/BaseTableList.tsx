@@ -57,6 +57,7 @@ export interface StoreWithData<T> {
   transactions?: T[];
   coupons?: T[];
   coverageAreas?: T[];
+  packageOrders?: T[];
   isLoading?: boolean;
   error?: string | null;
   pagination?: Pagination;
@@ -105,6 +106,7 @@ export interface BaseTableListProps<T> {
 
   // Service and Store for data fetching
   service: ApiService<T>;
+  serviceMethod?: keyof ApiService<T>;
   store: StoreWithData<T>;
 
   // Refresh callback
@@ -130,6 +132,7 @@ export function BaseTableList<T>({
   toolbarActions,
   columns,
   service,
+  serviceMethod,
   store,
   emptyMessage,
   getRowKey,
@@ -169,6 +172,7 @@ export function BaseTableList<T>({
     store.roles ||
     store.coupons ||
     store.transactions ||
+    store.packageOrders ||
     []) as T[];
   const isLoading = store.isLoading || false;
   const pagination = store.pagination;
@@ -212,7 +216,11 @@ export function BaseTableList<T>({
       }
 
       const queryString = params.toString();
-      await service.fetchLists(queryString);
+      if (serviceMethod) {
+        await serviceMethod.call(service, queryString);
+      } else {
+        await service.fetchLists(queryString);
+      }
 
       if (setError) {
         setError(null);

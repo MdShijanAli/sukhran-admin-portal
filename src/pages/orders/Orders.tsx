@@ -33,6 +33,8 @@ import UpdateDeliveryTimeModal from "./modal/UpdateDeliveryTimeModal";
 import { withPermission } from "@/hoc/withPermission";
 import permissions from "@/lib/permissions";
 import usePermissions from "@/hooks/use-permissions";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import PackageOrdersTab from "./tabs/PackageOrdersTab";
 
 function Orders() {
   const { t } = useTranslation();
@@ -402,33 +404,50 @@ function Orders() {
 
   return (
     <div className="animate-fade-in">
-      <BaseTableList<Order>
-        title={t("orders.title")}
-        description={t("orders.subtitle")}
-        // headerActions={[
-        //   {
-        //     label: t("orders.addOrder"),
-        //     icon: Plus,
-        //     onClick: handleCreate,
-        //     variant: "default",
-        //   },
-        // ]}
-        toolbarActions={
-          <Button variant="outline" onClick={() => setShowFilterModal(true)}>
-            <Filter className="mr-2 h-4 w-4" />
-            {t("filter")}
-          </Button>
-        }
-        searchPlaceholder={t("orders.searchPlaceholder")}
-        enableSearch={true}
-        columns={columns}
-        service={orderService}
-        store={store}
-        emptyMessage={t("orders.noOrdersFound")}
-        getRowKey={(order) => order.id}
-        onRefresh={handleSetRefresh}
-        summaryLists={summaryLists}
-      />
+      <Tabs defaultValue="orders" className="w-full">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl font-bold">{t("orders.title")}</h1>
+            <p className="text-muted-foreground">{t("orders.subtitle")}</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Button variant="outline" onClick={() => setShowFilterModal(true)}>
+              <Filter className="mr-2 h-4 w-4" />
+              {t("filter")}
+            </Button>
+            <TabsList className="gap-2">
+              <TabsTrigger value="orders" className="gap-2">
+                <ShoppingCart className="h-4 w-4" />
+                {t("orders.tabs.regularOrders")}
+              </TabsTrigger>
+              <TabsTrigger value="package_orders" className="gap-2">
+                <Package className="h-4 w-4" />
+                {t("orders.tabs.packageOrders")}
+              </TabsTrigger>
+            </TabsList>
+          </div>
+        </div>
+
+        <TabsContent value="orders" className="mt-0">
+          <BaseTableList<Order>
+            title=""
+            description=""
+            searchPlaceholder={t("orders.searchPlaceholder")}
+            enableSearch={true}
+            columns={columns}
+            service={orderService}
+            store={store}
+            emptyMessage={t("orders.noOrdersFound")}
+            getRowKey={(order) => order.id}
+            onRefresh={handleSetRefresh}
+            summaryLists={summaryLists}
+          />
+        </TabsContent>
+
+        <TabsContent value="package_orders" className="mt-0">
+          <PackageOrdersTab />
+        </TabsContent>
+      </Tabs>
 
       {/* Dialogs */}
       <FormModal
@@ -449,7 +468,7 @@ function Orders() {
         onClose={setShowDelete}
         title={t("orders.delete.title")}
         description={`${t("orders.delete.message")} ${
-          selectedOrder?.order_number
+          selectedOrder?.orderId
         }? ${t("orders.delete.cannotUndo")}`}
         onConfirm={handleDeleteOrder}
         isDeleting={isDeleting}
@@ -458,7 +477,7 @@ function Orders() {
       <UpdateOrderStatusModal
         open={showUpdateStatusModal}
         onClose={setShowUpdateStatusModal}
-        orderId={selectedOrder?.id || null}
+        orderId={selectedOrder?.id ? Number(selectedOrder.id) : null}
         status={selectedOrder?.status || ""}
         onSuccess={() => refreshTable?.()}
       />

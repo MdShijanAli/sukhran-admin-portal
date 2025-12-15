@@ -133,6 +133,19 @@ export const apiRoutes = {
       createApiUrl(`admin/orders/${id}/delivery-time`),
     getModifications: (id: number | string) =>
       createApiUrl(`admin/orders/${id}/modifications`),
+    getAllPackageOrders: createApiUrl("admin/orders/package-batches"),
+    getSinglePackageOrder: (id: number | string) =>
+      createApiUrl(`admin/orders/package-batch/${id}`),
+    setDeliveryDate: (id: number | string) =>
+      createApiUrl(`admin/orders/${id}/set-delivery-date`),
+    modifyItems: (id: number | string) =>
+      createApiUrl(`admin/orders/${id}/modify-items`),
+    pauseOrder: (id: number | string) =>
+      createApiUrl(`admin/orders/${id}/pause`),
+    resumeOrder: (id: number | string) =>
+      createApiUrl(`admin/orders/${id}/resume`),
+    cancelOrder: (id: number | string) =>
+      createApiUrl(`admin/orders/${id}/cancel`),
   },
 
   delivery: {

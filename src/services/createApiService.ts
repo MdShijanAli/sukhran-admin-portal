@@ -21,6 +21,7 @@ export interface ApiService<T = unknown> {
   storeItem: (data: unknown) => Promise<T>;
   updateItem: (id: number | string, data: unknown) => Promise<T>;
   deleteItem: (id: number | string) => Promise<T>;
+  customFetchLists?: (queryString?: string) => Promise<T>;
 }
 
 export const createApiService = <T = unknown>(

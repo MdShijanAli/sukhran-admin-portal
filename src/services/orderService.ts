@@ -1,7 +1,15 @@
 import { createApiService, ApiService } from "./createApiService";
 import { apiRoutes } from "@/api/apiRoutes";
 import { useOrderStore, Order } from "@/stores/orderStore";
+import { usePackageOrderStore } from "@/stores/packageOrderStore";
 import apiClient from "@/api/apiClient";
+import {
+  SetDeliveryDatePayload,
+  ModifyItemsPayload,
+  PauseOrderPayload,
+  ResumeOrderPayload,
+  CancelOrderPayload,
+} from "@/lib/types";
 
 // Create base API service with all CRUD operations
 const apiService = createApiService<Order>(
@@ -46,6 +54,29 @@ interface OrderService extends ApiService<Order> {
     }
   ) => Promise<unknown>;
   getModificationHistory: (id: number | string) => Promise<unknown>;
+  // Package Order Methods
+  fetchPackageOrders: (params?: string) => Promise<unknown>;
+  fetchPackageOrderDetails: (batchId: string) => Promise<unknown>;
+  setPackageOrderDeliveryDate: (
+    orderId: number | string,
+    data: SetDeliveryDatePayload
+  ) => Promise<unknown>;
+  modifyPackageOrderItems: (
+    orderId: number | string,
+    data: ModifyItemsPayload
+  ) => Promise<unknown>;
+  pausePackageOrder: (
+    orderId: number | string,
+    data: PauseOrderPayload
+  ) => Promise<unknown>;
+  resumePackageOrder: (
+    orderId: number | string,
+    data: ResumeOrderPayload
+  ) => Promise<unknown>;
+  cancelPackageOrder: (
+    orderId: number | string,
+    data: CancelOrderPayload
+  ) => Promise<unknown>;
 }
 
 const orderService: OrderService = {
@@ -179,6 +210,130 @@ const orderService: OrderService = {
       return response.data;
     } catch (error) {
       console.error("Error fetching modification history:", error);
+      throw error;
+    }
+  },
+
+  // Package Order Methods
+  fetchPackageOrders: async (params?: string) => {
+    try {
+      usePackageOrderStore.getState().setLoading(true);
+      const url = params
+        ? `${apiRoutes.orders.getAllPackageOrders}?${params}`
+        : apiRoutes.orders.getAllPackageOrders;
+
+      const response = await apiClient.get(url);
+      console.log("Package orders response:", response.data);
+
+      if (response && response.status === 200) {
+        usePackageOrderStore.getState().setItems(response.data);
+        return response.data;
+      }
+      throw new Error("Failed to fetch package orders");
+    } catch (error) {
+      console.error("Error fetching package orders:", error);
+      usePackageOrderStore
+        .getState()
+        .setError("Failed to fetch package orders");
+      throw error;
+    } finally {
+      usePackageOrderStore.getState().setLoading(false);
+    }
+  },
+
+  fetchPackageOrderDetails: async (batchId: string) => {
+    try {
+      const response = await apiClient.get(
+        apiRoutes.orders.getSinglePackageOrder(batchId)
+      );
+      console.log("Package order details response:", response.data);
+
+      if (response && response.status === 200) {
+        return response.data;
+      }
+      throw new Error("Failed to fetch package order details");
+    } catch (error) {
+      console.error("Error fetching package order details:", error);
+      throw error;
+    }
+  },
+
+  setPackageOrderDeliveryDate: async (
+    orderId: number | string,
+    data: SetDeliveryDatePayload
+  ) => {
+    try {
+      const response = await apiClient.patch(
+        apiRoutes.orders.setDeliveryDate(orderId),
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error setting delivery date:", error);
+      throw error;
+    }
+  },
+
+  modifyPackageOrderItems: async (
+    orderId: number | string,
+    data: ModifyItemsPayload
+  ) => {
+    try {
+      const response = await apiClient.patch(
+        apiRoutes.orders.modifyItems(orderId),
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error modifying items:", error);
+      throw error;
+    }
+  },
+
+  pausePackageOrder: async (
+    orderId: number | string,
+    data: PauseOrderPayload
+  ) => {
+    try {
+      const response = await apiClient.post(
+        apiRoutes.orders.pauseOrder(orderId),
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error pausing order:", error);
+      throw error;
+    }
+  },
+
+  resumePackageOrder: async (
+    orderId: number | string,
+    data: ResumeOrderPayload
+  ) => {
+    try {
+      const response = await apiClient.post(
+        apiRoutes.orders.resumeOrder(orderId),
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error resuming order:", error);
+      throw error;
+    }
+  },
+
+  cancelPackageOrder: async (
+    orderId: number | string,
+    data: CancelOrderPayload
+  ) => {
+    try {
+      const response = await apiClient.delete(
+        apiRoutes.orders.cancelOrder(orderId),
+        { data }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error cancelling order:", error);
       throw error;
     }
   },

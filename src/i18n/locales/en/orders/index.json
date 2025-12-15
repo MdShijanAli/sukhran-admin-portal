@@ -54,7 +54,9 @@
     "assignAgent": "Assign Agent",
     "markDelivered": "Mark as Delivered",
     "cancelOrder": "Cancel Order",
-    "updateDeliveryTime": "Update Delivery Time"
+    "updateDeliveryTime": "Update Delivery Time",
+    "orders": "Orders",
+    "package_orders": "Package Orders"
   },
   "form": {
     "createNewOrder": "Create New Order",
@@ -163,5 +165,86 @@
     "paymentMode": "Payment Mode",
     "apply": "Apply Filters",
     "clear": "Clear Filters"
+  },
+  "tabs": {
+    "regularOrders": "Regular Orders",
+    "packageOrders": "Package Orders"
+  },
+  "packageOrders": {
+    "title": "Package Orders",
+    "subtitle": "Manage subscription package orders",
+    "batchId": "Batch ID",
+    "customer": "Customer",
+    "schedule": "Schedule",
+    "totalOrders": "Total Orders",
+    "pending": "Pending",
+    "delivered": "Delivered",
+    "paymentAvailable": "Payment Available",
+    "createdAt": "Created At",
+    "actions": "Actions",
+    "viewDetails": "View Details",
+    "months": "months",
+    "perMonth": "per month",
+    "deliveryNumber": "Delivery #",
+    "deliveryMonth": "Month",
+    "itemsCount": "Items",
+    "deliveryDate": "Delivery Date",
+    "notSet": "Not Set",
+    "locked": "Locked",
+    "paused": "Paused",
+    "setDeliveryDate": "Set Delivery Date",
+    "modifyItems": "Modify Items",
+    "pauseOrder": "Pause Order",
+    "resumeOrder": "Resume Order",
+    "cancelOrder": "Cancel Order",
+    "batchDetails": "Batch Details",
+    "ordersList": "Orders in this Batch",
+    "noOrders": "No package orders found",
+    "messages": {
+      "deliveryDateSet": "Delivery date set successfully",
+      "itemsModified": "Items modified successfully",
+      "orderPaused": "Order paused successfully",
+      "orderResumed": "Order resumed successfully",
+      "orderCancelled": "Order cancelled successfully",
+      "failedToSetDate": "Failed to set delivery date",
+      "failedToModify": "Failed to modify items",
+      "failedToPause": "Failed to pause order",
+      "failedToResume": "Failed to resume order",
+      "failedToCancel": "Failed to cancel order"
+    },
+    "modals": {
+      "setDeliveryDate": {
+        "title": "Set Delivery Date",
+        "deliveryDate": "Delivery Date",
+        "selectDate": "Select delivery date"
+      },
+      "modifyItems": {
+        "title": "Modify Order Items",
+        "sku": "SKU ID",
+        "quantity": "Quantity",
+        "reason": "Reason",
+        "reasonPlaceholder": "Enter reason for modification",
+        "addItem": "Add Item",
+        "removeItem": "Remove"
+      },
+      "pauseOrder": {
+        "title": "Pause Order",
+        "message": "Are you sure you want to pause this order?",
+        "reason": "Reason",
+        "reasonPlaceholder": "Enter reason for pausing"
+      },
+      "resumeOrder": {
+        "title": "Resume Order",
+        "message": "Are you sure you want to resume this order?",
+        "reason": "Reason",
+        "reasonPlaceholder": "Enter reason for resuming"
+      },
+      "cancelOrder": {
+        "title": "Cancel Order",
+        "message": "Are you sure you want to cancel this order?",
+        "reason": "Reason",
+        "reasonPlaceholder": "Enter reason for cancellation"
+      }
+    }
   }
 }

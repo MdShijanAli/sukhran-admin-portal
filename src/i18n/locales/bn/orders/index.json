@@ -53,7 +53,9 @@
     "assignAgent": "এজেন্ট নির্ধারণ করুন",
     "markDelivered": "ডেলিভারি সম্পন্ন চিহ্নিত করুন",
     "cancelOrder": "অর্ডার বাতিল করুন",
-    "updateDeliveryTime": "ডেলিভারি সময় আপডেট করুন"
+    "updateDeliveryTime": "ডেলিভারি সময় আপডেট করুন",
+    "orders": "অর্ডারসমূহ",
+    "package_orders": "প্যাকেজ অর্ডারসমূহ"
   },
   "form": {
     "createNewOrder": "নতুন অর্ডার তৈরি করুন",
@@ -162,5 +164,86 @@
     "paymentMode": "পেমেন্ট মোড",
     "apply": "ফিল্টার প্রয়োগ করুন",
     "clear": "ফিল্টার মুছুন"
+  },
+  "tabs": {
+    "regularOrders": "নিয়মিত অর্ডার",
+    "packageOrders": "প্যাকেজ অর্ডার"
+  },
+  "packageOrders": {
+    "title": "প্যাকেজ অর্ডার",
+    "subtitle": "সাবস্ক্রিপশন প্যাকেজ অর্ডার পরিচালনা করুন",
+    "batchId": "ব্যাচ আইডি",
+    "customer": "গ্রাহক",
+    "schedule": "সময়সূচী",
+    "totalOrders": "মোট অর্ডার",
+    "pending": "মুলতুবি",
+    "delivered": "ডেলিভারি সম্পন্ন",
+    "paymentAvailable": "পেমেন্ট উপলব্ধ",
+    "createdAt": "তৈরির তারিখ",
+    "actions": "কার্যক্রম",
+    "viewDetails": "বিস্তারিত দেখুন",
+    "months": "মাস",
+    "perMonth": "প্রতি মাসে",
+    "deliveryNumber": "ডেলিভারি #",
+    "deliveryMonth": "মাস",
+    "itemsCount": "আইটেম",
+    "deliveryDate": "ডেলিভারির তারিখ",
+    "notSet": "নির্ধারিত নয়",
+    "locked": "লক করা",
+    "paused": "বন্ধ",
+    "setDeliveryDate": "ডেলিভারির তারিখ নির্ধারণ করুন",
+    "modifyItems": "আইটেম পরিবর্তন করুন",
+    "pauseOrder": "অর্ডার বন্ধ করুন",
+    "resumeOrder": "অর্ডার পুনরায় শুরু করুন",
+    "cancelOrder": "অর্ডার বাতিল করুন",
+    "batchDetails": "ব্যাচ বিবরণ",
+    "ordersList": "এই ব্যাচের অর্ডারগুলি",
+    "noOrders": "কোন প্যাকেজ অর্ডার পাওয়া যায়নি",
+    "messages": {
+      "deliveryDateSet": "ডেলিভারির তারিখ সফলভাবে নির্ধারণ করা হয়েছে",
+      "itemsModified": "আইটেম সফলভাবে পরিবর্তন করা হয়েছে",
+      "orderPaused": "অর্ডার সফলভাবে বন্ধ করা হয়েছে",
+      "orderResumed": "অর্ডার সফলভাবে পুনরায় শুরু করা হয়েছে",
+      "orderCancelled": "অর্ডার সফলভাবে বাতিল করা হয়েছে",
+      "failedToSetDate": "ডেলিভারির তারিখ নির্ধারণ করতে ব্যর্থ",
+      "failedToModify": "আইটেম পরিবর্তন করতে ব্যর্থ",
+      "failedToPause": "অর্ডার বন্ধ করতে ব্যর্থ",
+      "failedToResume": "অর্ডার পুনরায় শুরু করতে ব্যর্থ",
+      "failedToCancel": "অর্ডার বাতিল করতে ব্যর্থ"
+    },
+    "modals": {
+      "setDeliveryDate": {
+        "title": "ডেলিভারির তারিখ নির্ধারণ করুন",
+        "deliveryDate": "ডেলিভারির তারিখ",
+        "selectDate": "ডেলিভারির তারিখ নির্বাচন করুন"
+      },
+      "modifyItems": {
+        "title": "অর্ডার আইটেম পরিবর্তন করুন",
+        "sku": "SKU আইডি",
+        "quantity": "পরিমাণ",
+        "reason": "কারণ",
+        "reasonPlaceholder": "পরিবর্তনের কারণ লিখুন",
+        "addItem": "আইটেম যোগ করুন",
+        "removeItem": "সরান"
+      },
+      "pauseOrder": {
+        "title": "অর্ডার বন্ধ করুন",
+        "message": "আপনি কি নিশ্চিত এই অর্ডার বন্ধ করতে চান?",
+        "reason": "কারণ",
+        "reasonPlaceholder": "বন্ধ করার কারণ লিখুন"
+      },
+      "resumeOrder": {
+        "title": "অর্ডার পুনরায় শুরু করুন",
+        "message": "আপনি কি নিশ্চিত এই অর্ডার পুনরায় শুরু করতে চান?",
+        "reason": "কারণ",
+        "reasonPlaceholder": "পুনরায় শুরু করার কারণ লিখুন"
+      },
+      "cancelOrder": {
+        "title": "অর্ডার বাতিল করুন",
+        "message": "আপনি কি নিশ্চিত এই অর্ডার বাতিল করতে চান?",
+        "reason": "কারণ",
+        "reasonPlaceholder": "বাতিল করার কারণ লিখুন"
+      }
+    }
   }
 }

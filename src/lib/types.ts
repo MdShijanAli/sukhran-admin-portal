@@ -466,3 +466,95 @@ export interface SendCoinPayload {
   amount: number;
   reason: string;
 }
+
+// Package Orders Types
+export interface PackageOrderBatch {
+  batch_id: string;
+  customer: {
+    id: number;
+    name: string;
+    email: string;
+    mobile?: string;
+  };
+  schedule_months: string;
+  frequency_per_month: string;
+  total_orders: string | number;
+  pending_count: string | number;
+  payment_available_count: string | number;
+  delivered_count: string | number;
+  created_at: string;
+}
+
+export interface PackageOrderItem {
+  product_id: string;
+  sku_id: string;
+  product_name: string;
+  sku_name: string;
+  quantity: string;
+  unit_price: number;
+  item_cost: number;
+}
+
+export interface PackageOrder {
+  id: number;
+  orderId: string;
+  sequence: string;
+  delivery_month: string;
+  delivery_number: string;
+  preferred_delivery_time: string;
+  status: string;
+  is_locked: boolean;
+  is_paused: boolean;
+  paused_at: string | null;
+  payment_available: boolean;
+  delivery_date: string | null;
+  payment_mode: string;
+  payment_status: string;
+  items_count: number;
+  items: PackageOrderItem[];
+  amounts: {
+    subTotal: number;
+    deliveryCharge: number;
+    vat: number;
+    grandTotal: number;
+  };
+  created_at: string;
+}
+
+export interface PackageBatchDetails {
+  batch_id: string;
+  customer: {
+    id: number;
+    name: string;
+    email: string;
+    mobile: string;
+  };
+  schedule_months: string;
+  frequency_per_month: string;
+  total_orders: number;
+  orders: PackageOrder[];
+}
+
+export interface SetDeliveryDatePayload {
+  delivery_date: string;
+}
+
+export interface ModifyItemsPayload {
+  items: Array<{
+    sku_id: number;
+    quantity: number;
+  }>;
+  reason: string;
+}
+
+export interface PauseOrderPayload {
+  reason: string;
+}
+
+export interface ResumeOrderPayload {
+  reason: string;
+}
+
+export interface CancelOrderPayload {
+  reason: string;
+}
