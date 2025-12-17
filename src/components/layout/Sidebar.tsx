@@ -159,6 +159,12 @@ const menuItems = [
     permission: permissions.roles.view,
   },
   {
+    icon: Heart,
+    label: "nav.donations",
+    path: "/donations",
+    permission: permissions.donations.view,
+  },
+  {
     icon: Bell,
     label: "nav.notifications",
     path: "/notifications",

@@ -47,3 +47,11 @@ export const unFormatNumberWithCommas = (value: string | number): number => {
   // Remove commas and convert the string to a number
   return value ? parseFloat(String(value).replace(/,/g, "")) : 0;
 };
+
+export const formatCurrency = (
+  amount: number | string,
+  currency: string = "৳"
+): string => {
+  const numAmount = typeof amount === "string" ? parseFloat(amount) : amount;
+  return `${currency}${formatNumberWithCommas(numAmount)}`;
+};

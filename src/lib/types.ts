@@ -559,3 +559,209 @@ export interface ResumeOrderPayload {
 export interface CancelOrderPayload {
   reason: string;
 }
+
+// Donation Types
+export interface DonationChannel {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+  image_url: string;
+  targetAmount: number;
+  collectedAmount: number;
+  remainingAmount: number;
+  progress: number;
+  totalDonations: number;
+  isActive: boolean;
+  displayOrder: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DonationChannelFormData {
+  name: string;
+  description: string;
+  targetAmount: number;
+  isActive: boolean;
+  display_order: number;
+  imgUrl?: File;
+}
+
+export interface Donor {
+  userId: string;
+  name: string;
+  email: string;
+  mobile: string;
+  isAnonymous: boolean;
+}
+
+export interface Donation {
+  id: number;
+  channel: {
+    id: number;
+    name: string;
+    description?: string;
+  };
+  donor: Donor;
+  amount: number;
+  donationType: "standalone" | "product" | "package";
+  paymentMethod: "cod" | "online" | "coins";
+  paymentStatus: "pending" | "paid";
+  transactionId: string | null;
+  donorMessage: string | null;
+  orderId: string | null;
+  order?: unknown;
+  donatedAt: string;
+  created_at: string;
+  updated_at?: string;
+}
+
+export interface DonationStatistics {
+  overview: {
+    totalCashDonations: number;
+    totalCoinDonations: number;
+    totalDonations: number;
+    totalDonors: number;
+    totalDonationCount: number;
+    pendingDonations: number;
+    failedDonations: number;
+    averageDonation: number;
+  };
+  coinFulfillment: {
+    totalCoinDonations: number;
+    totalFulfilled: number;
+    totalUnfulfilled: number;
+    companyOwes: number;
+    fulfillmentPercentage: number;
+  };
+  timeBased: {
+    today: number;
+    thisWeek: number;
+    thisMonth: number;
+  };
+  byType: Record<
+    string,
+    {
+      total: number;
+      total_coins: number;
+      count: string;
+      type: string;
+    }
+  >;
+  byPaymentMethod: Record<
+    string,
+    {
+      total: number;
+      count: string;
+    }
+  >;
+  topChannels: Array<{
+    id: number;
+    name: string;
+    totalDonations: number;
+    cashDonations: number;
+    coinDonations: number;
+    donorCount: string;
+    targetAmount: number;
+    progressPercentage: number;
+    unfulfilledCoins: number;
+  }>;
+  topDonors: Array<{
+    userId: string;
+    name: string;
+    totalDonations: number;
+    cashDonations: number;
+    coinDonations: number;
+    donationCount: string;
+  }>;
+  recentDonations: Array<{
+    id: number;
+    channel: string;
+    donor: string;
+    amount: number;
+    type: string;
+    coins: number;
+    donatedAt: string;
+  }>;
+  dailyTrend: Array<{
+    date: string;
+    cash_total: number;
+    coin_total: number;
+    total: number;
+    count: string;
+  }>;
+}
+
+export interface CoinDonationReport {
+  overview: {
+    total_coin_donations: number;
+    total_coin_donation_count: number;
+    total_fulfilled: number;
+    total_unfulfilled: number;
+    company_owes: number;
+    average_coin_donation: number;
+  };
+  by_channel: Array<{
+    id: number;
+    name: string;
+    description: string;
+    statistics: {
+      total_coin_donations: number;
+      total_cash_donations: number;
+      total_donations: number;
+      coin_donation_count: string;
+    };
+    fulfillment: {
+      fulfilled_amount: number;
+      unfulfilled_amount: number;
+      company_owes: number;
+      fulfillment_percentage: number;
+    };
+    target: {
+      target_amount: number;
+      progress_percentage: number;
+    };
+  }>;
+  recent_donations: Array<{
+    id: number;
+    donor: string;
+    channel: string;
+    coins_donated: number;
+    value: number;
+    donated_at: string;
+  }>;
+  top_donors: Array<{
+    userId: string;
+    name: string;
+    total_coins_donated: number;
+    donation_count: string;
+    total_value: number;
+  }>;
+}
+
+export interface FulfillmentHistory {
+  id: number;
+  amount: number;
+  notes: string;
+  proof_document: string;
+  fulfilled_by: {
+    id: number;
+    name: string;
+    email: string;
+  };
+  fulfilled_at: string;
+  created_at: string;
+}
+
+export interface FulfillCoinPayload {
+  amount: number;
+  notes: string;
+  proof_document: File;
+}
+
+export interface ReorderChannelsPayload {
+  channels: Array<{
+    id: number;
+    displayOrder: number;
+  }>;
+}

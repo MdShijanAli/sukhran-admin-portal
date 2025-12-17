@@ -198,4 +198,30 @@ export const apiRoutes = {
     coinStatistics: createApiUrl("admin/coins/statistics"),
     sendCoin: createApiUrl("admin/coins/send"),
   },
+
+  donationChannels: {
+    getAll: createApiUrl("admin/donation-channels"),
+    getById: (id: number | string) =>
+      createApiUrl(`admin/donation-channels/${id}`),
+    create: createApiUrl("admin/donation-channels"),
+    update: (id: number | string) =>
+      createApiUrl(`admin/donation-channels/${id}`),
+    delete: (id: number | string) =>
+      createApiUrl(`admin/donation-channels/${id}`),
+    toggleStatus: (id: number | string) =>
+      createApiUrl(`admin/donation-channels/${id}/toggle-status`),
+    reorder: createApiUrl("admin/donation-channels/reorder"),
+  },
+
+  donations: {
+    getAll: createApiUrl("admin/donations"),
+    statics: createApiUrl("admin/donations/statistics"),
+    getById: (id: number | string) => createApiUrl(`admin/donations/${id}`),
+    create: createApiUrl("admin/donations"),
+    coinDonationReport: createApiUrl("admin/donations/coin-report"),
+    fulfilCoinDonation: (id: number | string) =>
+      createApiUrl(`admin/donation-channels/${id}/fulfill-coin-donations`),
+    getFulfillmentHistory: (id: number | string) =>
+      createApiUrl(`admin/donation-channels/${id}/fulfillments`),
+  },
 };

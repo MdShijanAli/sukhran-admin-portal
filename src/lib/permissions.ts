@@ -142,6 +142,14 @@ const permissions = {
     reject: "returns.reject",
   },
 
+  // donations
+  donations: {
+    view: "donations.view",
+    create: "donations.create",
+    edit: "donations.update",
+    delete: "donations.delete",
+  },
+
   // Notifications
   notifications: {
     view: "notifications.view",

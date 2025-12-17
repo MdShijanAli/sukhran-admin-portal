@@ -17,10 +17,12 @@ interface ApiRoutes {
 
 export interface ApiService<T = unknown> {
   fetchLists: (queryString?: string) => Promise<T>;
+  fetchAll: (queryString?: string) => Promise<T>;
   fetchDetails: (id: number | string) => Promise<T>;
   storeItem: (data: unknown) => Promise<T>;
   updateItem: (id: number | string, data: unknown) => Promise<T>;
   deleteItem: (id: number | string) => Promise<T>;
+  toggleStatus: (id: number | string) => Promise<T>;
   customFetchLists?: (queryString?: string) => Promise<T>;
 }
 
@@ -159,11 +161,32 @@ export const createApiService = <T = unknown>(
     }
   };
 
+  const toggleStatus = async (id: number | string) => {
+    try {
+      const response = await apiClient.put(
+        `${apiRoutes.getAll}/${id}/toggle-status`
+      );
+
+      if (response && response.status === 200) {
+        if (store && store.updateItem) {
+          store.updateItem(id, response.data);
+        }
+        return response.data;
+      }
+      throw new Error("Failed to toggle status");
+    } catch (error) {
+      console.error("Error toggling status:", error);
+      throw error;
+    }
+  };
+
   return {
     fetchLists,
+    fetchAll: fetchLists, // Alias for fetchLists
     fetchDetails,
     storeItem,
     updateItem,
     deleteItem,
+    toggleStatus,
   };
 };

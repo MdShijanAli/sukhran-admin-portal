@@ -33,6 +33,7 @@ import ProductViewDetails from "@/pages/products/ViewDetails";
 import CoverageAreas from "@/pages/coverage-area/CoverageAreas";
 import ContentManagement from "@/pages/ContentManagement";
 import PackageSettings from "@/pages/package/settings/PackageSettings";
+import Donations from "@/pages/donations";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -276,6 +277,14 @@ const AppRoutes: React.FC = () => {
           element={
             <PrivateRoute>
               <RoleManagement />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="donations"
+          element={
+            <PrivateRoute>
+              <Donations />
             </PrivateRoute>
           }
         />
