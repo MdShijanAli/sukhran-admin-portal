@@ -18,7 +18,7 @@ import Profile from "@/pages/profile/Profile";
 import Reports from "@/pages/Reports";
 import Delivery from "@/pages/delivery/Delivery";
 import Transactions from "@/pages/transactions/Transactions";
-import Support from "@/pages/Support";
+import Support from "@/pages/supports/Support";
 import Coupons from "@/pages/coupon/Coupons";
 import Returns from "@/pages/Returns";
 import RoleManagement from "@/pages/roles/RoleManagement";

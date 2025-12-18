@@ -224,4 +224,25 @@ export const apiRoutes = {
     getFulfillmentHistory: (id: number | string) =>
       createApiUrl(`admin/donation-channels/${id}/fulfillments`),
   },
+
+  supports: {
+    getAll: createApiUrl("admin/support/tickets"),
+    getById: (id: number | string) =>
+      createApiUrl(`admin/support/tickets/${id}`),
+    update: (id: number | string) =>
+      createApiUrl(`admin/support/tickets/${id}`),
+    delete: (id: number | string) =>
+      createApiUrl(`admin/support/tickets/${id}`),
+    create: createApiUrl("admin/support/tickets"),
+    changeStatus: (id: number | string) =>
+      createApiUrl(`admin/support/tickets/${id}/status`),
+    changePriority: (id: number | string) =>
+      createApiUrl(`admin/support/tickets/${id}/priority`),
+    reslvedTicket: (id: number | string) =>
+      createApiUrl(`admin/support/tickets/${id}/resolve`),
+    closeTicket: (id: number | string) =>
+      createApiUrl(`admin/support/tickets/${id}/close`),
+    bulkActions: createApiUrl("admin/support/tickets/bulk-action"),
+    statistics: createApiUrl("admin/support/dashboard"),
+  },
 };

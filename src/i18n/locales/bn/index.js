@@ -14,6 +14,7 @@ import coupon from "./coupon/index.json";
 import transactions from "./transactions/index.json";
 import coinManagement from "./coinManagement/index.json";
 import donations from "./donations/index.json";
+import support from "./support/index.json";
 
 /**
  * follow the file structure.
@@ -38,6 +39,7 @@ const combined = {
   transactions,
   coinManagement,
   donations,
+  support,
 };
 
 export default combined;

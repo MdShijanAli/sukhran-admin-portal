@@ -1,0 +1,212 @@
+{
+  "title": "Support Tickets",
+  "subtitle": "Manage customer support tickets and inquiries",
+  "tabs": {
+    "tickets": "All Tickets",
+    "statistics": "Statistics"
+  },
+  "addTicket": "Create Ticket",
+  "filter": {
+    "priority": "Select Priority",
+    "category": "Select Category",
+    "status": "Select Status",
+    "allPriorities": "All Priorities",
+    "allCategories": "All Categories",
+    "allStatuses": "All Statuses",
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "urgent": "Urgent",
+    "open": "Open",
+    "inProgress": "In Progress",
+    "resolved": "Resolved",
+    "closed": "Closed",
+    "delivery": "Delivery",
+    "payment": "Payment",
+    "product": "Product",
+    "account": "Account",
+    "order": "Order",
+    "return": "Return",
+    "other": "Other"
+  },
+  "tickets": {
+    "title": "Support Tickets",
+    "subtitle": "View and manage all support tickets",
+    "noTickets": "No tickets found",
+    "columns": {
+      "sl": "Sl.",
+      "ticketNumber": "Ticket #",
+      "customer": "Customer",
+      "category": "Category",
+      "subject": "Subject",
+      "status": "Status",
+      "priority": "Priority",
+      "createdBy": "Created By",
+      "created": "Created",
+      "actions": "Actions"
+    },
+    "category": {
+      "delivery": "Delivery",
+      "payment": "Payment",
+      "product": "Product",
+      "account": "Account",
+      "order": "Order",
+      "return": "Return",
+      "other": "Other"
+    },
+    "status": {
+      "open": "Open",
+      "in_progress": "In Progress",
+      "resolved": "Resolved",
+      "closed": "Closed"
+    },
+    "priority": {
+      "urgent": "Urgent",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "createdBy": {
+      "admin": "Admin",
+      "customer": "Customer"
+    },
+    "filter": {
+      "status": "All Statuses",
+      "category": "All Categories",
+      "priority": "All Priorities",
+      "allStatuses": "All Statuses",
+      "allCategories": "All Categories",
+      "allPriorities": "All Priorities"
+    }
+  },
+  "statistics": {
+    "title": "Support Statistics",
+    "today": "Today's Statistics",
+    "newTickets": "New Tickets",
+    "resolved": "Resolved",
+    "inProgress": "In Progress",
+    "currentStatus": "Current Status",
+    "open": "Open",
+    "closed": "Closed",
+    "totalActive": "Total Active",
+    "byCategory": "Tickets by Category",
+    "byPriority": "Tickets by Priority",
+    "recentTickets": "Recent Tickets",
+    "metrics": "Performance Metrics",
+    "avgResolutionTime": "Avg Resolution Time",
+    "hours": "hours",
+    "noData": "No statistics data available"
+  },
+  "create": {
+    "title": "Create Support Ticket",
+    "orderId": "Order ID",
+    "orderIdPlaceholder": "Search and select order...",
+    "optional": "Optional",
+    "category": "Category",
+    "categoryPlaceholder": "Select category",
+    "subject": "Subject",
+    "subjectPlaceholder": "Enter ticket subject",
+    "description": "Description",
+    "descriptionPlaceholder": "Describe the issue in detail",
+    "priority": "Priority",
+    "priorityPlaceholder": "Select priority",
+    "attachment": "Attachment",
+    "selectFile": "Select File",
+    "changeFile": "Change File",
+    "fileFormats": "PDF, PNG, JPG up to 10MB",
+    "submit": "Create Ticket"
+  },
+  "view": {
+    "title": "Ticket Details",
+    "ticketInfo": "Ticket Information",
+    "customerInfo": "Customer Information",
+    "orderInfo": "Order Information",
+    "timeline": "Timeline",
+    "ticketNumber": "Ticket Number",
+    "status": "Status",
+    "priority": "Priority",
+    "category": "Category",
+    "subject": "Subject",
+    "description": "Description",
+    "noDescription": "Description not available",
+    "createdBy": "Created By",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "customerName": "Name",
+    "customerEmail": "Email",
+    "customerMobile": "Mobile",
+    "orderNumber": "Order Number",
+    "noOrder": "No order associated"
+  },
+  "changeStatus": {
+    "title": "Change Ticket Status",
+    "currentStatus": "Current Status",
+    "newStatus": "New Status",
+    "statusPlaceholder": "Select new status",
+    "notes": "Notes",
+    "notesPlaceholder": "Add notes about status change (optional)",
+    "submit": "Update Status"
+  },
+  "changePriority": {
+    "title": "Change Priority",
+    "currentPriority": "Current Priority",
+    "newPriority": "New Priority",
+    "priorityPlaceholder": "Select new priority",
+    "submit": "Update Priority"
+  },
+  "resolve": {
+    "title": "Resolve Ticket",
+    "resolutionNote": "Resolution Note",
+    "resolutionNotePlaceholder": "Describe how the issue was resolved",
+    "submit": "Resolve Ticket",
+    "noteRequired": "Please provide resolution note"
+  },
+  "close": {
+    "title": "Close Ticket",
+    "resolutionNote": "Closing Note",
+    "resolutionNotePlaceholder": "Add closing note for this ticket",
+    "submit": "Close Ticket",
+    "noteRequired": "Please provide closing note"
+  },
+  "bulkActions": {
+    "title": "Bulk Actions",
+    "selectAction": "Select Action",
+    "closeTickets": "Close Selected Tickets",
+    "confirmClose": "Are you sure you want to close the selected tickets?",
+    "selectedTickets": "Selected Tickets"
+  },
+  "validation": {
+    "categoryRequired": "Please select a category",
+    "subjectRequired": "Please enter a subject",
+    "descriptionRequired": "Please enter a description",
+    "priorityRequired": "Please select a priority",
+    "statusRequired": "Please select a new status",
+    "priorityChangeRequired": "Please select a new priority"
+  },
+  "messages": {
+    "created": "Ticket created successfully",
+    "updated": "Ticket updated successfully",
+    "deleted": "Ticket deleted successfully",
+    "statusChanged": "Ticket status changed successfully",
+    "priorityChanged": "Ticket priority changed successfully",
+    "resolved": "Ticket resolved successfully",
+    "closed": "Ticket closed successfully",
+    "bulkActionSuccess": "Bulk action completed successfully",
+    "failedToCreate": "Failed to create ticket",
+    "failedToUpdate": "Failed to update ticket",
+    "failedToDelete": "Failed to delete ticket",
+    "failedToChangeStatus": "Failed to change status",
+    "failedToChangePriority": "Failed to change priority",
+    "failedToResolve": "Failed to resolve ticket",
+    "failedToClose": "Failed to close ticket",
+    "failedBulkAction": "Failed to perform bulk action"
+  },
+  "actions": {
+    "view": "View Details",
+    "changeStatus": "Change Status",
+    "changePriority": "Change Priority",
+    "resolve": "Resolve",
+    "close": "Close",
+    "delete": "Delete"
+  }
+}

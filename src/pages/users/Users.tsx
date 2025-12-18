@@ -134,17 +134,6 @@ const Users = () => {
       ],
       defaultValue: "active",
     },
-    // {
-    //   key: "subscription",
-    //   label: "Subscription Status",
-    //   options: [
-    //     { label: "All Subscriptions", value: "all" },
-    //     { label: "Active", value: "active" },
-    //     { label: "Expired", value: "expired" },
-    //     { label: "None", value: "none" },
-    //   ],
-    //   defaultValue: "all",
-    // },
     {
       key: "role",
       label: t("users.filter.user_role"),
