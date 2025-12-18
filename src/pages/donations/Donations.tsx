@@ -63,7 +63,7 @@ function Donations() {
 
     setIsDeleting(true);
     try {
-      await donationChannelService.delete(channelToDelete.id);
+      await donationChannelService.deleteItem(channelToDelete.id);
       toast.success(t("donations.channels.messages.deleted"));
       refreshChannels?.();
       setShowDeleteConfirm(false);
