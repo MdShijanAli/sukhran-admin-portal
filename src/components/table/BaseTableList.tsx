@@ -154,6 +154,7 @@ export function BaseTableList<T>({
   const [perPage] = useState(10);
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [hasInitialFetch, setHasInitialFetch] = useState(false);
   const [localFilters, setLocalFilters] = useState<Record<string, string>>(
     () => {
       const initial: Record<string, string> = {};
@@ -189,69 +190,87 @@ export function BaseTableList<T>({
   const filterValues = Object.values(localFilters).join(",");
 
   // Fetch data function with query params
-  const fetchData = useCallback(async () => {
-    try {
-      if (setLoading) {
-        setLoading(true);
+  const fetchData = useCallback(
+    async (forceFetch = false) => {
+      // Check if we should skip fetching
+      // Skip if: data exists in store AND it's first render AND not forcing fetch
+      if (!forceFetch && data.length > 0 && !hasInitialFetch && isFirstRender) {
+        console.log("Using cached data from store, skipping API call");
+        setHasInitialFetch(true);
+        return;
       }
 
-      // Build query string
-      const params = new URLSearchParams();
+      try {
+        if (setLoading) {
+          setLoading(true);
+        }
 
-      if (searchQuery) {
-        params.append("search", searchQuery);
-      }
+        // Build query string
+        const params = new URLSearchParams();
 
-      if (showPagination) {
-        params.append("page", currentPage.toString());
-        params.append("per_page", perPage.toString());
-      }
+        if (searchQuery) {
+          params.append("search", searchQuery);
+        }
 
-      // Add filter params
-      if (filters) {
-        filters.forEach((filter, index) => {
-          const filterKey = filter.label || `filter_${index}`;
-          const filterValue = localFilters[filterKey];
-          if (filterValue) {
-            // Use filter.label as the param key (e.g., "status")
-            params.append(filter.label || "filter", filterValue);
-          }
-        });
-      }
+        if (showPagination) {
+          params.append("page", currentPage.toString());
+          params.append("per_page", perPage.toString());
+        }
 
-      const queryString = params.toString();
-      if (serviceMethod) {
-        await serviceMethod.call(service, queryString);
-      } else {
-        await service.fetchLists(queryString);
-      }
+        // Add filter params
+        if (filters) {
+          filters.forEach((filter, index) => {
+            const filterKey = filter.label || `filter_${index}`;
+            const filterValue = localFilters[filterKey];
+            if (filterValue) {
+              // Use filter.label as the param key (e.g., "status")
+              params.append(filter.label || "filter", filterValue);
+            }
+          });
+        }
 
-      if (setError) {
-        setError(null);
+        const queryString = params.toString();
+        if (serviceMethod) {
+          await serviceMethod.call(service, queryString);
+        } else {
+          await service.fetchLists(queryString);
+        }
+
+        if (setError) {
+          setError(null);
+        }
+
+        if (!hasInitialFetch) {
+          setHasInitialFetch(true);
+        }
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+        if (setError) {
+          setError(
+            error instanceof Error ? error.message : "Failed to fetch data"
+          );
+        }
+      } finally {
+        if (setLoading) {
+          setLoading(false);
+        }
       }
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-      if (setError) {
-        setError(
-          error instanceof Error ? error.message : "Failed to fetch data"
-        );
-      }
-    } finally {
-      if (setLoading) {
-        setLoading(false);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    service,
-    setLoading,
-    setError,
-    searchQuery,
-    currentPage,
-    perPage,
-    showPagination,
-    filterValues,
-  ]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [
+      service,
+      setLoading,
+      setError,
+      searchQuery,
+      currentPage,
+      perPage,
+      showPagination,
+      filterValues,
+      hasInitialFetch,
+      data.length,
+      isFirstRender,
+    ]
+  );
 
   // Fetch on mount and when dependencies change
   useEffect(() => {
@@ -295,7 +314,7 @@ export function BaseTableList<T>({
 
   const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
-    await fetchData();
+    await fetchData(true); // Force fetch, bypass cache
     setIsRefreshing(false);
   }, [fetchData]);
 
