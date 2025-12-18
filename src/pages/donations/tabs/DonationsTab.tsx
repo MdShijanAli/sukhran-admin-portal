@@ -85,13 +85,8 @@ export default function DonationsTab({ onViewDetails }: DonationsTabProps) {
         key: "channel",
         label: t("donations.donations.columns.channel"),
         render: (donation) => (
-          <div>
-            <p className="font-medium">{donation.channel.name}</p>
-            {donation.channel.description && (
-              <p className="text-xs text-muted-foreground line-clamp-1">
-                {donation.channel.description}
-              </p>
-            )}
+          <div className="w-[80px]">
+            <p className="font-medium font-mono">{donation.channel.name}</p>
           </div>
         ),
       },
@@ -110,30 +105,41 @@ export default function DonationsTab({ onViewDetails }: DonationsTabProps) {
             {t(`donations.donations.type.${donation.donationType}`)}
           </Badge>
         ),
+        className: "text-center",
       },
       {
         key: "paymentMethod",
         label: t("donations.donations.columns.paymentMethod"),
-        render: (donation) => getPaymentMethodBadge(donation.paymentMethod),
+        render: (donation) => (
+          <div className="w-[120px]">
+            {getPaymentMethodBadge(donation.paymentMethod)}
+          </div>
+        ),
+        className: "text-center",
       },
       {
         key: "paymentStatus",
         label: t("donations.donations.columns.status"),
         render: (donation) => getStatusBadge(donation.paymentStatus),
+        className: "text-center",
       },
       {
         key: "transactionId",
         label: t("donations.donations.columns.transactionId"),
         render: (donation) => (
-          <span className="font-mono text-xs">
-            {donation.transactionId || "-"}
-          </span>
+          <div className="w-[120px]">
+            <span className="font-mono text-xs">
+              {donation.transactionId || "-"}
+            </span>
+          </div>
         ),
       },
       {
         key: "donatedAt",
         label: t("donations.donations.columns.date"),
-        render: (donation) => formatDate(donation.donatedAt),
+        render: (donation) => (
+          <div className="w-[100px]">{formatDate(donation.donatedAt)}</div>
+        ),
       },
     ],
     [t, getStatusBadge, getPaymentMethodBadge]
