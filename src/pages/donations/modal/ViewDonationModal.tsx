@@ -290,21 +290,6 @@ export default function ViewDonationModal({
                   </p>
                 </div>
               )}
-              <div className="grid grid-cols-2 gap-3">
-                {donation.donatedAt && (
-                  <div className="flex items-center gap-2 p-3 border rounded-lg">
-                    <Receipt className="w-4 h-4 text-muted-foreground" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">
-                        {t("donations.donations.view.donatedAt")}
-                      </p>
-                      <p className="text-sm font-medium">
-                        {formatDate(donation.donatedAt)}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
               <TimeStaps item={donation} />
             </div>
           </Card>
