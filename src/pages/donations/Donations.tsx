@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Plus, FileText } from "lucide-react";
+import { Plus, FileText, View } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
@@ -13,7 +13,7 @@ import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import { DonationChannel, Donation } from "@/lib/types";
 import donationChannelService from "@/services/donationChannelService";
 import { toast } from "sonner";
-import { useDonationStore } from "@/stores/donationStore";
+import ViewChannelModal from "./modal/ViewChannelModal";
 
 function Donations() {
   const { t } = useTranslation();
@@ -21,6 +21,7 @@ function Donations() {
   // State for modals
   const [showChannelForm, setShowChannelForm] = useState(false);
   const [showDonationView, setShowDonationView] = useState(false);
+  const [showChannelView, setShowChannelView] = useState(false);
   const [showFulfillCoin, setShowFulfillCoin] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -97,6 +98,11 @@ function Donations() {
     setShowDonationView(true);
   };
 
+  const handleViewChannel = (channel: DonationChannel) => {
+    setSelectedChannel(channel);
+    setShowChannelView(true);
+  };
+
   // Handlers for coin fulfillment
   const handleFulfillCoins = (channel: DonationChannel) => {
     setSelectedChannel(channel);
@@ -151,6 +157,7 @@ function Donations() {
               onEdit={handleEditChannel}
               onDelete={handleDeleteChannel}
               onToggleStatus={handleToggleStatus}
+              onViewDetails={handleViewChannel}
             />
           </Card>
         </TabsContent>
@@ -175,6 +182,12 @@ function Donations() {
         open={showDonationView}
         onClose={() => setShowDonationView(false)}
         donationId={selectedDonation?.id || null}
+      />
+
+      <ViewChannelModal
+        open={showChannelView}
+        onClose={() => setShowChannelView(false)}
+        channel={selectedChannel || null}
       />
 
       {selectedChannel && (
