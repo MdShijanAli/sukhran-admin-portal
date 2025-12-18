@@ -100,6 +100,7 @@ export default function DonationChannelsTab({
         render: (channel) => (
           <Badge variant="secondary">{channel.totalDonations}</Badge>
         ),
+        className: "text-center",
       },
       {
         key: "isActive",
