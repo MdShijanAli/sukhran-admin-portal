@@ -9,13 +9,15 @@ import { useDonationChannelStore } from "@/stores/donationChannelStore";
 import donationChannelService from "@/services/donationChannelService";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { ActionItem, DropdownMenuActions } from "@/components/table";
-import { Edit, Eye, Trash2 } from "lucide-react";
+import { Edit, Eye, Send, Trash2 } from "lucide-react";
 import { StatusSwitch } from "@/components/custom/StatusSwitch";
 
 interface DonationChannelsTabProps {
   onViewDetails?: (channel: DonationChannel) => void;
   onEdit?: (channel: DonationChannel) => void;
   onDelete?: (channel: DonationChannel) => void;
+  onFulfillCoins?: (channel: DonationChannel) => void;
+  onViewHistory?: (channel: DonationChannel) => void;
   onToggleStatus?: (channel: DonationChannel) => void;
 }
 
@@ -23,6 +25,8 @@ export default function DonationChannelsTab({
   onViewDetails,
   onEdit,
   onDelete,
+  onFulfillCoins,
+  onViewHistory,
   onToggleStatus,
 }: DonationChannelsTabProps) {
   const { t } = useTranslation();
@@ -41,6 +45,14 @@ export default function DonationChannelsTab({
     onDelete?.(channel);
   };
 
+  const handleFulfillCoins = (channel: DonationChannel) => {
+    onFulfillCoins?.(channel);
+  };
+
+  const handleViewHistory = (channel: DonationChannel) => {
+    onViewHistory?.(channel);
+  };
+
   // Define actions for dropdown menu
   const donationChannelsAction = (
     channel: DonationChannel
@@ -54,6 +66,16 @@ export default function DonationChannelsTab({
       label: t("donations.actions.edit"),
       icon: Edit,
       onClick: handleEdit,
+    },
+    {
+      label: t("donations.actions.fulfillCoins"),
+      icon: Send,
+      onClick: handleFulfillCoins,
+    },
+    {
+      label: t("donations.actions.viewHistory"),
+      icon: Eye,
+      onClick: handleViewHistory,
       separator: true,
     },
     {
@@ -109,7 +131,7 @@ export default function DonationChannelsTab({
       ),
     },
     {
-      key: "collectedAmount",
+      key: "remainingAmount",
       label: t("donations.channels.columns.remaining"),
       render: (channel) => (
         <div className="w-[100px] text-red-800 font-medium">

@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import ViewChannelModal from "./modal/ViewChannelModal";
 import StatisticsTab from "./tabs/StatisticsTab";
 import CoinReportTab from "./tabs/CoinReportTab";
+import FulfillHistoryModal from "./modal/FulfillHistoryModal";
 
 function Donations() {
   const { t } = useTranslation();
@@ -25,6 +26,7 @@ function Donations() {
   const [showDonationView, setShowDonationView] = useState(false);
   const [showChannelView, setShowChannelView] = useState(false);
   const [showFulfillCoin, setShowFulfillCoin] = useState(false);
+  const [showFulfillHistory, setShowFulfillHistory] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // State for selected items
@@ -59,6 +61,11 @@ function Donations() {
   const handleDeleteChannel = (channel: DonationChannel) => {
     setChannelToDelete(channel);
     setShowDeleteConfirm(true);
+  };
+
+  const handleViewHistory = (channel: DonationChannel) => {
+    setSelectedChannel(channel);
+    setShowFulfillHistory(true);
   };
 
   const handleConfirmDelete = async () => {
@@ -165,6 +172,8 @@ function Donations() {
               onEdit={handleEditChannel}
               onDelete={handleDeleteChannel}
               onToggleStatus={handleToggleStatus}
+              onFulfillCoins={handleFulfillCoins}
+              onViewHistory={handleViewHistory}
               onViewDetails={handleViewChannel}
             />
           </Card>
@@ -210,6 +219,12 @@ function Donations() {
         open={showChannelView}
         onClose={() => setShowChannelView(false)}
         channel={selectedChannel || null}
+      />
+
+      <FulfillHistoryModal
+        open={showFulfillHistory}
+        onClose={() => setShowFulfillHistory(false)}
+        channelId={selectedChannel?.id || null}
       />
 
       {selectedChannel && (

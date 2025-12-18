@@ -168,6 +168,7 @@
     "fulfill": {
       "title": "Fulfill Coin Donations",
       "channel": "Channel",
+      "unfulfilledAmount": "Unfulfilled Amount",
       "amount": "Amount to Fulfill",
       "amountPlaceholder": "Enter amount",
       "notes": "Notes",
@@ -175,7 +176,12 @@
       "proofDocument": "Proof Document",
       "selectFile": "Select File",
       "changeFile": "Change File",
-      "submit": "Fulfill Donation"
+      "fileFormats": "PDF, PNG, JPG up to 10MB",
+      "submit": "Fulfill Donation",
+      "amountRequired": "Please enter a valid amount",
+      "notesRequired": "Please add notes about this fulfillment",
+      "fileRequired": "Please select a proof document",
+      "amountExceedsLimit": "Amount cannot exceed unfulfilled amount"
     },
     "history": {
       "title": "Fulfillment History",
@@ -235,6 +241,21 @@
     "coins": "Coins",
     "unfulfilled": "Unfulfilled",
     "noDataAvailable": "No statistics data available"
+  },
+  "fulfillHistory": {
+    "title": "Fulfillment History",
+    "totalFulfilled": "Total Fulfilled",
+    "totalDonations": "Total Coin Donations",
+    "unfulfilled": "Unfulfilled",
+    "records": "Fulfillment Records",
+    "noRecords": "No fulfillment records found",
+    "noData": "No data available",
+    "recordId": "Record ID",
+    "fulfilled": "Fulfilled",
+    "fulfilledBy": "Fulfilled By",
+    "notes": "Notes",
+    "viewProof": "View Proof",
+    "fulfilledAt": "Fulfilled At"
   },
   "actions": {
     "viewDetails": "View Details",

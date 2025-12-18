@@ -57,24 +57,22 @@ export default function FulfillCoinModal({
 
   const handleSubmit = async () => {
     if (!amount || parseFloat(amount) <= 0) {
-      toast.error(t("donations.coinReport.fulfill.amountPlaceholder"));
+      toast.error(t("donations.coinReport.fulfill.amountRequired"));
       return;
     }
 
     if (!notes.trim()) {
-      toast.error(t("donations.coinReport.fulfill.notesPlaceholder"));
+      toast.error(t("donations.coinReport.fulfill.notesRequired"));
       return;
     }
 
     if (!proofDocument) {
-      toast.error(t("donations.coinReport.fulfill.selectFile"));
+      toast.error(t("donations.coinReport.fulfill.fileRequired"));
       return;
     }
 
     if (parseFloat(amount) > unfulfilledAmount) {
-      toast.error(
-        `Amount cannot exceed unfulfilled amount: ${unfulfilledAmount}`
-      );
+      toast.error(t("donations.coinReport.fulfill.amountExceedsLimit"));
       return;
     }
 
@@ -108,12 +106,12 @@ export default function FulfillCoinModal({
     >
       <div className="space-y-4">
         {/* Channel Info */}
-        <div className="bg-blue-50 p-3 rounded-lg">
-          <p className="text-sm font-medium text-blue-900">
+        <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+          <p className="text-sm font-medium text-blue-900 dark:text-blue-100">
             {t("donations.coinReport.fulfill.channel")}: {channelName}
           </p>
-          <p className="text-xs text-blue-700 mt-1">
-            {t("donations.coinReport.overview.unfulfilled")}: ৳
+          <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
+            {t("donations.coinReport.fulfill.unfulfilledAmount")}: ৳
             {unfulfilledAmount.toFixed(2)}
           </p>
         </div>
@@ -169,16 +167,16 @@ export default function FulfillCoinModal({
                 </Button>
               </div>
             ) : (
-              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50">
+              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900">
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <Upload className="w-8 h-8 mb-2 text-gray-400" />
-                  <p className="mb-1 text-sm text-gray-500">
+                  <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
                     <span className="font-semibold">
                       {t("donations.coinReport.fulfill.selectFile")}
                     </span>
                   </p>
-                  <p className="text-xs text-gray-500">
-                    PDF, PNG, JPG up to 10MB
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {t("donations.coinReport.fulfill.fileFormats")}
                   </p>
                 </div>
                 <input
