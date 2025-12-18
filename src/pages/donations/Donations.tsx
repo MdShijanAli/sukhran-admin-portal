@@ -17,7 +17,6 @@ import { useDonationStore } from "@/stores/donationStore";
 
 function Donations() {
   const { t } = useTranslation();
-  const donationStore = useDonationStore();
 
   // State for modals
   const [showChannelForm, setShowChannelForm] = useState(false);

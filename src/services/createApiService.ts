@@ -163,7 +163,7 @@ export const createApiService = <T = unknown>(
 
   const toggleStatus = async (id: number | string) => {
     try {
-      const response = await apiClient.put(
+      const response = await apiClient.patch(
         `${apiRoutes.getAll}/${id}/toggle-status`
       );
 
