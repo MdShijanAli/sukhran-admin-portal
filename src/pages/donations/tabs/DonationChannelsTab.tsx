@@ -24,6 +24,8 @@ export default function DonationChannelsTab({
 }: DonationChannelsTabProps) {
   const { t } = useTranslation();
 
+  const store = useDonationChannelStore();
+
   const columns: Column<DonationChannel>[] = useMemo(
     () => [
       {
@@ -36,11 +38,11 @@ export default function DonationChannelsTab({
         key: "image_url",
         label: t("donations.channels.columns.name"),
         render: (channel) => (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 w-[150px]">
             <img
               src={channel.image_url}
               alt={channel.name}
-              className="w-12 h-12 rounded object-cover"
+              className="w-12 h-12 object-cover object-top border border-1 rounded-md"
             />
             <div>
               <p className="font-medium">{channel.name}</p>
@@ -54,7 +56,11 @@ export default function DonationChannelsTab({
       {
         key: "targetAmount",
         label: t("donations.channels.columns.target"),
-        render: (channel) => formatCurrency(channel.targetAmount),
+        render: (channel) => (
+          <div className="w-[100px]">
+            {formatCurrency(channel.targetAmount)}
+          </div>
+        ),
       },
       {
         key: "collectedAmount",
@@ -64,8 +70,15 @@ export default function DonationChannelsTab({
             <p className="font-medium">
               {formatCurrency(channel.collectedAmount)}
             </p>
-            <p className="text-xs text-muted-foreground">
-              {t("donations.channels.columns.remaining")}:{" "}
+          </div>
+        ),
+      },
+      {
+        key: "collectedAmount",
+        label: t("donations.channels.columns.remaining"),
+        render: (channel) => (
+          <div>
+            <p className="font-medium">
               {formatCurrency(channel.remainingAmount)}
             </p>
           </div>
@@ -107,7 +120,9 @@ export default function DonationChannelsTab({
       {
         key: "created_at",
         label: t("donations.channels.columns.created"),
-        render: (channel) => formatDate(channel.created_at),
+        render: (channel) => (
+          <div className="w-[100px]">{formatDate(channel.created_at)}</div>
+        ),
       },
     ],
     [t]
@@ -143,12 +158,14 @@ export default function DonationChannelsTab({
 
   return (
     <BaseTableList<DonationChannel>
-      columns={columns}
-      serviceMethod="fetchAll"
-      service={donationChannelService}
-      store={useDonationChannelStore()}
-      actions={getActions}
+      title=""
+      description=""
       searchPlaceholder={t("donations.channels.subtitle")}
+      enableSearch={true}
+      columns={columns}
+      service={donationChannelService}
+      store={store}
+      getRowKey={(order) => order.id}
     />
   );
 }
