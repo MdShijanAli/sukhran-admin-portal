@@ -14,6 +14,7 @@ import { DonationChannel, Donation } from "@/lib/types";
 import donationChannelService from "@/services/donationChannelService";
 import { toast } from "sonner";
 import ViewChannelModal from "./modal/ViewChannelModal";
+import StatisticsTab from "./tabs/StatisticsTab";
 
 function Donations() {
   const { t } = useTranslation();
@@ -141,12 +142,15 @@ function Donations() {
 
       {/* Tabs */}
       <Tabs defaultValue="channels" className="w-full">
-        <TabsList className="grid w-full max-w-md grid-cols-2 mb-4">
+        <TabsList className="grid w-full max-w-md grid-cols-3 mb-4">
           <TabsTrigger value="channels">
             {t("donations.tabs.channels")}
           </TabsTrigger>
           <TabsTrigger value="donations">
             {t("donations.tabs.donations")}
+          </TabsTrigger>
+          <TabsTrigger value="statistics">
+            {t("donations.tabs.statistics")}
           </TabsTrigger>
         </TabsList>
 
@@ -166,6 +170,13 @@ function Donations() {
         <TabsContent value="donations">
           <Card>
             <DonationsTab onViewDetails={handleViewDonation} />
+          </Card>
+        </TabsContent>
+
+        {/* Statistics Tab */}
+        <TabsContent value="statistics">
+          <Card>
+            <StatisticsTab />
           </Card>
         </TabsContent>
       </Tabs>
