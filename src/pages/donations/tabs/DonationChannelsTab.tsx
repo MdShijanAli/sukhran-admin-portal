@@ -57,7 +57,7 @@ export default function DonationChannelsTab({
         key: "targetAmount",
         label: t("donations.channels.columns.target"),
         render: (channel) => (
-          <div className="w-[100px]">
+          <div className="w-[100px] text-blue-800 font-medium">
             {formatCurrency(channel.targetAmount)}
           </div>
         ),
@@ -66,10 +66,8 @@ export default function DonationChannelsTab({
         key: "collectedAmount",
         label: t("donations.channels.columns.collected"),
         render: (channel) => (
-          <div>
-            <p className="font-medium">
-              {formatCurrency(channel.collectedAmount)}
-            </p>
+          <div className="w-[100px] text-green-800 font-medium">
+            {formatCurrency(channel.collectedAmount)}
           </div>
         ),
       },
@@ -77,10 +75,8 @@ export default function DonationChannelsTab({
         key: "collectedAmount",
         label: t("donations.channels.columns.remaining"),
         render: (channel) => (
-          <div>
-            <p className="font-medium">
-              {formatCurrency(channel.remainingAmount)}
-            </p>
+          <div className="w-[100px] text-red-800 font-medium">
+            {formatCurrency(channel.remainingAmount)}
           </div>
         ),
       },
