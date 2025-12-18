@@ -15,6 +15,7 @@ import donationChannelService from "@/services/donationChannelService";
 import { toast } from "sonner";
 import ViewChannelModal from "./modal/ViewChannelModal";
 import StatisticsTab from "./tabs/StatisticsTab";
+import CoinReportTab from "./tabs/CoinReportTab";
 
 function Donations() {
   const { t } = useTranslation();
@@ -142,7 +143,7 @@ function Donations() {
 
       {/* Tabs */}
       <Tabs defaultValue="channels" className="w-full">
-        <TabsList className="grid w-full max-w-md grid-cols-3 mb-4">
+        <TabsList className="flex items-center justify-start mb-4">
           <TabsTrigger value="channels">
             {t("donations.tabs.channels")}
           </TabsTrigger>
@@ -151,6 +152,9 @@ function Donations() {
           </TabsTrigger>
           <TabsTrigger value="statistics">
             {t("donations.tabs.statistics")}
+          </TabsTrigger>
+          <TabsTrigger value="coinReport">
+            {t("donations.tabs.coinReport")}
           </TabsTrigger>
         </TabsList>
 
@@ -177,6 +181,13 @@ function Donations() {
         <TabsContent value="statistics">
           <Card>
             <StatisticsTab />
+          </Card>
+        </TabsContent>
+
+        {/* coinReport Tab */}
+        <TabsContent value="coinReport">
+          <Card>
+            <CoinReportTab />
           </Card>
         </TabsContent>
       </Tabs>
