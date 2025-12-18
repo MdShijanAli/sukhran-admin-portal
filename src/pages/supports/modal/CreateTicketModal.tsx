@@ -93,13 +93,15 @@ export default function CreateTicketModal({
       formData.append("priority", priority);
       if (attachment) formData.append("attachment", attachment);
 
-      await supportService.createItem(formData);
+      await supportService.storeItem(formData);
       toast.success(t("support.messages.created"));
       onSuccess();
       onClose();
     } catch (error) {
       console.error("Error creating ticket:", error);
-      toast.error(t("support.messages.failedToCreate"));
+      toast.error(
+        error.response.data.message || t("support.messages.failedToCreate")
+      );
     } finally {
       setIsSubmitting(false);
     }

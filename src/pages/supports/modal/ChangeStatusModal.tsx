@@ -51,7 +51,10 @@ export default function ChangeStatusModal({
       onClose();
     } catch (error) {
       console.error("Error changing status:", error);
-      toast.error(t("support.messages.failedToChangeStatus"));
+      toast.error(
+        error.response.data.message ||
+          t("support.messages.failedToChangeStatus")
+      );
     } finally {
       setIsSubmitting(false);
     }

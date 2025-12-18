@@ -45,7 +45,10 @@ export default function ChangePriorityModal({
       onClose();
     } catch (error) {
       console.error("Error changing priority:", error);
-      toast.error(t("support.messages.failedToChangePriority"));
+      toast.error(
+        error.response.data.message ||
+          t("support.messages.failedToChangePriority")
+      );
     } finally {
       setIsSubmitting(false);
     }

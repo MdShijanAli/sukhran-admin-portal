@@ -38,7 +38,9 @@ export default function CloseTicketModal({
       onClose();
     } catch (error) {
       console.error("Error closing ticket:", error);
-      toast.error(t("support.messages.failedToClose"));
+      toast.error(
+        error.response.data.message || t("support.messages.failedToClose")
+      );
     } finally {
       setIsSubmitting(false);
     }

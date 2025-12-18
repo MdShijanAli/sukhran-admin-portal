@@ -191,7 +191,9 @@ export default function TicketsTab({
     {
       key: "status",
       label: t("support.tickets.columns.status"),
-      render: (ticket) => getStatusBadge(ticket.status),
+      render: (ticket) => (
+        <div className="w-[90px]">{getStatusBadge(ticket.status)}</div>
+      ),
     },
     {
       key: "createdByAdmin",
