@@ -86,12 +86,12 @@ const menuItems = [
     path: "/orders",
     permission: permissions.orders.view,
   },
-  {
-    icon: Truck,
-    label: "nav.delivery",
-    path: "/delivery",
-    permission: permissions.delivery.view,
-  },
+  // {
+  //   icon: Truck,
+  //   label: "nav.delivery",
+  //   path: "/delivery",
+  //   permission: permissions.delivery.view,
+  // },
   {
     icon: MapPin,
     label: "nav.coverageAreas",
@@ -110,24 +110,24 @@ const menuItems = [
     path: "/coin-management",
     permission: permissions.coinManagement.view,
   },
-  {
-    icon: Mail,
-    label: "nav.marketing",
-    path: "/marketing",
-    permission: permissions.marketing.view,
-  },
+  // {
+  //   icon: Mail,
+  //   label: "nav.marketing",
+  //   path: "/marketing",
+  //   permission: permissions.marketing.view,
+  // },
   {
     icon: HeadphonesIcon,
     label: "nav.support",
     path: "/support",
     permission: permissions.support.view,
   },
-  {
-    icon: BarChart3,
-    label: "nav.analytics",
-    path: "/analytics",
-    permission: permissions.analytics.view,
-  },
+  // {
+  //   icon: BarChart3,
+  //   label: "nav.analytics",
+  //   path: "/analytics",
+  //   permission: permissions.analytics.view,
+  // },
   {
     icon: Ticket,
     label: "nav.coupons",
