@@ -270,7 +270,7 @@ export default function StatisticsTab() {
           <Clock className="w-5 h-5" />
           {t("support.statistics.recentTickets")}
         </h4>
-        <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-3">
           {statistics.recent_tickets.map((ticket) => (
             <div
               key={ticket.id}
