@@ -25,7 +25,9 @@
     "roles": "Role Management",
     "notifications": "Notifications",
     "settings": "Settings",
-    "reports": "Reports"
+    "reports": "Reports",
+    "searchMenu": "Search menu...",
+    "noMenuFound": "No menu items found"
   },
   "auth": {
     "login": "Login",

@@ -40,6 +40,8 @@
   "viewDetails": "বিস্তারিত দেখুন",
   "nav": {
     "dashboard": "ড্যাশবোর্ড",
+    "searchMenu": "মেনু খুঁজুন...",
+    "noMenuFound": "কোনো মেনু পাওয়া যায়নি",
     "cxoDashboard": "সিএক্সও ড্যাশবোর্ড",
     "operationalDashboard": "অপারেশনাল ড্যাশবোর্ড",
     "users": "ব্যবহারকারী",

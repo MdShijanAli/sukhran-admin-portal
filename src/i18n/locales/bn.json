@@ -25,7 +25,9 @@
     "roles": "রোল ম্যানেজমেন্ট",
     "notifications": "নোটিফিকেশন",
     "settings": "সেটিংস",
-    "reports": "রিপোর্ট"
+    "reports": "রিপোর্ট",
+    "searchMenu": "মেনু খুঁজুন...",
+    "noMenuFound": "কোনো মেনু পাওয়া যায়নি"
   },
   "auth": {
     "login": "লগইন",

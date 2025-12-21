@@ -25,6 +25,8 @@ import {
   Settings2,
   ChevronDown,
   ChevronUp,
+  Search,
+  X,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useSidebarStore } from "@/stores/sidebarStore";
@@ -33,7 +35,8 @@ import { useThemeStore } from "@/stores/themeStore";
 import usePermissions from "@/hooks/use-permissions";
 import permissions from "@/lib/permissions";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { Input } from "../ui/input";
 
 const menuItems = [
   {
@@ -190,6 +193,7 @@ export default function Sidebar() {
   const { language } = useThemeStore();
   const { hasPermission } = usePermissions();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const toggleExpand = (path: string) => {
     setExpandedItems((prev) =>
@@ -198,6 +202,65 @@ export default function Sidebar() {
         : [...prev, path]
     );
   };
+
+  // Filter menu items based on search query
+  const filteredMenuItems = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return menuItems.filter((item) => hasPermission(item.permission));
+    }
+
+    const query = searchQuery.toLowerCase();
+    return menuItems
+      .filter((item) => hasPermission(item.permission))
+      .filter((item) => {
+        // Check if parent item matches
+        const labelMatches = t(item.label).toLowerCase().includes(query);
+
+        // Check if any sub-item matches
+        const subItemMatches = item.subItems?.some(
+          (subItem) =>
+            t(subItem.label).toLowerCase().includes(query) &&
+            hasPermission(subItem.permission)
+        );
+
+        return labelMatches || subItemMatches;
+      })
+      .map((item) => {
+        // If item has sub-items, filter them too
+        if (item.subItems) {
+          return {
+            ...item,
+            subItems: item.subItems.filter(
+              (subItem) =>
+                hasPermission(subItem.permission) &&
+                (t(item.label).toLowerCase().includes(query) ||
+                  t(subItem.label).toLowerCase().includes(query))
+            ),
+          };
+        }
+        return item;
+      });
+  }, [searchQuery, hasPermission, t]);
+
+  // Auto-expand items when searching if they have matching sub-items
+  useMemo(() => {
+    if (searchQuery.trim() && !isCollapsed) {
+      const itemsToExpand: string[] = [];
+      filteredMenuItems.forEach((item) => {
+        if (item.subItems && item.subItems.length > 0) {
+          const hasMatchingSubItem = item.subItems.some((subItem) =>
+            t(subItem.label).toLowerCase().includes(searchQuery.toLowerCase())
+          );
+          if (hasMatchingSubItem && !expandedItems.includes(item.path)) {
+            itemsToExpand.push(item.path);
+          }
+        }
+      });
+      if (itemsToExpand.length > 0) {
+        setExpandedItems((prev) => [...new Set([...prev, ...itemsToExpand])]);
+      }
+    }
+  }, [searchQuery, filteredMenuItems, isCollapsed, t, expandedItems]);
 
   return (
     <aside
@@ -239,12 +302,60 @@ export default function Sidebar() {
           </button>
         </div>
 
+        {/* Search Bar */}
+        {!isCollapsed && (
+          <div className="px-3 py-2 border-b border-sidebar-border">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder={t("nav.searchMenu") || "Search menu..."}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 pr-8 h-9 bg-sidebar-accent/50 border border-primary focus-visible:ring-1 focus-visible:ring-sidebar-accent"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-sidebar-accent rounded-sm transition-colors"
+                >
+                  <X className="h-3 w-3 text-muted-foreground" />
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Collapsed Search Icon */}
+        {isCollapsed && (
+          <div className="px-2 py-2 border-b border-sidebar-border flex justify-center">
+            <Tooltip delayDuration={100}>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={toggleSidebar}
+                  className="p-2 hover:bg-sidebar-accent rounded-lg transition-colors"
+                >
+                  <Search className="h-5 w-5 text-sidebar-foreground" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                {t("nav.searchMenu") || "Expand to search"}
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        )}
+
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-sidebar-accent [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-sidebar-accent/80">
           <ul className="space-y-1 px-2">
-            {menuItems
-              .filter((item) => hasPermission(item.permission))
-              .map((item) => {
+            {filteredMenuItems.length === 0 ? (
+              <li className="px-3 py-8 text-center">
+                <p className="text-sm text-muted-foreground">
+                  {t("nav.noMenuFound") || "No menu items found"}
+                </p>
+              </li>
+            ) : (
+              filteredMenuItems.map((item) => {
                 const hasSubItems = item.subItems && item.subItems.length > 0;
                 const isExpanded = expandedItems.includes(item.path);
 
@@ -360,7 +471,8 @@ export default function Sidebar() {
                     )}
                   </li>
                 );
-              })}
+              })
+            )}
           </ul>
         </nav>
       </div>

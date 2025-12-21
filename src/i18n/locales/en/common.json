@@ -41,6 +41,8 @@
   "nav": {
     "dashboard": "Dashboard",
     "cxoDashboard": "CXO Dashboard",
+    "searchMenu": "Search menu...",
+    "noMenuFound": "No menu items found",
     "operationalDashboard": "Operational Dashboard",
     "users": "Users",
     "products": "Products",
