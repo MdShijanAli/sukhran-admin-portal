@@ -63,36 +63,6 @@ const Users = () => {
   const { hasPermission } = usePermissions();
 
   useEffect(() => {
-    const params = new URLSearchParams();
-    if (filterData.status) {
-      params.append("status", filterData.status);
-    }
-    if (filterData.subscription) {
-      params.append("subscription", filterData.subscription);
-    }
-    if (filterData.role) {
-      params.append("role_id", filterData.role);
-    }
-    const queryString = params.toString();
-    const fetchLists = async () => {
-      store.setLoading(true);
-      try {
-        await userService.fetchLists(queryString);
-      } catch (error) {
-        console.error("Error fetching filtered user list:", error);
-        toast.error("Failed to fetch filtered user list");
-      } finally {
-        store.setLoading(false);
-      }
-    };
-    if (!queryString) {
-      return;
-    } else {
-      fetchLists();
-    }
-  }, [filterData.status, filterData.subscription, filterData.role]);
-
-  useEffect(() => {
     const fetchRoles = async () => {
       try {
         await roleService.fetchLists();
@@ -103,23 +73,6 @@ const Users = () => {
     };
     fetchRoles();
   }, []);
-
-  const handleApplyFilters = (filters: Record<string, string>) => {
-    setFilterData(filters);
-    // Apply filters to your data fetching logic
-    console.log("Applied filters:", filters);
-    toast.success("Filters applied successfully");
-  };
-
-  const handleClearFilters = () => {
-    setFilterData({
-      status: "active",
-      subscription: "all",
-      role: constData.roles.ADMIN,
-    });
-    toast.info("Filters cleared");
-    setShowFilterModal(false);
-  };
 
   // Filter configurations
   const userFilterConfigs = [
@@ -183,7 +136,7 @@ const Users = () => {
     try {
       await userService.restoreUser(selectedUser.id);
       toast.success("User restored successfully");
-      handleClearFilters();
+      refreshTable?.();
     } catch (error) {
       console.error("Error restoring user:", error);
       toast.error("Failed to restore user");
@@ -471,14 +424,15 @@ const Users = () => {
       />
 
       {/* Filter Modal */}
-      <FilterModal
+      <FilterModal<User>
         open={showFilterModal}
         onClose={() => setShowFilterModal(false)}
         title={t("filter")}
         filters={userFilterConfigs}
         currentFilters={filterData}
-        onApplyFilters={handleApplyFilters}
-        onClearFilters={handleClearFilters}
+        onApplyFilters={(filters) => setFilterData(filters)}
+        service={userService}
+        store={store}
         submitButtonText={t("users.filter.apply")}
         clearButtonText={t("users.filter.clear")}
       />

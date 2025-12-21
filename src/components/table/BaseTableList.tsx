@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 import { BaseTable, Column } from "./BaseTable";
 import { ApiService } from "@/services/createApiService";
-import { RefreshCcw, RefreshCw, X } from "lucide-react";
+import { RefreshCw, X } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 
 export interface FilterOption {
