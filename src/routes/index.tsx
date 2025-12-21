@@ -34,6 +34,7 @@ import CoverageAreas from "@/pages/coverage-area/CoverageAreas";
 import ContentManagement from "@/pages/ContentManagement";
 import PackageSettings from "@/pages/package/settings/PackageSettings";
 import Donations from "@/pages/donations";
+import CreateSupport from "@/pages/supports/CreateSupport";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -221,6 +222,14 @@ const AppRoutes: React.FC = () => {
           element={
             <PrivateRoute>
               <Support />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="support/create-ticket"
+          element={
+            <PrivateRoute>
+              <CreateSupport />
             </PrivateRoute>
           }
         />

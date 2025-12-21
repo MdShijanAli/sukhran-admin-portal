@@ -1,0 +1,754 @@
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import {
+  ArrowLeft,
+  Upload,
+  X,
+  FileText,
+  User,
+  ShoppingBag,
+  Package,
+  User2,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
+import supportService from "@/services/supportService";
+import userService from "@/services/userService";
+import { cn } from "@/lib/utils";
+
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  mobile: string;
+  image_url?: string;
+}
+
+interface Order {
+  id: string;
+  orderNumber: string;
+  status?: string;
+  total?: number;
+}
+
+interface OrderDetails {
+  id: number;
+  orderNumber: string;
+  status: string;
+  totalAmount: number;
+  customer: {
+    name: string;
+    email: string;
+    mobile: string;
+  };
+  items: Array<{
+    id: number;
+    product_name: string;
+    quantity: number;
+    price: number;
+  }>;
+}
+
+export default function CreateSupport() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Form state
+  const [userId, setUserId] = useState("");
+  const [orderId, setOrderId] = useState("");
+  const [category, setCategory] = useState("");
+  const [subject, setSubject] = useState("");
+  const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState("");
+  const [attachment, setAttachment] = useState<File | null>(null);
+  const [fileName, setFileName] = useState("");
+
+  // Data lists
+  const [users, setUsers] = useState<User[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [isLoadingUsers, setIsLoadingUsers] = useState(false);
+  const [isLoadingOrders, setIsLoadingOrders] = useState(false);
+
+  // Selected details
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedOrderDetails, setSelectedOrderDetails] =
+    useState<OrderDetails | null>(null);
+  const [isLoadingUserDetails, setIsLoadingUserDetails] = useState(false);
+  const [isLoadingOrderDetails, setIsLoadingOrderDetails] = useState(false);
+
+  // Popover states
+  const [openUserPopover, setOpenUserPopover] = useState(false);
+  const [openOrderPopover, setOpenOrderPopover] = useState(false);
+
+  useEffect(() => {
+    fetchUsers();
+    fetchOrders();
+  }, []);
+
+  const fetchUsers = async () => {
+    setIsLoadingUsers(true);
+    try {
+      const response = await supportService.getCustomerList();
+      const data = response as any;
+      setUsers(data?.data || []);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      toast.error(t("support.create.failedToLoadUsers"));
+    } finally {
+      setIsLoadingUsers(false);
+    }
+  };
+
+  const fetchOrders = async () => {
+    setIsLoadingOrders(true);
+    try {
+      const response = await supportService.getOrdersList();
+      const data = response as any;
+      setOrders(data?.data || []);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      toast.error(t("support.create.failedToLoadOrders"));
+    } finally {
+      setIsLoadingOrders(false);
+    }
+  };
+
+  const handleUserSelect = async (user: User) => {
+    setUserId(user.id.toString());
+    setSelectedUser(user);
+    setOpenUserPopover(false);
+    setIsLoadingUserDetails(true);
+
+    try {
+      const response = await userService.fetchDetails(user.id);
+      const data = response as any;
+      setSelectedUser(data?.data || user);
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    } finally {
+      setIsLoadingUserDetails(false);
+    }
+  };
+
+  const handleOrderSelect = async (order: Order) => {
+    setOrderId(order.id);
+    setOpenOrderPopover(false);
+    setIsLoadingOrderDetails(true);
+
+    try {
+      const response = await supportService.getOrderDetails(order.id);
+      const data = response as any;
+      setSelectedOrderDetails(data?.data || null);
+    } catch (error) {
+      console.error("Error fetching order details:", error);
+      toast.error(t("support.create.failedToLoadOrderDetails"));
+    } finally {
+      setIsLoadingOrderDetails(false);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file size (10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error(t("support.create.fileSizeError"));
+        return;
+      }
+      setAttachment(file);
+      setFileName(file.name);
+    }
+  };
+
+  const removeFile = () => {
+    setAttachment(null);
+    setFileName("");
+    const fileInput = document.getElementById("attachment") as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
+  };
+
+  const validateForm = () => {
+    if (!userId) {
+      toast.error(t("support.validation.userRequired"));
+      return false;
+    }
+    if (!category) {
+      toast.error(t("support.validation.categoryRequired"));
+      return false;
+    }
+    if (!subject.trim()) {
+      toast.error(t("support.validation.subjectRequired"));
+      return false;
+    }
+    if (!description.trim()) {
+      toast.error(t("support.validation.descriptionRequired"));
+      return false;
+    }
+    if (!priority) {
+      toast.error(t("support.validation.priorityRequired"));
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    try {
+      const formData = new FormData();
+      formData.append("user_id", userId);
+      if (orderId) formData.append("order_id", orderId);
+      formData.append("category", category);
+      formData.append("subject", subject.trim());
+      formData.append("description", description.trim());
+      formData.append("priority", priority);
+      if (attachment) formData.append("attachment", attachment);
+
+      await supportService.storeItem(formData);
+      toast.success(t("support.messages.created"));
+      navigate("/support");
+    } catch (error) {
+      console.error("Error creating ticket:", error);
+      toast.error(t("support.messages.failedToCreate"));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="space-y-3 animate-fade-in">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/support")}
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold">{t("support.create.title")}</h1>
+            <p className="text-muted-foreground mt-1">
+              {t("support.create.subtitle")}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+          {/* Main Form */}
+          <div className="lg:col-span-2 space-y-3">
+            {/* Customer Selection */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <User className="w-5 h-5" />
+                  {t("support.create.customerInfo")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="user">
+                    {t("support.create.selectCustomer")} *
+                  </Label>
+                  <Popover
+                    open={openUserPopover}
+                    onOpenChange={setOpenUserPopover}
+                  >
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-full justify-between mt-2",
+                          !userId && "text-muted-foreground"
+                        )}
+                      >
+                        {selectedUser
+                          ? selectedUser.firstName + " " + selectedUser.lastName
+                          : t("support.create.searchCustomer")}
+                        <User2 className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0" align="start">
+                      <Command>
+                        <CommandInput
+                          placeholder={t(
+                            "support.create.searchCustomerPlaceholder"
+                          )}
+                        />
+                        <CommandEmpty>
+                          {isLoadingUsers
+                            ? t("common.loading")
+                            : t("support.create.noCustomerFound")}
+                        </CommandEmpty>
+                        <CommandGroup className="max-h-64 overflow-auto">
+                          {users.map((user) => (
+                            <CommandItem
+                              key={user.id}
+                              value={user.firstName}
+                              onSelect={() => handleUserSelect(user)}
+                            >
+                              <div className="flex flex-col">
+                                <span className="font-medium">
+                                  {user.firstName + " " + user.lastName}
+                                </span>
+                                <span className="text-xs text-muted-foreground">
+                                  {user.mobile}
+                                </span>
+                              </div>
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                {selectedUser && (
+                  <div className="p-4 border rounded-lg bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20 space-y-3">
+                    <div className="flex items-center gap-4 pb-3 border-b">
+                      {selectedUser.image_url ? (
+                        <img
+                          src={selectedUser.image_url}
+                          alt={`${selectedUser.firstName} ${selectedUser.lastName}`}
+                          className="w-16 h-16 rounded-full object-cover object-top border-2 border-white shadow-md"
+                        />
+                      ) : (
+                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xl font-bold shadow-md">
+                          {selectedUser.firstName?.[0]?.toUpperCase()}
+                          {selectedUser.lastName?.[0]?.toUpperCase()}
+                        </div>
+                      )}
+                      <div>
+                        <p className="font-semibold text-lg">
+                          {selectedUser.firstName} {selectedUser.lastName}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {t("support.create.selectedCustomer")}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <p className="text-muted-foreground text-xs mb-1">
+                          {t("support.create.email")}
+                        </p>
+                        <p className="font-medium">{selectedUser.email}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground text-xs mb-1">
+                          {t("support.create.mobile")}
+                        </p>
+                        <p className="font-medium">{selectedUser.mobile}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Order Selection (Optional) */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <ShoppingBag className="w-5 h-5" />
+                  {t("support.create.orderInfo")}{" "}
+                  <Badge variant="secondary" className="ml-2">
+                    {t("support.create.optional")}
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="order">
+                    {t("support.create.selectOrder")}
+                  </Label>
+                  <Popover
+                    open={openOrderPopover}
+                    onOpenChange={setOpenOrderPopover}
+                  >
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-full justify-between mt-2",
+                          !orderId && "text-muted-foreground"
+                        )}
+                      >
+                        {selectedOrderDetails
+                          ? selectedOrderDetails.orderNumber
+                          : t("support.create.searchOrder")}
+                        <ShoppingBag className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0" align="start">
+                      <Command>
+                        <CommandInput
+                          placeholder={t(
+                            "support.create.searchOrderPlaceholder"
+                          )}
+                        />
+                        <CommandEmpty>
+                          {isLoadingOrders
+                            ? t("common.loading")
+                            : t("support.create.noOrderFound")}
+                        </CommandEmpty>
+                        <CommandGroup className="max-h-64 overflow-auto">
+                          {orders.map((order) => (
+                            <CommandItem
+                              key={order.id}
+                              value={order.orderNumber}
+                              onSelect={() => handleOrderSelect(order)}
+                            >
+                              <span className="font-mono">
+                                {order.orderNumber}
+                              </span>
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                {selectedOrderDetails && (
+                  <div className="p-4 border rounded-lg bg-blue-50/50 dark:bg-blue-950/20 space-y-3">
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <p className="text-muted-foreground">
+                          {t("support.create.orderStatus")}
+                        </p>
+                        <Badge variant="outline" className="mt-1">
+                          {selectedOrderDetails.status}
+                        </Badge>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">
+                          {t("support.create.orderTotal")}
+                        </p>
+                        <p className="font-bold text-lg">
+                          ৳{selectedOrderDetails.totalAmount}
+                        </p>
+                      </div>
+                    </div>
+                    {selectedOrderDetails.items &&
+                      selectedOrderDetails.items.length > 0 && (
+                        <>
+                          <Separator />
+                          <div>
+                            <p className="text-sm font-medium mb-2">
+                              {t("support.create.orderItems")}
+                            </p>
+                            <div className="space-y-1">
+                              {selectedOrderDetails.items
+                                .slice(0, 3)
+                                .map((item) => (
+                                  <div
+                                    key={item.id}
+                                    className="text-xs flex items-center justify-between"
+                                  >
+                                    <span className="text-muted-foreground">
+                                      {item.product_name} x{item.quantity}
+                                    </span>
+                                    <span className="font-medium">
+                                      ৳{item.price}
+                                    </span>
+                                  </div>
+                                ))}
+                              {selectedOrderDetails.items.length > 3 && (
+                                <p className="text-xs text-muted-foreground italic">
+                                  +{selectedOrderDetails.items.length - 3} more
+                                  items
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </>
+                      )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Ticket Details */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="w-5 h-5" />
+                  {t("support.create.ticketDetails")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label htmlFor="category">
+                      {t("support.create.category")} *
+                    </Label>
+                    <Select value={category} onValueChange={setCategory}>
+                      <SelectTrigger className="mt-2">
+                        <SelectValue
+                          placeholder={t("support.create.categoryPlaceholder")}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="delivery">
+                          {t("support.tickets.category.delivery")}
+                        </SelectItem>
+                        <SelectItem value="payment">
+                          {t("support.tickets.category.payment")}
+                        </SelectItem>
+                        <SelectItem value="product">
+                          {t("support.tickets.category.product")}
+                        </SelectItem>
+                        <SelectItem value="account">
+                          {t("support.tickets.category.account")}
+                        </SelectItem>
+                        <SelectItem value="order">
+                          {t("support.tickets.category.order")}
+                        </SelectItem>
+                        <SelectItem value="return">
+                          {t("support.tickets.category.return")}
+                        </SelectItem>
+                        <SelectItem value="other">
+                          {t("support.tickets.category.other")}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="priority">
+                      {t("support.create.priority")} *
+                    </Label>
+                    <Select value={priority} onValueChange={setPriority}>
+                      <SelectTrigger className="mt-2">
+                        <SelectValue
+                          placeholder={t("support.create.priorityPlaceholder")}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="urgent">
+                          {t("support.tickets.priority.urgent")}
+                        </SelectItem>
+                        <SelectItem value="high">
+                          {t("support.tickets.priority.high")}
+                        </SelectItem>
+                        <SelectItem value="medium">
+                          {t("support.tickets.priority.medium")}
+                        </SelectItem>
+                        <SelectItem value="low">
+                          {t("support.tickets.priority.low")}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="subject">
+                    {t("support.create.subject")} *
+                  </Label>
+                  <Input
+                    id="subject"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    placeholder={t("support.create.subjectPlaceholder")}
+                    className="mt-2"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="description">
+                    {t("support.create.description")} *
+                  </Label>
+                  <Textarea
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder={t("support.create.descriptionPlaceholder")}
+                    rows={6}
+                    className="mt-2"
+                  />
+                </div>
+
+                <div>
+                  <Label>
+                    {t("support.create.attachment")}{" "}
+                    <span className="text-xs text-muted-foreground">
+                      ({t("support.create.optional")})
+                    </span>
+                  </Label>
+                  {fileName ? (
+                    <div className="mt-2 flex items-center justify-between p-3 border rounded-lg bg-muted/30">
+                      <div className="flex items-center gap-2">
+                        <FileText className="h-5 w-5 text-blue-500" />
+                        <span className="text-sm font-medium">{fileName}</span>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={removeFile}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <label
+                      htmlFor="attachment"
+                      className="mt-2 flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/30 transition-colors"
+                    >
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <Upload className="w-8 h-8 mb-2 text-muted-foreground" />
+                        <p className="mb-1 text-sm text-muted-foreground">
+                          <span className="font-semibold">
+                            {t("support.create.clickToUpload")}
+                          </span>
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {t("support.create.fileFormats")}
+                        </p>
+                      </div>
+                      <input
+                        id="attachment"
+                        type="file"
+                        className="hidden"
+                        accept=".pdf,.png,.jpg,.jpeg"
+                        onChange={handleFileChange}
+                      />
+                    </label>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Sidebar - Summary */}
+          <div className="space-y-3">
+            <Card className="sticky top-6">
+              <CardHeader>
+                <CardTitle>{t("support.create.summary")}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">
+                      {t("support.create.customer")}
+                    </span>
+                    <span className="font-medium">
+                      {selectedUser
+                        ? `${selectedUser.firstName} ${selectedUser.lastName}`
+                        : "-"}
+                    </span>
+                  </div>
+                  <Separator />
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">
+                      {t("support.create.order")}
+                    </span>
+                    <span className="font-medium">
+                      {selectedOrderDetails
+                        ? selectedOrderDetails.orderNumber
+                        : "-"}
+                    </span>
+                  </div>
+                  <Separator />
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">
+                      {t("support.create.category")}
+                    </span>
+                    <span className="font-medium">
+                      {category
+                        ? t(`support.tickets.category.${category}`)
+                        : "-"}
+                    </span>
+                  </div>
+                  <Separator />
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">
+                      {t("support.create.priority")}
+                    </span>
+                    <span className="font-medium">
+                      {priority
+                        ? t(`support.tickets.priority.${priority}`)
+                        : "-"}
+                    </span>
+                  </div>
+                  <Separator />
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">
+                      {t("support.create.hasAttachment")}
+                    </span>
+                    <Badge variant={attachment ? "default" : "secondary"}>
+                      {attachment ? t("common.yes") : t("common.no")}
+                    </Badge>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div className="space-y-2">
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting
+                      ? t("common.creating")
+                      : t("support.create.submit")}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => navigate("/support")}
+                    disabled={isSubmitting}
+                  >
+                    {t("common.cancel")}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </form>
+    </div>
+  );
+}

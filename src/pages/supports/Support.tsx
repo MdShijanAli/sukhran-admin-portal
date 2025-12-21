@@ -16,9 +16,11 @@ import ChangeStatusModal from "./modal/ChangeStatusModal";
 import ViewTicketModal from "./modal/ViewTicketModal";
 import CreateTicketModal from "./modal/CreateTicketModal";
 import StatisticsTab from "./tabs/StatisticsTab";
+import { useNavigate } from "react-router-dom";
 
 function Support() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   // State for modals
   const [showCreateTicket, setShowCreateTicket] = useState(false);
@@ -45,7 +47,8 @@ function Support() {
 
   // Handlers
   const handleCreateTicket = () => {
-    setShowCreateTicket(true);
+    navigate("/support/create-ticket");
+    // setShowCreateTicket(true);
   };
 
   const handleViewTicket = (ticket: SupportTicket) => {

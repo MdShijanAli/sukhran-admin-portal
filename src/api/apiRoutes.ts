@@ -244,5 +244,8 @@ export const apiRoutes = {
       createApiUrl(`admin/support/tickets/${id}/close`),
     bulkActions: createApiUrl("admin/support/tickets/bulk-action"),
     statistics: createApiUrl("admin/support/dashboard"),
+    orderLists: createApiUrl("admin/support/orders/ids"),
+    orderDetails: (id: number | string) =>
+      createApiUrl(`admin/support/search/orders?q=${id}`),
   },
 };
