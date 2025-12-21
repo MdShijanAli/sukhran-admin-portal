@@ -213,7 +213,7 @@ export default function StatisticsTab() {
           <h4 className="font-semibold mb-4">
             {t("support.statistics.byCategory")}
           </h4>
-          <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
             {Object.entries(statistics.by_category).map(([category, count]) => (
               <div
                 key={category}
