@@ -130,6 +130,9 @@
     "priority": "Priority",
     "priorityPlaceholder": "Select priority",
     "attachment": "Attachment",
+    "attachments": "Attachments",
+    "filesSelected": "files selected",
+    "files": "files",
     "selectFile": "Select File",
     "changeFile": "Change File",
     "fileFormats": "PDF, PNG, JPG up to 10MB",
@@ -214,6 +217,7 @@
     "categoryRequired": "Please select a category",
     "subjectRequired": "Please enter a subject",
     "descriptionRequired": "Please enter a description",
+    "descriptionMinLength": "Description must be at least 10 characters",
     "priorityRequired": "Please select a priority",
     "statusRequired": "Please select a new status",
     "priorityChangeRequired": "Please select a new priority"

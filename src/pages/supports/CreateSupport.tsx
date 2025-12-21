@@ -80,8 +80,7 @@ export default function CreateSupport() {
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("");
-  const [attachment, setAttachment] = useState<File | null>(null);
-  const [fileName, setFileName] = useState("");
+  const [attachments, setAttachments] = useState<File[]>([]);
 
   // Data lists
   const [users, setUsers] = useState<User[]>([]);
@@ -162,23 +161,24 @@ export default function CreateSupport() {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Validate file size (10MB)
-      if (file.size > 10 * 1024 * 1024) {
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
+      // Validate each file size (10MB)
+      const invalidFiles = files.filter((file) => file.size > 10 * 1024 * 1024);
+      if (invalidFiles.length > 0) {
         toast.error(t("support.create.fileSizeError"));
         return;
       }
-      setAttachment(file);
-      setFileName(file.name);
+      setAttachments((prev) => [...prev, ...files]);
     }
   };
 
-  const removeFile = () => {
-    setAttachment(null);
-    setFileName("");
-    const fileInput = document.getElementById("attachment") as HTMLInputElement;
-    if (fileInput) {
+  const removeFile = (index: number) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== index));
+    const fileInput = document.getElementById(
+      "attachments"
+    ) as HTMLInputElement;
+    if (fileInput && attachments.length === 1) {
       fileInput.value = "";
     }
   };
@@ -198,6 +198,10 @@ export default function CreateSupport() {
     }
     if (!description.trim()) {
       toast.error(t("support.validation.descriptionRequired"));
+      return false;
+    }
+    if (description.trim().length < 10) {
+      toast.error(t("support.validation.descriptionMinLength"));
       return false;
     }
     if (!priority) {
@@ -221,7 +225,9 @@ export default function CreateSupport() {
       formData.append("subject", subject.trim());
       formData.append("description", description.trim());
       formData.append("priority", priority);
-      if (attachment) formData.append("attachment", attachment);
+      attachments.forEach((file) => {
+        formData.append("attachments[]", file);
+      });
 
       await supportService.storeItem(formData);
       toast.success(t("support.messages.created"));
@@ -530,51 +536,71 @@ export default function CreateSupport() {
 
                 <div>
                   <Label>
-                    {t("support.create.attachment")}{" "}
+                    {t("support.create.attachments")}{" "}
                     <span className="text-xs text-muted-foreground">
                       ({t("support.create.optional")})
                     </span>
                   </Label>
-                  {fileName ? (
-                    <div className="mt-2 flex items-center justify-between p-3 border rounded-lg bg-muted/30">
-                      <div className="flex items-center gap-2">
-                        <FileText className="h-5 w-5 text-blue-500" />
-                        <span className="text-sm font-medium">{fileName}</span>
-                      </div>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={removeFile}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
+
+                  {attachments.length > 0 && (
+                    <div className="mt-2 space-y-2">
+                      {attachments.map((file, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 border rounded-lg bg-muted/30"
+                        >
+                          <div className="flex items-center gap-2">
+                            <FileText className="h-5 w-5 text-blue-500" />
+                            <span className="text-sm font-medium">
+                              {file.name}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              ({(file.size / 1024).toFixed(2)} KB)
+                            </span>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeFile(index)}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
                     </div>
-                  ) : (
-                    <label
-                      htmlFor="attachment"
-                      className="mt-2 flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/30 transition-colors"
-                    >
-                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <Upload className="w-8 h-8 mb-2 text-muted-foreground" />
-                        <p className="mb-1 text-sm text-muted-foreground">
-                          <span className="font-semibold">
-                            {t("support.create.clickToUpload")}
-                          </span>
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {t("support.create.fileFormats")}
-                        </p>
-                      </div>
-                      <input
-                        id="attachment"
-                        type="file"
-                        className="hidden"
-                        accept=".pdf,.png,.jpg,.jpeg"
-                        onChange={handleFileChange}
-                      />
-                    </label>
                   )}
+
+                  <label
+                    htmlFor="attachments"
+                    className="mt-2 flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/30 transition-colors"
+                  >
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                      <Upload className="w-8 h-8 mb-2 text-muted-foreground" />
+                      <p className="mb-1 text-sm text-muted-foreground">
+                        <span className="font-semibold">
+                          {t("support.create.clickToUpload")}
+                        </span>
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {t("support.create.fileFormats")}
+                      </p>
+                      {attachments.length > 0 && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {attachments.length}{" "}
+                          {t("support.create.filesSelected")}
+                        </p>
+                      )}
+                    </div>
+                    <input
+                      id="attachments"
+                      type="file"
+                      className="hidden"
+                      accept=".pdf,.png,.jpg,.jpeg"
+                      multiple
+                      onChange={handleFileChange}
+                    />
+                  </label>
                 </div>
               </CardContent>
             </Card>
@@ -632,10 +658,14 @@ export default function CreateSupport() {
                   <Separator />
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground">
-                      {t("support.create.hasAttachment")}
+                      {t("support.create.attachments")}
                     </span>
-                    <Badge variant={attachment ? "default" : "secondary"}>
-                      {attachment ? t("yes") : t("no")}
+                    <Badge
+                      variant={attachments.length > 0 ? "default" : "secondary"}
+                    >
+                      {attachments.length > 0
+                        ? `${attachments.length} ${t("support.create.files")}`
+                        : t("no")}
                     </Badge>
                   </div>
                 </div>

@@ -103,6 +103,9 @@
     "priority": "অগ্রাধিকার",
     "priorityPlaceholder": "অগ্রাধিকার নির্বাচন করুন",
     "attachment": "সংযুক্তি",
+    "attachments": "সংযুক্তি",
+    "filesSelected": "ফাইল নির্বাচিত",
+    "files": "ফাইল",
     "selectFile": "ফাইল নির্বাচন করুন",
     "changeFile": "ফাইল পরিবর্তন করুন",
     "fileFormats": "PDF, PNG, JPG সর্বোচ্চ ১০MB",
@@ -187,6 +190,7 @@
     "categoryRequired": "অনুগ্রহ করে একটি বিভাগ নির্বাচন করুন",
     "subjectRequired": "অনুগ্রহ করে একটি বিষয় লিখুন",
     "descriptionRequired": "অনুগ্রহ করে একটি বিবরণ লিখুন",
+    "descriptionMinLength": "বিবরণ কমপক্ষে ১০ অক্ষরের হতে হবে",
     "priorityRequired": "অনুগ্রহ করে একটি অগ্রাধিকার নির্বাচন করুন",
     "statusRequired": "অনুগ্রহ করে একটি নতুন অবস্থা নির্বাচন করুন",
     "priorityChangeRequired": "অনুগ্রহ করে একটি নতুন অগ্রাধিকার নির্বাচন করুন"
