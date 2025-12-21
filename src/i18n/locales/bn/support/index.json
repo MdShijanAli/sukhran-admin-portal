@@ -77,6 +77,7 @@
     "selectCustomer": "গ্রাহক নির্বাচন করুন",
     "selectedCustomer": "নির্বাচিত গ্রাহক",
     "searchCustomer": "গ্রাহক খুঁজুন...",
+    "selectCustomerFirst": "অনুগ্রহ করে প্রথমে একটি গ্রাহক নির্বাচন করুন",
     "searchCustomerPlaceholder": "নাম বা ইমেইল দিয়ে গ্রাহক খুঁজুন",
     "noCustomerFound": "কোন গ্রাহক পাওয়া যায়নি",
     "email": "ইমেইল",

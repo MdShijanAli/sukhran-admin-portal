@@ -104,6 +104,7 @@
     "selectCustomer": "Select Customer",
     "selectedCustomer": "Selected Customer",
     "searchCustomer": "Search customer...",
+    "selectCustomerFirst": "Please select a customer first",
     "searchCustomerPlaceholder": "Type to search customers by name or email",
     "noCustomerFound": "No customer found",
     "email": "Email",

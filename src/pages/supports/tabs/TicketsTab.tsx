@@ -99,11 +99,13 @@ export default function TicketsTab({
       label: t("support.actions.changeStatus"),
       icon: Edit,
       onClick: onChangeStatus,
+      show: ticket.status !== "closed" && ticket.status !== "resolved",
     },
     {
       label: t("support.actions.changePriority"),
       icon: Flag,
       onClick: onChangePriority,
+      show: ticket.status !== "closed" && ticket.status !== "resolved",
     },
     {
       label: t("support.actions.resolve"),
@@ -115,12 +117,13 @@ export default function TicketsTab({
       label: t("support.actions.close"),
       icon: XCircle,
       onClick: onClose,
-      show: ticket.status !== "closed",
+      show: ticket.status !== "closed" && ticket.status === "resolved",
     },
     {
       label: t("support.actions.delete"),
       icon: Trash2,
       onClick: onDelete,
+      show: ticket.status !== "closed" && ticket.status !== "resolved",
     },
   ];
 

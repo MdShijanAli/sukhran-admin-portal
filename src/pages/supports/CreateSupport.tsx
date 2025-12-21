@@ -8,8 +8,8 @@ import {
   FileText,
   User,
   ShoppingBag,
-  Package,
   User2,
+  Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,24 +23,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import supportService from "@/services/supportService";
 import userService from "@/services/userService";
-import { cn } from "@/lib/utils";
+import { ComboboxSelect } from "@/components/custom/ComboboxSelect";
+import ViewOrderDetailsModal from "../orders/modal/ViewModal";
 
 interface User {
   id: number;
@@ -53,16 +42,16 @@ interface User {
 
 interface Order {
   id: string;
-  orderNumber: string;
+  orderId: string;
   status?: string;
-  total?: number;
+  grandTotal?: number;
 }
 
 interface OrderDetails {
   id: number;
-  orderNumber: string;
+  orderId: string;
   status: string;
-  totalAmount: number;
+  grandTotal: number;
   customer: {
     name: string;
     email: string;
@@ -79,11 +68,14 @@ interface OrderDetails {
 export default function CreateSupport() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  console.log("navigate", navigate);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form state
   const [userId, setUserId] = useState("");
   const [orderId, setOrderId] = useState("");
+  const [showOrderDetails, setShowOrderDetails] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [category, setCategory] = useState("");
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
@@ -102,16 +94,16 @@ export default function CreateSupport() {
   const [selectedOrderDetails, setSelectedOrderDetails] =
     useState<OrderDetails | null>(null);
   const [isLoadingUserDetails, setIsLoadingUserDetails] = useState(false);
-  const [isLoadingOrderDetails, setIsLoadingOrderDetails] = useState(false);
-
-  // Popover states
-  const [openUserPopover, setOpenUserPopover] = useState(false);
-  const [openOrderPopover, setOpenOrderPopover] = useState(false);
 
   useEffect(() => {
     fetchUsers();
-    fetchOrders();
   }, []);
+
+  useEffect(() => {
+    if (selectedUser) {
+      fetchOrders(selectedUser);
+    }
+  }, [selectedUser]);
 
   const fetchUsers = async () => {
     setIsLoadingUsers(true);
@@ -127,12 +119,19 @@ export default function CreateSupport() {
     }
   };
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (newUser: User) => {
+    if (!newUser) {
+      toast.error(t("support.create.selectCustomerFirst"));
+      return;
+    }
     setIsLoadingOrders(true);
     try {
-      const response = await supportService.getOrdersList();
+      const response = await supportService.getOrdersList(
+        newUser.mobile || newUser.email
+      );
       const data = response as any;
-      setOrders(data?.data || []);
+      console.log("Orders data:", data.data.orders);
+      setOrders(data?.data?.orders || []);
     } catch (error) {
       console.error("Error fetching orders:", error);
       toast.error(t("support.create.failedToLoadOrders"));
@@ -144,7 +143,6 @@ export default function CreateSupport() {
   const handleUserSelect = async (user: User) => {
     setUserId(user.id.toString());
     setSelectedUser(user);
-    setOpenUserPopover(false);
     setIsLoadingUserDetails(true);
 
     try {
@@ -160,19 +158,7 @@ export default function CreateSupport() {
 
   const handleOrderSelect = async (order: Order) => {
     setOrderId(order.id);
-    setOpenOrderPopover(false);
-    setIsLoadingOrderDetails(true);
-
-    try {
-      const response = await supportService.getOrderDetails(order.id);
-      const data = response as any;
-      setSelectedOrderDetails(data?.data || null);
-    } catch (error) {
-      console.error("Error fetching order details:", error);
-      toast.error(t("support.create.failedToLoadOrderDetails"));
-    } finally {
-      setIsLoadingOrderDetails(false);
-    }
+    setSelectedOrder(order);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -230,7 +216,7 @@ export default function CreateSupport() {
     try {
       const formData = new FormData();
       formData.append("user_id", userId);
-      if (orderId) formData.append("order_id", orderId);
+      if (selectedOrder) formData.append("order_id", selectedOrder.id);
       formData.append("category", category);
       formData.append("subject", subject.trim());
       formData.append("description", description.trim());
@@ -242,7 +228,9 @@ export default function CreateSupport() {
       navigate("/support");
     } catch (error) {
       console.error("Error creating ticket:", error);
-      toast.error(t("support.messages.failedToCreate"));
+      toast.error(
+        error.response.data.message || t("support.messages.failedToCreate")
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -286,58 +274,37 @@ export default function CreateSupport() {
                   <Label htmlFor="user">
                     {t("support.create.selectCustomer")} *
                   </Label>
-                  <Popover
-                    open={openUserPopover}
-                    onOpenChange={setOpenUserPopover}
-                  >
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "w-full justify-between mt-2",
-                          !userId && "text-muted-foreground"
-                        )}
-                      >
-                        {selectedUser
-                          ? selectedUser.firstName + " " + selectedUser.lastName
-                          : t("support.create.searchCustomer")}
+                  <div className="mt-2">
+                    <ComboboxSelect
+                      options={users}
+                      value={userId}
+                      onValueChange={(value) => setUserId(value.toString())}
+                      onSelect={handleUserSelect}
+                      placeholder={t("support.create.searchCustomer")}
+                      searchPlaceholder={t(
+                        "support.create.searchCustomerPlaceholder"
+                      )}
+                      emptyText={t("support.create.noCustomerFound")}
+                      isLoading={isLoadingUsers}
+                      getOptionValue={(user) => user.id}
+                      getOptionLabel={(user) =>
+                        `${user.firstName} ${user.lastName}`
+                      }
+                      renderOption={(user) => (
+                        <div className="flex flex-col">
+                          <span className="font-medium">
+                            {user.firstName} {user.lastName}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {user.mobile}
+                          </span>
+                        </div>
+                      )}
+                      icon={
                         <User2 className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0" align="start">
-                      <Command>
-                        <CommandInput
-                          placeholder={t(
-                            "support.create.searchCustomerPlaceholder"
-                          )}
-                        />
-                        <CommandEmpty>
-                          {isLoadingUsers
-                            ? t("common.loading")
-                            : t("support.create.noCustomerFound")}
-                        </CommandEmpty>
-                        <CommandGroup className="max-h-64 overflow-auto">
-                          {users.map((user) => (
-                            <CommandItem
-                              key={user.id}
-                              value={user.firstName}
-                              onSelect={() => handleUserSelect(user)}
-                            >
-                              <div className="flex flex-col">
-                                <span className="font-medium">
-                                  {user.firstName + " " + user.lastName}
-                                </span>
-                                <span className="text-xs text-muted-foreground">
-                                  {user.mobile}
-                                </span>
-                              </div>
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                      }
+                    />
+                  </div>
                 </div>
 
                 {selectedUser && (
@@ -399,64 +366,42 @@ export default function CreateSupport() {
                   <Label htmlFor="order">
                     {t("support.create.selectOrder")}
                   </Label>
-                  <Popover
-                    open={openOrderPopover}
-                    onOpenChange={setOpenOrderPopover}
-                  >
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "w-full justify-between mt-2",
-                          !orderId && "text-muted-foreground"
-                        )}
-                      >
-                        {selectedOrderDetails
-                          ? selectedOrderDetails.orderNumber
-                          : t("support.create.searchOrder")}
+                  <div className="mt-2">
+                    <ComboboxSelect
+                      options={orders}
+                      value={orderId}
+                      onValueChange={(value) => setOrderId(value.toString())}
+                      onSelect={handleOrderSelect}
+                      placeholder={t("support.create.searchOrder")}
+                      searchPlaceholder={t(
+                        "support.create.searchOrderPlaceholder"
+                      )}
+                      emptyText={t("support.create.noOrderFound")}
+                      isLoading={isLoadingOrders}
+                      getOptionValue={(order) => order.id}
+                      getOptionLabel={(order) => order.orderId}
+                      renderOption={(order) => (
+                        <span className="font-mono">
+                          {order.orderId} {` - ৳${order.grandTotal}`}
+                        </span>
+                      )}
+                      icon={
                         <ShoppingBag className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0" align="start">
-                      <Command>
-                        <CommandInput
-                          placeholder={t(
-                            "support.create.searchOrderPlaceholder"
-                          )}
-                        />
-                        <CommandEmpty>
-                          {isLoadingOrders
-                            ? t("common.loading")
-                            : t("support.create.noOrderFound")}
-                        </CommandEmpty>
-                        <CommandGroup className="max-h-64 overflow-auto">
-                          {orders.map((order) => (
-                            <CommandItem
-                              key={order.id}
-                              value={order.orderNumber}
-                              onSelect={() => handleOrderSelect(order)}
-                            >
-                              <span className="font-mono">
-                                {order.orderNumber}
-                              </span>
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                      }
+                      disabled={!selectedUser}
+                    />
+                  </div>
                 </div>
 
-                {selectedOrderDetails && (
+                {selectedOrder && (
                   <div className="p-4 border rounded-lg bg-blue-50/50 dark:bg-blue-950/20 space-y-3">
-                    <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="grid grid-cols-3 justify-between items-center text-sm">
                       <div>
                         <p className="text-muted-foreground">
                           {t("support.create.orderStatus")}
                         </p>
                         <Badge variant="outline" className="mt-1">
-                          {selectedOrderDetails.status}
+                          {selectedOrder.status}
                         </Badge>
                       </div>
                       <div>
@@ -464,44 +409,19 @@ export default function CreateSupport() {
                           {t("support.create.orderTotal")}
                         </p>
                         <p className="font-bold text-lg">
-                          ৳{selectedOrderDetails.totalAmount}
+                          ৳{selectedOrder.grandTotal}
                         </p>
                       </div>
+                      <div className="flex justify-end">
+                        <Button
+                          variant="default"
+                          onClick={() => setShowOrderDetails(true)}
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
+                          <span>{t("viewDetails")}</span>
+                        </Button>
+                      </div>
                     </div>
-                    {selectedOrderDetails.items &&
-                      selectedOrderDetails.items.length > 0 && (
-                        <>
-                          <Separator />
-                          <div>
-                            <p className="text-sm font-medium mb-2">
-                              {t("support.create.orderItems")}
-                            </p>
-                            <div className="space-y-1">
-                              {selectedOrderDetails.items
-                                .slice(0, 3)
-                                .map((item) => (
-                                  <div
-                                    key={item.id}
-                                    className="text-xs flex items-center justify-between"
-                                  >
-                                    <span className="text-muted-foreground">
-                                      {item.product_name} x{item.quantity}
-                                    </span>
-                                    <span className="font-medium">
-                                      ৳{item.price}
-                                    </span>
-                                  </div>
-                                ))}
-                              {selectedOrderDetails.items.length > 3 && (
-                                <p className="text-xs text-muted-foreground italic">
-                                  +{selectedOrderDetails.items.length - 3} more
-                                  items
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                        </>
-                      )}
                   </div>
                 )}
               </CardContent>
@@ -684,9 +604,7 @@ export default function CreateSupport() {
                       {t("support.create.order")}
                     </span>
                     <span className="font-medium">
-                      {selectedOrderDetails
-                        ? selectedOrderDetails.orderNumber
-                        : "-"}
+                      {selectedOrder ? selectedOrder.orderId : "-"}
                     </span>
                   </div>
                   <Separator />
@@ -717,7 +635,7 @@ export default function CreateSupport() {
                       {t("support.create.hasAttachment")}
                     </span>
                     <Badge variant={attachment ? "default" : "secondary"}>
-                      {attachment ? t("common.yes") : t("common.no")}
+                      {attachment ? t("yes") : t("no")}
                     </Badge>
                   </div>
                 </div>
@@ -730,9 +648,7 @@ export default function CreateSupport() {
                     className="w-full"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting
-                      ? t("common.creating")
-                      : t("support.create.submit")}
+                    {isSubmitting ? t("creating") : t("support.create.submit")}
                   </Button>
                   <Button
                     type="button"
@@ -741,7 +657,7 @@ export default function CreateSupport() {
                     onClick={() => navigate("/support")}
                     disabled={isSubmitting}
                   >
-                    {t("common.cancel")}
+                    {t("cancel")}
                   </Button>
                 </div>
               </CardContent>
@@ -749,6 +665,13 @@ export default function CreateSupport() {
           </div>
         </div>
       </form>
+
+      {/* Order Details Modal */}
+      <ViewOrderDetailsModal
+        open={showOrderDetails}
+        onClose={() => setShowOrderDetails(false)}
+        orderId={orderId}
+      />
     </div>
   );
 }

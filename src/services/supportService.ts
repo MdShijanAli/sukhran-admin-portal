@@ -12,8 +12,7 @@ const apiService = createApiService<SupportTicket>(
 interface SupportService extends ApiService<SupportTicket> {
   getStatistics: () => Promise<unknown>;
   getCustomerList: () => Promise<unknown>;
-  getOrdersList: () => Promise<unknown>;
-  getOrderDetails: (orderId: string) => Promise<unknown>;
+  getOrdersList: (query: string) => Promise<unknown>;
   changeStatus: (
     id: number | string,
     status: string,
@@ -63,25 +62,13 @@ const supportService: SupportService = {
   },
 
   // Get orders list for ticket creation
-  getOrdersList: async () => {
+  getOrdersList: async (query: string) => {
+    const queryString  = query ? `?q=${query}` : "";
     try {
-      const response = await apiClient.get(apiRoutes.supports.orderLists);
+      const response = await apiClient.get(`${apiRoutes.supports.orderLists}${queryString}`);
       return response.data;
     } catch (error) {
       console.error("Error fetching orders list:", error);
-      throw error;
-    }
-  },
-
-  // Get order details by ID
-  getOrderDetails: async (orderId: string) => {
-    try {
-      const response = await apiClient.get(
-        apiRoutes.supports.orderDetails(orderId)
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching order details:", error);
       throw error;
     }
   },
