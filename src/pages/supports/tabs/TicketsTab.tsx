@@ -1,29 +1,13 @@
 import { useTranslation } from "react-i18next";
-import {
-  Eye,
-  Edit,
-  Trash2,
-  CheckCircle,
-  XCircle,
-  Flag,
-  Filter,
-} from "lucide-react";
+import { Eye, Edit, Trash2, XCircle, Flag, Filter } from "lucide-react";
 import { BaseTableList } from "@/components/table/BaseTableList";
 import { Column } from "@/components/table/BaseTable";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
 import { SupportTicket, useSupportStore } from "@/stores/supportStore";
 import supportService from "@/services/supportService";
 import { formatDate } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilterModal from "@/components/modals/FilterModal";
 import { toast } from "@/components/ui/sonner";
 import constData from "@/lib/constData";
@@ -233,6 +217,33 @@ export default function TicketsTab({
     },
   ];
 
+  useEffect(() => {
+    const params = new URLSearchParams();
+    params.append("status", filterData.status);
+
+    params.append("category", filterData.category);
+
+    params.append("priority", filterData.priority);
+
+    const queryString = params.toString();
+    const fetchLists = async () => {
+      store.setLoading(true);
+      try {
+        await supportService.fetchLists(queryString);
+      } catch (error) {
+        console.error("Error fetching filtered user list:", error);
+        toast.error("Failed to fetch filtered user list");
+      } finally {
+        store.setLoading(false);
+      }
+    };
+    if (!queryString) {
+      return;
+    } else {
+      fetchLists();
+    }
+  }, [filterData.status, filterData.category, filterData.priority]);
+
   const handleApplyFilters = (filters: Record<string, string>) => {
     setFilterData(filters);
     // Apply filters to your data fetching logic
@@ -324,9 +335,9 @@ export default function TicketsTab({
 
   const handleClearFilters = () => {
     setFilterData({
-      status: "active",
-      category: "all",
-      priority: "all",
+      status: "",
+      category: "",
+      priority: "",
     });
     toast.info("Filters cleared");
     setShowFilterModal(false);
