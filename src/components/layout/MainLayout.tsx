@@ -4,6 +4,7 @@ import Header from "./Header";
 import { useSidebarStore } from "@/stores/sidebarStore";
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
+import RouteChangeListener from "../RouteChangeListener";
 
 export default function MainLayout() {
   const { isCollapsed, setCollapsed } = useSidebarStore();
@@ -26,6 +27,7 @@ export default function MainLayout() {
 
   return (
     <div className="min-h-screen bg-background">
+      <RouteChangeListener />
       <Sidebar />
       <div
         className={cn(isCollapsed ? "ml-[4.5rem]" : "ml-64")}
