@@ -157,8 +157,8 @@ const menuItems = [
   },
   {
     icon: Bell,
-    label: "nav.notifications",
-    path: "/notifications",
+    label: "nav.notificationsSettings",
+    path: "/notification-settings",
     permission: permissions.notifications.view,
   },
   {

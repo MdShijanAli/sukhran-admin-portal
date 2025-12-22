@@ -303,7 +303,7 @@ const AppRoutes: React.FC = () => {
           }
         />
         <Route
-          path="notifications"
+          path="notification-settings"
           element={
             <PrivateRoute>
               <Notifications />
