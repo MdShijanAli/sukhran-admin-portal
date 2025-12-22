@@ -131,12 +131,12 @@ const menuItems = [
     path: "/coupons",
     permission: permissions.coupons.view,
   },
-  {
-    icon: FileText,
-    label: "nav.content",
-    path: "/content-management",
-    permission: permissions.content.view,
-  },
+  // {
+  //   icon: FileText,
+  //   label: "nav.content",
+  //   path: "/content-management",
+  //   permission: permissions.content.view,
+  // },
   // {
   //   icon: UserPlus,
   //   label: "nav.family",

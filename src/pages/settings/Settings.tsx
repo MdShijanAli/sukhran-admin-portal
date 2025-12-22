@@ -8,6 +8,7 @@ import {
   Truck,
   Mail,
   Package,
+  Shield,
 } from "lucide-react";
 import BusinessTab from "./tabs/BusinessTab";
 import NotificationsTab from "./tabs/NotificationsTab";
@@ -16,11 +17,46 @@ import PaymentTab from "./tabs/PaymentTab";
 import ShippingTab from "./tabs/ShippingTab";
 import EmailTab from "./tabs/EmailTab";
 import SubscriptionTab from "./tabs/SubscriptionTab";
+import LegalTab from "./tabs/LegalTab";
 import permissions from "@/lib/permissions";
 import { withPermission } from "@/hoc/withPermission";
 
 function Settings() {
   const { t } = useTranslation();
+
+  const tabLists = [
+    {
+      id: "business",
+      label: t("settings.business.tab"),
+      icon: Building2,
+    },
+    {
+      id: "notifications",
+      label: t("settings.notifications.tab"),
+      icon: Bell,
+    },
+    {
+      id: "system",
+      label: t("settings.system.tab"),
+      icon: Settings2,
+    },
+    {
+      id: "payment",
+      label: t("settings.payment.tab"),
+      icon: CreditCard,
+    },
+    {
+      id: "shipping",
+      label: t("settings.shipping.tab"),
+      icon: Truck,
+    },
+    {
+      id: "legal",
+      label: t("settings.terms_condition.tab"),
+      icon: Shield,
+    },
+    // {
+  ];
 
   return (
     <div className="max-w-6xl">
@@ -34,39 +70,17 @@ function Settings() {
       </div>
 
       <Tabs defaultValue="business" className="w-full mt-3">
-        <TabsList className="flex flex-wrap lg:justify-between lg:grid w-full grid-cols-3 lg:grid-cols-6">
-          <TabsTrigger value="business" className="gap-2">
-            <Building2 className="h-4 w-4" />
-            <span className="hidden sm:inline">
-              {t("settings.business.tab")}
-            </span>
-          </TabsTrigger>
-          <TabsTrigger value="notifications" className="gap-2">
-            <Bell className="h-4 w-4" />
-            <span className="hidden sm:inline">
-              {t("settings.notifications.tab")}
-            </span>
-          </TabsTrigger>
-          <TabsTrigger value="system" className="gap-2">
-            <Settings2 className="h-4 w-4" />
-            <span className="hidden sm:inline">{t("settings.system.tab")}</span>
-          </TabsTrigger>
-          <TabsTrigger value="payment" className="gap-2">
-            <CreditCard className="h-4 w-4" />
-            <span className="hidden sm:inline">
-              {t("settings.payment.tab")}
-            </span>
-          </TabsTrigger>
-          <TabsTrigger value="shipping" className="gap-2">
-            <Truck className="h-4 w-4" />
-            <span className="hidden sm:inline">
-              {t("settings.shipping.tab")}
-            </span>
-          </TabsTrigger>
-          <TabsTrigger value="email" className="gap-2">
+        <TabsList className="flex flex-wrap gap-2 justify-between">
+          {tabLists.map((tab) => (
+            <TabsTrigger key={tab.id} value={tab.id} className="gap-2">
+              <tab.icon className="h-4 w-4" />
+              <span className="hidden sm:inline">{tab.label}</span>
+            </TabsTrigger>
+          ))}
+          {/* <TabsTrigger value="email" className="gap-2">
             <Mail className="h-4 w-4" />
             <span className="hidden sm:inline">{t("settings.email.tab")}</span>
-          </TabsTrigger>
+          </TabsTrigger> */}
           {/* <TabsTrigger value="subscription" className="gap-2">
             <Package className="h-4 w-4" />
             <span className="hidden sm:inline">
@@ -97,6 +111,10 @@ function Settings() {
 
         <TabsContent value="email" className="space-y-3">
           <EmailTab />
+        </TabsContent>
+
+        <TabsContent value="legal" className="space-y-3">
+          <LegalTab />
         </TabsContent>
 
         {/* <TabsContent value="subscription" className="space-y-3">

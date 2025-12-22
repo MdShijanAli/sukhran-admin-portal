@@ -17,6 +17,33 @@
     "fetchError": "Failed to fetch settings",
     "saveError": "Failed to save settings"
   },
+  "terms_condition": {
+    "tab": "Terms & Conditions",
+    "title": "Terms & Conditions Configuration",
+    "description": "Update your store's terms and policies",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "returnPolicy": "Return Policy",
+    "shippingPolicy": "Shipping Policy"
+  },
+  "legal": {
+    "title": "Legal Documents",
+    "description": "Manage your terms of service and privacy policy",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "termsContent": "Terms of Service Content",
+    "privacyContent": "Privacy Policy Content",
+    "termsPlaceholder": "Enter your terms of service content...",
+    "privacyPlaceholder": "Enter your privacy policy content...",
+    "reset": "Reset",
+    "preview": "Preview",
+    "saving": "Saving...",
+    "saveTerms": "Save Terms",
+    "savePrivacy": "Save Privacy Policy",
+    "lastUpdated": "Last updated:",
+    "lastUpdatedBy": "Last updated by:",
+    "previewDescription": "Preview of how this content will appear to users"
+  },
   "business": {
     "tab": "Business",
     "title": "Business Information",
