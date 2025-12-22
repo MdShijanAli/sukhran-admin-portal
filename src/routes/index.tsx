@@ -23,7 +23,7 @@ const Support = lazy(() => import("@/pages/supports/Support"));
 const Coupons = lazy(() => import("@/pages/coupon/Coupons"));
 const Returns = lazy(() => import("@/pages/Returns"));
 const RoleManagement = lazy(() => import("@/pages/roles/RoleManagement"));
-const Notifications = lazy(() => import("@/pages/Notifications"));
+const Notifications = lazy(() => import("@/pages/notifications/Notifications"));
 const Settings = lazy(() => import("@/pages/settings/Settings"));
 const CoinManagement = lazy(
   () => import("@/pages/coin-management/CoinManagement")

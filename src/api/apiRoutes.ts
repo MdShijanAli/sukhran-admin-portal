@@ -246,4 +246,10 @@ export const apiRoutes = {
     statistics: createApiUrl("admin/support/dashboard"),
     orderLists: createApiUrl("admin/support/search/customer"),
   },
+
+  notifications: {
+    getAll: createApiUrl("admin/notifications"),
+    send: createApiUrl("admin/notifications/send"),
+    test: createApiUrl("admin/notifications/test"),
+  },
 };
