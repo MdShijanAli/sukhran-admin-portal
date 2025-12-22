@@ -41,6 +41,8 @@ export default function FormModal({
   const { t } = useTranslation();
   const { permissions, totalPermissions } = useRoleStore();
 
+  console.log("Total Permissions from Store:", permissions, totalPermissions);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<RoleFormData>({

@@ -46,12 +46,6 @@ const menuItems = [
     permission: permissions.dashboard.view,
   },
   {
-    icon: Users,
-    label: "nav.users",
-    path: "/users",
-    permission: permissions.users.view,
-  },
-  {
     icon: Package,
     label: "nav.products",
     path: "/products",
@@ -156,12 +150,6 @@ const menuItems = [
   //   permission: permissions.returns.view,
   // },
   {
-    icon: Shield,
-    label: "nav.roles",
-    path: "/role-management",
-    permission: permissions.roles.view,
-  },
-  {
     icon: Heart,
     label: "nav.donations",
     path: "/donations",
@@ -172,6 +160,26 @@ const menuItems = [
     label: "nav.notifications",
     path: "/notifications",
     permission: permissions.notifications.view,
+  },
+  {
+    icon: Users,
+    label: "nav.usersSettings",
+    path: "/users",
+    permission: permissions.users.view,
+    subItems: [
+      {
+        icon: Users,
+        label: "nav.users",
+        path: "/users",
+        permission: permissions.users.view,
+      },
+      {
+        icon: Shield,
+        label: "nav.roles",
+        path: "/role-management",
+        permission: permissions.roles.view,
+      },
+    ],
   },
   {
     icon: Settings,

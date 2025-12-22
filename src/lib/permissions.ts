@@ -32,6 +32,11 @@ const permissions = {
     delete: "categories.delete",
   },
 
+  activity_logs: {
+    view: "activity_logs.view",
+    view_own: "activity_logs.view_own",
+  },
+
   // Products Management
   products: {
     view: "products.view",
@@ -48,11 +53,20 @@ const permissions = {
     delete: "packages.delete",
   },
 
+  package_schedule_options: {
+    view: "package_schedule_options.view",
+    create: "package_schedule_options.create",
+    edit: "package_schedule_options.update",
+    delete: "package_schedule_options.delete",
+  },
+
   // Orders Management
   orders: {
     view: "orders.view",
     create: "orders.create",
     edit: "orders.update",
+    manage: "orders.manage",
+    modify_items: "orders.modify_items",
     delete: "orders.delete",
     updateStatus: "orders.update_status",
     updateDeliveryTime: "orders.update_delivery_time",
@@ -81,6 +95,7 @@ const permissions = {
   transactions: {
     view: "transactions.view",
     export: "transactions.export",
+    refund: "transactions.refund",
   },
 
   // Loyalty & Rewards
@@ -119,6 +134,13 @@ const permissions = {
     delete: "coupons.delete",
   },
 
+  coins: {
+    view: "coins.view",
+    manage: "coins.manage",
+    send: "coins.send",
+    view_transactions: "coins.view_transactions",
+  },
+
   // Content Management
   content: {
     view: "content.view",
@@ -148,6 +170,7 @@ const permissions = {
     create: "donations.create",
     edit: "donations.update",
     delete: "donations.delete",
+    manage: "donations.manage",
   },
 
   // Notifications
@@ -169,6 +192,14 @@ const permissions = {
   reports: {
     view: "reports.view",
     export: "reports.export",
+  },
+
+  subscriptions: {
+    view: "subscriptions.view",
+    create: "subscriptions.create",
+    edit: "subscriptions.update",
+    delete: "subscriptions.delete",
+    settings: "subscriptions.manage_settings",
   },
 };
 
