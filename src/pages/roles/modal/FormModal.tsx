@@ -318,7 +318,7 @@ export default function FormModal({
                             {module.module}
                           </span>
                           <Badge variant="outline" className="text-xs">
-                            {selectedCount} / {totalPermissions}
+                            {selectedCount} / {module.permissions.length}
                           </Badge>
                         </div>
                       </AccordionTrigger>
