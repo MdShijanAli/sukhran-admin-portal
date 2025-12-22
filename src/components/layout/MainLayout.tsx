@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import { Suspense } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { useSidebarStore } from "@/stores/sidebarStore";
@@ -41,7 +42,9 @@ export default function MainLayout() {
             isCollapsed ? "p-3" : "p-3"
           }`}
         >
-          <Outlet />
+          <Suspense fallback={null}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </div>
