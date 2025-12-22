@@ -42,9 +42,9 @@ export default function MainLayout() {
             isCollapsed ? "p-3" : "p-3"
           }`}
         >
-          {/* <Suspense fallback={null}> */}
-          <Outlet />
-          {/* </Suspense> */}
+          <Suspense fallback={null}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </div>

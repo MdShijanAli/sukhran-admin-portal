@@ -364,37 +364,73 @@ export default function Sidebar() {
                     {hasSubItems ? (
                       <>
                         {/* Parent Item with Submenu */}
-                        <button
-                          onClick={() => toggleExpand(item.path)}
-                          className={cn(
-                            "w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-300 ease-in-out",
-                            "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                            "text-sidebar-foreground"
-                          )}
-                        >
-                          {isCollapsed ? (
-                            <Tooltip delayDuration={100}>
-                              <TooltipTrigger asChild>
+                        {isCollapsed ? (
+                          <Tooltip delayDuration={100}>
+                            <TooltipTrigger asChild>
+                              <button
+                                onClick={() => toggleExpand(item.path)}
+                                className={cn(
+                                  "w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-300 ease-in-out",
+                                  "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                                  "text-sidebar-foreground"
+                                )}
+                              >
                                 <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
-                              </TooltipTrigger>
-                              <TooltipContent side="right">
-                                {t(item.label)}
-                              </TooltipContent>
-                            </Tooltip>
-                          ) : (
-                            <>
-                              <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
-                              <span className="flex-1 text-left transition-opacity duration-300 ease-in-out">
-                                {t(item.label)}
-                              </span>
-                              {isExpanded ? (
-                                <ChevronUp className="h-4 w-4 transition-transform duration-500" />
-                              ) : (
-                                <ChevronDown className="h-4 w-4 transition-transform duration-500" />
-                              )}
-                            </>
-                          )}
-                        </button>
+                              </button>
+                            </TooltipTrigger>
+                            <TooltipContent side="right" className="p-0">
+                              <div className="flex flex-col min-w-[180px]">
+                                <div className="px-3 py-2 font-medium border-b">
+                                  {t(item.label)}
+                                </div>
+                                <ul className="py-1">
+                                  {item.subItems
+                                    ?.filter((subItem) =>
+                                      hasPermission(subItem.permission)
+                                    )
+                                    .map((subItem) => (
+                                      <li key={subItem.path}>
+                                        <NavLink
+                                          to={subItem.path}
+                                          className={({ isActive }) =>
+                                            cn(
+                                              "flex items-center gap-3 px-3 py-2 text-sm transition-colors",
+                                              "hover:bg-sidebar-accent",
+                                              isActive
+                                                ? "bg-sidebar-accent font-medium"
+                                                : ""
+                                            )
+                                          }
+                                        >
+                                          <subItem.icon className="h-4 w-4 flex-shrink-0" />
+                                          <span>{t(subItem.label)}</span>
+                                        </NavLink>
+                                      </li>
+                                    ))}
+                                </ul>
+                              </div>
+                            </TooltipContent>
+                          </Tooltip>
+                        ) : (
+                          <button
+                            onClick={() => toggleExpand(item.path)}
+                            className={cn(
+                              "w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-300 ease-in-out",
+                              "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                              "text-sidebar-foreground"
+                            )}
+                          >
+                            <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
+                            <span className="flex-1 text-left transition-opacity duration-300 ease-in-out">
+                              {t(item.label)}
+                            </span>
+                            {isExpanded ? (
+                              <ChevronUp className="h-4 w-4 transition-transform duration-500" />
+                            ) : (
+                              <ChevronDown className="h-4 w-4 transition-transform duration-500" />
+                            )}
+                          </button>
+                        )}
 
                         {/* Submenu Items */}
                         {!isCollapsed && (
