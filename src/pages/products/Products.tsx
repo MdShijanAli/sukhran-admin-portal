@@ -46,9 +46,21 @@ const Products = () => {
   const products = store.products || [];
   const pagination = store.pagination;
   const isLoading = store.isLoading || false;
+  const [hasInitialFetch, setHasInitialFetch] = useState(false);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   const fetchProducts = useCallback(
-    async (page = 1) => {
+    async (page = 1, forceFetch = false) => {
+      if (
+        !forceFetch &&
+        products.length > 0 &&
+        !hasInitialFetch &&
+        isFirstRender
+      ) {
+        console.log("Using cached data from store, skipping API call");
+        setHasInitialFetch(true);
+        return;
+      }
       try {
         store.setLoading?.(true);
         const params = new URLSearchParams();
@@ -57,6 +69,9 @@ const Products = () => {
         }
         params.append("page", page.toString());
         await productService.fetchLists(params.toString());
+        if (!hasInitialFetch) {
+          setHasInitialFetch(true);
+        }
       } catch (error) {
         console.error("Failed to fetch products:", error);
         toast.error(error.data.message || "Failed to load products");
@@ -64,28 +79,37 @@ const Products = () => {
         store.setLoading?.(false);
       }
     },
-    [searchQuery]
+    [searchQuery, isFirstRender, hasInitialFetch, products.length]
   );
+
+  // Fetch on mount and when dependencies change
+  useEffect(() => {
+    if (isFirstRender) {
+      setIsFirstRender(false);
+      fetchProducts(currentPage);
+    }
+  }, [fetchProducts, isFirstRender]);
 
   // Fetch products on mount and page change
   useEffect(() => {
-    fetchProducts(currentPage);
-  }, [fetchProducts, currentPage]);
+    if (isFirstRender) return; // Skip debounce on first render
 
-  // Debounced search - reset to page 1
-  useEffect(() => {
     const timer = setTimeout(() => {
-      setCurrentPage(1);
-      fetchProducts(1);
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+      } else {
+        fetchProducts(1);
+      }
     }, 500);
 
     return () => clearTimeout(timer);
+    // Only run when searchQuery changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await fetchProducts(currentPage);
+    await fetchProducts(currentPage, true);
     setIsRefreshing(false);
   };
 

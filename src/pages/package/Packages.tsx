@@ -47,9 +47,21 @@ function Packages() {
   const packages = store.packages || [];
   const pagination = store.pagination;
   const isLoading = store.isLoading || false;
+  const [hasInitialFetch, setHasInitialFetch] = useState(false);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   const fetchPackages = useCallback(
-    async (page = 1) => {
+    async (page = 1, forceFetch = false) => {
+      if (
+        !forceFetch &&
+        packages.length > 0 &&
+        !hasInitialFetch &&
+        isFirstRender
+      ) {
+        console.log("Using cached data from store, skipping API call");
+        setHasInitialFetch(true);
+        return;
+      }
       try {
         store.setLoading?.(true);
         const params = new URLSearchParams();
@@ -58,6 +70,9 @@ function Packages() {
         }
         params.append("page", page.toString());
         await packageService.fetchLists(params.toString());
+        if (!hasInitialFetch) {
+          setHasInitialFetch(true);
+        }
       } catch (error) {
         console.error("Failed to fetch packages:", error);
         toast.error(t("packages.messages.failedToLoad"));
@@ -65,28 +80,37 @@ function Packages() {
         store.setLoading?.(false);
       }
     },
-    [searchQuery]
+    [searchQuery, isFirstRender, hasInitialFetch, packages.length]
   );
 
-  // Fetch packages on mount and page change
+  // Fetch on mount and when dependencies change
   useEffect(() => {
-    fetchPackages(currentPage);
-  }, [fetchPackages, currentPage]);
+    if (isFirstRender) {
+      setIsFirstRender(false);
+      fetchPackages(currentPage);
+    }
+  }, [fetchPackages, isFirstRender]);
 
-  // Debounced search - reset to page 1
+  // Handle search with debounce
   useEffect(() => {
+    if (isFirstRender) return; // Skip debounce on first render
+
     const timer = setTimeout(() => {
-      setCurrentPage(1);
-      fetchPackages(1);
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+      } else {
+        fetchPackages(1);
+      }
     }, 500);
 
     return () => clearTimeout(timer);
+    // Only run when searchQuery changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await fetchPackages(currentPage);
+    await fetchPackages(currentPage, true);
     setIsRefreshing(false);
   };
 
