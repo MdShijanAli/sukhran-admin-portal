@@ -27,15 +27,18 @@ export default function Profile() {
   const user = useAuthStore((state) => state.user);
 
   // Personal Info State
-  const [name, setName] = useState(user.firstName || "");
+  const [firstName, setFirstName] = useState(user.firstName || "");
+  const [lastName, setLastName] = useState(user.lastName || "");
   const [email, setEmail] = useState(user?.email || "");
   const [phone, setPhone] = useState(user.mobile || "");
-  const [location, setLocation] = useState("Dhaka, Bangladesh");
+  const [location, setLocation] = useState("");
   const [showPassword, setShowPassword] = useState({
     old_password: false,
     new_password: false,
     confirm_password: false,
   });
+  const [isProfileUpdating, setIsProfileUpdating] = useState(false);
+  const [isPasswordChanging, setIsPasswordChanging] = useState(false);
 
   // Password State
   const [currentPassword, setCurrentPassword] = useState("");
@@ -58,20 +61,54 @@ export default function Profile() {
     .join("")
     .toUpperCase();
 
-  const handlePersonalInfoSave = () => {};
+  const handlePersonalInfoSave = async () => {
+    setIsProfileUpdating(true);
+    try {
+      const response = await authService.updateProfile({
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        mobile: phone,
+        location: location,
+      });
+      console.log("Profile update response:", response);
+      toast.success("Profile updated successfully");
+    } catch (error: any) {
+      console.error("Profile update error:", error);
+      toast.error(error.response.data.message || "Failed to update profile");
+    } finally {
+      setIsProfileUpdating(false);
+    }
+  };
 
-  const handlePasswordChange = () => {
+  const handlePasswordChange = async () => {
     if (newPassword !== confirmPassword) {
+      toast.error(t("profile.messages.passwordMismatch"));
       return;
     }
 
     if (newPassword.length < 6) {
+      toast.error(t("profile.messages.passwordTooShort"));
       return;
     }
 
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
+    try {
+      setIsPasswordChanging(true);
+      await authService.changePassword({
+        old_password: currentPassword,
+        new_password: newPassword,
+        new_password_confirmation: confirmPassword,
+      });
+      toast.success(t("profile.messages.passwordChangeSuccess"));
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error: any) {
+      console.error("Password change error:", error);
+      toast.error(error.response.data.message || "Failed to change password");
+    } finally {
+      setIsPasswordChanging(false);
+    }
   };
 
   const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -189,25 +226,44 @@ export default function Profile() {
                   <Lock className="h-4 w-4 mr-2" />
                   {t("profile.security")}
                 </TabsTrigger>
-                <TabsTrigger value="theme">
+                {/* <TabsTrigger value="theme">
                   <Palette className="h-4 w-4 mr-2" />
                   {t("profile.theme")}
-                </TabsTrigger>
+                </TabsTrigger> */}
               </TabsList>
 
               {/* Personal Information Tab */}
               <TabsContent value="personal" className="space-y-4 mt-4">
                 <div className="grid gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="name" className="flex items-center gap-2">
-                      <User className="h-4 w-4" />
-                      {t("profile.name")}
-                    </Label>
-                    <Input
-                      id="name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="grid gap-2">
+                      <Label
+                        htmlFor="firstName"
+                        className="flex items-center gap-2"
+                      >
+                        <User className="h-4 w-4" />
+                        {t("profile.firstName")}
+                      </Label>
+                      <Input
+                        id="firstName"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label
+                        htmlFor="lastName"
+                        className="flex items-center gap-2"
+                      >
+                        <User className="h-4 w-4" />
+                        {t("profile.lastName")}
+                      </Label>
+                      <Input
+                        id="lastName"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                      />
+                    </div>
                   </div>
 
                   <div className="grid gap-2">
@@ -246,6 +302,7 @@ export default function Profile() {
                     <Input
                       id="location"
                       value={location}
+                      placeholder="Enter your location"
                       onChange={(e) => setLocation(e.target.value)}
                     />
                   </div>
@@ -265,10 +322,13 @@ export default function Profile() {
                 </div>
 
                 <div className="flex gap-2 pt-4">
-                  <Button onClick={handlePersonalInfoSave}>
-                    {t("common.save")}
+                  <Button
+                    onClick={handlePersonalInfoSave}
+                    disabled={isProfileUpdating}
+                  >
+                    {isProfileUpdating ? t("saving") : t("save")}
                   </Button>
-                  <Button variant="outline">{t("common.cancel")}</Button>
+                  <Button variant="outline">{t("cancel")}</Button>
                 </div>
               </TabsContent>
 
@@ -389,12 +449,22 @@ export default function Profile() {
                         />
                       )}
                     </div>
+                    {confirmPassword && newPassword !== confirmPassword && (
+                      <p className="text-sm text-destructive">
+                        {t("profile.messages.passwordMismatch")}
+                      </p>
+                    )}
                   </div>
                 </div>
 
                 <div className="flex gap-2 pt-4">
-                  <Button onClick={handlePasswordChange}>
-                    {t("profile.changePassword")}
+                  <Button
+                    onClick={handlePasswordChange}
+                    disabled={isPasswordChanging}
+                  >
+                    {isPasswordChanging
+                      ? t("profile.changingPassword")
+                      : t("profile.changePassword")}
                   </Button>
                   <Button variant="outline">{t("common.cancel")}</Button>
                 </div>

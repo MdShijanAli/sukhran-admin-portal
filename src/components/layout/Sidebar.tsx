@@ -137,12 +137,12 @@ const menuItems = [
     path: "/content-management",
     permission: permissions.content.view,
   },
-  {
-    icon: UserPlus,
-    label: "nav.family",
-    path: "/family",
-    permission: permissions.family.view,
-  },
+  // {
+  //   icon: UserPlus,
+  //   label: "nav.family",
+  //   path: "/family",
+  //   permission: permissions.family.view,
+  // },
   // {
   //   icon: RefreshCw,
   //   label: "nav.returns",

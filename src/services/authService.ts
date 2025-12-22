@@ -81,6 +81,22 @@ const authService = {
     }
   },
 
+  updateProfile: async (data: any) => {
+    try {
+      const resp = await apiClient.post(apiRoutes.profile.updateProfile, data);
+      console.log("Update Profile response:", resp);
+      if (resp && resp.status === 200) {
+        useAuthStore.setState({
+          user: resp.data.user,
+        });
+      }
+      return resp.data;
+    } catch (e) {
+      console.error("Update Profile error:", e);
+      throw e;
+    }
+  },
+
   logout: async (): Promise<LogoutResponse> => {
     try {
       // Best-effort server logout
@@ -135,6 +151,20 @@ const authService = {
       return resp.data;
     } catch (e) {
       console.error("Forgot Password error:", e);
+      throw e;
+    }
+  },
+
+  changePassword: async (data: {
+    old_password: string;
+    new_password: string;
+    new_password_confirmation: string;
+  }) => {
+    try {
+      const resp = await apiClient.post(apiRoutes.auth.changePassword, data);
+      return resp.data;
+    } catch (e) {
+      console.error("Change Password error:", e);
       throw e;
     }
   },

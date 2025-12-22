@@ -4,6 +4,8 @@
   "security": "Security",
   "theme": "Theme",
   "name": "Name",
+  "firstName": "First Name",
+  "lastName": "Last Name",
   "email": "Email",
   "phone": "Phone",
   "location": "Location",
@@ -13,6 +15,7 @@
   "newPassword": "New Password",
   "confirmPassword": "Confirm Password",
   "changePassword": "Change Password",
+  "changingPassword": "Changing Password...",
   "themeDescription": "Customize the appearance of your dashboard with your brand colors and logo.",
   "companyLogo": "Company Logo",
   "uploadLogo": "Click to upload logo",
@@ -27,6 +30,7 @@
     "passwordMismatch": "Passwords do not match",
     "passwordTooShort": "Password must be at least 6 characters",
     "profileUpdated": "Profile updated successfully",
-    "failedToUpdate": "Failed to update profile"
+    "failedToUpdate": "Failed to update profile",
+    "passwordChangeSuccess": "Password changed successfully"
   }
 }

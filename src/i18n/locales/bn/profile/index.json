@@ -4,6 +4,8 @@
   "security": "নিরাপত্তা",
   "theme": "থিম",
   "name": "নাম",
+  "firstName": "প্রথম নাম",
+  "lastName": "শেষ নাম",
   "email": "ইমেইল",
   "phone": "ফোন",
   "location": "অবস্থান",
@@ -18,6 +20,7 @@
   "uploadLogo": "লোগো আপলোড করতে ক্লিক করুন",
   "primaryColor": "প্রাথমিক রঙ",
   "secondaryColor": "সেকেন্ডারি রঙ",
+  "changingPassword": "পাসওয়ার্ড পরিবর্তন হচ্ছে...",
   "colorPreview": "রঙের পূর্বরূপ",
   "applyTheme": "থিম প্রয়োগ করুন",
   "uploading": "আপলোড হচ্ছে...",
@@ -27,6 +30,7 @@
     "passwordMismatch": "পাসওয়ার্ড মিলছে না",
     "passwordTooShort": "পাসওয়ার্ড কমপক্ষে ৬টি অক্ষরের হতে হবে",
     "profileUpdated": "প্রোফাইল সফলভাবে আপডেট হয়েছে",
-    "failedToUpdate": "প্রোফাইল আপডেট করতে ব্যর্থ"
+    "failedToUpdate": "প্রোফাইল আপডেট করতে ব্যর্থ",
+    "passwordChangeSuccess": "পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে"
   }
 }

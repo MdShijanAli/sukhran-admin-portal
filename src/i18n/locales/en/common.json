@@ -34,6 +34,7 @@
   "deleteConfirm": "Are you sure you want to delete",
   "deleteAftermath": "This action cannot be undone.",
   "info": "Info",
+  "saving": "Saving...",
   "lastUpdated": "Last Updated",
   "created": "Created",
   "refreshSuccess": "Refresh successful",
