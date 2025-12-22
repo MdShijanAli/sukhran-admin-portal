@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,11 +42,14 @@ export function DropdownMenuActions<T>({
   align = "end",
 }: DropdownMenuActionsProps<T>) {
   const { t } = useTranslation();
-  const visibleActions = actions.filter((action) => {
-    if (action.show === undefined) return true;
-    if (typeof action.show === "function") return action.show(item);
-    return action.show;
-  });
+
+  const visibleActions = useMemo(() => {
+    return actions.filter((action) => {
+      if (action.show === undefined) return true;
+      if (typeof action.show === "function") return action.show(item);
+      return action.show;
+    });
+  }, [actions, item]);
 
   const menuLabelNode = menuLabel ? menuLabel : t("actions");
 

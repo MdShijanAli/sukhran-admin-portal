@@ -196,7 +196,7 @@ export function BaseTableList<T>({
     async (forceFetch = false) => {
       // Check if we should skip fetching
       // Skip if: data exists in store AND it's first render AND not forcing fetch
-      if (!forceFetch && data.length > 0 && !hasInitialFetch && isFirstRender) {
+      if (!forceFetch && !hasInitialFetch && isFirstRender && data.length > 0) {
         console.log("Using cached data from store, skipping API call");
         setHasInitialFetch(true);
         return;
@@ -257,10 +257,10 @@ export function BaseTableList<T>({
           setLoading(false);
         }
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [
       service,
+      serviceMethod,
       setLoading,
       setError,
       searchQuery,
@@ -269,7 +269,6 @@ export function BaseTableList<T>({
       showPagination,
       filterValues,
       hasInitialFetch,
-      data.length,
       isFirstRender,
     ]
   );
