@@ -18,6 +18,9 @@ import userService from "@/services/userService";
 import { ComboboxSelect } from "@/components/custom/ComboboxSelect";
 import { ImageUpload } from "@/components/content/ImageUpload";
 import { toast } from "sonner";
+import { useProductStore } from "@/stores/productStore";
+import productService from "@/services/productService";
+import { useTranslation } from "react-i18next";
 
 interface NotificationFormData {
   title: string;
@@ -43,7 +46,9 @@ export default function SendNotificationModal({
   onClose,
   onSuccess,
 }: SendNotificationModalProps) {
-  const [packages, setPackages] = useState([]);
+  const packageStore = usePackageStore();
+  const productStore = useProductStore();
+  const { t } = useTranslation();
   const userStore = useUserStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<NotificationFormData>({
@@ -59,21 +64,7 @@ export default function SendNotificationModal({
     target_user_ids: [],
   });
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await packageService.fetchLists();
-      const data = response as any;
-      console.log("Fetched packages:", data);
-      setPackages(data?.data || []);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      toast.error(t("support.create.failedToLoadUsers"));
-    }
-  };
+  // No need for manual fetching - ComboboxSelect will handle it
 
   const handleImageUpload = (imageUrl: string) => {
     if (!imageUrl) {
@@ -145,7 +136,6 @@ export default function SendNotificationModal({
     }
 
     setIsSubmitting(true);
-    // product_id: formData.product_id || undefined,
     try {
       await notificationService.sendNotification({
         title: formData.title,
@@ -154,6 +144,7 @@ export default function SendNotificationModal({
         link_type: formData.link_type,
         package_id: formData.package_id || undefined,
         url: formData.url || undefined,
+        product_id: formData.product_id || undefined,
         target_audience: formData.target_audience,
         target_user_ids:
           formData.target_audience === "specific"
@@ -164,6 +155,19 @@ export default function SendNotificationModal({
       toast.success("Notification sent successfully");
       onSuccess?.();
       onClose();
+      // Reset form
+      setFormData({
+        title: "",
+        body: "",
+        image: "",
+        imageFile: null,
+        link_type: "none",
+        package_id: "",
+        product_id: "",
+        url: "",
+        target_audience: "all",
+        target_user_ids: [],
+      });
     } catch (error) {
       console.error("Error sending notification:", error);
       toast.error("Failed to send notification");
@@ -258,13 +262,16 @@ export default function SendNotificationModal({
           </div>
         )}
 
-        {/* {formData.link_type === "product" && (
+        {formData.link_type === "product" && (
           <div className="space-y-2">
-            <Label htmlFor="package_id">
+            <Label htmlFor="product_id">
               Select Product <span className="text-red-500">*</span>
             </Label>
             <ComboboxSelect
-              options={products}
+              service={productService}
+              store={productStore}
+              storeDataKey="products"
+              enableApiSearch={true}
               value={formData.product_id}
               onValueChange={(value) =>
                 setFormData((prev) => ({
@@ -275,26 +282,30 @@ export default function SendNotificationModal({
               placeholder="Select a product..."
               searchPlaceholder="Search products..."
               emptyText="No products found."
-              getOptionValue={(pkg) => pkg.id.toString()}
-              getOptionLabel={(pkg) => pkg?.product_name}
-              renderOption={(pkg) => (
+              getOptionValue={(product) => product.id.toString()}
+              getOptionLabel={(product) => product?.name}
+              renderOption={(product) => (
                 <div className="flex flex-col">
-                  <span className="font-medium">{pkg.name}</span>
+                  <span className="font-medium">{product.name}</span>
                   <span className="text-xs text-muted-foreground">
-                    {pkg.category?.category_name}
+                    {product.category?.name}
                   </span>
                 </div>
               )}
             />
           </div>
-        )} */}
+        )}
+
         {formData.link_type === "package" && (
           <div className="space-y-2">
             <Label htmlFor="package_id">
               Select Package <span className="text-red-500">*</span>
             </Label>
             <ComboboxSelect
-              options={packages}
+              service={packageService}
+              store={packageStore}
+              storeDataKey="packages"
+              enableApiSearch={true}
               value={formData.package_id}
               onValueChange={(value) =>
                 setFormData((prev) => ({
@@ -309,10 +320,7 @@ export default function SendNotificationModal({
               getOptionLabel={(pkg) => pkg?.package_name}
               renderOption={(pkg) => (
                 <div className="flex flex-col">
-                  <span className="font-medium">{pkg.name}</span>
-                  <span className="text-xs text-muted-foreground">
-                    {pkg.category?.category_name}
-                  </span>
+                  <span className="font-medium">{pkg.package_name}</span>
                 </div>
               )}
             />

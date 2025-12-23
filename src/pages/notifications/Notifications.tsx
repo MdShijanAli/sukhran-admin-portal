@@ -13,6 +13,7 @@ import SendNotificationModal from "./modal/SendNotificationModal";
 import TestNotificationModal from "./modal/TestNotificationModal";
 import ViewNotificationModal from "./modal/ViewNotificationModal";
 import { useTranslation } from "react-i18next";
+import { formatDate } from "@/lib/utils";
 
 const Notifications = () => {
   const { t } = useTranslation();
@@ -85,9 +86,11 @@ const Notifications = () => {
       key: "link_type",
       label: "Link Type",
       render: (notification) => (
-        <Badge variant="outline" className="capitalize">
-          {notification.link_type}
-        </Badge>
+        <div className="text-center w-[80px]">
+          <Badge variant="outline" className="capitalize">
+            {notification.link_type}
+          </Badge>
+        </div>
       ),
       className: "text-center",
     },
@@ -95,15 +98,17 @@ const Notifications = () => {
       key: "target_audience",
       label: "Target Audience",
       render: (notification) => (
-        <Badge
-          variant={
-            notification.target_audience === "all" ? "default" : "secondary"
-          }
-        >
-          {notification.target_audience === "all"
-            ? "All Users"
-            : "Specific Users"}
-        </Badge>
+        <div className="w-[120px]">
+          <Badge
+            variant={
+              notification.target_audience === "all" ? "default" : "secondary"
+            }
+          >
+            {notification.target_audience === "all"
+              ? "All Users"
+              : "Specific Users"}
+          </Badge>
+        </div>
       ),
       className: "text-center",
     },
@@ -137,9 +142,9 @@ const Notifications = () => {
       key: "created_at",
       label: "Sent Date",
       render: (notification) => (
-        <span className="text-sm">
-          {new Date(notification.created_at).toLocaleString()}
-        </span>
+        <div className="w-[100px]">
+          <span className="text-sm">{formatDate(notification.created_at)}</span>
+        </div>
       ),
     },
     {

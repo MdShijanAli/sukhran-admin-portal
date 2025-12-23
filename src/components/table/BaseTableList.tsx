@@ -61,6 +61,7 @@ export interface StoreWithData<T> {
   donations?: T[];
   channels?: T[];
   tickets?: T[];
+  notifications?: T[];
   isLoading?: boolean;
   error?: string | null;
   pagination?: Pagination;
@@ -180,6 +181,7 @@ export function BaseTableList<T>({
     store.donations ||
     store.channels ||
     store.tickets ||
+    store.notifications ||
     []) as T[];
   const isLoading = store.isLoading || false;
   const pagination = store.pagination;

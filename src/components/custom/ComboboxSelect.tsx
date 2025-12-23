@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { ApiService } from "@/services/createApiService";
+import { StoreWithData } from "../table/BaseTableList";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -16,7 +19,8 @@ import {
 import { cn } from "@/lib/utils";
 
 interface ComboboxSelectProps<T> {
-  options: T[];
+  // Static options (use this OR service/store)
+  options?: T[];
   value: string | number;
   onValueChange: (value: string | number) => void;
   onSelect?: (item: T) => void;
@@ -31,17 +35,27 @@ interface ComboboxSelectProps<T> {
   renderOption?: (option: T) => React.ReactNode;
   renderTrigger?: (selected: T | undefined) => React.ReactNode;
   icon?: React.ReactNode;
+  // Service integration (alternative to static options)
+  service?: ApiService<T>;
+  serviceMethod?: keyof ApiService<T>;
+  store?: StoreWithData<T>;
+  // Store data key (e.g., 'products', 'packages', 'users')
+  storeDataKey?: string;
+  // Additional query params
+  additionalParams?: Record<string, string>;
+  // Enable search with API
+  enableApiSearch?: boolean;
 }
 
 export function ComboboxSelect<T>({
-  options,
+  options: staticOptions,
   value,
   onValueChange,
   onSelect,
   placeholder = "Select option...",
   searchPlaceholder = "Search...",
   emptyText = "No results found.",
-  isLoading = false,
+  isLoading: externalLoading = false,
   disabled = false,
   className,
   getOptionValue,
@@ -49,16 +63,102 @@ export function ComboboxSelect<T>({
   renderOption,
   renderTrigger,
   icon,
+  service,
+  serviceMethod,
+  store,
+  storeDataKey = "data",
+  additionalParams = {},
+  enableApiSearch = true,
 }: ComboboxSelectProps<T>) {
   const [open, setOpen] = useState(false);
+  const [internalLoading, setInternalLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [hasFetchedInitial, setHasFetchedInitial] = useState(false);
 
-  //   console.log("ComboboxSelect value:", value);
+  // Determine data source: static options or store data
+  const getOptionsFromStore = (): T[] => {
+    if (!store) return [];
+    // Try to get data from store using storeDataKey
+    const storeData = (store as any)[storeDataKey];
+    return Array.isArray(storeData) ? storeData : [];
+  };
+
+  const options = staticOptions || getOptionsFromStore();
+  const isLoading =
+    externalLoading || internalLoading || store?.isLoading || false;
+
+  // Fetch data from API
+  const fetchData = async (search?: string) => {
+    if (!service || !store) {
+      console.warn(
+        "ComboboxSelect: service and store required for API fetching"
+      );
+      return;
+    }
+
+    try {
+      setInternalLoading(true);
+
+      // Build query params
+      const params = new URLSearchParams();
+
+      if (search && enableApiSearch) {
+        params.append("search", search);
+      }
+
+      // Add additional params
+      Object.entries(additionalParams).forEach(([key, value]) => {
+        if (value) {
+          params.append(key, value);
+        }
+      });
+
+      const queryString = params.toString();
+
+      // Call service method
+      if (serviceMethod && typeof service[serviceMethod] === "function") {
+        await (service[serviceMethod] as any)(queryString);
+      } else if (typeof service.fetchLists === "function") {
+        await service.fetchLists(queryString);
+      } else {
+        console.error("ComboboxSelect: No valid service method found");
+      }
+    } catch (error) {
+      console.error("ComboboxSelect: Failed to fetch data:", error);
+      toast.error("Failed to load options");
+    } finally {
+      setInternalLoading(false);
+    }
+  };
+
+  // Initial data fetch
+  useEffect(() => {
+    if (service && store && !staticOptions) {
+      const storeData = getOptionsFromStore();
+      // Only fetch if store is empty and we haven't fetched yet
+      if (storeData.length === 0 && !hasFetchedInitial) {
+        fetchData();
+        setHasFetchedInitial(true);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [service, store, staticOptions]);
+
+  // Handle search with debouncing
+  useEffect(() => {
+    if (service && store && enableApiSearch && searchQuery) {
+      const debounce = setTimeout(() => {
+        fetchData(searchQuery);
+      }, 300);
+
+      return () => clearTimeout(debounce);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery]);
+
   const selectedOption = options.find((option) => {
-    console.log("Comparing:", getOptionValue(option), "with", value);
     return getOptionValue(option) === value;
   });
-
-  console.log("Selected Option:", selectedOption);
 
   const handleSelect = (option: T) => {
     const optionValue = getOptionValue(option);
@@ -95,7 +195,14 @@ export function ComboboxSelect<T>({
       </PopoverTrigger>
       <PopoverContent className="w-full p-0" align="start">
         <Command>
-          <CommandInput placeholder={searchPlaceholder} />
+          <CommandInput
+            placeholder={searchPlaceholder}
+            onValueChange={(value) => {
+              if (enableApiSearch && service && store) {
+                setSearchQuery(value);
+              }
+            }}
+          />
           <CommandEmpty>{isLoading ? "Loading..." : emptyText}</CommandEmpty>
           <CommandGroup className="max-h-64 overflow-auto">
             {options.map((option, index) => {
