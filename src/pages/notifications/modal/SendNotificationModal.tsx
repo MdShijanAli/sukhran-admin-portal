@@ -83,7 +83,7 @@ export default function SendNotificationModal({
       })
       .catch((error) => {
         console.error("Error converting image:", error);
-        toast.error("Failed to process image");
+        toast.error(t("notifications.messages.imageProcessFailed"));
       });
   };
 
@@ -108,22 +108,22 @@ export default function SendNotificationModal({
   const handleSubmit = async () => {
     // Validate required fields
     if (!formData.title || !formData.body) {
-      toast.error("Title and body are required");
+      toast.error(t("notifications.messages.titleBodyRequired"));
       return;
     }
 
     if (formData.link_type === "package" && !formData.package_id) {
-      toast.error("Please select a package");
+      toast.error(t("notifications.messages.packageRequired"));
       return;
     }
 
     if (formData.link_type === "url" && !formData.url) {
-      toast.error("Please enter a URL");
+      toast.error(t("notifications.messages.urlRequired"));
       return;
     }
 
     if (formData.link_type === "product" && !formData.product_id) {
-      toast.error("Please select a product");
+      toast.error(t("notifications.messages.productRequired"));
       return;
     }
 
@@ -131,7 +131,7 @@ export default function SendNotificationModal({
       formData.target_audience === "specific" &&
       formData.target_user_ids.length === 0
     ) {
-      toast.error("Please select at least one user");
+      toast.error(t("notifications.messages.usersRequired"));
       return;
     }
 
@@ -152,7 +152,7 @@ export default function SendNotificationModal({
             : undefined,
       });
 
-      toast.success("Notification sent successfully");
+      toast.success(t("notifications.messages.sentSuccess"));
       onSuccess?.();
       onClose();
       // Reset form
@@ -170,7 +170,7 @@ export default function SendNotificationModal({
       });
     } catch (error) {
       console.error("Error sending notification:", error);
-      toast.error("Failed to send notification");
+      toast.error(t("notifications.messages.sentFailed"));
     } finally {
       setIsSubmitting(false);
     }
@@ -180,21 +180,21 @@ export default function SendNotificationModal({
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title="Send Push Notification"
+      title={t("notifications.send.title")}
       onSubmit={handleSubmit}
       isSubmitting={isSubmitting}
-      submitButtonText="Send Notification"
+      submitButtonText={t("notifications.send.submitButton")}
       size="2xl"
-      closeButtonText="Cancel"
+      closeButtonText={t("notifications.send.cancel")}
     >
       <div className="grid gap-4">
         <div className="space-y-2">
           <Label htmlFor="title">
-            Title <span className="text-red-500">*</span>
+            {t("notifications.send.notificationTitle")} <span className="text-red-500">*</span>
           </Label>
           <Input
             id="title"
-            placeholder="Enter notification title"
+            placeholder={t("notifications.send.titlePlaceholder")}
             value={formData.title}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, title: e.target.value }))
@@ -204,11 +204,11 @@ export default function SendNotificationModal({
 
         <div className="space-y-2">
           <Label htmlFor="body">
-            Message <span className="text-red-500">*</span>
+            {t("notifications.send.notificationMessage")} <span className="text-red-500">*</span>
           </Label>
           <Textarea
             id="body"
-            placeholder="Enter notification message"
+            placeholder={t("notifications.send.messagePlaceholder")}
             value={formData.body}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, body: e.target.value }))
@@ -218,12 +218,12 @@ export default function SendNotificationModal({
         </div>
 
         <div className="space-y-2">
-          <Label>Notification Image (Optional)</Label>
+          <Label>{t("notifications.send.notificationImage")}</Label>
           <ImageUpload value={formData.image} onChange={handleImageUpload} />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="link_type">Link Type</Label>
+          <Label htmlFor="link_type">{t("notifications.send.linkType")}</Label>
           <Select
             value={formData.link_type}
             onValueChange={(value: "none" | "product" | "package" | "url") =>
@@ -235,13 +235,13 @@ export default function SendNotificationModal({
             }
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select link type" />
+              <SelectValue placeholder={t("notifications.send.linkType")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="none">None</SelectItem>
-              <SelectItem value="product">Product</SelectItem>
-              <SelectItem value="package">Package</SelectItem>
-              <SelectItem value="url">URL</SelectItem>
+              <SelectItem value="none">{t("notifications.linkTypes.none")}</SelectItem>
+              <SelectItem value="product">{t("notifications.linkTypes.product")}</SelectItem>
+              <SelectItem value="package">{t("notifications.linkTypes.package")}</SelectItem>
+              <SelectItem value="url">{t("notifications.linkTypes.url")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -249,11 +249,11 @@ export default function SendNotificationModal({
         {formData.link_type === "url" && (
           <div className="space-y-2">
             <Label htmlFor="url">
-              URL <span className="text-red-500">*</span>
+              {t("notifications.send.url")} <span className="text-red-500">*</span>
             </Label>
             <Input
               id="url"
-              placeholder="Enter URL"
+              placeholder={t("notifications.send.urlPlaceholder")}
               value={formData.url || ""}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, url: e.target.value }))
@@ -265,7 +265,7 @@ export default function SendNotificationModal({
         {formData.link_type === "product" && (
           <div className="space-y-2">
             <Label htmlFor="product_id">
-              Select Product <span className="text-red-500">*</span>
+              {t("notifications.send.selectProduct")} <span className="text-red-500">*</span>
             </Label>
             <ComboboxSelect
               service={productService}
@@ -279,9 +279,9 @@ export default function SendNotificationModal({
                   product_id: value.toString(),
                 }))
               }
-              placeholder="Select a product..."
-              searchPlaceholder="Search products..."
-              emptyText="No products found."
+              placeholder={t("notifications.send.selectProduct")}
+              searchPlaceholder={t("notifications.send.searchProducts")}
+              emptyText={t("notifications.send.noProducts")}
               getOptionValue={(product) => product.id.toString()}
               getOptionLabel={(product) => product?.name}
               renderOption={(product) => (
@@ -299,7 +299,7 @@ export default function SendNotificationModal({
         {formData.link_type === "package" && (
           <div className="space-y-2">
             <Label htmlFor="package_id">
-              Select Package <span className="text-red-500">*</span>
+              {t("notifications.send.selectPackage")} <span className="text-red-500">*</span>
             </Label>
             <ComboboxSelect
               service={packageService}
@@ -313,9 +313,9 @@ export default function SendNotificationModal({
                   package_id: value.toString(),
                 }))
               }
-              placeholder="Select a package..."
-              searchPlaceholder="Search packages..."
-              emptyText="No packages found."
+              placeholder={t("notifications.send.selectPackage")}
+              searchPlaceholder={t("notifications.send.searchPackages")}
+              emptyText={t("notifications.send.noPackages")}
               getOptionValue={(pkg) => pkg.id.toString()}
               getOptionLabel={(pkg) =>
                 pkg?.name + ` - ${pkg.pricing?.currentPrice} BDT`
@@ -333,7 +333,7 @@ export default function SendNotificationModal({
         )}
 
         <div className="space-y-2">
-          <Label htmlFor="target_audience">Target Audience</Label>
+          <Label htmlFor="target_audience">{t("notifications.send.targetAudience")}</Label>
           <Select
             value={formData.target_audience}
             onValueChange={(value: "all" | "specific") =>
@@ -345,11 +345,11 @@ export default function SendNotificationModal({
             }
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select target audience" />
+              <SelectValue placeholder={t("notifications.send.targetAudience")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Users</SelectItem>
-              <SelectItem value="specific">Specific Users</SelectItem>
+              <SelectItem value="all">{t("notifications.audience.all")}</SelectItem>
+              <SelectItem value="specific">{t("notifications.audience.specific")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -357,11 +357,11 @@ export default function SendNotificationModal({
         {formData.target_audience === "specific" && (
           <div className="space-y-2">
             <Label>
-              Select Users <span className="text-red-500">*</span>
+              {t("notifications.send.selectUsers")} <span className="text-red-500">*</span>
             </Label>
             <div className="border rounded-lg p-4 space-y-2">
               <Input
-                placeholder="Search users by name or email..."
+                placeholder={t("notifications.send.searchUsers")}
                 onChange={(e) => handleUserSelection(e.target.value)}
               />
               <div className="max-h-[200px] overflow-y-auto space-y-1">
@@ -390,7 +390,7 @@ export default function SendNotificationModal({
               </div>
               {formData.target_user_ids.length > 0 && (
                 <p className="text-sm text-muted-foreground">
-                  {formData.target_user_ids.length} user(s) selected
+                  {formData.target_user_ids.length} {t("notifications.send.usersSelected")}
                 </p>
               )}
             </div>

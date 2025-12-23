@@ -59,7 +59,7 @@ function Settings() {
   ];
 
   return (
-    <div className="max-w-6xl">
+    <div className="">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">
           {t("settings.title")}

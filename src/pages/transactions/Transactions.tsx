@@ -24,6 +24,7 @@ import permissions from "@/lib/permissions";
 import usePermissions from "@/hooks/use-permissions";
 import { withPermission } from "@/hoc/withPermission";
 import { formatNumberWithCommas } from "@/lib/utils";
+import getSerialNumber from "@/lib/getSerialNumber";
 
 const Transactions = () => {
   const { t } = useTranslation();
@@ -50,6 +51,11 @@ const Transactions = () => {
         variant: "default" as const,
         icon: CheckCircle2,
         color: "text-green-600",
+      },
+      cancelled: {
+        variant: "destructive" as const,
+        icon: XCircle,
+        color: "text-red-600",
       },
       pending: {
         variant: "secondary" as const,
@@ -94,7 +100,7 @@ const Transactions = () => {
     {
       key: "sl",
       label: t("transactions.columns.sl"),
-      render: (_, index) => index + 1,
+      render: (_, index) => getSerialNumber(store, index),
       className: "text-center w-[60px]",
     },
     {

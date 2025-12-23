@@ -18,7 +18,8 @@
     "success": "সফল",
     "pending": "অপেক্ষমাণ",
     "failed": "ব্যর্থ",
-    "refunded": "ফেরত"
+    "refunded": "ফেরত",
+    "cancelled": "বাতিল"
   },
   "summary": {
     "totalTransactions": "মোট লেনদেন",

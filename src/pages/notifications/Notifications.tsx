@@ -14,6 +14,7 @@ import TestNotificationModal from "./modal/TestNotificationModal";
 import ViewNotificationModal from "./modal/ViewNotificationModal";
 import { useTranslation } from "react-i18next";
 import { formatDate } from "@/lib/utils";
+import getSerialNumber from "@/lib/getSerialNumber";
 
 const Notifications = () => {
   const { t } = useTranslation();
@@ -48,7 +49,7 @@ const Notifications = () => {
     notification: Notification
   ): ActionItem<Notification>[] => [
     {
-      label: "View Details",
+      label: t("notifications.buttons.viewDetails"),
       icon: Eye,
       onClick: handleViewDetails,
     },
@@ -58,13 +59,13 @@ const Notifications = () => {
   const columns: Column<Notification>[] = [
     {
       key: "sl",
-      label: "SL",
-      render: (_, index) => index + 1,
+      label: t("notifications.columns.sl"),
+      render: (_, index) => getSerialNumber(store, index),
       className: "text-center",
     },
     {
       key: "title",
-      label: "Title",
+      label: t("notifications.columns.title"),
       render: (notification) => (
         <div className="max-w-[200px]">
           <p className="font-medium truncate">{notification.title}</p>
@@ -73,7 +74,7 @@ const Notifications = () => {
     },
     {
       key: "body",
-      label: "Message",
+      label: t("notifications.columns.message"),
       render: (notification) => (
         <div className="max-w-[300px]">
           <p className="text-sm text-muted-foreground truncate">
@@ -84,7 +85,7 @@ const Notifications = () => {
     },
     {
       key: "link_type",
-      label: "Link Type",
+      label: t("notifications.columns.linkType"),
       render: (notification) => (
         <div className="text-center w-[80px]">
           <Badge variant="outline" className="capitalize">
@@ -96,7 +97,7 @@ const Notifications = () => {
     },
     {
       key: "target_audience",
-      label: "Target Audience",
+      label: t("notifications.columns.targetAudience"),
       render: (notification) => (
         <div className="w-[120px]">
           <Badge
@@ -105,8 +106,8 @@ const Notifications = () => {
             }
           >
             {notification.target_audience === "all"
-              ? "All Users"
-              : "Specific Users"}
+              ? t("notifications.audience.all")
+              : t("notifications.audience.specific")}
           </Badge>
         </div>
       ),
@@ -114,33 +115,47 @@ const Notifications = () => {
     },
     {
       key: "sent_count",
-      label: "Sent",
+      label: t("notifications.columns.sent"),
       render: (notification) => (
-        <span className="text-sm">{notification.sent_count || 0}</span>
+        <span className="text-sm text-blue-900">
+          {notification.sent_count || 0}
+        </span>
       ),
       className: "text-center",
     },
     {
-      key: "status",
-      label: "Status",
-      render: (notification) => {
-        const variant =
-          notification.status === "sent"
-            ? "default"
-            : notification.status === "pending"
-            ? "secondary"
-            : "destructive";
-        return (
-          <Badge variant={variant} className="capitalize">
-            {notification.status}
-          </Badge>
-        );
-      },
+      key: "success_count",
+      label: t("notifications.columns.success"),
+      render: (notification) => (
+        <span className="text-sm text-green-700">
+          {notification.success_count || 0}
+        </span>
+      ),
+      className: "text-center",
+    },
+    {
+      key: "failed_count",
+      label: t("notifications.columns.failed"),
+      render: (notification) => (
+        <span className="text-sm text-red-700">
+          {notification.failed_count || 0}
+        </span>
+      ),
+      className: "text-center",
+    },
+    {
+      key: "success_rate",
+      label: t("notifications.columns.success_rate"),
+      render: (notification) => (
+        <div className="w-[100px]">
+          <span className="text-sm">{notification.success_rate || "0%"}</span>
+        </div>
+      ),
       className: "text-center",
     },
     {
       key: "created_at",
-      label: "Sent Date",
+      label: t("notifications.columns.sentDate"),
       render: (notification) => (
         <div className="w-[100px]">
           <span className="text-sm">{formatDate(notification.created_at)}</span>
@@ -149,7 +164,7 @@ const Notifications = () => {
     },
     {
       key: "actions",
-      label: "Actions",
+      label: t("notifications.columns.actions"),
       className: "text-right",
       render: (notification) => (
         <DropdownMenuActions
@@ -164,28 +179,28 @@ const Notifications = () => {
   return (
     <div className="animate-fade-in">
       <BaseTableList<Notification>
-        title="Notifications"
-        description="Send push notifications to your users"
+        title={t("notifications.title")}
+        description={t("notifications.description")}
         headerActions={[
           {
-            label: "Test",
+            label: t("notifications.buttons.test"),
             icon: TestTube,
             onClick: handleTest,
             variant: "outline",
           },
           {
-            label: "Send",
+            label: t("notifications.buttons.send"),
             icon: Plus,
             onClick: handleCreate,
             variant: "default",
           },
         ]}
-        searchPlaceholder="Search notifications..."
+        searchPlaceholder={t("notifications.searchPlaceholder")}
         enableSearch={true}
         columns={columns}
         service={notificationService}
         store={store}
-        emptyMessage="No notifications found"
+        emptyMessage={t("notifications.emptyMessage")}
         getRowKey={(notification) => notification.id}
         onRefresh={handleSetRefresh}
       />

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import notificationService from "@/services/notificationService";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface TestFormData {
   fcm_token: string;
@@ -21,6 +22,7 @@ export default function TestNotificationModal({
   open,
   onClose,
 }: TestNotificationModalProps) {
+  const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<TestFormData>({
     fcm_token: "",
@@ -31,7 +33,7 @@ export default function TestNotificationModal({
   const handleSubmit = async () => {
     // Validate required fields
     if (!formData.fcm_token || !formData.title || !formData.body) {
-      toast.error("All fields are required for testing");
+      toast.error(t("notifications.messages.testFieldsRequired"));
       return;
     }
 
@@ -39,7 +41,7 @@ export default function TestNotificationModal({
     try {
       await notificationService.testNotification(formData);
 
-      toast.success("Test notification sent successfully");
+      toast.success(t("notifications.messages.testSentSuccess"));
       onClose();
       // Reset form
       setFormData({
@@ -49,7 +51,7 @@ export default function TestNotificationModal({
       });
     } catch (error) {
       console.error("Error testing notification:", error);
-      toast.error("Failed to send test notification");
+      toast.error(t("notifications.messages.testSentFailed"));
     } finally {
       setIsSubmitting(false);
     }
@@ -59,22 +61,23 @@ export default function TestNotificationModal({
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title="Test Push Notification"
-      description="Send a test notification to a specific FCM token"
+      title={t("notifications.test.title")}
+      description={t("notifications.test.description")}
       onSubmit={handleSubmit}
       isSubmitting={isSubmitting}
-      submitButtonText="Send Test"
+      submitButtonText={t("notifications.test.submitButton")}
       size="lg"
-      closeButtonText="Cancel"
+      closeButtonText={t("notifications.test.cancel")}
     >
       <div className="grid gap-4">
         <div className="space-y-2">
           <Label htmlFor="fcm_token">
-            FCM Token <span className="text-red-500">*</span>
+            {t("notifications.test.fcmToken")}{" "}
+            <span className="text-red-500">*</span>
           </Label>
           <Textarea
             id="fcm_token"
-            placeholder="Enter FCM token"
+            placeholder={t("notifications.test.fcmTokenPlaceholder")}
             value={formData.fcm_token}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, fcm_token: e.target.value }))
@@ -85,11 +88,12 @@ export default function TestNotificationModal({
 
         <div className="space-y-2">
           <Label htmlFor="test_title">
-            Title <span className="text-red-500">*</span>
+            {t("notifications.test.notificationTitle")}{" "}
+            <span className="text-red-500">*</span>
           </Label>
           <Input
             id="test_title"
-            placeholder="Enter notification title"
+            placeholder={t("notifications.test.titlePlaceholder")}
             value={formData.title}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, title: e.target.value }))
@@ -99,11 +103,12 @@ export default function TestNotificationModal({
 
         <div className="space-y-2">
           <Label htmlFor="test_body">
-            Message <span className="text-red-500">*</span>
+            {t("notifications.test.notificationMessage")}{" "}
+            <span className="text-red-500">*</span>
           </Label>
           <Textarea
             id="test_body"
-            placeholder="Enter notification message"
+            placeholder={t("notifications.test.messagePlaceholder")}
             value={formData.body}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, body: e.target.value }))

@@ -9,6 +9,7 @@ import donationService from "@/services/donationService";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { ActionItem, DropdownMenuActions } from "@/components/table";
 import { Edit, Eye, Trash2 } from "lucide-react";
+import getSerialNumber from "@/lib/getSerialNumber";
 
 interface DonationsTabProps {
   onViewDetails?: (donation: Donation) => void;
@@ -69,7 +70,7 @@ export default function DonationsTab({ onViewDetails }: DonationsTabProps) {
     {
       key: "sl",
       label: t("donations.donations.columns.sl"),
-      render: (_, index) => index + 1,
+      render: (_, index) => getSerialNumber(store, index),
       className: "text-center w-16",
     },
     {

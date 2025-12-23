@@ -11,6 +11,7 @@ import { useState } from "react";
 import FilterModal from "@/components/modals/FilterModal";
 import constData from "@/lib/constData";
 import { ActionItem, DropdownMenuActions } from "@/components/table";
+import getSerialNumber from "@/lib/getSerialNumber";
 
 interface TicketsTabProps {
   onView: (ticket: SupportTicket) => void;
@@ -127,7 +128,7 @@ export default function TicketsTab({
     {
       key: "sl",
       label: t("support.tickets.columns.sl"),
-      render: (_, index) => index + 1,
+      render: (_, index) => getSerialNumber(store, index),
       className: "text-center",
     },
     {

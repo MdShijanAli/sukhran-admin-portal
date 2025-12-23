@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import getSerialNumber from "@/lib/getSerialNumber";
 
 const CoverageAreas = () => {
   const { t } = useTranslation();
@@ -194,7 +195,7 @@ const CoverageAreas = () => {
     {
       key: "sl",
       label: t("coverage_area.columns.sl"),
-      render: (_, index) => index + 1,
+      render: (_, index) => getSerialNumber(store, index),
       className: "text-center w-[60px]",
     },
     {

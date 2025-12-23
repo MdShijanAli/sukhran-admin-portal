@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import { DeleteModal } from "@/components/modals";
 import FormModal from "./modal/FormModal";
 import TrackingModal from "./modal/TrackingModal";
+import getSerialNumber from "@/lib/getSerialNumber";
 
 export default function DeliveryPage() {
   const { t } = useTranslation();
@@ -134,7 +135,7 @@ export default function DeliveryPage() {
     {
       key: "sl",
       label: t("delivery.columns.sl"),
-      render: (_, index) => index + 1,
+      render: (_, index) => getSerialNumber(store, index),
       className: "text-center",
     },
     {

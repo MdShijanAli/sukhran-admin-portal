@@ -50,7 +50,7 @@ export default function UserCoinDetailsModal({
         setError(null);
         const params = new URLSearchParams({
           page: page.toString(),
-          per_page: "10",
+          per_page: "20",
         }).toString();
         const response = await coinService.fetchUserCoinDetails(userId, params);
         setDetails(response);

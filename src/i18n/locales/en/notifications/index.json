@@ -1,0 +1,109 @@
+{
+  "title": "Notifications Settings",
+  "description": "Send push notifications to your users",
+  "searchPlaceholder": "Search notifications...",
+  "emptyMessage": "No notifications found",
+  "buttons": {
+    "send": "Send",
+    "test": "Test",
+    "viewDetails": "View Details",
+    "close": "Close"
+  },
+  "columns": {
+    "sl": "SL",
+    "title": "Title",
+    "message": "Message",
+    "linkType": "Link Type",
+    "targetAudience": "Target Audience",
+    "sent": "Sent",
+    "success": "Success",
+    "failed": "Failed",
+    "success_rate": "Success Rate",
+    "status": "Status",
+    "sentDate": "Sent Date",
+    "actions": "Actions"
+  },
+  "status": {
+    "sent": "Sent",
+    "pending": "Pending",
+    "failed": "Failed"
+  },
+  "audience": {
+    "all": "All Users",
+    "specific": "Specific Users"
+  },
+  "linkTypes": {
+    "none": "None",
+    "product": "Product",
+    "package": "Package",
+    "url": "URL"
+  },
+  "send": {
+    "title": "Send Push Notification",
+    "notificationTitle": "Title",
+    "notificationMessage": "Message",
+    "notificationImage": "Notification Image (Optional)",
+    "linkType": "Link Type",
+    "url": "URL",
+    "selectProduct": "Select Product",
+    "selectPackage": "Select Package",
+    "targetAudience": "Target Audience",
+    "selectUsers": "Select Users",
+    "searchProducts": "Search products...",
+    "searchPackages": "Search packages...",
+    "searchUsers": "Search users by name or email...",
+    "noProducts": "No products found.",
+    "noPackages": "No packages found.",
+    "titlePlaceholder": "Enter notification title",
+    "messagePlaceholder": "Enter notification message",
+    "urlPlaceholder": "Enter URL",
+    "submitButton": "Send Notification",
+    "cancel": "Cancel",
+    "usersSelected": "user(s) selected",
+    "required": "required"
+  },
+  "test": {
+    "title": "Test Push Notification",
+    "description": "Send a test notification to a specific FCM token",
+    "fcmToken": "FCM Token",
+    "notificationTitle": "Title",
+    "notificationMessage": "Message",
+    "fcmTokenPlaceholder": "Enter FCM token",
+    "titlePlaceholder": "Enter notification title",
+    "messagePlaceholder": "Enter notification message",
+    "submitButton": "Send Test",
+    "cancel": "Cancel"
+  },
+  "view": {
+    "title": "Notification Details",
+    "notificationImage": "Notification Image",
+    "linkInformation": "Link Information",
+    "type": "Type:",
+    "url": "URL:",
+    "targetAudience": "Target Audience",
+    "performanceMetrics": "Performance Metrics",
+    "sent": "Sent",
+    "success": "Success",
+    "failed": "Failed",
+    "successRate": "Success Rate",
+    "timeline": "Timeline",
+    "sentAt": "Sent At:",
+    "createdAt": "Created At:",
+    "sentBy": "Sent By",
+    "close": "Close"
+  },
+  "messages": {
+    "titleBodyRequired": "Title and body are required",
+    "packageRequired": "Please select a package",
+    "productRequired": "Please select a product",
+    "urlRequired": "Please enter a URL",
+    "usersRequired": "Please select at least one user",
+    "sentSuccess": "Notification sent successfully",
+    "sentFailed": "Failed to send notification",
+    "testFieldsRequired": "All fields are required for testing",
+    "testSentSuccess": "Test notification sent successfully",
+    "testSentFailed": "Failed to send test notification",
+    "imageProcessFailed": "Failed to process image",
+    "loadOptionsFailed": "Failed to load options"
+  }
+}

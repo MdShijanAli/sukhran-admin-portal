@@ -11,6 +11,7 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import { ActionItem, DropdownMenuActions } from "@/components/table";
 import { Edit, Eye, Send, Trash2 } from "lucide-react";
 import { StatusSwitch } from "@/components/custom/StatusSwitch";
+import getSerialNumber from "@/lib/getSerialNumber";
 
 interface DonationChannelsTabProps {
   onViewDetails?: (channel: DonationChannel) => void;
@@ -90,7 +91,7 @@ export default function DonationChannelsTab({
     {
       key: "sl",
       label: t("donations.channels.columns.sl"),
-      render: (_, index) => index + 1,
+      render: (_, index) => getSerialNumber(store, index),
       className: "text-center w-16",
     },
     {

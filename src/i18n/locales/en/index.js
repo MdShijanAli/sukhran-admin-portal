@@ -15,6 +15,7 @@ import transactions from "./transactions/index.json";
 import coinManagement from "./coinManagement/index.json";
 import donations from "./donations/index.json";
 import support from "./support/index.json";
+import notifications from "./notifications/index.json";
 
 /**
  * follow the file structure.
@@ -40,6 +41,7 @@ const combined = {
   coinManagement,
   donations,
   support,
+  notifications,
 };
 
 export default combined;

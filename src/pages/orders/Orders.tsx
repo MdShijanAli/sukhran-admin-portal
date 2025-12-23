@@ -35,6 +35,7 @@ import permissions from "@/lib/permissions";
 import usePermissions from "@/hooks/use-permissions";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import PackageOrdersTab from "./tabs/PackageOrdersTab";
+import getSerialNumber from "@/lib/getSerialNumber";
 
 function Orders() {
   const { t } = useTranslation();
@@ -249,7 +250,7 @@ function Orders() {
     {
       key: "sl",
       label: t("orders.columns.sl"),
-      render: (_, index) => index + 1,
+      render: (_, index) => getSerialNumber(store, index),
       className: "text-center",
     },
     {

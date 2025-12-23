@@ -34,6 +34,7 @@ import usePermissions from "@/hooks/use-permissions";
 import { withPermission } from "@/hoc/withPermission";
 import { formatDDMMYYY } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import getSerialNumber from "@/lib/getSerialNumber";
 
 const Coupons = () => {
   const { t } = useTranslation();
@@ -172,7 +173,7 @@ const Coupons = () => {
     {
       key: "sl",
       label: t("coupon.columns.sl"),
-      render: (_, index) => index + 1,
+      render: (_, index) => getSerialNumber(store, index),
       className: "text-center w-[60px]",
     },
     {

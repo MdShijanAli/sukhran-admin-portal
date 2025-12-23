@@ -98,7 +98,7 @@ Add extra params that aren't part of the filters:
   store={store}
   additionalParams={{
     page: "1",
-    per_page: "10",
+    per_page: "20",
     search: searchQuery,
   }}
 />

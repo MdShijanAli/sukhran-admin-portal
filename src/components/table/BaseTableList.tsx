@@ -19,6 +19,7 @@ import { BaseTable, Column } from "./BaseTable";
 import { ApiService } from "@/services/createApiService";
 import { RefreshCw, X } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
+import { Pagination } from "./Pagination";
 
 export interface FilterOption {
   label: string;
@@ -145,15 +146,17 @@ export function BaseTableList<T>({
   checkboxCondition,
   selectedRows,
   onSelectionChange,
-  showPagination = false,
+  showPagination = true,
   summaryLists = [],
   summaryLoading = false,
   onRefresh,
 }: BaseTableListProps<T>) {
   // Local state for query params
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(
+    store.pagination?.current_page || 1
+  );
+  const [perPage] = useState(store.pagination?.per_page || 20);
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [hasInitialFetch, setHasInitialFetch] = useState(false);
@@ -488,36 +491,43 @@ export function BaseTableList<T>({
           />
 
           {/* Pagination */}
-          {showPagination && pagination && (
-            <div className="flex items-center justify-between mt-4">
-              <div className="text-sm text-muted-foreground">
-                Showing {pagination.from} to {pagination.to} of{" "}
-                {pagination.total} entries
-              </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handlePageChange(pagination.current_page - 1)}
-                  disabled={pagination.current_page <= 1 || isLoading}
-                >
-                  Previous
-                </Button>
-                <span className="text-sm text-muted-foreground px-3">
-                  Page {pagination.current_page} of {pagination.last_page}
-                </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handlePageChange(pagination.current_page + 1)}
-                  disabled={
-                    pagination.current_page >= pagination.last_page || isLoading
-                  }
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
+          {showPagination && pagination && pagination.last_page > 1 && (
+            // <div className="flex items-center justify-between mt-4">
+            //   <div className="text-sm text-muted-foreground">
+            //     Showing {pagination.from} to {pagination.to} of{" "}
+            //     {pagination.total} entries
+            //   </div>
+            //   <div className="flex items-center gap-2">
+            //     <Button
+            //       variant="outline"
+            //       size="sm"
+            //       onClick={() => handlePageChange(pagination.current_page - 1)}
+            //       disabled={pagination.current_page <= 1 || isLoading}
+            //     >
+            //       Previous
+            //     </Button>
+            //     <span className="text-sm text-muted-foreground px-3">
+            //       Page {pagination.current_page} of {pagination.last_page}
+            //     </span>
+            //     <Button
+            //       variant="outline"
+            //       size="sm"
+            //       onClick={() => handlePageChange(pagination.current_page + 1)}
+            //       disabled={
+            //         pagination.current_page >= pagination.last_page || isLoading
+            //       }
+            //     >
+            //       Next
+            //     </Button>
+            //   </div>
+            // </div>
+            <Pagination
+              currentPage={pagination.current_page}
+              totalPages={pagination.last_page}
+              totalItems={pagination.total}
+              itemsPerPage={pagination.per_page}
+              onPageChange={handlePageChange}
+            />
           )}
         </CardContent>
       </Card>

@@ -81,7 +81,7 @@ export const useDeliveryStore = createStore<DeliveryState>(
     pagination: {
       current_page: 1,
       total: 0,
-      per_page: 10,
+      per_page: 20,
       last_page: 1,
       from: 1,
       to: 1,

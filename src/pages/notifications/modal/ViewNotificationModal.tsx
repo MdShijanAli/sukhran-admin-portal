@@ -15,6 +15,7 @@ import {
   User,
 } from "lucide-react";
 import { Notification } from "@/stores/notificationStore";
+import { useTranslation } from "react-i18next";
 
 interface ViewNotificationModalProps {
   open: boolean;
@@ -27,6 +28,7 @@ export default function ViewNotificationModal({
   onClose,
   notification,
 }: ViewNotificationModalProps) {
+  const { t } = useTranslation();
   if (!notification) return null;
 
   const getImageUrl = (url: string) => {
@@ -38,10 +40,10 @@ export default function ViewNotificationModal({
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title="Notification Details"
+      title={t("notifications.view.title")}
       size="3xl"
       isSubmitting={false}
-      closeButtonText="Close"
+      closeButtonText={t("notifications.view.close")}
     >
       <div className="space-y-6">
         {/* Header Section */}
@@ -77,7 +79,9 @@ export default function ViewNotificationModal({
           <Card className="overflow-hidden border-2">
             <div className="flex items-center gap-2 px-4 py-2 bg-muted/50">
               <ImageIcon className="h-4 w-4 text-muted-foreground" />
-              <Label className="text-sm font-medium">Notification Image</Label>
+              <Label className="text-sm font-medium">
+                {t("notifications.view.notificationImage")}
+              </Label>
             </div>
             <div className="p-4">
               <img
@@ -98,11 +102,15 @@ export default function ViewNotificationModal({
           <Card className="p-4">
             <div className="flex items-center gap-2 mb-3">
               <LinkIcon className="h-4 w-4 text-muted-foreground" />
-              <Label className="text-sm font-medium">Link Information</Label>
+              <Label className="text-sm font-medium">
+                {t("notifications.view.linkInformation")}
+              </Label>
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Type:</span>
+                <span className="text-sm text-muted-foreground">
+                  {t("notifications.view.type")}
+                </span>
                 <Badge variant="outline" className="capitalize">
                   {notification.link_type}
                 </Badge>
@@ -110,7 +118,7 @@ export default function ViewNotificationModal({
               {notification.url && notification.link_type === "url" && (
                 <div className="mt-2">
                   <span className="text-sm text-muted-foreground block mb-1">
-                    URL:
+                    {t("notifications.view.url")}
                   </span>
                   <a
                     href={notification.url}
@@ -128,7 +136,9 @@ export default function ViewNotificationModal({
           <Card className="p-4">
             <div className="flex items-center gap-2 mb-3">
               <Users className="h-4 w-4 text-muted-foreground" />
-              <Label className="text-sm font-medium">Target Audience</Label>
+              <Label className="text-sm font-medium">
+                {t("notifications.view.targetAudience")}
+              </Label>
             </div>
             <Badge
               variant={
@@ -137,8 +147,8 @@ export default function ViewNotificationModal({
               className="text-sm"
             >
               {notification.target_audience === "all"
-                ? "All Users"
-                : "Specific Users"}
+                ? t("notifications.audience.all")
+                : t("notifications.audience.specific")}
             </Badge>
           </Card>
         </div>
@@ -147,13 +157,15 @@ export default function ViewNotificationModal({
         <Card className="p-4">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            <Label className="text-sm font-medium">Performance Metrics</Label>
+            <Label className="text-sm font-medium">
+              {t("notifications.view.performanceMetrics")}
+            </Label>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-muted-foreground">
                 <Send className="h-4 w-4" />
-                <span className="text-xs">Sent</span>
+                <span className="text-xs">{t("notifications.view.sent")}</span>
               </div>
               <p className="text-2xl font-bold text-foreground">
                 {notification.sent_count || 0}
@@ -163,7 +175,9 @@ export default function ViewNotificationModal({
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-green-600">
                 <CheckCircle2 className="h-4 w-4" />
-                <span className="text-xs">Success</span>
+                <span className="text-xs">
+                  {t("notifications.view.success")}
+                </span>
               </div>
               <p className="text-2xl font-bold text-green-600">
                 {notification.success_count || 0}
@@ -173,7 +187,9 @@ export default function ViewNotificationModal({
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-red-600">
                 <XCircle className="h-4 w-4" />
-                <span className="text-xs">Failed</span>
+                <span className="text-xs">
+                  {t("notifications.view.failed")}
+                </span>
               </div>
               <p className="text-2xl font-bold text-red-600">
                 {notification.failed_count || 0}
@@ -183,7 +199,9 @@ export default function ViewNotificationModal({
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-blue-600">
                 <TrendingUp className="h-4 w-4" />
-                <span className="text-xs">Success Rate</span>
+                <span className="text-xs">
+                  {t("notifications.view.successRate")}
+                </span>
               </div>
               <p className="text-2xl font-bold text-blue-600">
                 {notification.success_rate || "0%"}
@@ -197,11 +215,15 @@ export default function ViewNotificationModal({
           <Card className="p-4">
             <div className="flex items-center gap-2 mb-3">
               <Clock className="h-4 w-4 text-muted-foreground" />
-              <Label className="text-sm font-medium">Timeline</Label>
+              <Label className="text-sm font-medium">
+                {t("notifications.view.timeline")}
+              </Label>
             </div>
             <div className="space-y-2 text-sm">
               <div>
-                <span className="text-muted-foreground">Sent At:</span>
+                <span className="text-muted-foreground">
+                  {t("notifications.view.sentAt")}
+                </span>
                 <p className="font-medium">
                   {new Date(
                     notification.sent_at || notification.created_at
@@ -210,7 +232,9 @@ export default function ViewNotificationModal({
               </div>
               {notification.sent_at !== notification.created_at && (
                 <div>
-                  <span className="text-muted-foreground">Created At:</span>
+                  <span className="text-muted-foreground">
+                    {t("notifications.view.createdAt")}
+                  </span>
                   <p className="font-medium">
                     {new Date(notification.created_at).toLocaleString()}
                   </p>
@@ -223,7 +247,9 @@ export default function ViewNotificationModal({
             <Card className="p-4">
               <div className="flex items-center gap-2 mb-3">
                 <User className="h-4 w-4 text-muted-foreground" />
-                <Label className="text-sm font-medium">Sent By</Label>
+                <Label className="text-sm font-medium">
+                  {t("notifications.view.sentBy")}
+                </Label>
               </div>
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">

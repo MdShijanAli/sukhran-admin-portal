@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import permissions from "@/lib/permissions";
 import { withPermission } from "@/hoc/withPermission";
 import usePermissions from "@/hooks/use-permissions";
+import getSerialNumber from "@/lib/getSerialNumber";
 
 const Categories = () => {
   const { t } = useTranslation();
@@ -110,7 +111,7 @@ const Categories = () => {
     {
       key: "sl",
       label: t("categories.columns.sl"),
-      render: (_, index) => index + 1,
+      render: (_, index) => getSerialNumber(store, index),
       className: "text-center",
     },
     {

@@ -1,0 +1,109 @@
+{
+  "title": "নোটিফিকেশন সেটিংস",
+  "description": "আপনার ব্যবহারকারীদের পুশ নোটিফিকেশন পাঠান",
+  "searchPlaceholder": "নোটিফিকেশন খুঁজুন...",
+  "emptyMessage": "কোনো নোটিফিকেশন পাওয়া যায়নি",
+  "buttons": {
+    "send": "পাঠান",
+    "test": "টেস্ট",
+    "viewDetails": "বিস্তারিত দেখুন",
+    "close": "বন্ধ করুন"
+  },
+  "columns": {
+    "sl": "ক্রমিক",
+    "title": "শিরোনাম",
+    "message": "বার্তা",
+    "linkType": "লিংক টাইপ",
+    "targetAudience": "টার্গেট অডিয়েন্স",
+    "sent": "পাঠানো",
+    "success": "সফল",
+    "failed": "ব্যর্থ",
+    "success_rate": "সফলতার হার",
+    "status": "স্ট্যাটাস",
+    "sentDate": "প্রেরণের তারিখ",
+    "actions": "কার্যক্রম"
+  },
+  "status": {
+    "sent": "পাঠানো হয়েছে",
+    "pending": "অপেক্ষমাণ",
+    "failed": "ব্যর্থ"
+  },
+  "audience": {
+    "all": "সকল ব্যবহারকারী",
+    "specific": "নির্দিষ্ট ব্যবহারকারী"
+  },
+  "linkTypes": {
+    "none": "কোনোটি নয়",
+    "product": "পণ্য",
+    "package": "প্যাকেজ",
+    "url": "URL"
+  },
+  "send": {
+    "title": "পুশ নোটিফিকেশন পাঠান",
+    "notificationTitle": "শিরোনাম",
+    "notificationMessage": "বার্তা",
+    "notificationImage": "নোটিফিকেশন ছবি (ঐচ্ছিক)",
+    "linkType": "লিংক টাইপ",
+    "url": "URL",
+    "selectProduct": "পণ্য নির্বাচন করুন",
+    "selectPackage": "প্যাকেজ নির্বাচন করুন",
+    "targetAudience": "টার্গেট অডিয়েন্স",
+    "selectUsers": "ব্যবহারকারী নির্বাচন করুন",
+    "searchProducts": "পণ্য খুঁজুন...",
+    "searchPackages": "প্যাকেজ খুঁজুন...",
+    "searchUsers": "নাম বা ইমেইল দিয়ে ব্যবহারকারী খুঁজুন...",
+    "noProducts": "কোনো পণ্য পাওয়া যায়নি।",
+    "noPackages": "কোনো প্যাকেজ পাওয়া যায়নি।",
+    "titlePlaceholder": "নোটিফিকেশন শিরোনাম লিখুন",
+    "messagePlaceholder": "নোটিফিকেশন বার্তা লিখুন",
+    "urlPlaceholder": "URL লিখুন",
+    "submitButton": "নোটিফিকেশন পাঠান",
+    "cancel": "বাতিল",
+    "usersSelected": "জন ব্যবহারকারী নির্বাচিত",
+    "required": "প্রয়োজনীয়"
+  },
+  "test": {
+    "title": "টেস্ট পুশ নোটিফিকেশন",
+    "description": "একটি নির্দিষ্ট FCM টোকেনে টেস্ট নোটিফিকেশন পাঠান",
+    "fcmToken": "FCM টোকেন",
+    "notificationTitle": "শিরোনাম",
+    "notificationMessage": "বার্তা",
+    "fcmTokenPlaceholder": "FCM টোকেন লিখুন",
+    "titlePlaceholder": "নোটিফিকেশন শিরোনাম লিখুন",
+    "messagePlaceholder": "নোটিফিকেশন বার্তা লিখুন",
+    "submitButton": "টেস্ট পাঠান",
+    "cancel": "বাতিল"
+  },
+  "view": {
+    "title": "নোটিফিকেশনের বিস্তারিত",
+    "notificationImage": "নোটিফিকেশন ছবি",
+    "linkInformation": "লিংক তথ্য",
+    "type": "টাইপ:",
+    "url": "URL:",
+    "targetAudience": "টার্গেট অডিয়েন্স",
+    "performanceMetrics": "পারফরম্যান্স মেট্রিক্স",
+    "sent": "পাঠানো",
+    "success": "সফল",
+    "failed": "ব্যর্থ",
+    "successRate": "সফলতার হার",
+    "timeline": "টাইমলাইন",
+    "sentAt": "প্রেরণের সময়:",
+    "createdAt": "তৈরির সময়:",
+    "sentBy": "প্রেরক",
+    "close": "বন্ধ করুন"
+  },
+  "messages": {
+    "titleBodyRequired": "শিরোনাম এবং বার্তা প্রয়োজন",
+    "packageRequired": "অনুগ্রহ করে একটি প্যাকেজ নির্বাচন করুন",
+    "productRequired": "অনুগ্রহ করে একটি পণ্য নির্বাচন করুন",
+    "urlRequired": "অনুগ্রহ করে একটি URL লিখুন",
+    "usersRequired": "অনুগ্রহ করে কমপক্ষে একজন ব্যবহারকারী নির্বাচন করুন",
+    "sentSuccess": "নোটিফিকেশন সফলভাবে পাঠানো হয়েছে",
+    "sentFailed": "নোটিফিকেশন পাঠাতে ব্যর্থ",
+    "testFieldsRequired": "টেস্টের জন্য সকল ক্ষেত্র প্রয়োজন",
+    "testSentSuccess": "টেস্ট নোটিফিকেশন সফলভাবে পাঠানো হয়েছে",
+    "testSentFailed": "টেস্ট নোটিফিকেশন পাঠাতে ব্যর্থ",
+    "imageProcessFailed": "ছবি প্রক্রিয়া করতে ব্যর্থ",
+    "loadOptionsFailed": "অপশন লোড করতে ব্যর্থ"
+  }
+}

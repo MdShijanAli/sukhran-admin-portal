@@ -18,7 +18,8 @@
     "success": "Success",
     "pending": "Pending",
     "failed": "Failed",
-    "refunded": "Refunded"
+    "refunded": "Refunded",
+    "cancelled": "Cancelled"
   },
   "summary": {
     "totalTransactions": "Total Transactions",

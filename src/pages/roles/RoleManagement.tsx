@@ -26,6 +26,7 @@ import constData from "@/lib/constData";
 import { withPermission } from "@/hoc/withPermission";
 import permissions from "@/lib/permissions";
 import usePermissions from "@/hooks/use-permissions";
+import getSerialNumber from "@/lib/getSerialNumber";
 
 const RoleManagement = () => {
   const { t } = useTranslation();
@@ -127,7 +128,7 @@ const RoleManagement = () => {
     {
       key: "sl",
       label: t("roles.columns.sl"),
-      render: (_, index) => index + 1,
+      render: (_, index) => getSerialNumber(store, index),
       className: "text-center",
     },
     {

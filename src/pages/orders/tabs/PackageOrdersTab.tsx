@@ -12,6 +12,7 @@ import { ActionItem, DropdownMenuActions } from "@/components/table";
 import usePermissions from "@/hooks/use-permissions";
 import permissions from "@/lib/permissions";
 import UpdateDeliveryTimeModal from "../modal/UpdateDeliveryTimeModal";
+import getSerialNumber from "@/lib/getSerialNumber";
 
 export default function PackageOrdersTab() {
   const { t } = useTranslation();
@@ -94,7 +95,7 @@ export default function PackageOrdersTab() {
       {
         key: "sl",
         label: t("orders.columns.sl"),
-        render: (_, index) => index + 1,
+        render: (_, index) => getSerialNumber(store, index),
         className: "text-center w-16",
       },
       {

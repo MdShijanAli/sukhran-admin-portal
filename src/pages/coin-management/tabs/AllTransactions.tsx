@@ -20,6 +20,8 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CoinTransaction, PaginationMeta } from "@/lib/types";
 import { formatNumberWithCommas } from "@/lib/utils";
+import getSerialNumber from "@/lib/getSerialNumber";
+import { useCoinStore } from "@/stores/coinStore";
 
 interface AllTransactionsProps {
   transactions: CoinTransaction[];
@@ -35,12 +37,13 @@ export default function AllTransactions({
   onPageChange,
 }: AllTransactionsProps) {
   const { t } = useTranslation();
+  const store = useCoinStore();
 
   const columns: Column<CoinTransaction>[] = [
     {
       key: "sl",
       label: t("coinManagement.transactions.columns.sl"),
-      render: (_, index) => index + 1,
+      render: (_, index) => getSerialNumber(store, index),
       className: "text-center w-16",
     },
     {

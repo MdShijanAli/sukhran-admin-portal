@@ -36,6 +36,7 @@ import { useRoleStore } from "@/stores/roleStore";
 import { withPermission } from "@/hoc/withPermission";
 import permissions from "@/lib/permissions";
 import usePermissions from "@/hooks/use-permissions";
+import getSerialNumber from "@/lib/getSerialNumber";
 
 const Users = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -220,7 +221,7 @@ const Users = () => {
     {
       key: "sl",
       label: t("users.columns.sl"),
-      render: (_, index) => index + 1,
+      render: (_, index) => getSerialNumber(store, index),
       className: "text-center",
     },
     {

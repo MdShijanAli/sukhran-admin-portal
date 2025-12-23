@@ -23,6 +23,8 @@ import { Coins, Send, Eye, SendIcon } from "lucide-react";
 import { formatNumberWithCommas } from "@/lib/utils";
 import SendCoinModal from "../modal/SendCoinModal";
 import UserCoinDetailsModal from "../modal/UserCoinDetailsModal";
+import getSerialNumber from "@/lib/getSerialNumber";
+import { useCoinStore } from "@/stores/coinStore";
 
 interface UserBalancesProps {
   topHolders: TopHolder[];
@@ -36,6 +38,7 @@ export default function UserBalances({
   onRefresh,
 }: UserBalancesProps) {
   const { t } = useTranslation();
+  const store = useCoinStore();
   const [showSendCoinModal, setShowSendCoinModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<TopHolder | null>(null);
@@ -54,7 +57,7 @@ export default function UserBalances({
     {
       key: "sl",
       label: t("coinManagement.userBalances.columns.sl"),
-      render: (_, index) => index + 1,
+      render: (_, index) => getSerialNumber(store, index),
       className: "text-center w-16",
     },
     {
