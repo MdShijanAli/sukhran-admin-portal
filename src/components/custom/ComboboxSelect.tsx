@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, RefreshCw } from "lucide-react";
 import { ApiService } from "@/services/createApiService";
 import { StoreWithData } from "../table/BaseTableList";
 import { toast } from "sonner";
@@ -195,14 +195,35 @@ export function ComboboxSelect<T>({
       </PopoverTrigger>
       <PopoverContent className="w-full p-0" align="start">
         <Command>
-          <CommandInput
-            placeholder={searchPlaceholder}
-            onValueChange={(value) => {
-              if (enableApiSearch && service && store) {
-                setSearchQuery(value);
-              }
-            }}
-          />
+          <div className="relative">
+            <CommandInput
+              placeholder={searchPlaceholder}
+              onValueChange={(value) => {
+                if (enableApiSearch && service && store) {
+                  setSearchQuery(value);
+                }
+              }}
+            />
+            {service && store && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery("");
+                  fetchData();
+                }}
+                disabled={isLoading}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-accent rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Refresh data"
+              >
+                <RefreshCw
+                  className={cn(
+                    "h-4 w-4 text-muted-foreground",
+                    isLoading && "animate-spin"
+                  )}
+                />
+              </button>
+            )}
+          </div>
           <CommandEmpty>{isLoading ? "Loading..." : emptyText}</CommandEmpty>
           <CommandGroup className="max-h-64 overflow-auto">
             {options.map((option, index) => {

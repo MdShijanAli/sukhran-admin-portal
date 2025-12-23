@@ -317,10 +317,15 @@ export default function SendNotificationModal({
               searchPlaceholder="Search packages..."
               emptyText="No packages found."
               getOptionValue={(pkg) => pkg.id.toString()}
-              getOptionLabel={(pkg) => pkg?.package_name}
+              getOptionLabel={(pkg) =>
+                pkg?.name + ` - ${pkg.pricing?.currentPrice} BDT`
+              }
               renderOption={(pkg) => (
                 <div className="flex flex-col">
-                  <span className="font-medium">{pkg.package_name}</span>
+                  <span className="font-medium">{pkg.name}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {pkg.pricing?.currentPrice} BDT
+                  </span>
                 </div>
               )}
             />
