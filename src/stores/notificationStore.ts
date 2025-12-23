@@ -12,15 +12,16 @@ export interface Notification {
   url?: string;
   target_audience: "all" | "specific";
   sent_count?: number;
-  delivered_count?: number;
+  success_count?: number;
   failed_count?: number;
+  success_rate?: string;
   status: "sent" | "pending" | "failed";
+  sent_at?: string;
   created_at: string;
   updated_at?: string;
-  created_by?: {
+  sent_by?: {
     id: number | string;
-    firstName: string;
-    lastName: string;
+    name: string;
   };
 }
 

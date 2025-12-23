@@ -225,7 +225,7 @@ export function ComboboxSelect<T>({
             )}
           </div>
           <CommandEmpty>{isLoading ? "Loading..." : emptyText}</CommandEmpty>
-          <CommandGroup className="max-h-64 overflow-auto">
+          <CommandGroup className="max-h-64 overflow-y-auto">
             {options.map((option, index) => {
               const optionValue = getOptionValue(option);
               const isSelected = value === optionValue;
