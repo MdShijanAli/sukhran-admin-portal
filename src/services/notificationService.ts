@@ -15,6 +15,8 @@ interface SendNotificationParams {
   image?: File;
   link_type?: "none" | "product" | "package" | "url";
   package_id?: number | string;
+  url?: string;
+  product_id?: number | string;
   target_audience?: "all" | "specific";
   target_user_ids?: (number | string)[];
 }
@@ -49,6 +51,14 @@ const notificationService: NotificationService = {
 
       if (params.link_type) {
         formData.append("link_type", params.link_type);
+      }
+
+      if (params.url) {
+        formData.append("url", params.url);
+      }
+
+      if (params.product_id) {
+        formData.append("product_id", params.product_id.toString());
       }
 
       if (params.package_id) {

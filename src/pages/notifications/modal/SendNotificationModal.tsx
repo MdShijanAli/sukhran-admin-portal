@@ -22,9 +22,12 @@ import { toast } from "sonner";
 interface NotificationFormData {
   title: string;
   body: string;
-  image: File | null;
+  image: string;
+  imageFile: File | null;
   link_type: "none" | "product" | "package" | "url";
-  package_id: string;
+  package_id?: string;
+  product_id?: string;
+  url?: string;
   target_audience: "all" | "specific";
   target_user_ids: (number | string)[];
 }
@@ -46,9 +49,12 @@ export default function SendNotificationModal({
   const [formData, setFormData] = useState<NotificationFormData>({
     title: "",
     body: "",
-    image: null,
+    image: "",
+    imageFile: null,
     link_type: "none",
     package_id: "",
+    product_id: "",
+    url: "",
     target_audience: "all",
     target_user_ids: [],
   });
@@ -69,13 +75,31 @@ export default function SendNotificationModal({
     }
   };
 
-  const handleImageUpload = (file: File | null) => {
-    setFormData((prev) => ({ ...prev, image: file }));
+  const handleImageUpload = (imageUrl: string) => {
+    if (!imageUrl) {
+      setFormData((prev) => ({ ...prev, image: "", imageFile: null }));
+      return;
+    }
+
+    // Convert base64 to File object for API submission
+    fetch(imageUrl)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const file = new File([blob], "notification-image.jpg", {
+          type: blob.type,
+        });
+        setFormData((prev) => ({ ...prev, image: imageUrl, imageFile: file }));
+      })
+      .catch((error) => {
+        console.error("Error converting image:", error);
+        toast.error("Failed to process image");
+      });
   };
 
   const handleUserSelection = async (searchQuery: string) => {
+    const queryString = `search=${encodeURIComponent(searchQuery)}&per_page=50`;
     try {
-      await userService.getAll({ search: searchQuery, per_page: 50 });
+      await userService.fetchLists(queryString);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -102,6 +126,16 @@ export default function SendNotificationModal({
       return;
     }
 
+    if (formData.link_type === "url" && !formData.url) {
+      toast.error("Please enter a URL");
+      return;
+    }
+
+    if (formData.link_type === "product" && !formData.product_id) {
+      toast.error("Please select a product");
+      return;
+    }
+
     if (
       formData.target_audience === "specific" &&
       formData.target_user_ids.length === 0
@@ -111,13 +145,15 @@ export default function SendNotificationModal({
     }
 
     setIsSubmitting(true);
+    // product_id: formData.product_id || undefined,
     try {
       await notificationService.sendNotification({
         title: formData.title,
         body: formData.body,
-        image: formData.image || undefined,
+        image: formData.imageFile || undefined,
         link_type: formData.link_type,
         package_id: formData.package_id || undefined,
+        url: formData.url || undefined,
         target_audience: formData.target_audience,
         target_user_ids:
           formData.target_audience === "specific"
@@ -179,11 +215,7 @@ export default function SendNotificationModal({
 
         <div className="space-y-2">
           <Label>Notification Image (Optional)</Label>
-          <ImageUpload
-            value={formData.image ? URL.createObjectURL(formData.image) : ""}
-            onChange={(file) => handleImageUpload(file)}
-            onRemove={() => handleImageUpload(null)}
-          />
+          <ImageUpload value={formData.image} onChange={handleImageUpload} />
         </div>
 
         <div className="space-y-2">
@@ -210,6 +242,52 @@ export default function SendNotificationModal({
           </Select>
         </div>
 
+        {formData.link_type === "url" && (
+          <div className="space-y-2">
+            <Label htmlFor="url">
+              URL <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="url"
+              placeholder="Enter URL"
+              value={formData.url || ""}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, url: e.target.value }))
+              }
+            />
+          </div>
+        )}
+
+        {/* {formData.link_type === "product" && (
+          <div className="space-y-2">
+            <Label htmlFor="package_id">
+              Select Product <span className="text-red-500">*</span>
+            </Label>
+            <ComboboxSelect
+              options={products}
+              value={formData.product_id}
+              onValueChange={(value) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  product_id: value.toString(),
+                }))
+              }
+              placeholder="Select a product..."
+              searchPlaceholder="Search products..."
+              emptyText="No products found."
+              getOptionValue={(pkg) => pkg.id.toString()}
+              getOptionLabel={(pkg) => pkg?.product_name}
+              renderOption={(pkg) => (
+                <div className="flex flex-col">
+                  <span className="font-medium">{pkg.name}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {pkg.category?.category_name}
+                  </span>
+                </div>
+              )}
+            />
+          </div>
+        )} */}
         {formData.link_type === "package" && (
           <div className="space-y-2">
             <Label htmlFor="package_id">
