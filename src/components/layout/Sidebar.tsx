@@ -273,7 +273,7 @@ export default function Sidebar() {
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-40 h-screen bg-sidebar border-r border-sidebar-border",
+        "fixed left-0 top-0 z-40 h-screen bg-primary border-r border-primary/20",
         isCollapsed ? "w-18" : "w-64"
       )}
       style={{
@@ -285,7 +285,7 @@ export default function Sidebar() {
         <div
           className={`relative flex ${
             isCollapsed ? "h-16 border-b" : "h-32"
-          } items-center justify-between border-sidebar-border px-4 transition-all duration-500 ease-in-out`}
+          } items-center justify-between border-white/10 px-4 transition-all duration-500 ease-in-out`}
         >
           <img
             src={
@@ -300,34 +300,34 @@ export default function Sidebar() {
             onClick={toggleSidebar}
             className={`absolute ${
               isCollapsed ? "top-1/2" : "top-8"
-            } hidden lg:block -right-4 transform -translate-y-1/2 rounded-lg p-1 bg-sidebar-accent transition-all duration-500 ease-in-out hover:scale-110`}
+            } hidden lg:block -right-4 transform -translate-y-1/2 rounded-lg p-1 bg-white shadow-md transition-all duration-500 ease-in-out hover:scale-110`}
           >
             {isCollapsed ? (
-              <ChevronRight className="h-5 w-5 text-sidebar-foreground" />
+              <ChevronRight className="h-5 w-5 text-primary" />
             ) : (
-              <ChevronLeft className="h-5 w-5 text-sidebar-foreground" />
+              <ChevronLeft className="h-5 w-5 text-primary" />
             )}
           </button>
         </div>
 
         {/* Search Bar */}
         {!isCollapsed && (
-          <div className="px-3 py-2 border-b border-sidebar-border">
+          <div className="px-3 py-2 border-b border-white/10">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white/70" />
               <Input
                 type="text"
                 placeholder={t("nav.searchMenu") || "Search menu..."}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-8 h-9 bg-sidebar-accent/50 border border-primary focus-visible:ring-1 focus-visible:ring-sidebar-accent"
+                className="pl-9 pr-8 h-9 bg-white/10 text-white placeholder:text-white/50 border border-white/20 focus-visible:ring-1 focus-visible:ring-white/30"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-sidebar-accent rounded-sm transition-colors"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-white/10 rounded-sm transition-colors"
                 >
-                  <X className="h-3 w-3 text-muted-foreground" />
+                  <X className="h-3 w-3 text-white/70" />
                 </button>
               )}
             </div>
@@ -336,14 +336,14 @@ export default function Sidebar() {
 
         {/* Collapsed Search Icon */}
         {isCollapsed && (
-          <div className="px-2 py-2 border-b border-sidebar-border flex justify-center">
+          <div className="px-2 py-2 border-b border-white/10 flex justify-center">
             <Tooltip delayDuration={100}>
               <TooltipTrigger asChild>
                 <button
                   onClick={toggleSidebar}
-                  className="p-2 hover:bg-sidebar-accent rounded-lg transition-colors"
+                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                 >
-                  <Search className="h-5 w-5 text-sidebar-foreground" />
+                  <Search className="h-5 w-5 text-white" />
                 </button>
               </TooltipTrigger>
               <TooltipContent side="right">
@@ -354,11 +354,11 @@ export default function Sidebar() {
         )}
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto py-4 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-sidebar-accent [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-sidebar-accent/80">
+        <nav className="flex-1 overflow-y-auto py-4 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-white/30">
           <ul className="space-y-1 px-2">
             {filteredMenuItems.length === 0 ? (
               <li className="px-3 py-8 text-center">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-white/60">
                   {t("nav.noMenuFound") || "No menu items found"}
                 </p>
               </li>
@@ -379,11 +379,11 @@ export default function Sidebar() {
                                 onClick={() => toggleExpand(item.path)}
                                 className={cn(
                                   "w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-300 ease-in-out",
-                                  "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                                  "text-sidebar-foreground"
+                                  "hover:bg-white/10",
+                                  "text-white"
                                 )}
                               >
-                                <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
+                                <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out text-white" />
                               </button>
                             </TooltipTrigger>
                             <TooltipContent side="right" className="p-0">
@@ -403,9 +403,9 @@ export default function Sidebar() {
                                           className={({ isActive }) =>
                                             cn(
                                               "flex items-center gap-3 px-3 py-2 text-sm transition-colors",
-                                              "hover:bg-sidebar-accent",
+                                              "hover:bg-accent",
                                               isActive
-                                                ? "bg-sidebar-accent font-medium"
+                                                ? "bg-accent font-medium"
                                                 : ""
                                             )
                                           }
@@ -424,8 +424,8 @@ export default function Sidebar() {
                             onClick={() => toggleExpand(item.path)}
                             className={cn(
                               "w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-300 ease-in-out",
-                              "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                              "text-sidebar-foreground"
+                              "hover:bg-white/10 hover:text-white",
+                              "text-white/90"
                             )}
                           >
                             <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
@@ -450,7 +450,7 @@ export default function Sidebar() {
                                 : "max-h-0 opacity-0"
                             )}
                           >
-                            <ul className="mt-1 space-y-1 ml-4 pl-4 border-l-2 border-sidebar-accent/30">
+                            <ul className="mt-1 space-y-1 ml-4 pl-4 border-l-2 border-white/20">
                               {item.subItems
                                 ?.filter((subItem) =>
                                   hasPermission(subItem.permission)
@@ -462,10 +462,10 @@ export default function Sidebar() {
                                       className={({ isActive }) =>
                                         cn(
                                           "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-300 ease-in-out",
-                                          "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                                          "hover:bg-white/10 hover:text-white",
                                           isActive
-                                            ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                                            : "text-sidebar-foreground"
+                                            ? "bg-white/20 text-white font-medium"
+                                            : "text-white/80"
                                         )
                                       }
                                     >
@@ -487,10 +487,10 @@ export default function Sidebar() {
                         className={({ isActive }) =>
                           cn(
                             "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-300 ease-in-out",
-                            "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                            "hover:bg-white/10 hover:text-white",
                             isActive
-                              ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                              : "text-sidebar-foreground"
+                              ? "bg-white/20 text-white font-medium"
+                              : "text-white/90"
                           )
                         }
                       >
