@@ -163,11 +163,11 @@ const ProductViewDetails = () => {
               </div>
             </div>
             <div className="flex gap-2">
-              <ShareButton
+              {/* <ShareButton
                 title={`Check out ${product.name}`}
                 description={product.description || "Amazing product!"}
                 price={product.skus[0]?.pricing?.currentPrice}
-              />
+              /> */}
               <Button
                 variant="outline"
                 onClick={() => navigate(`/products/edit/${product.id}`)}
@@ -251,9 +251,9 @@ const ProductViewDetails = () => {
                   {t("products.view.category")}
                 </p>
                 <div className="flex items-center gap-3">
-                  {product.category.image_url && (
+                  {product.category?.image_url && (
                     <img
-                      src={product.category.image_url}
+                      src={product.category?.image_url}
                       alt={product.category.name}
                       className="h-10 w-10 rounded-md object-cover"
                     />
@@ -272,17 +272,17 @@ const ProductViewDetails = () => {
                   {t("products.view.subCategory")}
                 </p>
                 <div className="flex items-center gap-3">
-                  {product.sub_category.image_url && (
+                  {product.sub_category?.image_url && (
                     <img
-                      src={product.sub_category.image_url}
-                      alt={product.sub_category.name}
+                      src={product.sub_category?.image_url}
+                      alt={product.sub_category?.name}
                       className="h-10 w-10 rounded-md object-cover"
                     />
                   )}
                   <div>
-                    <p className="font-medium">{product.sub_category.name}</p>
+                    <p className="font-medium">{product.sub_category?.name}</p>
                     <p className="text-xs text-muted-foreground">
-                      {product.sub_category.description}
+                      {product.sub_category?.description}
                     </p>
                   </div>
                 </div>

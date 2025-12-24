@@ -14,7 +14,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { ArrowLeft, Loader2, Plus, Trash2, Upload, X } from "lucide-react";
+import {
+  ArrowLeft,
+  Copy,
+  Loader2,
+  Plus,
+  Trash2,
+  Upload,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
 import packageService from "@/services/packageService";
 import productService from "@/services/productService";
@@ -205,6 +213,17 @@ export default function PackageForm() {
     }
   };
 
+  const duplicateItem = (index: number) => {
+    const itemToDuplicate = items[index];
+    const newItem = {
+      ...itemToDuplicate,
+    };
+    const newItems = [...items];
+    newItems.splice(index + 1, 0, newItem);
+    setItems(newItems);
+    toast.success("Item duplicated successfully");
+  };
+
   const updateItem = (
     index: number,
     field: keyof PackageItem,
@@ -305,6 +324,7 @@ export default function PackageForm() {
         toast.success(t("packages.messages.packageCreated"));
       }
 
+      await packageService.fetchLists(); // Refresh package list
       navigate("/packages");
     } catch (error: any) {
       console.error("Error saving package:", error);
@@ -433,50 +453,6 @@ export default function PackageForm() {
                       rows={4}
                     />
                   </div>
-
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="packageType">
-                        {t("packages.form.packageType")}{" "}
-                        <span className="text-destructive">*</span>
-                      </Label>
-                      <Select
-                        value={formData.packageType}
-                        onValueChange={(value) =>
-                          updateField("packageType", value)
-                        }
-                      >
-                        <SelectTrigger id="packageType">
-                          <SelectValue
-                            placeholder={t("packages.form.selectType")}
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="admin">
-                            {t("packages.type.admin")}
-                          </SelectItem>
-                          <SelectItem value="custom">
-                            {t("packages.type.custom")}
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="displayOrder">
-                        {t("packages.form.displayOrder")}
-                      </Label>
-                      <Input
-                        id="displayOrder"
-                        type="number"
-                        placeholder="0"
-                        value={formData.displayOrder}
-                        onChange={(e) =>
-                          updateField("displayOrder", e.target.value)
-                        }
-                      />
-                    </div>
-                  </div>
                 </CardContent>
               </Card>
 
@@ -511,16 +487,26 @@ export default function PackageForm() {
                             <h4 className="font-medium">
                               {t("packages.form.item")} {index + 1}
                             </h4>
-                            {items.length > 1 && (
+                            <div className="flex gap-2">
                               <Button
                                 type="button"
-                                variant="ghost"
+                                variant="outline"
                                 size="sm"
-                                onClick={() => removeItem(index)}
+                                onClick={() => duplicateItem(index)}
                               >
-                                <Trash2 className="h-4 w-4" />
+                                <Copy className="h-4 w-4" />
                               </Button>
-                            )}
+                              {items.length > 1 && (
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => removeItem(index)}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              )}
+                            </div>
                           </div>
 
                           <div className="grid gap-4 md:grid-cols-3">

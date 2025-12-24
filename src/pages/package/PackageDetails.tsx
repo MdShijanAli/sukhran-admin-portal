@@ -123,7 +123,7 @@ export default function PackageDetails() {
             {t("packages.view.viewCompleteInfo")}
           </p>
         </div>
-        <div className="flex gap-2">
+        {/* <div className="flex gap-2">
           <ShareButton
             title={`${t("packages.view.checkOut")} ${packageData.name}`}
             description={
@@ -135,7 +135,7 @@ export default function PackageDetails() {
             <Edit className="h-4 w-4 mr-2" />
             {t("packages.view.editPackage")}
           </Button>
-        </div>
+        </div> */}
       </div>
 
       <div className="grid gap-3 lg:grid-cols-3">

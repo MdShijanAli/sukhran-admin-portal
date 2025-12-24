@@ -373,7 +373,7 @@ function Packages() {
                         >
                           <Eye className="h-3.5 w-3.5" />
                         </Button>
-                        <ShareButton
+                        {/* <ShareButton
                           url={`${window.location.origin}/packages/view/${pkg.id}`}
                           title={`Check out ${pkg.name}`}
                           description={
@@ -384,7 +384,7 @@ function Packages() {
                           size="sm"
                           iconOnly
                           className="flex-1 h-8 text-xs"
-                        />
+                        /> */}
                         {hasPermission(permissions.packages.edit) && (
                           <Button
                             variant="outline"

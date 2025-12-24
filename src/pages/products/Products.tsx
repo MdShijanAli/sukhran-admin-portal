@@ -412,7 +412,7 @@ const Products = () => {
                         >
                           <Eye className="h-3.5 w-3.5" />
                         </Button>
-                        <ShareButton
+                        {/* <ShareButton
                           url={`${window.location.origin}/products/view/${product.id}`}
                           title={`Check out ${product.name}`}
                           description={
@@ -423,7 +423,7 @@ const Products = () => {
                           size="sm"
                           iconOnly
                           className="flex-1 h-8 text-xs"
-                        />
+                        /> */}
                         {hasPermission(permissions.products.edit) && (
                           <Button
                             variant="outline"
