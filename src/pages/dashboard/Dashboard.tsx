@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import ComingSoon from "@/components/custom/ComingSoon";
 import {
   ShoppingCart,
   DollarSign,
@@ -25,6 +26,22 @@ import { dashboardStats, revenueData, topProducts } from "@/data/mockData";
 
 export default function Dashboard() {
   const { t } = useTranslation();
+  const isProduction = import.meta.env.PROD;
+
+  // Show Coming Soon in production mode
+  if (isProduction) {
+    return (
+      <div className="animate-fade-in">
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <p className="text-muted-foreground mt-1">
+            Welcome back! Here's what's happening today.
+          </p>
+        </div>
+        <ComingSoon />
+      </div>
+    );
+  }
 
   const StatCard = ({
     title,
