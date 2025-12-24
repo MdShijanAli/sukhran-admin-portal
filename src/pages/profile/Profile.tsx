@@ -153,7 +153,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="max-w-6xl">
+    <div className="">
       <div className="grid gap-3 md:grid-cols-3">
         {/* Profile Avatar Card */}
         <Card className="md:col-span-1">
