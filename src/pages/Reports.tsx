@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { reportTypes } from "@/data/mockData";
+import ComingSoon from "@/components/custom/ComingSoon";
 
 const iconMap = {
   TrendingUp,
@@ -30,11 +31,27 @@ const iconMap = {
 
 const Reports = () => {
   const { t } = useTranslation();
+  const isProduction = import.meta.env.PROD;
 
   const handleGenerateReport = (reportId: string) => {
     console.log("Generating report:", reportId);
     // Report generation logic here
   };
+
+  // Show Coming Soon in production mode
+  if (isProduction) {
+    return (
+      <div className="animate-fade-in">
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <p className="text-muted-foreground mt-1">
+            Welcome back! Here's what's happening today.
+          </p>
+        </div>
+        <ComingSoon />
+      </div>
+    );
+  }
 
   return (
     <div className="">
