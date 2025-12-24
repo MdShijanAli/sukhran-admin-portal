@@ -39,9 +39,19 @@ const Products = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [selectedSkus, setSelectedSkus] = useState<
+    Record<string | number, number>
+  >({});
   const currentPage = store.pagination?.current_page || 1;
   const perPage = store.pagination?.per_page || 20;
   const { isCollapsed } = useSidebarStore();
+
+  const handleSkuSelect = (productId: string | number, skuId: number) => {
+    setSelectedSkus((prev) => ({
+      ...prev,
+      [productId]: skuId,
+    }));
+  };
 
   // Get data from store
   const products = store.products || [];
@@ -270,6 +280,11 @@ const Products = () => {
             {products.map((product) => {
               const firstSku = product.skus?.[0];
               const hasMultipleSKUs = (product.skus?.length || 0) > 1;
+              const selectedSkuId = selectedSkus[product.id];
+              const selectedSku = selectedSkuId
+                ? product.skus?.find((sku) => sku.id === selectedSkuId)
+                : firstSku;
+              const displaySku = selectedSku || firstSku;
 
               return (
                 <Card
@@ -281,7 +296,7 @@ const Products = () => {
                     <div className="relative aspect-video overflow-hidden bg-muted">
                       <img
                         src={
-                          firstSku?.image_url ||
+                          displaySku?.image_url ||
                           product.image_url ||
                           noProductImage
                         }
@@ -323,36 +338,64 @@ const Products = () => {
                         {product.name}
                       </h3>
 
+                      {/* SKUs */}
+                      {product.skus && product.skus.length > 0 && (
+                        <div className="flex flex-wrap items-center gap-1">
+                          <span className="text-[10px]">
+                            {t("products.skus")}:
+                          </span>
+                          {product.skus.map((sku) => (
+                            <Badge
+                              key={sku.id}
+                              variant={
+                                displaySku?.id === sku.id
+                                  ? "default"
+                                  : "outline"
+                              }
+                              className="text-[10px] px-1.5 py-0.5 cursor-pointer hover:bg-primary/80 hover:text-white transition-colors"
+                              onClick={() =>
+                                handleSkuSelect(product.id, sku.id)
+                              }
+                            >
+                              {sku.unit.size} {sku.unit.name}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+
                       {/* Price */}
-                      {firstSku && (
+                      {displaySku && (
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="text-base font-bold text-primary">
                               ৳
                               {formatNumberWithCommas(
-                                (firstSku as any).pricing?.currentPrice || 0
+                                (displaySku as any).pricing?.currentPrice || 0
                               )}
+                              <span className="text-[10px] ml-1">
+                                ({displaySku.stockQuantity} qty)
+                              </span>
                             </p>
-                            {(firstSku as any).pricing?.originalPrice &&
-                              (firstSku as any).pricing.originalPrice !==
-                                (firstSku as any).pricing.currentPrice && (
+                            {(displaySku as any).pricing?.originalPrice &&
+                              (displaySku as any).pricing.originalPrice !==
+                                (displaySku as any).pricing.currentPrice && (
                                 <p className="text-[10px] text-muted-foreground line-through">
                                   ৳
                                   {formatNumberWithCommas(
-                                    (firstSku as any).pricing.originalPrice
+                                    (displaySku as any).pricing.originalPrice
                                   )}
                                 </p>
                               )}
                           </div>
                           <Badge
                             variant={
-                              (firstSku as any).isInStock
+                              (displaySku as any).isInStock
                                 ? "default"
                                 : "destructive"
                             }
                             className="text-[10px] px-1.5 py-0"
                           >
-                            {(firstSku as any).isInStock
+                            {(displaySku as any).isInStock
                               ? t("products.view.inStock")
                               : t("products.view.outOfStock")}
                           </Badge>
@@ -375,7 +418,7 @@ const Products = () => {
                           description={
                             product.description || "Amazing product!"
                           }
-                          price={firstSku?.pricing?.currentPrice}
+                          price={displaySku?.pricing?.currentPrice}
                           variant="outline"
                           size="sm"
                           iconOnly

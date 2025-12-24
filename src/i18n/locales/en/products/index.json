@@ -117,7 +117,8 @@
     "failedToLoadSubCategories": "Failed to load sub-categories",
     "failedToLoadDetails": "Failed to load product details",
     "productDeleted": "Product deleted successfully",
-    "failedToDelete": "Failed to delete product"
+    "failedToDelete": "Failed to delete product",
+    "skuDuplicated": "SKU duplicated successfully"
   },
   "delete": {
     "title": "Delete Product",

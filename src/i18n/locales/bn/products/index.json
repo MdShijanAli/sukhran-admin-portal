@@ -117,7 +117,8 @@
     "failedToLoadSubCategories": "সাব-ক্যাটাগরি লোড করতে ব্যর্থ",
     "failedToLoadDetails": "পণ্যের বিবরণ লোড করতে ব্যর্থ",
     "productDeleted": "পণ্য সফলভাবে মুছে ফেলা হয়েছে",
-    "failedToDelete": "পণ্য মুছে ফেলতে ব্যর্থ"
+    "failedToDelete": "পণ্য মুছে ফেলতে ব্যর্থ",
+    "skuDuplicated": "SKU সফলভাবে নকল হয়েছে"
   },
   "delete": {
     "title": "পণ্য মুছুন",

@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Backpack, Loader2, Plus, Trash2, Undo2, X } from "lucide-react";
+import { Backpack, Loader2, Plus, Trash2, Undo2, X, Copy } from "lucide-react";
 import { toast } from "sonner";
 import productService from "@/services/productService";
 import categoryService from "@/services/categoryService";
@@ -272,6 +272,27 @@ export default function ProductForm() {
     }
   };
 
+  const duplicateSku = (index: number) => {
+    const skuToDuplicate = skus[index];
+    const duplicatedSku = {
+      ...skuToDuplicate,
+      id: undefined, // Remove ID for new SKU
+    };
+    setSkus([...skus, duplicatedSku]);
+
+    // Duplicate image if exists
+    if (skuImages[index]) {
+      setSkuImages((prev) => ({
+        ...prev,
+        [skus.length]: skuImages[index],
+      }));
+    }
+
+    toast.success(
+      t("products.messages.skuDuplicated") || "SKU duplicated successfully"
+    );
+  };
+
   const updateSku = (
     index: number,
     field: keyof ProductSku,
@@ -394,11 +415,7 @@ export default function ProductForm() {
       navigate("/products");
     } catch (error) {
       console.error("Error submitting product:", error);
-      toast.error(
-        isEditMode
-          ? t("products.messages.failedToUpdate")
-          : t("products.messages.failedToCreate")
-      );
+      toast.error(error.response.data.error_message || "an error occurred");
     } finally {
       setIsSubmitting(false);
     }
@@ -432,9 +449,9 @@ export default function ProductForm() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 {/* Product Name */}
-                <div className="grid gap-2">
+                <div className="grid sm:col-span-2 gap-2">
                   <Label htmlFor="productName">
                     {t("products.form.productName")} *
                   </Label>
@@ -514,7 +531,7 @@ export default function ProductForm() {
                 </div>
 
                 {/* Product Type */}
-                <div className="grid gap-2">
+                {/* <div className="grid gap-2">
                   <Label htmlFor="productType">
                     {t("products.form.productType")} *
                   </Label>
@@ -542,7 +559,7 @@ export default function ProductForm() {
                       </SelectItem>
                     </SelectContent>
                   </Select>
-                </div>
+                </div> */}
               </div>
 
               {/* Description */}
@@ -641,17 +658,28 @@ export default function ProductForm() {
                   key={index}
                   className="border rounded-lg p-4 space-y-4 relative"
                 >
-                  {skus.length > 1 && (
+                  <div className="absolute top-2 right-2 flex gap-1">
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="absolute top-2 right-2"
-                      onClick={() => removeSku(index)}
+                      onClick={() => duplicateSku(index)}
+                      title={t("products.form.duplicateSku") || "Duplicate SKU"}
                     >
-                      <Trash2 className="h-4 w-4 text-destructive" />
+                      <Copy className="h-4 w-4 text-primary" />
                     </Button>
-                  )}
+                    {skus.length > 1 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeSku(index)}
+                        title={t("products.form.removeSku") || "Remove SKU"}
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    )}
+                  </div>
 
                   <h4 className="font-medium">
                     {t("products.skus")} {index + 1}
