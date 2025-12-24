@@ -14,6 +14,7 @@ interface CoverageAreaState {
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   setStats: (stats: Partial<CoverageAreaPaginationMeta["stats"]>) => void;
+  setPagination: (pagination: CoverageAreaPaginationMeta) => void;
 }
 
 export const useCoverageAreaStore = createStore<CoverageAreaState>(
@@ -35,6 +36,15 @@ export const useCoverageAreaStore = createStore<CoverageAreaState>(
     },
     isLoading: false,
     error: null,
+
+    setPagination: (pagination: CoverageAreaPaginationMeta) => {
+      set({
+        pagination: {
+          ...get().pagination,
+          ...pagination,
+        },
+      });
+    },
 
     setItems: (data: unknown) => {
       // Handle both array and object responses

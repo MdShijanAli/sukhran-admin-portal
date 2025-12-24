@@ -72,6 +72,7 @@ interface ProductState {
   getProductById: (id: number | string) => Product | undefined;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setPagination: (pagination: PaginationMeta) => void;
 }
 
 export const useProductStore = createStore<ProductState>(
@@ -87,6 +88,15 @@ export const useProductStore = createStore<ProductState>(
     },
     isLoading: false,
     error: null,
+
+    setPagination: (pagination: PaginationMeta) => {
+      set({
+        pagination: {
+          ...get().pagination,
+          ...pagination,
+        },
+      });
+    },
 
     setItems: (data: unknown) => {
       // Handle both array and object responses

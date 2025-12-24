@@ -25,6 +25,7 @@ interface DonationState {
   getDonationById: (id: number | string) => Donation | undefined;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setPagination: (pagination: PaginationMeta) => void;
 }
 
 export const useDonationStore = createStore<DonationState>(
@@ -43,6 +44,15 @@ export const useDonationStore = createStore<DonationState>(
     },
     isLoading: false,
     error: null,
+
+    setPagination: (pagination: PaginationMeta) => {
+      set({
+        pagination: {
+          ...get().pagination,
+          ...pagination,
+        },
+      });
+    },
 
     setItems: (data: unknown) => {
       const donations = Array.isArray(data)

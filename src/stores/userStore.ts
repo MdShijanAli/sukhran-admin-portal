@@ -85,6 +85,7 @@ interface UserState {
   getUserById: (id: number | string) => User | undefined;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setPagination: (pagination: PaginationMeta) => void;
 }
 
 export const useUserStore = createStore<UserState>(
@@ -109,6 +110,15 @@ export const useUserStore = createStore<UserState>(
     },
     isLoading: false,
     error: null,
+
+    setPagination: (pagination: PaginationMeta) => {
+      set({
+        pagination: {
+          ...get().pagination,
+          ...pagination,
+        },
+      });
+    },
 
     setItems: (data: unknown) => {
       // Handle both array and object responses

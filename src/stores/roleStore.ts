@@ -53,6 +53,7 @@ interface RoleState {
   getRoleById: (id: number | string) => Role | undefined;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setPagination: (pagination: PaginationMeta) => void;
 }
 
 export const useRoleStore = createStore<RoleState>(
@@ -77,6 +78,15 @@ export const useRoleStore = createStore<RoleState>(
     },
     isLoading: false,
     error: null,
+
+    setPagination: (pagination: PaginationMeta) => {
+      set({
+        pagination: {
+          ...get().pagination,
+          ...pagination,
+        },
+      });
+    },
 
     setItems: (data: unknown) => {
       // Handle both array and object responses

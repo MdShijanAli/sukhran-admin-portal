@@ -31,6 +31,7 @@ interface TransactionState {
   getTransactionById: (id: number | string) => Transaction | undefined;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setPagination: (pagination: TransactionPaginationMeta) => void;
 }
 
 export const useTransactionStore = createStore<TransactionState>(
@@ -65,6 +66,15 @@ export const useTransactionStore = createStore<TransactionState>(
     },
     isLoading: false,
     error: null,
+
+    setPagination: (pagination: TransactionPaginationMeta) => {
+      set({
+        pagination: {
+          ...get().pagination,
+          ...pagination,
+        },
+      });
+    },
 
     setItems: (data: unknown) => {
       const transactions = Array.isArray(data)

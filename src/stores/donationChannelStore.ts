@@ -17,6 +17,7 @@ interface DonationChannelState {
   getChannelById: (id: number | string) => DonationChannel | undefined;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setPagination: (pagination: PaginationMeta) => void;
 }
 
 export const useDonationChannelStore = createStore<DonationChannelState>(
@@ -34,6 +35,15 @@ export const useDonationChannelStore = createStore<DonationChannelState>(
     },
     isLoading: false,
     error: null,
+
+    setPagination: (pagination: PaginationMeta) => {
+      set({
+        pagination: {
+          ...get().pagination,
+          ...pagination,
+        },
+      });
+    },
 
     setItems: (data: unknown) => {
       const channels = Array.isArray(data)

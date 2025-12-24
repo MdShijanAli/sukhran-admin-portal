@@ -38,6 +38,7 @@ interface CategoryState {
   getCategoryById: (id: number | string) => Category | undefined;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setPagination: (pagination: PaginationMeta) => void;
 }
 
 export const useCategoryStore = createStore<CategoryState>(
@@ -53,6 +54,15 @@ export const useCategoryStore = createStore<CategoryState>(
     },
     isLoading: false,
     error: null,
+
+    setPagination: (pagination: PaginationMeta) => {
+      set({
+        pagination: {
+          ...get().pagination,
+          ...pagination,
+        },
+      });
+    },
 
     setItems: (data: unknown) => {
       // Handle both array and object responses

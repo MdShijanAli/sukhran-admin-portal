@@ -1,4 +1,4 @@
-import { Coupon, CouponPaginationMeta } from "@/lib/types";
+import { Coupon, CouponPaginationMeta, PaginationMeta } from "@/lib/types";
 import { createStore } from "./createStore";
 
 interface CouponState {
@@ -13,6 +13,7 @@ interface CouponState {
   getCouponById: (id: number | string) => Coupon | undefined;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setPagination: (pagination: CouponPaginationMeta) => void;
 }
 
 export const useCouponStore = createStore<CouponState>(
@@ -40,6 +41,15 @@ export const useCouponStore = createStore<CouponState>(
     },
     isLoading: false,
     error: null,
+
+    setPagination: (pagination: CouponPaginationMeta) => {
+      set({
+        pagination: {
+          ...get().pagination,
+          ...pagination,
+        },
+      });
+    },
 
     setItems: (data: unknown) => {
       const responseData = data as {

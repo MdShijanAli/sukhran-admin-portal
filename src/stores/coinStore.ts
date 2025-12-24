@@ -25,7 +25,7 @@ interface CoinState {
 }
 
 export const useCoinStore = createStore<CoinState>(
-  (set) => ({
+  (set, get) => ({
     transactions: [],
     statistics: null,
     userCoinDetails: null,
@@ -40,13 +40,20 @@ export const useCoinStore = createStore<CoinState>(
     isLoading: false,
     error: null,
 
+    setPagination: (pagination: PaginationMeta) => {
+      set({
+        pagination: {
+          ...get().pagination,
+          ...pagination,
+        },
+      });
+    },
+
     setTransactions: (transactions) => set({ transactions }),
 
     setStatistics: (statistics) => set({ statistics }),
 
     setUserCoinDetails: (details) => set({ userCoinDetails: details }),
-
-    setPagination: (pagination) => set({ pagination }),
 
     setLoading: (isLoading) => set({ isLoading }),
 

@@ -80,6 +80,7 @@ interface SupportState {
   getTicketById: (id: number | string) => SupportTicket | undefined;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setPagination: (pagination: PaginationMeta) => void;
 }
 
 export const useSupportStore = createStore<SupportState>(
@@ -96,6 +97,15 @@ export const useSupportStore = createStore<SupportState>(
     },
     isLoading: false,
     error: null,
+
+    setPagination: (pagination: PaginationMeta) => {
+      set({
+        pagination: {
+          ...get().pagination,
+          ...pagination,
+        },
+      });
+    },
 
     setItems: (data: unknown) => {
       const tickets = Array.isArray(data)

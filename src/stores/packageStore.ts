@@ -14,6 +14,7 @@ interface PackageState {
   getPackageById: (id: number | string) => Package | undefined;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setPagination: (pagination: PaginationMeta) => void;
 }
 
 export const usePackageStore = createStore<PackageState>(
@@ -29,6 +30,15 @@ export const usePackageStore = createStore<PackageState>(
     },
     isLoading: false,
     error: null,
+
+    setPagination: (pagination: PaginationMeta) => {
+      set({
+        pagination: {
+          ...get().pagination,
+          ...pagination,
+        },
+      });
+    },
 
     setItems: (data: unknown) => {
       // Handle both array and object responses

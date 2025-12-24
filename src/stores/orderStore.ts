@@ -144,6 +144,7 @@ interface OrderState {
   getOrderById: (id: number | string) => Order | undefined;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setPagination: (pagination: PaginationMeta) => void;
 }
 
 export const useOrderStore = createStore<OrderState>(
@@ -189,6 +190,15 @@ export const useOrderStore = createStore<OrderState>(
     },
     isLoading: false,
     error: null,
+
+    setPagination: (pagination: PaginationMeta) => {
+      set({
+        pagination: {
+          ...get().pagination,
+          ...pagination,
+        },
+      });
+    },
 
     setItems: (data: unknown) => {
       const orders = Array.isArray(data)

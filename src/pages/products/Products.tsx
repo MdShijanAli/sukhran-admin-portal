@@ -39,7 +39,8 @@ const Products = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const currentPage = store.pagination?.current_page || 1;
+  const perPage = store.pagination?.per_page || 20;
   const { isCollapsed } = useSidebarStore();
 
   // Get data from store
@@ -50,7 +51,7 @@ const Products = () => {
   const [isFirstRender, setIsFirstRender] = useState(true);
 
   const fetchProducts = useCallback(
-    async (page = 1, forceFetch = false) => {
+    async (forceFetch = false) => {
       if (
         !forceFetch &&
         products.length > 0 &&
@@ -67,7 +68,8 @@ const Products = () => {
         if (searchQuery) {
           params.append("search", searchQuery);
         }
-        params.append("page", page.toString());
+        params.append("page", currentPage.toString());
+        params.append("per_page", perPage.toString());
         await productService.fetchLists(params.toString());
         if (!hasInitialFetch) {
           setHasInitialFetch(true);
@@ -79,14 +81,21 @@ const Products = () => {
         store.setLoading?.(false);
       }
     },
-    [searchQuery, isFirstRender, hasInitialFetch, products.length]
+    [
+      searchQuery,
+      isFirstRender,
+      hasInitialFetch,
+      products.length,
+      perPage,
+      currentPage,
+    ]
   );
 
   // Fetch on mount and when dependencies change
   useEffect(() => {
     if (isFirstRender) {
       setIsFirstRender(false);
-      fetchProducts(currentPage);
+      fetchProducts();
     }
   }, [fetchProducts, isFirstRender]);
 
@@ -96,9 +105,12 @@ const Products = () => {
 
     const timer = setTimeout(() => {
       if (currentPage !== 1) {
-        setCurrentPage(1);
+        store.setPagination?.({
+          ...store.pagination,
+          current_page: 1,
+        });
       } else {
-        fetchProducts(1);
+        fetchProducts();
       }
     }, 500);
 
@@ -107,14 +119,17 @@ const Products = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
+  // Handle filter, page, and perPage changes
+  useEffect(() => {
+    if (isFirstRender) return; // Skip on first render
+    fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, perPage]);
+
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await fetchProducts(currentPage, true);
+    await fetchProducts(true);
     setIsRefreshing(false);
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
   };
 
   const handleEdit = (product: Product) => {
@@ -409,7 +424,7 @@ const Products = () => {
                 totalPages={pagination.last_page}
                 totalItems={pagination.total}
                 itemsPerPage={pagination.per_page}
-                onPageChange={handlePageChange}
+                store={store}
               />
             </CardContent>
           </Card>

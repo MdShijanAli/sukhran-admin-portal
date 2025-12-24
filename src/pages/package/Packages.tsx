@@ -40,7 +40,8 @@ function Packages() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const currentPage = store.pagination?.current_page || 1;
+  const perPage = store.pagination?.per_page || 20;
   const { isCollapsed } = useSidebarStore();
 
   // Get data from store
@@ -51,7 +52,7 @@ function Packages() {
   const [isFirstRender, setIsFirstRender] = useState(true);
 
   const fetchPackages = useCallback(
-    async (page = 1, forceFetch = false) => {
+    async (forceFetch = false) => {
       if (
         !forceFetch &&
         packages.length > 0 &&
@@ -68,7 +69,8 @@ function Packages() {
         if (searchQuery) {
           params.append("search", searchQuery);
         }
-        params.append("page", page.toString());
+        params.append("page", currentPage.toString());
+        params.append("per_page", perPage.toString());
         await packageService.fetchLists(params.toString());
         if (!hasInitialFetch) {
           setHasInitialFetch(true);
@@ -80,14 +82,21 @@ function Packages() {
         store.setLoading?.(false);
       }
     },
-    [searchQuery, isFirstRender, hasInitialFetch, packages.length]
+    [
+      searchQuery,
+      isFirstRender,
+      hasInitialFetch,
+      packages.length,
+      perPage,
+      currentPage,
+    ]
   );
 
   // Fetch on mount and when dependencies change
   useEffect(() => {
     if (isFirstRender) {
       setIsFirstRender(false);
-      fetchPackages(currentPage);
+      fetchPackages();
     }
   }, [fetchPackages, isFirstRender]);
 
@@ -97,9 +106,12 @@ function Packages() {
 
     const timer = setTimeout(() => {
       if (currentPage !== 1) {
-        setCurrentPage(1);
+        store.setPagination?.({
+          ...store.pagination,
+          current_page: 1,
+        });
       } else {
-        fetchPackages(1);
+        fetchPackages();
       }
     }, 500);
 
@@ -108,14 +120,17 @@ function Packages() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
+  // Handle filter, page, and perPage changes
+  useEffect(() => {
+    if (isFirstRender) return; // Skip on first render
+    fetchPackages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, perPage]);
+
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await fetchPackages(currentPage, true);
+    await fetchPackages(true);
     setIsRefreshing(false);
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
   };
 
   const handleEdit = (pkg: Package) => {
@@ -413,7 +428,7 @@ function Packages() {
                 totalPages={pagination.last_page}
                 totalItems={pagination.total}
                 itemsPerPage={pagination.per_page}
-                onPageChange={handlePageChange}
+                store={store}
               />
             </CardContent>
           </Card>

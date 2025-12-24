@@ -10,6 +10,7 @@ interface PackageOrderState {
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   getPackageOrderByBatchId: (batchId: string) => PackageOrderBatch | undefined;
+  setPagination: (pagination: PaginationMeta) => void;
 }
 
 export const usePackageOrderStore = createStore<PackageOrderState>(
@@ -25,6 +26,15 @@ export const usePackageOrderStore = createStore<PackageOrderState>(
     },
     isLoading: false,
     error: null,
+
+    setPagination: (pagination: PaginationMeta) => {
+      set({
+        pagination: {
+          ...get().pagination,
+          ...pagination,
+        },
+      });
+    },
 
     setItems: (data: unknown) => {
       const packageOrders = Array.isArray(data)
