@@ -30,6 +30,53 @@ interface GeneralSettingsResponse {
   data: SettingsGroup[];
 }
 
+interface LegalDocument {
+  id: number;
+  type: "privacy_policy" | "terms_and_conditions";
+  type_label: string;
+  title: string;
+  content: string;
+  version: string;
+  is_active: boolean;
+  effective_date?: string;
+  created_by: {
+    id: number;
+    name: string;
+  };
+  updated_by?: {
+    id: number;
+    name: string;
+  } | null;
+  created_at: string;
+  updated_at: string;
+}
+
+interface LegalDocumentResponse {
+  success: boolean;
+  data: LegalDocument[];
+  meta?: {
+    current_page: number;
+    total: number;
+    per_page: number;
+    last_page: number;
+  };
+}
+
+interface CreateLegalDocumentPayload {
+  type: "privacy_policy" | "terms_and_conditions";
+  title: string;
+  content: string;
+  version?: string;
+  is_active?: boolean;
+  effective_date?: string;
+}
+
+interface UpdateLegalDocumentPayload {
+  title: string;
+  content: string;
+  version?: string;
+}
+
 const settingsService = {
   // Get subscription settings
   getSubscriptionSettings: async (): Promise<SubscriptionSettingResponse> => {
@@ -98,6 +145,57 @@ const settingsService = {
       throw error;
     }
   },
+
+  // Get legal document by type
+  getLegalDocumentByType: async (
+    type: "privacy_policy" | "terms_and_conditions"
+  ): Promise<LegalDocumentResponse> => {
+    try {
+      const response = await apiClient.get<LegalDocumentResponse>(
+        apiRoutes.documents.getLegalDocumentByType(type)
+      );
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching legal document ${type}:`, error);
+      throw error;
+    }
+  },
+
+  // Create legal document
+  createLegalDocument: async (payload: CreateLegalDocumentPayload) => {
+    try {
+      const response = await apiClient.post(
+        apiRoutes.documents.legalDocuments,
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error creating legal document:", error);
+      throw error;
+    }
+  },
+
+  // Update legal document
+  updateLegalDocument: async (
+    id: number,
+    payload: UpdateLegalDocumentPayload
+  ) => {
+    try {
+      const response = await apiClient.put(
+        apiRoutes.documents.updateLegalDocument(id),
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating legal document:", error);
+      throw error;
+    }
+  },
 };
 
 export default settingsService;
+export type {
+  LegalDocument,
+  CreateLegalDocumentPayload,
+  UpdateLegalDocumentPayload,
+};

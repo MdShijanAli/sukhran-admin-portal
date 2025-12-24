@@ -252,4 +252,14 @@ export const apiRoutes = {
     send: createApiUrl("admin/notifications/send"),
     test: createApiUrl("admin/notifications/test"),
   },
+
+  documents: {
+    legalDocuments: createApiUrl("admin/legal-documents"),
+    getLegalDocumentByType: (type: "privacy_policy" | "terms_and_conditions") =>
+      createApiUrl(`admin/legal-documents?type=${type}`),
+    getLegalDocumentById: (id: number | string) =>
+      createApiUrl(`admin/legal-documents/${id}`),
+    updateLegalDocument: (id: number | string) =>
+      createApiUrl(`admin/legal-documents/${id}`),
+  },
 };
