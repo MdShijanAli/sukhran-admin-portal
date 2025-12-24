@@ -69,6 +69,7 @@ function Packages() {
         if (searchQuery) {
           params.append("search", searchQuery);
         }
+        params.append("packageType", "admin");
         params.append("page", currentPage.toString());
         params.append("per_page", perPage.toString());
         await packageService.fetchLists(params.toString());

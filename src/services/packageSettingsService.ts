@@ -18,77 +18,80 @@ interface PackageSettingsService {
 
 const packageSettingsService: PackageSettingsService = {
   fetchSettings: async () => {
-    const store = usePackageSettingsStore.getState();
     try {
-      store.setLoading(true);
+      usePackageSettingsStore.getState().setLoading(true);
       const response = await apiClient.get(apiRoutes.packages.packageSettings);
-      store.setSettings(response.data);
+      usePackageSettingsStore.getState().setSettings(response.data);
       return response.data;
     } catch (error) {
-      store.setError("Failed to fetch package settings");
+      usePackageSettingsStore
+        .getState()
+        .setError("Failed to fetch package settings");
       throw error;
     } finally {
-      store.setLoading(false);
+      usePackageSettingsStore.getState().setLoading(false);
     }
   },
 
   updateSetting: async (id: number | string, value: string) => {
-    const store = usePackageSettingsStore.getState();
     try {
-      store.setLoading(true);
+      usePackageSettingsStore.getState().setLoading(true);
       const response = await apiClient.put(
         apiRoutes.packages.updatePackageSettings,
         { value }
       );
-      store.updateSetting(id, value);
+      usePackageSettingsStore.getState().updateSetting(id, value);
       return response.data;
     } catch (error) {
-      store.setError("Failed to update setting");
+      usePackageSettingsStore.getState().setError("Failed to update setting");
       throw error;
     } finally {
-      store.setLoading(false);
+      usePackageSettingsStore.getState().setLoading(false);
     }
   },
 
   enablePackageSettings: async (id: number, enabled: boolean) => {
-    const store = usePackageSettingsStore.getState();
     try {
-      store.setLoading(true);
+      usePackageSettingsStore.getState().setLoading(true);
       const response = await apiClient.put(
         apiRoutes.packages.enablePackageSettings,
         { value: enabled.toString() }
       );
       if (response.status === 200) {
-        store.updateSetting(id, enabled.toString());
+        usePackageSettingsStore
+          .getState()
+          .updateSetting(id, enabled.toString());
       }
       return response.data;
     } catch (error) {
-      store.setError("Failed to update enabled setting");
+      usePackageSettingsStore
+        .getState()
+        .setError("Failed to update enabled setting");
       throw error;
     } finally {
-      store.setLoading(false);
+      usePackageSettingsStore.getState().setLoading(false);
     }
   },
 
   fetchScheduleOptions: async () => {
-    const store = usePackageSettingsStore.getState();
     try {
-      store.setLoading(true);
+      usePackageSettingsStore.getState().setLoading(true);
       const response = await apiClient.get(apiRoutes.packages.packageSchedule);
-      store.setScheduleOptions(response.data);
+      usePackageSettingsStore.getState().setScheduleOptions(response.data);
       return response.data;
     } catch (error) {
-      store.setError("Failed to fetch schedule options");
+      usePackageSettingsStore
+        .getState()
+        .setError("Failed to fetch schedule options");
       throw error;
     } finally {
-      store.setLoading(false);
+      usePackageSettingsStore.getState().setLoading(false);
     }
   },
 
   setupSchedule: async (options: ScheduleOptionFormData[]) => {
-    const store = usePackageSettingsStore.getState();
     try {
-      store.setLoading(true);
+      usePackageSettingsStore.getState().setLoading(true);
       const response = await apiClient.post(apiRoutes.packages.setupSchedule, {
         options,
       });
@@ -96,19 +99,18 @@ const packageSettingsService: PackageSettingsService = {
       await packageSettingsService.fetchScheduleOptions();
       return response.data;
     } catch (error) {
-      store.setError("Failed to setup schedule");
+      usePackageSettingsStore.getState().setError("Failed to setup schedule");
       throw error;
     } finally {
-      store.setLoading(false);
+      usePackageSettingsStore.getState().setLoading(false);
     }
   },
 
   modifySchedule: async (
     options: Partial<ScheduleOptionFormData & { id: number }>[]
   ) => {
-    const store = usePackageSettingsStore.getState();
     try {
-      store.setLoading(true);
+      usePackageSettingsStore.getState().setLoading(true);
       const response = await apiClient.put(apiRoutes.packages.setupSchedule, {
         options,
       });
@@ -116,46 +118,54 @@ const packageSettingsService: PackageSettingsService = {
       await packageSettingsService.fetchScheduleOptions();
       return response.data;
     } catch (error) {
-      store.setError("Failed to modify schedule");
+      usePackageSettingsStore.getState().setError("Failed to modify schedule");
       throw error;
     } finally {
-      store.setLoading(false);
+      usePackageSettingsStore.getState().setLoading(false);
     }
   },
 
   deleteScheduleOptions: async (ids: number[]) => {
-    const store = usePackageSettingsStore.getState();
+    console.log("Deleting schedule options with IDs:", ids);
     try {
-      store.setLoading(true);
-      const response = await apiClient.put(apiRoutes.packages.setupSchedule, {
-        ids,
-      });
-      // Remove from store
+      usePackageSettingsStore.getState().setLoading(true);
+      const response = await apiClient.delete(
+        apiRoutes.packages.setupSchedule,
+        {
+          data: {
+            ids: ids,
+          },
+        }
+      );
+      // Remove from usePackageSettingsStore.getState()
       ids.forEach((id) => {
-        const options = store.scheduleOptions;
+        const options = usePackageSettingsStore.getState().scheduleOptions;
         if (options) {
           Object.keys(options).forEach((key) => {
             const optionType = key as
               | "schedule_months"
               | "frequency_per_month"
               | "delivery_time";
-            store.removeScheduleOption(optionType, id);
+            usePackageSettingsStore
+              .getState()
+              .removeScheduleOption(optionType, id);
           });
         }
       });
       return response.data;
     } catch (error) {
-      store.setError("Failed to delete schedule options");
+      usePackageSettingsStore
+        .getState()
+        .setError("Failed to delete schedule options");
       throw error;
     } finally {
-      store.setLoading(false);
+      usePackageSettingsStore.getState().setLoading(false);
     }
   },
 
   bulkToggleSchedule: async (ids: number[], isActive: boolean) => {
-    const store = usePackageSettingsStore.getState();
     try {
-      store.setLoading(true);
+      usePackageSettingsStore.getState().setLoading(true);
       const response = await apiClient.patch(
         apiRoutes.packages.packageScheduleBulkToggle,
         {
@@ -167,10 +177,12 @@ const packageSettingsService: PackageSettingsService = {
       await packageSettingsService.fetchScheduleOptions();
       return response.data;
     } catch (error) {
-      store.setError("Failed to toggle schedule status");
+      usePackageSettingsStore
+        .getState()
+        .setError("Failed to toggle schedule status");
       throw error;
     } finally {
-      store.setLoading(false);
+      usePackageSettingsStore.getState().setLoading(false);
     }
   },
 };
