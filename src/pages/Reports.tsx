@@ -43,7 +43,7 @@ const Reports = () => {
     return (
       <div className="animate-fade-in">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <h1 className="text-3xl font-bold">Reports</h1>
           <p className="text-muted-foreground mt-1">
             Welcome back! Here's what's happening today.
           </p>

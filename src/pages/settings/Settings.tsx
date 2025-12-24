@@ -40,11 +40,11 @@ function Settings() {
       label: t("settings.system.tab"),
       icon: Settings2,
     },
-    {
-      id: "payment",
-      label: t("settings.payment.tab"),
-      icon: CreditCard,
-    },
+    // {
+    //   id: "payment",
+    //   label: t("settings.payment.tab"),
+    //   icon: CreditCard,
+    // },
     {
       id: "shipping",
       label: t("settings.shipping.tab"),
@@ -69,8 +69,8 @@ function Settings() {
         </p>
       </div>
 
-      <Tabs defaultValue="business" className="w-full mt-3">
-        <TabsList className="flex flex-wrap gap-2 justify-between">
+      <Tabs defaultValue="business" className="mt-3">
+        <TabsList className="flex flex-wrap gap-2 justify-start">
           {tabLists.map((tab) => (
             <TabsTrigger key={tab.id} value={tab.id} className="gap-2">
               <tab.icon className="h-4 w-4" />
