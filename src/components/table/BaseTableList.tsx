@@ -68,6 +68,7 @@ export interface StoreWithData<T> {
   pagination?: Pagination;
   setLoading?: (loading: boolean) => void;
   setError?: (error: string | null) => void;
+  setPagination?: (pagination: Pagination) => void;
 }
 
 export interface BaseTableListProps<T> {
@@ -153,10 +154,8 @@ export function BaseTableList<T>({
 }: BaseTableListProps<T>) {
   // Local state for query params
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(
-    store.pagination?.current_page || 1
-  );
-  const [perPage] = useState(store.pagination?.per_page || 20);
+  const currentPage = store.pagination?.current_page || 1;
+  const perPage = store.pagination?.per_page || 20;
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [hasInitialFetch, setHasInitialFetch] = useState(false);
@@ -201,7 +200,8 @@ export function BaseTableList<T>({
     async (forceFetch = false) => {
       // Check if we should skip fetching
       // Skip if: data exists in store AND it's first render AND not forcing fetch
-      if (!forceFetch && !hasInitialFetch && isFirstRender && data.length > 0) {
+      const hasData = data.length > 0;
+      if (!forceFetch && !hasInitialFetch && isFirstRender && hasData) {
         console.log("Using cached data from store, skipping API call");
         setHasInitialFetch(true);
         return;
@@ -291,8 +291,11 @@ export function BaseTableList<T>({
     if (isFirstRender) return; // Skip debounce on first render
 
     const timer = setTimeout(() => {
-      if (currentPage !== 1) {
-        setCurrentPage(1);
+      if (currentPage !== 1 && store.setPagination) {
+        store.setPagination({
+          ...store.pagination,
+          current_page: 1,
+        });
       } else {
         fetchData();
       }
@@ -303,19 +306,15 @@ export function BaseTableList<T>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
-  // Handle filter changes
+  // Handle filter, page, and perPage changes
   useEffect(() => {
     if (isFirstRender) return; // Skip on first render
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterValues, currentPage]);
+  }, [filterValues, currentPage, perPage]);
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
   };
 
   const handleRefresh = useCallback(async () => {
@@ -406,8 +405,11 @@ export function BaseTableList<T>({
                             }));
                             filter.onChange(value);
                             // Reset to page 1 when filter changes
-                            if (currentPage !== 1) {
-                              setCurrentPage(1);
+                            if (currentPage !== 1 && store.setPagination) {
+                              store.setPagination({
+                                ...store.pagination,
+                                current_page: 1,
+                              });
                             }
                           }}
                         >
@@ -492,41 +494,12 @@ export function BaseTableList<T>({
 
           {/* Pagination */}
           {showPagination && pagination && pagination.last_page > 1 && (
-            // <div className="flex items-center justify-between mt-4">
-            //   <div className="text-sm text-muted-foreground">
-            //     Showing {pagination.from} to {pagination.to} of{" "}
-            //     {pagination.total} entries
-            //   </div>
-            //   <div className="flex items-center gap-2">
-            //     <Button
-            //       variant="outline"
-            //       size="sm"
-            //       onClick={() => handlePageChange(pagination.current_page - 1)}
-            //       disabled={pagination.current_page <= 1 || isLoading}
-            //     >
-            //       Previous
-            //     </Button>
-            //     <span className="text-sm text-muted-foreground px-3">
-            //       Page {pagination.current_page} of {pagination.last_page}
-            //     </span>
-            //     <Button
-            //       variant="outline"
-            //       size="sm"
-            //       onClick={() => handlePageChange(pagination.current_page + 1)}
-            //       disabled={
-            //         pagination.current_page >= pagination.last_page || isLoading
-            //       }
-            //     >
-            //       Next
-            //     </Button>
-            //   </div>
-            // </div>
             <Pagination
               currentPage={pagination.current_page}
               totalPages={pagination.last_page}
               totalItems={pagination.total}
               itemsPerPage={pagination.per_page}
-              onPageChange={handlePageChange}
+              store={store}
             />
           )}
         </CardContent>
