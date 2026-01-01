@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useReferralStore } from "@/stores/referralStore";
 import referralService from "@/services/referralService";
-import { toast } from "@/hooks/use-toast";
+import { useStatsController } from "@/hooks/use-api-controller";
 import {
   CheckCircle,
   Save,
@@ -19,6 +19,7 @@ import {
   FileText,
 } from "lucide-react";
 import { ReferralSettings } from "@/lib/types";
+import { toast } from "sonner";
 
 interface SettingsTabProps {
   onSuccess?: () => void;
@@ -26,8 +27,7 @@ interface SettingsTabProps {
 
 const SettingsTab = ({ onSuccess }: SettingsTabProps) => {
   const { t } = useTranslation();
-  const { settings } = useReferralStore();
-  const [isLoading, setIsLoading] = useState(false);
+  const store = useReferralStore.getState();
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<Partial<ReferralSettings>>({
     isEnabled: false,
@@ -36,9 +36,19 @@ const SettingsTab = ({ onSuccess }: SettingsTabProps) => {
     description: "",
   });
 
-  useEffect(() => {
-    fetchSettings();
-  }, []);
+  const { data, isLoading } = useStatsController({
+    serviceFn: () => referralService.getSettings(),
+    store,
+    dataKey: "settings",
+    setterKey: "setSettings",
+    autoFetch: true,
+    cacheEnabled: true,
+    onError: (error) => {
+      toast.error(t("referrals.settings.messages.failedToUpdate"));
+    },
+  });
+
+  const settings = data?.data as ReferralSettings;
 
   useEffect(() => {
     if (settings) {
@@ -51,40 +61,17 @@ const SettingsTab = ({ onSuccess }: SettingsTabProps) => {
     }
   }, [settings]);
 
-  const fetchSettings = async () => {
-    setIsLoading(true);
-    try {
-      await referralService.getSettings();
-    } catch (error) {
-      console.error("Error fetching settings:", error);
-      toast({
-        title: "Error",
-        description: t("referrals.settings.messages.failedToUpdate"),
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
 
     try {
       await referralService.updateSettings(formData);
-      toast({
-        title: "Success",
-        description: t("referrals.settings.messages.updated"),
-      });
+      toast.success(t("referrals.settings.messages.updated"));
       onSuccess?.();
     } catch (error) {
       console.error("Error updating settings:", error);
-      toast({
-        title: "Error",
-        description: t("referrals.settings.messages.failedToUpdate"),
-        variant: "destructive",
-      });
+      toast.error(t("referrals.settings.messages.failedToUpdate"));
     } finally {
       setIsSaving(false);
     }

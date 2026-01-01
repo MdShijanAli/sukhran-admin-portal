@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { useReferralStore } from "@/stores/referralStore";
 import referralService from "@/services/referralService";
+import { useStatsController } from "@/hooks/use-api-controller";
 import {
   Users,
   Clock,
@@ -19,6 +20,7 @@ import {
   DollarSign,
 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
+import { ReferralStatistics } from "@/lib/types";
 
 interface StatisticsTabProps {
   onSetRefresh?: (refreshFn: () => void) => void;
@@ -26,24 +28,22 @@ interface StatisticsTabProps {
 
 const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
   const { t } = useTranslation();
-  const { statistics } = useReferralStore();
-  const [isLoading, setIsLoading] = useState(false);
+  const store = useReferralStore.getState();
+
+  const { data, isLoading, refresh } = useStatsController({
+    serviceFn: () => referralService.getStatistics(),
+    store,
+    dataKey: "statistics",
+    setterKey: "setStatistics",
+    autoFetch: true,
+    cacheEnabled: true,
+  });
+
+  const statistics = data?.data as ReferralStatistics;
 
   useEffect(() => {
-    fetchStatistics();
-    onSetRefresh?.(fetchStatistics);
-  }, []);
-
-  const fetchStatistics = async () => {
-    setIsLoading(true);
-    try {
-      await referralService.getStatistics();
-    } catch (error) {
-      console.error("Error fetching statistics:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    onSetRefresh?.(refresh);
+  }, [refresh, onSetRefresh]);
 
   if (isLoading) {
     return (
@@ -62,7 +62,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
         <p className="text-muted-foreground">
           {t("referrals.statistics.noDataAvailable")}
         </p>
-        <Button onClick={fetchStatistics} className="mt-4">
+        <Button onClick={refresh} className="mt-4">
           <RefreshCw className="w-4 h-4 mr-2" />
           {t("referrals.statistics.refreshData")}
         </Button>
@@ -78,7 +78,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
           <TrendingUp className="w-5 h-5" />
           {t("referrals.statistics.overview")}
         </h3>
-        <Button onClick={fetchStatistics} variant="outline" size="sm">
+        <Button onClick={refresh} variant="outline" size="sm">
           <RefreshCw className="w-4 h-4 mr-2" />
           {t("referrals.statistics.refreshData")}
         </Button>
@@ -94,7 +94,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                 {t("referrals.statistics.totalReferrals")}
               </p>
               <p className="text-2xl font-bold">
-                {statistics.overview.total_referrals}
+                {statistics?.overview?.total_referrals}
               </p>
             </div>
             <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
@@ -111,7 +111,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                 {t("referrals.statistics.pending")}
               </p>
               <p className="text-2xl font-bold">
-                {statistics.overview.pending}
+                {statistics?.overview?.pending}
               </p>
             </div>
             <div className="w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
@@ -127,7 +127,9 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
               <p className="text-xs text-muted-foreground mb-1">
                 {t("referrals.statistics.locked")}
               </p>
-              <p className="text-2xl font-bold">{statistics.overview.locked}</p>
+              <p className="text-2xl font-bold">
+                {statistics?.overview?.locked}
+              </p>
             </div>
             <div className="w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
               <Lock className="w-6 h-6 text-orange-600 dark:text-orange-400" />
@@ -143,7 +145,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                 {t("referrals.statistics.credited")}
               </p>
               <p className="text-2xl font-bold">
-                {statistics.overview.credited}
+                {statistics?.overview?.credited}
               </p>
             </div>
             <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
@@ -160,7 +162,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                 {t("referrals.statistics.cancelled")}
               </p>
               <p className="text-2xl font-bold">
-                {statistics.overview.cancelled}
+                {statistics?.overview?.cancelled}
               </p>
             </div>
             <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
@@ -187,7 +189,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                   {t("referrals.statistics.totalDistributed")}
                 </p>
                 <p className="text-2xl font-bold text-amber-700 dark:text-amber-400">
-                  {statistics.coins.total_distributed}
+                  {statistics?.coins?.total_distributed}
                 </p>
                 <p className="text-xs text-muted-foreground">coins</p>
               </div>
@@ -204,7 +206,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                   {t("referrals.statistics.pendingCoins")}
                 </p>
                 <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-400">
-                  {statistics.coins.pending_coins}
+                  {statistics?.coins?.pending_coins}
                 </p>
                 <p className="text-xs text-muted-foreground">coins</p>
               </div>
@@ -221,7 +223,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                   {t("referrals.statistics.lockedCoins")}
                 </p>
                 <p className="text-2xl font-bold text-orange-700 dark:text-orange-400">
-                  {statistics.coins.locked_coins}
+                  {statistics?.coins?.locked_coins}
                 </p>
                 <p className="text-xs text-muted-foreground">coins</p>
               </div>
@@ -249,7 +251,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                   {t("referrals.statistics.newReferrals")}
                 </span>
                 <span className="font-bold">
-                  {statistics.today.new_referrals}
+                  {statistics?.today?.new_referrals}
                 </span>
               </div>
               <div className="flex justify-between items-center">
@@ -257,7 +259,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                   {t("referrals.statistics.coinsCredited")}
                 </span>
                 <span className="font-bold text-amber-600">
-                  {statistics.today.coins_credited}
+                  {statistics?.today?.coins_credited}
                 </span>
               </div>
             </div>
@@ -275,7 +277,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                   {t("referrals.statistics.newReferrals")}
                 </span>
                 <span className="font-bold">
-                  {statistics.this_week.new_referrals}
+                  {statistics?.this_week?.new_referrals}
                 </span>
               </div>
               <div className="flex justify-between items-center">
@@ -283,7 +285,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                   {t("referrals.statistics.coinsCredited")}
                 </span>
                 <span className="font-bold text-amber-600">
-                  {statistics.this_week.coins_credited}
+                  {statistics?.this_week?.coins_credited}
                 </span>
               </div>
             </div>
@@ -301,7 +303,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                   {t("referrals.statistics.newReferrals")}
                 </span>
                 <span className="font-bold">
-                  {statistics.this_month.new_referrals}
+                  {statistics?.this_month?.new_referrals}
                 </span>
               </div>
               <div className="flex justify-between items-center">
@@ -309,7 +311,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                   {t("referrals.statistics.coinsCredited")}
                 </span>
                 <span className="font-bold text-amber-600">
-                  {statistics.this_month.coins_credited}
+                  {statistics?.this_month?.coins_credited}
                 </span>
               </div>
             </div>
@@ -331,10 +333,10 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
               </p>
               <Badge
                 variant={
-                  statistics.settings.is_enabled ? "default" : "secondary"
+                  statistics?.settings?.is_enabled ? "default" : "secondary"
                 }
               >
-                {statistics.settings.is_enabled
+                {statistics?.settings?.is_enabled
                   ? t("referrals.statistics.enabled")
                   : t("referrals.statistics.disabled")}
               </Badge>
@@ -346,7 +348,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                 {t("referrals.statistics.coinsPerReferral")}
               </p>
               <p className="text-xl font-bold text-amber-600">
-                {statistics.settings.coins_per_referral}
+                {statistics?.settings?.coins_per_referral}
               </p>
             </div>
           </div>
@@ -356,7 +358,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                 {t("referrals.statistics.minOrderAmount")}
               </p>
               <p className="text-xl font-bold text-green-600">
-                {formatCurrency(statistics.settings.min_order_amount)}
+                {formatCurrency(statistics?.settings?.min_order_amount)}
               </p>
             </div>
           </div>
