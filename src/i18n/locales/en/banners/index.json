@@ -1,0 +1,122 @@
+{
+  "title": "Banners Management",
+  "subtitle": "Manage promotional banners and advertisements",
+  "addBanner": "Add",
+  "searchPlaceholder": "Search banners by title...",
+  "noBannersFound": "No banners found",
+
+  "totalBanners": "Total Banners",
+  "activeBanners": "Active Banners",
+  "inactiveBanners": "Inactive Banners",
+
+  "columns": {
+    "sl": "SL",
+    "banner": "Banner",
+    "title": "Title",
+    "linkType": "Link Type",
+    "linkDetails": "Link Details",
+    "displayOrder": "Order",
+    "status": "Status",
+    "actions": "Actions"
+  },
+
+  "linkTypes": {
+    "none": "No Link",
+    "product": "Product",
+    "package": "Package",
+    "url": "External URL"
+  },
+
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+
+  "actions": {
+    "viewDetails": "View Details",
+    "editBanner": "Edit Banner",
+    "deleteBanner": "Delete Banner",
+    "toggleStatus": "Toggle Status"
+  },
+
+  "form": {
+    "createNewBanner": "Create New Banner",
+    "editBanner": "Edit Banner",
+    "createBanner": "Create Banner",
+    "updateBanner": "Update Banner",
+
+    "title": "Banner Title",
+    "titlePlaceholder": "Enter banner title",
+    "titleHint": "A descriptive title for internal reference",
+
+    "image": "Banner Image",
+    "imagePlaceholder": "Upload banner image",
+    "imageHint": "Recommended size: 1920x600px (JPG, PNG, WebP)",
+    "currentImage": "Current Image",
+    "changeImage": "Change Image",
+
+    "linkType": "Link Type",
+    "linkTypePlaceholder": "Select link type",
+    "linkTypeHint": "Choose what happens when users click the banner",
+
+    "url": "URL",
+    "urlPlaceholder": "https://example.com",
+    "urlHint": "External website link",
+
+    "package": "Package",
+    "packagePlaceholder": "Select a package",
+    "packageHint": "Link to a specific package",
+
+    "product": "Product",
+    "productPlaceholder": "Select a product",
+    "productHint": "Link to a specific product",
+
+    "displayOrder": "Display Order",
+    "displayOrderPlaceholder": "1",
+    "displayOrderHint": "Lower numbers appear first",
+
+    "activeStatus": "Active Status",
+    "activeStatusHint": "Enable to show this banner to users"
+  },
+
+  "view": {
+    "bannerDetails": "Banner Details",
+    "basicInformation": "Basic Information",
+    "linkInformation": "Link Information",
+    "statistics": "Statistics",
+    "noLink": "This banner has no link",
+    "linksTo": "Links to",
+    "createdBy": "Created By",
+    "updatedBy": "Updated By",
+    "notUpdated": "Not updated yet"
+  },
+
+  "delete": {
+    "title": "Delete Banner",
+    "message": "Are you sure you want to delete this banner?",
+    "cannotUndo": "This action cannot be undone."
+  },
+
+  "messages": {
+    "bannerCreated": "Banner created successfully",
+    "bannerUpdated": "Banner updated successfully",
+    "bannerDeleted": "Banner deleted successfully",
+    "statusToggled": "Banner status updated successfully",
+    "failedToCreate": "Failed to create banner",
+    "failedToUpdate": "Failed to update banner",
+    "failedToDelete": "Failed to delete banner",
+    "failedToToggle": "Failed to toggle banner status",
+    "failedToLoad": "Failed to load banner details",
+    "titleRequired": "Banner title is required",
+    "titleTooShort": "Title must be at least 3 characters",
+    "imageRequired": "Banner image is required",
+    "invalidImageType": "Only JPG, PNG, and WebP images are allowed",
+    "imageTooLarge": "Image size must be less than 5MB",
+    "urlRequired": "URL is required for URL link type",
+    "invalidUrl": "Please enter a valid URL",
+    "packageRequired": "Package selection is required",
+    "productRequired": "Product selection is required",
+    "displayOrderRequired": "Display order is required",
+    "invalidDisplayOrder": "Display order must be a positive number"
+  }
+}

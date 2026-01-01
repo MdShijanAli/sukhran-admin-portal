@@ -1,0 +1,122 @@
+{
+  "title": "ব্যানার ম্যানেজমেন্ট",
+  "subtitle": "প্রচারমূলক ব্যানার এবং বিজ্ঞাপন পরিচালনা করুন",
+  "addBanner": "যোগ করুন",
+  "searchPlaceholder": "শিরোনাম দিয়ে ব্যানার খুঁজুন...",
+  "noBannersFound": "কোন ব্যানার পাওয়া যায়নি",
+
+  "totalBanners": "মোট ব্যানার",
+  "activeBanners": "সক্রিয় ব্যানার",
+  "inactiveBanners": "নিষ্ক্রিয় ব্যানার",
+
+  "columns": {
+    "sl": "ক্রমিক",
+    "banner": "ব্যানার",
+    "title": "শিরোনাম",
+    "linkType": "লিঙ্ক ধরন",
+    "linkDetails": "লিঙ্ক বিস্তারিত",
+    "displayOrder": "ক্রম",
+    "status": "অবস্থা",
+    "actions": "কার্যক্রম"
+  },
+
+  "linkTypes": {
+    "none": "কোন লিঙ্ক নেই",
+    "product": "পণ্য",
+    "package": "প্যাকেজ",
+    "url": "বহিরাগত URL"
+  },
+
+  "status": {
+    "active": "সক্রিয়",
+    "inactive": "নিষ্ক্রিয়"
+  },
+
+  "actions": {
+    "viewDetails": "বিস্তারিত দেখুন",
+    "editBanner": "ব্যানার সম্পাদনা করুন",
+    "deleteBanner": "ব্যানার মুছে ফেলুন",
+    "toggleStatus": "অবস্থা পরিবর্তন করুন"
+  },
+
+  "form": {
+    "createNewBanner": "নতুন ব্যানার তৈরি করুন",
+    "editBanner": "ব্যানার সম্পাদনা করুন",
+    "createBanner": "ব্যানার তৈরি করুন",
+    "updateBanner": "ব্যানার আপডেট করুন",
+
+    "title": "ব্যানার শিরোনাম",
+    "titlePlaceholder": "ব্যানার শিরোনাম লিখুন",
+    "titleHint": "অভ্যন্তরীণ রেফারেন্সের জন্য একটি বর্ণনামূলক শিরোনাম",
+
+    "image": "ব্যানার ছবি",
+    "imagePlaceholder": "ব্যানার ছবি আপলোড করুন",
+    "imageHint": "প্রস্তাবিত সাইজ: 1920x600px (JPG, PNG, WebP)",
+    "currentImage": "বর্তমান ছবি",
+    "changeImage": "ছবি পরিবর্তন করুন",
+
+    "linkType": "লিঙ্ক ধরন",
+    "linkTypePlaceholder": "লিঙ্ক ধরন নির্বাচন করুন",
+    "linkTypeHint": "ব্যবহারকারীরা ব্যানারে ক্লিক করলে কী ঘটবে",
+
+    "url": "URL",
+    "urlPlaceholder": "https://example.com",
+    "urlHint": "বহিরাগত ওয়েবসাইট লিঙ্ক",
+
+    "package": "প্যাকেজ",
+    "packagePlaceholder": "একটি প্যাকেজ নির্বাচন করুন",
+    "packageHint": "একটি নির্দিষ্ট প্যাকেজের লিঙ্ক",
+
+    "product": "পণ্য",
+    "productPlaceholder": "একটি পণ্য নির্বাচন করুন",
+    "productHint": "একটি নির্দিষ্ট পণ্যের লিঙ্ক",
+
+    "displayOrder": "প্রদর্শন ক্রম",
+    "displayOrderPlaceholder": "১",
+    "displayOrderHint": "কম সংখ্যা আগে প্রদর্শিত হয়",
+
+    "activeStatus": "সক্রিয় অবস্থা",
+    "activeStatusHint": "ব্যবহারকারীদের কাছে এই ব্যানার দেখাতে সক্ষম করুন"
+  },
+
+  "view": {
+    "bannerDetails": "ব্যানার বিস্তারিত",
+    "basicInformation": "মৌলিক তথ্য",
+    "linkInformation": "লিঙ্ক তথ্য",
+    "statistics": "পরিসংখ্যান",
+    "noLink": "এই ব্যানারে কোন লিঙ্ক নেই",
+    "linksTo": "লিঙ্ক করে",
+    "createdBy": "তৈরি করেছেন",
+    "updatedBy": "আপডেট করেছেন",
+    "notUpdated": "এখনও আপডেট করা হয়নি"
+  },
+
+  "delete": {
+    "title": "ব্যানার মুছে ফেলুন",
+    "message": "আপনি কি নিশ্চিত যে আপনি এই ব্যানারটি মুছে ফেলতে চান?",
+    "cannotUndo": "এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।"
+  },
+
+  "messages": {
+    "bannerCreated": "ব্যানার সফলভাবে তৈরি হয়েছে",
+    "bannerUpdated": "ব্যানার সফলভাবে আপডেট করা হয়েছে",
+    "bannerDeleted": "ব্যানার সফলভাবে মুছে ফেলা হয়েছে",
+    "statusToggled": "ব্যানার অবস্থা আপডেট করা হয়েছে",
+    "failedToCreate": "ব্যানার তৈরি করতে ব্যর্থ হয়েছে",
+    "failedToUpdate": "ব্যানার আপডেট করতে ব্যর্থ হয়েছে",
+    "failedToDelete": "ব্যানার মুছে ফেলতে ব্যর্থ হয়েছে",
+    "failedToToggle": "ব্যানার অবস্থা পরিবর্তন করতে ব্যর্থ হয়েছে",
+    "failedToLoad": "ব্যানার বিস্তারিত লোড করতে ব্যর্থ হয়েছে",
+    "titleRequired": "ব্যানার শিরোনাম প্রয়োজন",
+    "titleTooShort": "শিরোনাম কমপক্ষে ৩ অক্ষর হতে হবে",
+    "imageRequired": "ব্যানার ছবি প্রয়োজন",
+    "invalidImageType": "শুধুমাত্র JPG, PNG, এবং WebP ছবি অনুমোদিত",
+    "imageTooLarge": "ছবির সাইজ ৫MB এর কম হতে হবে",
+    "urlRequired": "URL লিঙ্ক ধরনের জন্য URL প্রয়োজন",
+    "invalidUrl": "অনুগ্রহ করে একটি বৈধ URL লিখুন",
+    "packageRequired": "প্যাকেজ নির্বাচন প্রয়োজন",
+    "productRequired": "পণ্য নির্বাচন প্রয়োজন",
+    "displayOrderRequired": "প্রদর্শন ক্রম প্রয়োজন",
+    "invalidDisplayOrder": "প্রদর্শন ক্রম একটি ধনাত্মক সংখ্যা হতে হবে"
+  }
+}

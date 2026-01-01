@@ -17,6 +17,7 @@ import donations from "./donations/index.json";
 import referrals from "./referrals/index.json";
 import support from "./support/index.json";
 import notifications from "./notifications/index.json";
+import banners from "./banners/index.json";
 
 /**
  * follow the file structure.
@@ -44,6 +45,7 @@ const combined = {
   referrals,
   support,
   notifications,
+  banners,
 };
 
 export default combined;

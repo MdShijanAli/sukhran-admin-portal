@@ -880,3 +880,48 @@ export interface UserReferrals {
   }>;
   meta: PaginationMeta;
 }
+
+// Banner Types
+export interface BannerPackage {
+  id: number;
+  name: string;
+  image: string | null;
+}
+
+export interface BannerProduct {
+  id: number;
+  name: string;
+  image: string | null;
+}
+
+export interface Banner {
+  id: number;
+  title: string;
+  image_url: string;
+  link_type: "none" | "product" | "package" | "url";
+  url?: string;
+  package_id?: string;
+  package?: BannerPackage;
+  product_id?: string;
+  product?: BannerProduct;
+  display_order: number;
+  is_active: boolean;
+  created_by: {
+    id: number;
+    name: string;
+  };
+  updated_by: {
+    id: number;
+    name: string;
+  } | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BannerPaginationMeta extends PaginationMeta {
+  stats?: {
+    total_banners: number;
+    active_banners: number;
+    inactive_banners: number;
+  };
+}

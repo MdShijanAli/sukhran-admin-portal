@@ -64,6 +64,7 @@ export interface StoreWithData<T> {
   tickets?: T[];
   notifications?: T[];
   referrals?: T[];
+  banners?: T[];
   isLoading?: boolean;
   error?: string | null;
   pagination?: Pagination;
@@ -217,6 +218,7 @@ export function BaseTableList<T>({
         store.tickets ||
         store.notifications ||
         store.referrals ||
+        store.banners ||
         []) as T[];
       const hasData = currentData.length > 0;
       if (!forceFetch && !hasInitialFetch && isFirstRender && hasData) {

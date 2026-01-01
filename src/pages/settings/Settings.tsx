@@ -1,15 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Building2,
-  Bell,
-  Settings2,
-  CreditCard,
-  Truck,
-  Mail,
-  Package,
-  Shield,
-} from "lucide-react";
+import { Building2, Bell, Settings2, Truck, Shield, Image } from "lucide-react";
 import BusinessTab from "./tabs/BusinessTab";
 import NotificationsTab from "./tabs/NotificationsTab";
 import SystemTab from "./tabs/SystemTab";
@@ -20,6 +11,7 @@ import SubscriptionTab from "./tabs/SubscriptionTab";
 import LegalTab from "./tabs/LegalTab";
 import permissions from "@/lib/permissions";
 import { withPermission } from "@/hoc/withPermission";
+import BannersTab from "./tabs/BannersTab";
 
 function Settings() {
   const { t } = useTranslation();
@@ -54,6 +46,11 @@ function Settings() {
       id: "legal",
       label: t("settings.terms_condition.tab"),
       icon: Shield,
+    },
+    {
+      id: "banners",
+      label: t("settings.banners.tab"),
+      icon: Image,
     },
     // {
   ];
@@ -120,6 +117,10 @@ function Settings() {
         {/* <TabsContent value="subscription" className="space-y-3">
           <SubscriptionTab />
         </TabsContent> */}
+
+        <TabsContent value="banners" className="space-y-3">
+          <BannersTab />
+        </TabsContent>
       </Tabs>
     </div>
   );

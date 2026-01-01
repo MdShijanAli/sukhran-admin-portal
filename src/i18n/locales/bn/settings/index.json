@@ -154,6 +154,20 @@
     "notificationEmail": "অর্ডার বিজ্ঞপ্তি ইমেল",
     "notificationEmailHint": "অর্ডার বিজ্ঞপ্তি গ্রহণ করার জন্য ইমেল ঠিকানা"
   },
+  "banners": {
+    "tab": "ব্যানার",
+    "title": "ব্যানার সেটিংস",
+    "description": "হোমপেজ এবং প্রচারমূলক ব্যানার কনফিগার করুন",
+    "homepageBanner": "হোমপেজ ব্যানার",
+    "promotionalBanners": "প্রচারমূলক ব্যানার",
+    "addBanner": "নতুন ব্যানার যোগ করুন",
+    "bannerImage": "ব্যানার ইমেজ",
+    "bannerLink": "ব্যানার লিঙ্ক",
+    "bannerAltText": "ব্যানার অল্ট টেক্সট",
+    "bannerPosition": "ব্যানার পজিশন",
+    "bannerActive": "সক্রিয়",
+    "bannerInactive": "নিষ্ক্রিয়"
+  },
   "subscription": {
     "tab": "সাবস্ক্রিপশন",
     "messages": {

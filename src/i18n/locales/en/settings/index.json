@@ -154,6 +154,20 @@
     "notificationEmail": "Order Notification Email",
     "notificationEmailHint": "Email address to receive order notifications"
   },
+  "banners": {
+    "tab": "Banners",
+    "title": "Banner Settings",
+    "description": "Configure homepage and promotional banners",
+    "homepageBanner": "Homepage Banner",
+    "promotionalBanners": "Promotional Banners",
+    "addBanner": "Add New Banner",
+    "bannerImage": "Banner Image",
+    "bannerLink": "Banner Link",
+    "bannerAltText": "Banner Alt Text",
+    "bannerPosition": "Banner Position",
+    "bannerActive": "Active",
+    "bannerInactive": "Inactive"
+  },
   "subscription": {
     "tab": "Subscription",
     "messages": {

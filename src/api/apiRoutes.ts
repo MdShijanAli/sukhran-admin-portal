@@ -272,4 +272,14 @@ export const apiRoutes = {
     usersReferrals: (userId: number | string) =>
       createApiUrl(`admin/referrals/user/${userId}`),
   },
+
+  banners: {
+    getAll: createApiUrl("admin/banners"),
+    getById: (id: number | string) => createApiUrl(`admin/banners/${id}`),
+    create: createApiUrl("admin/banners"),
+    update: (id: number | string) => createApiUrl(`admin/banners/${id}`),
+    delete: (id: number | string) => createApiUrl(`admin/banners/${id}`),
+    toggleStatus: (id: number | string) =>
+      createApiUrl(`admin/banners/${id}/toggle`),
+  },
 };
