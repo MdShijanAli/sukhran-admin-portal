@@ -15,7 +15,6 @@ import { Shield, FileText, Eye, Save, RotateCcw, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { BaseModal } from "@/components/modals";
 import settingsService, { LegalDocument } from "@/services/settingsService";
-import { Badge } from "@/components/ui/badge";
 
 export default function LegalTab() {
   const { t } = useTranslation();

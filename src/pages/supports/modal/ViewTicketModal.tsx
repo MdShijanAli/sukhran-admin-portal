@@ -12,7 +12,6 @@ import {
   Mail,
   Phone,
   MessageSquare,
-  Calendar,
   Tag,
   Flag,
   AlertCircle,

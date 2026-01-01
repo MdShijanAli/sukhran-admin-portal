@@ -71,7 +71,7 @@ export default function UserCoinDetailsModal({
     if (open && userId) {
       fetchUserDetails();
     }
-  }, [open, userId, fetchUserDetails]);
+  }, [open, userId]);
 
   const handlePageChange = (page: number) => {
     fetchUserDetails(page);

@@ -36,7 +36,7 @@ export default function CoinManagement() {
 
   useEffect(() => {
     fetchAllData();
-  }, [fetchAllData]);
+  }, []);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);

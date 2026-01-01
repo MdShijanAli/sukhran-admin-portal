@@ -57,7 +57,7 @@ export default function ViewModal({
     };
 
     fetchCouponDetails();
-  }, [couponId, open, t]);
+  }, [couponId, open]);
 
   const getStatusBadge = () => {
     if (!coupon) return null;

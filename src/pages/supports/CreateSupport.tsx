@@ -68,7 +68,6 @@ interface OrderDetails {
 export default function CreateSupport() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  console.log("navigate", navigate);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form state

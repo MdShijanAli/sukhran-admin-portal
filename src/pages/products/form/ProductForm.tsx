@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Backpack, Loader2, Plus, Trash2, Undo2, X, Copy } from "lucide-react";
+import { Loader2, Plus, Trash2, Undo2, X, Copy } from "lucide-react";
 import { toast } from "sonner";
 import productService from "@/services/productService";
 import categoryService from "@/services/categoryService";

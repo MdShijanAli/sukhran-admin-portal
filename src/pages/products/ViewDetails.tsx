@@ -18,7 +18,6 @@ import productService from "@/services/productService";
 import { toast } from "sonner";
 import noProductImage from "@/assets/images/no_product_image.png";
 import TimeStaps from "@/components/custom/TimeStamps";
-import ShareButton from "@/components/custom/ShareButton";
 import { formatNumberWithCommas } from "@/lib/utils";
 
 interface ProductDetails {

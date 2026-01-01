@@ -16,8 +16,7 @@ import userService from "@/services/userService";
 import roleService from "@/services/roleService";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
-import { Eye, EyeClosed, EyeOffIcon } from "lucide-react";
+import { EyeClosed, EyeOffIcon } from "lucide-react";
 
 interface UserFormData {
   firstName: string;
@@ -177,7 +176,7 @@ export default function FormModal({
         isActive: true,
       });
     }
-  }, [editData, open, t]);
+  }, [editData, open]);
 
   return (
     <BaseModal

@@ -3,17 +3,7 @@ import { useTranslation } from "react-i18next";
 import { BaseModal } from "@/components/modals";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import {
-  Loader2,
-  CheckCircle,
-  Clock,
-  Package,
-  Truck,
-  XCircle,
-  MapPin,
-  User,
-  Phone,
-} from "lucide-react";
+import { Loader2, Truck, MapPin, User } from "lucide-react";
 import { Delivery } from "@/stores/deliveryStore";
 import deliveryService from "@/services/deliveryService";
 import { formatDate } from "@/lib/utils";

@@ -36,7 +36,7 @@ import ContentManagement from "@/pages/ContentManagement";
 import PackageSettings from "@/pages/package/settings/PackageSettings";
 import Donations from "@/pages/donations";
 import CreateSupport from "@/pages/supports/CreateSupport";
-import Referrals from "@/pages/referrals";
+import Referrals from "@/pages/referrals/Referrals";
 
 const AppRoutes: React.FC = () => {
   return (

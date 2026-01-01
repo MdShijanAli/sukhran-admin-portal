@@ -99,7 +99,7 @@ function Packages() {
       setIsFirstRender(false);
       fetchPackages();
     }
-  }, [fetchPackages, isFirstRender]);
+  }, [isFirstRender]);
 
   // Handle search with debounce
   useEffect(() => {

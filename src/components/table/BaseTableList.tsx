@@ -201,8 +201,24 @@ export function BaseTableList<T>({
   const fetchData = useCallback(
     async (forceFetch = false) => {
       // Check if we should skip fetching
-      // Skip if: data exists in store AND it's first render AND not forcing fetch
-      const hasData = data.length > 0;
+      // Get fresh data from store at call time to avoid stale closures
+      const currentData = (store.items ||
+        store.categories ||
+        store.orders ||
+        store.products ||
+        store.users ||
+        store.coverageAreas ||
+        store.roles ||
+        store.coupons ||
+        store.transactions ||
+        store.packageOrders ||
+        store.donations ||
+        store.channels ||
+        store.tickets ||
+        store.notifications ||
+        store.referrals ||
+        []) as T[];
+      const hasData = currentData.length > 0;
       if (!forceFetch && !hasInitialFetch && isFirstRender && hasData) {
         console.log("Using cached data from store, skipping API call");
         setHasInitialFetch(true);
@@ -266,6 +282,7 @@ export function BaseTableList<T>({
       }
     },
     [
+      store,
       service,
       serviceMethod,
       setLoading,
@@ -274,7 +291,8 @@ export function BaseTableList<T>({
       currentPage,
       perPage,
       showPagination,
-      filterValues,
+      filters,
+      localFilters,
       hasInitialFetch,
       isFirstRender,
     ]
@@ -286,7 +304,7 @@ export function BaseTableList<T>({
       setIsFirstRender(false);
       fetchData();
     }
-  }, [fetchData, isFirstRender]);
+  }, [isFirstRender]);
 
   // Handle search with debounce
   useEffect(() => {
@@ -325,12 +343,13 @@ export function BaseTableList<T>({
     setIsRefreshing(false);
   }, [fetchData]);
 
-  // Expose refresh function to parent
+  // Expose refresh function to parent (run only once on mount)
   useEffect(() => {
     if (onRefresh) {
       onRefresh(handleRefresh);
     }
-  }, [onRefresh, handleRefresh]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // handleRefresh is stable via useCallback
 
   return (
     <div className="space-y-3">

@@ -43,7 +43,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
 
   useEffect(() => {
     onSetRefresh?.(refresh);
-  }, [refresh, onSetRefresh]);
+  }, [refresh]);
 
   if (isLoading) {
     return (

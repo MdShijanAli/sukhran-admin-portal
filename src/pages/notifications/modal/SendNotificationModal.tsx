@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BaseModal } from "@/components/modals";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -190,7 +190,8 @@ export default function SendNotificationModal({
       <div className="grid gap-4">
         <div className="space-y-2">
           <Label htmlFor="title">
-            {t("notifications.send.notificationTitle")} <span className="text-red-500">*</span>
+            {t("notifications.send.notificationTitle")}{" "}
+            <span className="text-red-500">*</span>
           </Label>
           <Input
             id="title"
@@ -204,7 +205,8 @@ export default function SendNotificationModal({
 
         <div className="space-y-2">
           <Label htmlFor="body">
-            {t("notifications.send.notificationMessage")} <span className="text-red-500">*</span>
+            {t("notifications.send.notificationMessage")}{" "}
+            <span className="text-red-500">*</span>
           </Label>
           <Textarea
             id="body"
@@ -238,10 +240,18 @@ export default function SendNotificationModal({
               <SelectValue placeholder={t("notifications.send.linkType")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="none">{t("notifications.linkTypes.none")}</SelectItem>
-              <SelectItem value="product">{t("notifications.linkTypes.product")}</SelectItem>
-              <SelectItem value="package">{t("notifications.linkTypes.package")}</SelectItem>
-              <SelectItem value="url">{t("notifications.linkTypes.url")}</SelectItem>
+              <SelectItem value="none">
+                {t("notifications.linkTypes.none")}
+              </SelectItem>
+              <SelectItem value="product">
+                {t("notifications.linkTypes.product")}
+              </SelectItem>
+              <SelectItem value="package">
+                {t("notifications.linkTypes.package")}
+              </SelectItem>
+              <SelectItem value="url">
+                {t("notifications.linkTypes.url")}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -249,7 +259,8 @@ export default function SendNotificationModal({
         {formData.link_type === "url" && (
           <div className="space-y-2">
             <Label htmlFor="url">
-              {t("notifications.send.url")} <span className="text-red-500">*</span>
+              {t("notifications.send.url")}{" "}
+              <span className="text-red-500">*</span>
             </Label>
             <Input
               id="url"
@@ -265,7 +276,8 @@ export default function SendNotificationModal({
         {formData.link_type === "product" && (
           <div className="space-y-2">
             <Label htmlFor="product_id">
-              {t("notifications.send.selectProduct")} <span className="text-red-500">*</span>
+              {t("notifications.send.selectProduct")}{" "}
+              <span className="text-red-500">*</span>
             </Label>
             <ComboboxSelect
               service={productService}
@@ -299,7 +311,8 @@ export default function SendNotificationModal({
         {formData.link_type === "package" && (
           <div className="space-y-2">
             <Label htmlFor="package_id">
-              {t("notifications.send.selectPackage")} <span className="text-red-500">*</span>
+              {t("notifications.send.selectPackage")}{" "}
+              <span className="text-red-500">*</span>
             </Label>
             <ComboboxSelect
               service={packageService}
@@ -333,7 +346,9 @@ export default function SendNotificationModal({
         )}
 
         <div className="space-y-2">
-          <Label htmlFor="target_audience">{t("notifications.send.targetAudience")}</Label>
+          <Label htmlFor="target_audience">
+            {t("notifications.send.targetAudience")}
+          </Label>
           <Select
             value={formData.target_audience}
             onValueChange={(value: "all" | "specific") =>
@@ -345,11 +360,17 @@ export default function SendNotificationModal({
             }
           >
             <SelectTrigger>
-              <SelectValue placeholder={t("notifications.send.targetAudience")} />
+              <SelectValue
+                placeholder={t("notifications.send.targetAudience")}
+              />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">{t("notifications.audience.all")}</SelectItem>
-              <SelectItem value="specific">{t("notifications.audience.specific")}</SelectItem>
+              <SelectItem value="all">
+                {t("notifications.audience.all")}
+              </SelectItem>
+              <SelectItem value="specific">
+                {t("notifications.audience.specific")}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -357,7 +378,8 @@ export default function SendNotificationModal({
         {formData.target_audience === "specific" && (
           <div className="space-y-2">
             <Label>
-              {t("notifications.send.selectUsers")} <span className="text-red-500">*</span>
+              {t("notifications.send.selectUsers")}{" "}
+              <span className="text-red-500">*</span>
             </Label>
             <div className="border rounded-lg p-4 space-y-2">
               <Input
@@ -390,7 +412,8 @@ export default function SendNotificationModal({
               </div>
               {formData.target_user_ids.length > 0 && (
                 <p className="text-sm text-muted-foreground">
-                  {formData.target_user_ids.length} {t("notifications.send.usersSelected")}
+                  {formData.target_user_ids.length}{" "}
+                  {t("notifications.send.usersSelected")}
                 </p>
               )}
             </div>

@@ -107,7 +107,7 @@ const Products = () => {
       setIsFirstRender(false);
       fetchProducts();
     }
-  }, [fetchProducts, isFirstRender]);
+  }, [isFirstRender]);
 
   // Fetch products on mount and page change
   useEffect(() => {

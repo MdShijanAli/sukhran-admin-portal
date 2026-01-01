@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
-import { Calendar, Package, Layers, Edit, Trash2 } from "lucide-react";
+import { Package, Layers, Edit, Trash2 } from "lucide-react";
 import { Category } from "@/stores/categoryStore";
 import { useEffect, useState } from "react";
 import categoryService from "@/services/categoryService";

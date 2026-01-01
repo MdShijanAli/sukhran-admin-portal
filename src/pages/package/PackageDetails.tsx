@@ -7,16 +7,13 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
   ArrowLeft,
-  Edit,
   Loader2,
   Package as PackageIcon,
-  Calendar,
   Coins,
 } from "lucide-react";
 import { toast } from "sonner";
 import packageService from "@/services/packageService";
 import { Package } from "@/lib/types";
-import ShareButton from "@/components/custom/ShareButton";
 import { formatNumberWithCommas } from "@/lib/utils";
 import TimeStaps from "@/components/custom/TimeStamps";
 

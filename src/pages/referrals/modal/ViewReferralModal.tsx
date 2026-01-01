@@ -15,10 +15,6 @@ import {
   ShoppingCart,
   CreditCard,
   FileText,
-  CheckCircle,
-  Clock,
-  Lock,
-  XCircle,
 } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import TimeStaps from "@/components/custom/TimeStamps";
@@ -56,16 +52,6 @@ export default function ViewReferralModal({
     };
     fetchReferralDetails();
   }, [referralId, open]);
-
-  const getStatusIcon = (status: string) => {
-    const icons = {
-      pending: Clock,
-      locked: Lock,
-      credited: CheckCircle,
-      cancelled: XCircle,
-    };
-    return icons[status as keyof typeof icons] || Clock;
-  };
 
   const getStatusBadge = (status: string) => {
     const variants: Record<

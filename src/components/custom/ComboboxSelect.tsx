@@ -142,7 +142,7 @@ export function ComboboxSelect<T>({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [service, store, staticOptions]);
+  }, [service, staticOptions]);
 
   // Handle search with debouncing
   useEffect(() => {

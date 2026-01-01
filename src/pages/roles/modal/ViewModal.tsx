@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BaseModal } from "@/components/modals";
-import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Shield, Users, Key, Calendar } from "lucide-react";
 import { Role } from "@/stores/roleStore";

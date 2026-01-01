@@ -19,7 +19,7 @@ const App = () => {
   useEffect(() => {
     // Initialize theme on mount
     setTheme(theme);
-  }, [theme, setTheme]);
+  }, [theme]);
 
   useEffect(() => {
     const fetchProfile = async () => {

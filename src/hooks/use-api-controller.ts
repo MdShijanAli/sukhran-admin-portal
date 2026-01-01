@@ -119,7 +119,7 @@ export function useApiController<T, StoreType extends Record<string, any>>({
         fetch();
       }
     }
-  }, [autoFetch, shouldFetch, fetch]);
+  }, [autoFetch]);
 
   return {
     data,
