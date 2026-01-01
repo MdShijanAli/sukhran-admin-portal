@@ -156,6 +156,12 @@ const menuItems = [
     permission: permissions.donations.view,
   },
   {
+    icon: FileText,
+    label: "nav.referrals",
+    path: "/referrals",
+    permission: permissions.referrals.view,
+  },
+  {
     icon: Bell,
     label: "nav.notificationsSettings",
     path: "/notification-settings",

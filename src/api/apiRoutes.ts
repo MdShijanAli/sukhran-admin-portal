@@ -262,4 +262,14 @@ export const apiRoutes = {
     updateLegalDocument: (id: number | string) =>
       createApiUrl(`admin/legal-documents/${id}`),
   },
+
+  referrals: {
+    getAll: createApiUrl("admin/referrals"),
+    getById: (id: number | string) => createApiUrl(`admin/referrals/${id}`),
+    settings: createApiUrl("admin/referrals/settings"),
+    updateSettings: createApiUrl("admin/referrals/settings"),
+    statistics: createApiUrl("admin/referrals/statistics"),
+    usersReferrals: (userId: number | string) =>
+      createApiUrl(`admin/referrals/user/${userId}`),
+  },
 };

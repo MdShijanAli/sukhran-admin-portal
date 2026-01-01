@@ -70,7 +70,8 @@
     "notificationsSettings": "Notifications Settings",
     "settings": "Settings",
     "reports": "Reports",
-    "packageSettings": "Package Settings"
+    "packageSettings": "Package Settings",
+    "referrals": "Referrals"
   },
   "auth": {
     "login": "Login",

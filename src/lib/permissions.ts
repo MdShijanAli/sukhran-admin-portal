@@ -201,6 +201,12 @@ const permissions = {
     delete: "subscriptions.delete",
     settings: "subscriptions.manage_settings",
   },
+
+  // Referrals
+  referrals: {
+    view: "referrals.view",
+    manage: "referrals.manage",
+  },
 };
 
 export default permissions;

@@ -70,7 +70,8 @@
     "notificationsSettings": "নোটিফিকেশন সেটিংস",
     "settings": "সেটিংস",
     "reports": "রিপোর্ট",
-    "packageSettings": "প্যাকেজ সেটিংস"
+    "packageSettings": "প্যাকেজ সেটিংস",
+    "referrals": "রেফারেল"
   },
   "auth": {
     "login": "লগইন",

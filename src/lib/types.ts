@@ -765,3 +765,118 @@ export interface ReorderChannelsPayload {
     displayOrder: number;
   }>;
 }
+
+// Referral Types
+export interface ReferralSettings {
+  id: number;
+  isEnabled: boolean;
+  coinsPerReferral: number;
+  minOrderAmount: number;
+  description: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ReferralUser {
+  id: number;
+  name: string;
+  email: string;
+  mobile: string;
+  referral_code?: string;
+  registered_at?: string;
+}
+
+export interface ReferralOrder {
+  id: number;
+  orderId: string;
+  status?: string;
+  paymentStatus?: string;
+  grandTotal: number;
+  created_at: string;
+}
+
+export interface ReferralTransaction {
+  id: number;
+  amount: number;
+  balanceAfter: number;
+  created_at: string;
+}
+
+export interface Referral {
+  id: number;
+  referrer: ReferralUser;
+  referred_user: ReferralUser;
+  status: "pending" | "locked" | "credited" | "cancelled";
+  status_display: string;
+  status_color?: string;
+  coins_amount: number;
+  first_order: ReferralOrder | null;
+  coin_transaction: ReferralTransaction | null;
+  credited_at: string | null;
+  coin_transaction_id: string | null;
+  notes: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ReferralStatistics {
+  overview: {
+    total_referrals: number;
+    pending: number;
+    locked: number;
+    credited: number;
+    cancelled: number;
+  };
+  coins: {
+    total_distributed: number;
+    pending_coins: number;
+    locked_coins: number;
+  };
+  today: {
+    new_referrals: number;
+    coins_credited: number;
+  };
+  this_week: {
+    new_referrals: number;
+    coins_credited: number;
+  };
+  this_month: {
+    new_referrals: number;
+    coins_credited: number;
+  };
+  settings: {
+    is_enabled: boolean;
+    coins_per_referral: number;
+    min_order_amount: number;
+  };
+}
+
+export interface UserReferrals {
+  user: ReferralUser;
+  statistics: {
+    referral_code: string;
+    total_referred: number;
+    pending_rewards: {
+      count: number;
+      total_coins: number;
+    };
+    locked_rewards: {
+      count: number;
+      total_coins: number;
+    };
+    credited_rewards: {
+      count: number;
+      total_coins: number;
+    };
+    total_coins_earned: number;
+  };
+  referrals: Array<{
+    id: number;
+    referred_user: ReferralUser;
+    status: string;
+    status_display: string;
+    coins_amount: number;
+    created_at: string;
+  }>;
+  meta: PaginationMeta;
+}

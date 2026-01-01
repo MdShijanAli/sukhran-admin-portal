@@ -36,6 +36,7 @@ import ContentManagement from "@/pages/ContentManagement";
 import PackageSettings from "@/pages/package/settings/PackageSettings";
 import Donations from "@/pages/donations";
 import CreateSupport from "@/pages/supports/CreateSupport";
+import Referrals from "@/pages/referrals";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -295,6 +296,14 @@ const AppRoutes: React.FC = () => {
           element={
             <PrivateRoute>
               <Donations />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="referrals"
+          element={
+            <PrivateRoute>
+              <Referrals />
             </PrivateRoute>
           }
         />

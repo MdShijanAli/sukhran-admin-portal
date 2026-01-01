@@ -1,0 +1,147 @@
+{
+  "title": "Referrals",
+  "subtitle": "Manage referral program and track rewards",
+  "tabs": {
+    "referrals": "All Referrals",
+    "statistics": "Statistics",
+    "settings": "Settings"
+  },
+  "referrals": {
+    "title": "All Referrals",
+    "subtitle": "View and manage all referral records",
+    "noReferrals": "No referrals found",
+    "noOrderYet": "No order yet",
+    "columns": {
+      "sl": "Sl.",
+      "referrer": "Referrer",
+      "referredUser": "Referred User",
+      "status": "Status",
+      "coins": "Coins",
+      "firstOrder": "First Order",
+      "creditedAt": "Credited At",
+      "createdAt": "Created At",
+      "actions": "Actions"
+    },
+    "status": {
+      "pending": "Pending",
+      "locked": "Locked",
+      "credited": "Credited",
+      "cancelled": "Cancelled"
+    },
+    "statusDisplay": {
+      "pending": "Waiting for First Order",
+      "locked": "Order Placed - Locked",
+      "credited": "Coins Credited",
+      "cancelled": "Cancelled"
+    },
+    "view": {
+      "title": "Referral Details",
+      "referrerInfo": "Referrer Information",
+      "referredUserInfo": "Referred User Information",
+      "rewardInfo": "Reward Information",
+      "orderInfo": "First Order Information",
+      "transactionInfo": "Coin Transaction",
+      "timeline": "Timeline",
+      "name": "Name",
+      "email": "Email",
+      "mobile": "Mobile",
+      "referralCode": "Referral Code",
+      "registeredAt": "Registered At",
+      "status": "Status",
+      "coinsAmount": "Coins Amount",
+      "creditedAt": "Credited At",
+      "orderId": "Order ID",
+      "orderStatus": "Order Status",
+      "paymentStatus": "Payment Status",
+      "grandTotal": "Grand Total",
+      "orderDate": "Order Date",
+      "transactionId": "Transaction ID",
+      "amount": "Amount",
+      "balanceAfter": "Balance After",
+      "transactionDate": "Transaction Date",
+      "notes": "Notes",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    }
+  },
+  "statistics": {
+    "overview": "Overview",
+    "totalReferrals": "Total Referrals",
+    "pending": "Pending",
+    "locked": "Locked",
+    "credited": "Credited",
+    "cancelled": "Cancelled",
+    "coinsDistribution": "Coins Distribution",
+    "totalDistributed": "Total Distributed",
+    "pendingCoins": "Pending Coins",
+    "lockedCoins": "Locked Coins",
+    "timeBasedMetrics": "Time-Based Metrics",
+    "today": "Today",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "newReferrals": "New Referrals",
+    "coinsCredited": "Coins Credited",
+    "programSettings": "Program Settings",
+    "programStatus": "Program Status",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "coinsPerReferral": "Coins Per Referral",
+    "minOrderAmount": "Min. Order Amount",
+    "noDataAvailable": "No statistics data available",
+    "refreshData": "Refresh Data"
+  },
+  "settings": {
+    "title": "Referral Program Settings",
+    "subtitle": "Configure referral program parameters",
+    "form": {
+      "isEnabled": "Enable Referral Program",
+      "isEnabledDescription": "Allow users to refer others and earn rewards",
+      "coinsPerReferral": "Coins Per Referral",
+      "coinsPerReferralPlaceholder": "Enter coins amount",
+      "coinsPerReferralDescription": "Number of coins awarded per successful referral",
+      "minOrderAmount": "Minimum Order Amount",
+      "minOrderAmountPlaceholder": "Enter minimum order amount",
+      "minOrderAmountDescription": "Minimum order value required to unlock referral rewards",
+      "description": "Program Description",
+      "descriptionPlaceholder": "Enter program description",
+      "descriptionDescription": "Description shown to users about the referral program",
+      "save": "Save Settings",
+      "saving": "Saving...",
+      "cancel": "Cancel"
+    },
+    "messages": {
+      "updated": "Settings updated successfully",
+      "failedToUpdate": "Failed to update settings",
+      "loading": "Loading settings..."
+    },
+    "info": {
+      "title": "How Referral Program Works",
+      "step1": "User shares their unique referral code with friends",
+      "step2": "Friend registers using the referral code",
+      "step3": "Friend places their first order (minimum order amount applies)",
+      "step4": "Coins are credited to referrer's account",
+      "note": "Note: Coins are locked until the referred user's first order is confirmed"
+    }
+  },
+  "userReferrals": {
+    "title": "User Referrals",
+    "subtitle": "View all referrals made by this user",
+    "userName": "User Name",
+    "userEmail": "Email",
+    "referralCode": "Referral Code",
+    "statistics": {
+      "totalReferred": "Total Referred",
+      "pendingRewards": "Pending Rewards",
+      "lockedRewards": "Locked Rewards",
+      "creditedRewards": "Credited Rewards",
+      "totalCoinsEarned": "Total Coins Earned"
+    },
+    "referralsList": "Referrals List",
+    "noReferrals": "No referrals found for this user"
+  },
+  "actions": {
+    "viewDetails": "View Details",
+    "viewUserReferrals": "View User Referrals",
+    "refresh": "Refresh"
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "title": "রেফারেল",
+  "subtitle": "রেফারেল প্রোগ্রাম পরিচালনা এবং পুরস্কার ট্র্যাক করুন",
+  "tabs": {
+    "referrals": "সকল রেফারেল",
+    "statistics": "পরিসংখ্যান",
+    "settings": "সেটিংস"
+  },
+  "referrals": {
+    "title": "সকল রেফারেল",
+    "subtitle": "সমস্ত রেফারেল রেকর্ড দেখুন এবং পরিচালনা করুন",
+    "noReferrals": "কোন রেফারেল পাওয়া যায়নি",
+    "noOrderYet": "কোন অর্ডার নেই",
+    "columns": {
+      "sl": "ক্রমিক",
+      "referrer": "রেফারার",
+      "referredUser": "রেফার করা ব্যবহারকারী",
+      "status": "স্ট্যাটাস",
+      "coins": "কয়েন",
+      "firstOrder": "প্রথম অর্ডার",
+      "creditedAt": "ক্রেডিট করা হয়েছে",
+      "createdAt": "তৈরির তারিখ",
+      "actions": "কার্যক্রম"
+    },
+    "status": {
+      "pending": "মুলতুবি",
+      "locked": "লক করা",
+      "credited": "ক্রেডিট করা হয়েছে",
+      "cancelled": "বাতিল"
+    },
+    "statusDisplay": {
+      "pending": "প্রথম অর্ডারের অপেক্ষায়",
+      "locked": "অর্ডার করা হয়েছে - লক করা",
+      "credited": "কয়েন ক্রেডিট করা হয়েছে",
+      "cancelled": "বাতিল"
+    },
+    "view": {
+      "title": "রেফারেল বিবরণ",
+      "referrerInfo": "রেফারার তথ্য",
+      "referredUserInfo": "রেফার করা ব্যবহারকারীর তথ্য",
+      "rewardInfo": "পুরস্কার তথ্য",
+      "orderInfo": "প্রথম অর্ডার তথ্য",
+      "transactionInfo": "কয়েন লেনদেন",
+      "timeline": "টাইমলাইন",
+      "name": "নাম",
+      "email": "ইমেইল",
+      "mobile": "মোবাইল",
+      "referralCode": "রেফারেল কোড",
+      "registeredAt": "নিবন্ধনের তারিখ",
+      "status": "স্ট্যাটাস",
+      "coinsAmount": "কয়েন পরিমাণ",
+      "creditedAt": "ক্রেডিট করার তারিখ",
+      "orderId": "অর্ডার আইডি",
+      "orderStatus": "অর্ডার স্ট্যাটাস",
+      "paymentStatus": "পেমেন্ট স্ট্যাটাস",
+      "grandTotal": "সর্বমোট",
+      "orderDate": "অর্ডারের তারিখ",
+      "transactionId": "লেনদেন আইডি",
+      "amount": "পরিমাণ",
+      "balanceAfter": "পরের ব্যালেন্স",
+      "transactionDate": "লেনদেনের তারিখ",
+      "notes": "নোট",
+      "createdAt": "তৈরির তারিখ",
+      "updatedAt": "আপডেটের তারিখ"
+    }
+  },
+  "statistics": {
+    "overview": "সারাংশ",
+    "totalReferrals": "মোট রেফারেল",
+    "pending": "মুলতুবি",
+    "locked": "লক করা",
+    "credited": "ক্রেডিট করা হয়েছে",
+    "cancelled": "বাতিল",
+    "coinsDistribution": "কয়েন বিতরণ",
+    "totalDistributed": "মোট বিতরিত",
+    "pendingCoins": "মুলতুবি কয়েন",
+    "lockedCoins": "লক করা কয়েন",
+    "timeBasedMetrics": "সময়-ভিত্তিক মেট্রিক্স",
+    "today": "আজ",
+    "thisWeek": "এই সপ্তাহে",
+    "thisMonth": "এই মাসে",
+    "newReferrals": "নতুন রেফারেল",
+    "coinsCredited": "কয়েন ক্রেডিট করা হয়েছে",
+    "programSettings": "প্রোগ্রাম সেটিংস",
+    "programStatus": "প্রোগ্রাম স্ট্যাটাস",
+    "enabled": "সক্রিয়",
+    "disabled": "নিষ্ক্রিয়",
+    "coinsPerReferral": "প্রতি রেফারেলে কয়েন",
+    "minOrderAmount": "ন্যূনতম অর্ডার পরিমাণ",
+    "noDataAvailable": "কোন পরিসংখ্যান ডেটা উপলব্ধ নেই",
+    "refreshData": "ডেটা রিফ্রেশ করুন"
+  },
+  "settings": {
+    "title": "রেফারেল প্রোগ্রাম সেটিংস",
+    "subtitle": "রেফারেল প্রোগ্রাম প্যারামিটার কনফিগার করুন",
+    "form": {
+      "isEnabled": "রেফারেল প্রোগ্রাম সক্রিয় করুন",
+      "isEnabledDescription": "ব্যবহারকারীদের অন্যদের রেফার করতে এবং পুরস্কার অর্জন করার অনুমতি দিন",
+      "coinsPerReferral": "প্রতি রেফারেলে কয়েন",
+      "coinsPerReferralPlaceholder": "কয়েনের পরিমাণ লিখুন",
+      "coinsPerReferralDescription": "প্রতিটি সফল রেফারেলের জন্য প্রদত্ত কয়েনের সংখ্যা",
+      "minOrderAmount": "ন্যূনতম অর্ডার পরিমাণ",
+      "minOrderAmountPlaceholder": "ন্যূনতম অর্ডার পরিমাণ লিখুন",
+      "minOrderAmountDescription": "রেফারেল পুরস্কার আনলক করার জন্য প্রয়োজনীয় ন্যূনতম অর্ডার মূল্য",
+      "description": "প্রোগ্রাম বিবরণ",
+      "descriptionPlaceholder": "প্রোগ্রাম বিবরণ লিখুন",
+      "descriptionDescription": "রেফারেল প্রোগ্রাম সম্পর্কে ব্যবহারকারীদের দেখানো বিবরণ",
+      "save": "সেটিংস সংরক্ষণ করুন",
+      "saving": "সংরক্ষণ করা হচ্ছে...",
+      "cancel": "বাতিল"
+    },
+    "messages": {
+      "updated": "সেটিংস সফলভাবে আপডেট হয়েছে",
+      "failedToUpdate": "সেটিংস আপডেট করতে ব্যর্থ",
+      "loading": "সেটিংস লোড হচ্ছে..."
+    },
+    "info": {
+      "title": "রেফারেল প্রোগ্রাম কীভাবে কাজ করে",
+      "step1": "ব্যবহারকারী তাদের অনন্য রেফারেল কোড বন্ধুদের সাথে শেয়ার করে",
+      "step2": "বন্ধু রেফারেল কোড ব্যবহার করে নিবন্ধন করে",
+      "step3": "বন্ধু তাদের প্রথম অর্ডার করে (ন্যূনতম অর্ডার পরিমাণ প্রযোজ্য)",
+      "step4": "কয়েন রেফারারের অ্যাকাউন্টে ক্রেডিট করা হয়",
+      "note": "নোট: রেফার করা ব্যবহারকারীর প্রথম অর্ডার নিশ্চিত না হওয়া পর্যন্ত কয়েন লক করা থাকে"
+    }
+  },
+  "userReferrals": {
+    "title": "ব্যবহারকারী রেফারেল",
+    "subtitle": "এই ব্যবহারকারীর দ্বারা করা সমস্ত রেফারেল দেখুন",
+    "userName": "ব্যবহারকারীর নাম",
+    "userEmail": "ইমেইল",
+    "referralCode": "রেফারেল কোড",
+    "statistics": {
+      "totalReferred": "মোট রেফার করা",
+      "pendingRewards": "মুলতুবি পুরস্কার",
+      "lockedRewards": "লক করা পুরস্কার",
+      "creditedRewards": "ক্রেডিট করা পুরস্কার",
+      "totalCoinsEarned": "মোট কয়েন অর্জিত"
+    },
+    "referralsList": "রেফারেল তালিকা",
+    "noReferrals": "এই ব্যবহারকারীর জন্য কোন রেফারেল পাওয়া যায়নি"
+  },
+  "actions": {
+    "viewDetails": "বিস্তারিত দেখুন",
+    "viewUserReferrals": "ব্যবহারকারী রেফারেল দেখুন",
+    "refresh": "রিফ্রেশ"
+  }
+}
