@@ -29,6 +29,9 @@
     "subCategory": "Sub Category",
     "selectSubCategory": "Select sub-category",
     "productName": "Product Name",
+    "selectBadge": "Select Badge",
+    "searchBadges": "Search Badges...",
+    "badge": "Badge",
     "enterProductName": "Enter product name",
     "productType": "Product Type",
     "normal": "Normal",
@@ -68,7 +71,18 @@
     "enterHeight": "Enter height",
     "skuImage": "SKU Image",
     "addSku": "Add SKU",
-    "removeSku": "Remove SKU"
+    "removeSku": "Remove SKU",
+    "customSkuId": "Custom SKU ID",
+    "enterCustomSkuId": "Enter custom SKU ID",
+    "badges": {
+      "best_selling": "Best Selling",
+      "new_arrival": "New Arrival",
+      "hot_deal": "Hot Deal",
+      "organic": "Organic",
+      "limited_stock": "Limited Stock",
+      "flash_sale": "Flash Sale",
+      "halal_certified": "Halal Certified"
+    }
   },
   "view": {
     "productImage": "Product Image",

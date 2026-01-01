@@ -33,6 +33,7 @@ export interface ProductSku {
     width?: string;
     height?: string;
   };
+  customSkuId?: string;
 }
 
 export interface Product {
@@ -58,6 +59,7 @@ export interface Product {
     id: number;
     name: string;
   };
+  badgeLabel?: string;
 }
 
 interface ProductState {

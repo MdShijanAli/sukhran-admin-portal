@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import productService from "@/services/productService";
 import categoryService from "@/services/categoryService";
 import { ProductSku } from "@/stores/productStore";
+import { BaseSelect } from "@/components/custom/BaseSelect";
 
 interface Category {
   id: number | string;
@@ -40,6 +41,14 @@ interface ProductFormData {
   isActive: boolean;
   isFeatured: boolean;
   imgUrl?: File;
+  badge?:
+    | "best_selling"
+    | "new_arrival"
+    | "hot_deal"
+    | "organic"
+    | "limited_stock"
+    | "flash_sale"
+    | "halal_certified";
 }
 
 export default function ProductForm() {
@@ -61,6 +70,7 @@ export default function ProductForm() {
     name: "",
     subCategoryId: "",
     productType: "normal",
+    badge: "best_selling",
     description: "",
     isActive: true,
     isFeatured: false,
@@ -71,6 +81,7 @@ export default function ProductForm() {
       name: "",
       unitName: "",
       unitSize: "",
+      customSkuId: "",
       currentPrice: 0,
       stockQuantity: 0,
       originalPrice: 0,
@@ -92,6 +103,28 @@ export default function ProductForm() {
     "bag",
     "box",
     "pack",
+  ];
+
+  const badgeLists = [
+    {
+      value: "best_selling",
+      label: t("products.form.badges.best_selling") || "",
+    },
+    {
+      value: "new_arrival",
+      label: t("products.form.badges.new_arrival") || "",
+    },
+    { value: "hot_deal", label: t("products.form.badges.hot_deal") || "" },
+    { value: "organic", label: t("products.form.badges.organic") || "" },
+    {
+      value: "limited_stock",
+      label: t("products.form.badges.limited_stock") || "",
+    },
+    { value: "flash_sale", label: t("products.form.badges.flash_sale") || "" },
+    {
+      value: "halal_certified",
+      label: t("products.form.badges.halal_certified") || "",
+    },
   ];
 
   const [skuImages, setSkuImages] = useState<{ [key: number]: string }>({});
@@ -165,6 +198,7 @@ export default function ProductForm() {
         name: product.name || "",
         subCategoryId: product.subCategoryId?.toString() || "",
         productType: product.productType || "normal",
+        badge: product.badge || "best_selling",
         description: product.description || "",
         isActive: product.isActive ?? true,
         isFeatured: product.isFeatured ?? false,
@@ -182,6 +216,7 @@ export default function ProductForm() {
           name: sku.name || "",
           unitName: sku.unit?.name || "",
           unitSize: sku.unit?.size || "",
+          customSkuId: sku.customSkuId || "",
           currentPrice: sku.pricing?.currentPrice || 0,
           stockQuantity: sku.stockQuantity || 0,
           originalPrice: sku.pricing?.originalPrice || 0,
@@ -251,6 +286,7 @@ export default function ProductForm() {
         name: "",
         unitName: "",
         unitSize: "",
+        customSkuId: "",
         currentPrice: 0,
         stockQuantity: 0,
         originalPrice: 0,
@@ -372,6 +408,7 @@ export default function ProductForm() {
         formDataToSubmit.append("subCategoryId", formData.subCategoryId);
       }
       formDataToSubmit.append("productType", formData.productType);
+      formDataToSubmit.append("badge", formData.badge || "");
       formDataToSubmit.append("description", formData.description);
       formDataToSubmit.append("isActive", formData.isActive ? "1" : "0");
       formDataToSubmit.append("isFeatured", formData.isFeatured ? "1" : "0");
@@ -449,9 +486,9 @@ export default function ProductForm() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
                 {/* Product Name */}
-                <div className="grid sm:col-span-2 gap-2">
+                <div className="grid sm:col-span-2 md:col-span-2 gap-2">
                   <Label htmlFor="productName">
                     {t("products.form.productName")} *
                   </Label>
@@ -528,6 +565,23 @@ export default function ProductForm() {
                       ))}
                     </SelectContent>
                   </Select>
+                </div>
+
+                {/* Badge */}
+                <div className="grid gap-2">
+                  <Label htmlFor="badge">{t("products.form.badge")}</Label>
+                  <BaseSelect
+                    id="badge"
+                    value={formData.badge}
+                    onValueChange={(value) => updateField("badge", value)}
+                    options={badgeLists.map((badge) => ({
+                      value: badge.value,
+                      label: badge.label,
+                    }))}
+                    placeholder={t("products.form.selectBadge")}
+                    searchable
+                    searchPlaceholder={t("products.form.searchBadges")}
+                  />
                 </div>
 
                 {/* Product Type */}
@@ -707,26 +761,21 @@ export default function ProductForm() {
                       <Label htmlFor={`unit-name-${index}`}>
                         {t("products.form.unitName")} *
                       </Label>
-                      <Select
+                      <BaseSelect
+                        id={`unit-name-${index}`}
                         value={sku.unitName}
                         onValueChange={(value) =>
                           updateSku(index, "unitName", value)
                         }
+                        options={unitNames.map((unit) => ({
+                          value: unit,
+                          label: unit,
+                        }))}
+                        placeholder={t("products.form.selectUnit")}
+                        searchable
+                        searchPlaceholder="Search units..."
                         required
-                      >
-                        <SelectTrigger id={`unit-name-${index}`}>
-                          <SelectValue
-                            placeholder={t("products.form.selectUnit")}
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {unitNames.map((unit) => (
-                            <SelectItem key={unit} value={unit}>
-                              {unit}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      />
                     </div>
 
                     {/* Unit Size */}
@@ -746,151 +795,172 @@ export default function ProductForm() {
                       />
                     </div>
 
-                    {/* Current Price */}
+                    {/* customSkuId */}
                     <div className="grid gap-2">
-                      <Label htmlFor={`current-price-${index}`}>
-                        {t("products.form.currentPrice")} *
+                      <Label htmlFor="customSkuId">
+                        {t("products.form.customSkuId")}
                       </Label>
                       <Input
-                        id={`current-price-${index}`}
-                        type="number"
-                        step="0.01"
-                        placeholder={t("products.form.enterCurrentPrice")}
-                        value={sku.currentPrice || ""}
+                        id="customSkuId"
+                        placeholder={t("products.form.enterCustomSkuId")}
+                        value={sku.customSkuId || ""}
                         onChange={(e) =>
-                          updateSku(
-                            index,
-                            "currentPrice",
-                            Number(e.target.value)
-                          )
-                        }
-                        required
-                      />
-                    </div>
-
-                    {/* Original Price */}
-                    <div className="grid gap-2">
-                      <Label htmlFor={`original-price-${index}`}>
-                        {t("products.form.originalPrice")}
-                      </Label>
-                      <Input
-                        id={`original-price-${index}`}
-                        type="number"
-                        step="0.01"
-                        placeholder={t("products.form.enterOriginalPrice")}
-                        value={sku.originalPrice || ""}
-                        onChange={(e) =>
-                          updateSku(
-                            index,
-                            "originalPrice",
-                            Number(e.target.value)
-                          )
+                          updateSku(index, "customSkuId", e.target.value)
                         }
                       />
                     </div>
 
-                    {/* Stock Quantity */}
-                    <div className="grid gap-2">
-                      <Label htmlFor={`stock-${index}`}>
-                        {t("products.form.stockQuantity")} *
-                      </Label>
-                      <Input
-                        id={`stock-${index}`}
-                        type="number"
-                        placeholder={t("products.form.enterStockQuantity")}
-                        value={sku.stockQuantity || ""}
-                        onChange={(e) =>
-                          updateSku(
-                            index,
-                            "stockQuantity",
-                            Number(e.target.value)
-                          )
-                        }
-                        required
-                      />
+                    <div className="grid grid-cols-2 gap-3">
+                      {/* Current Price */}
+                      <div className="grid gap-2">
+                        <Label htmlFor={`current-price-${index}`}>
+                          {t("products.form.currentPrice")} *
+                        </Label>
+                        <Input
+                          id={`current-price-${index}`}
+                          type="number"
+                          step="0.01"
+                          placeholder={t("products.form.enterCurrentPrice")}
+                          value={sku.currentPrice || ""}
+                          onChange={(e) =>
+                            updateSku(
+                              index,
+                              "currentPrice",
+                              Number(e.target.value)
+                            )
+                          }
+                          required
+                        />
+                      </div>
+
+                      {/* Original Price */}
+                      <div className="grid gap-2">
+                        <Label htmlFor={`original-price-${index}`}>
+                          {t("products.form.originalPrice")}
+                        </Label>
+                        <Input
+                          id={`original-price-${index}`}
+                          type="number"
+                          step="0.01"
+                          placeholder={t("products.form.enterOriginalPrice")}
+                          value={sku.originalPrice || ""}
+                          onChange={(e) =>
+                            updateSku(
+                              index,
+                              "originalPrice",
+                              Number(e.target.value)
+                            )
+                          }
+                        />
+                      </div>
                     </div>
 
-                    {/* Weight */}
-                    <div className="grid gap-2">
-                      <Label htmlFor={`weight-${index}`}>
-                        {t("products.form.weight")}
-                      </Label>
-                      <Input
-                        id={`weight-${index}`}
-                        type="number"
-                        step="0.01"
-                        placeholder={t("products.form.enterWeight")}
-                        value={sku.weight || ""}
-                        onChange={(e) =>
-                          updateSku(index, "weight", Number(e.target.value))
-                        }
-                      />
-                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {/* Stock Quantity */}
+                      <div className="grid gap-2">
+                        <Label htmlFor={`stock-${index}`}>
+                          {t("products.form.stockQuantity")} *
+                        </Label>
+                        <Input
+                          id={`stock-${index}`}
+                          type="number"
+                          placeholder={t("products.form.enterStockQuantity")}
+                          value={sku.stockQuantity || ""}
+                          onChange={(e) =>
+                            updateSku(
+                              index,
+                              "stockQuantity",
+                              Number(e.target.value)
+                            )
+                          }
+                          required
+                        />
+                      </div>
 
-                    {/* Color */}
-                    <div className="grid gap-2">
-                      <Label htmlFor={`color-${index}`}>
-                        {t("products.form.color")}
-                      </Label>
-                      <Input
-                        id={`color-${index}`}
-                        placeholder={t("products.form.enterColor")}
-                        value={sku.color || ""}
-                        onChange={(e) =>
-                          updateSku(index, "color", e.target.value)
-                        }
-                      />
+                      {/* Weight */}
+                      <div className="grid gap-2">
+                        <Label htmlFor={`weight-${index}`}>
+                          {t("products.form.weight")}
+                        </Label>
+                        <Input
+                          id={`weight-${index}`}
+                          type="number"
+                          step="0.01"
+                          placeholder={t("products.form.enterWeight")}
+                          value={sku.weight || ""}
+                          onChange={(e) =>
+                            updateSku(index, "weight", Number(e.target.value))
+                          }
+                        />
+                      </div>
                     </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {/* Color */}
+                      <div className="grid gap-2">
+                        <Label htmlFor={`color-${index}`}>
+                          {t("products.form.color")}
+                        </Label>
+                        <Input
+                          id={`color-${index}`}
+                          placeholder={t("products.form.enterColor")}
+                          value={sku.color || ""}
+                          onChange={(e) =>
+                            updateSku(index, "color", e.target.value)
+                          }
+                        />
+                      </div>
 
-                    {/* Length */}
-                    <div className="grid gap-2">
-                      <Label htmlFor={`length-${index}`}>
-                        {t("products.form.length")}
-                      </Label>
-                      <Input
-                        id={`length-${index}`}
-                        type="number"
-                        step="0.01"
-                        placeholder={t("products.form.enterLength")}
-                        value={sku.length || ""}
-                        onChange={(e) =>
-                          updateSku(index, "length", Number(e.target.value))
-                        }
-                      />
+                      {/* Length */}
+                      <div className="grid gap-2">
+                        <Label htmlFor={`length-${index}`}>
+                          {t("products.form.length")}
+                        </Label>
+                        <Input
+                          id={`length-${index}`}
+                          type="number"
+                          step="0.01"
+                          placeholder={t("products.form.enterLength")}
+                          value={sku.length || ""}
+                          onChange={(e) =>
+                            updateSku(index, "length", Number(e.target.value))
+                          }
+                        />
+                      </div>
                     </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {/* Width */}
+                      <div className="grid gap-2">
+                        <Label htmlFor={`width-${index}`}>
+                          {t("products.form.width")}
+                        </Label>
+                        <Input
+                          id={`width-${index}`}
+                          type="number"
+                          step="0.01"
+                          placeholder={t("products.form.enterWidth")}
+                          value={sku.width || ""}
+                          onChange={(e) =>
+                            updateSku(index, "width", Number(e.target.value))
+                          }
+                        />
+                      </div>
 
-                    {/* Width */}
-                    <div className="grid gap-2">
-                      <Label htmlFor={`width-${index}`}>
-                        {t("products.form.width")}
-                      </Label>
-                      <Input
-                        id={`width-${index}`}
-                        type="number"
-                        step="0.01"
-                        placeholder={t("products.form.enterWidth")}
-                        value={sku.width || ""}
-                        onChange={(e) =>
-                          updateSku(index, "width", Number(e.target.value))
-                        }
-                      />
-                    </div>
-
-                    {/* Height */}
-                    <div className="grid gap-2">
-                      <Label htmlFor={`height-${index}`}>
-                        {t("products.form.height")}
-                      </Label>
-                      <Input
-                        id={`height-${index}`}
-                        type="number"
-                        step="0.01"
-                        placeholder={t("products.form.enterHeight")}
-                        value={sku.height || ""}
-                        onChange={(e) =>
-                          updateSku(index, "height", Number(e.target.value))
-                        }
-                      />
+                      {/* Height */}
+                      <div className="grid gap-2">
+                        <Label htmlFor={`height-${index}`}>
+                          {t("products.form.height")}
+                        </Label>
+                        <Input
+                          id={`height-${index}`}
+                          type="number"
+                          step="0.01"
+                          placeholder={t("products.form.enterHeight")}
+                          value={sku.height || ""}
+                          onChange={(e) =>
+                            updateSku(index, "height", Number(e.target.value))
+                          }
+                        />
+                      </div>
                     </div>
                   </div>
 

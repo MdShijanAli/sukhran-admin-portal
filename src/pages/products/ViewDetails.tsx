@@ -27,6 +27,7 @@ interface ProductDetails {
   name: string;
   slug: string;
   productType: string;
+  badge?: string;
   description: string;
   imgUrl: string;
   isActive: boolean;
@@ -76,6 +77,7 @@ interface ProductDetails {
     };
   }>;
   photos: any[];
+  badgeLabel?: string;
 }
 
 const ProductViewDetails = () => {
@@ -235,6 +237,16 @@ const ProductViewDetails = () => {
                   {product.productType}
                 </Badge>
               </div>
+              {product.badge && (
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    {t("products.form.badge")}
+                  </span>
+                  <Badge variant="secondary" className="capitalize">
+                    {product.badgeLabel}
+                  </Badge>
+                </div>
+              )}
             </CardContent>
           </Card>
 

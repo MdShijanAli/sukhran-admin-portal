@@ -25,6 +25,7 @@
     "editProduct": "পণ্য সম্পাদনা করুন",
     "updateProduct": "পণ্য আপডেট করুন",
     "category": "ক্যাটাগরি",
+    "selectBadge": "ব্যাজ নির্বাচন করুন",
     "selectCategory": "ক্যাটাগরি নির্বাচন করুন",
     "subCategory": "সাব ক্যাটাগরি",
     "selectSubCategory": "সাব-ক্যাটাগরি নির্বাচন করুন",
@@ -34,6 +35,8 @@
     "normal": "সাধারণ",
     "subscription": "সাবস্ক্রিপশন",
     "bundle": "বান্ডিল",
+    "searchBadges": "ব্যাজ অনুসন্ধান করুন...",
+    "badge": "ব্যাজ",
     "description": "বিবরণ",
     "enterDescription": "পণ্যের বিবরণ লিখুন",
     "productImage": "পণ্যের ছবি",
@@ -68,7 +71,18 @@
     "enterHeight": "উচ্চতা লিখুন",
     "skuImage": "SKU ছবি",
     "addSku": "SKU যোগ করুন",
-    "removeSku": "SKU সরান"
+    "removeSku": "SKU সরান",
+    "customSkuId": "কাস্টম SKU আইডি",
+    "enterCustomSkuId": "কাস্টম SKU আইডি লিখুন",
+    "badges": {
+      "best_selling": "সেরা বিক্রিত",
+      "new_arrival": "নতুন আগমন",
+      "hot_deal": "হট ডিল",
+      "organic": "অর্গানিক",
+      "limited_stock": "সীমিত স্টক",
+      "flash_sale": "ফ্ল্যাশ সেল",
+      "halal_certified": "হালাল সার্টিফাইড"
+    }
   },
   "view": {
     "productImage": "পণ্যের ছবি",

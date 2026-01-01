@@ -312,6 +312,15 @@ const Products = () => {
                             ? t("products.columns.active")
                             : t("products.columns.inactive")}
                         </Badge>
+                        {product.badgeLabel && (
+                          <Badge
+                            variant="primary"
+                            className="text-[10px] px-1.5 py-0"
+                          >
+                            {product.badgeLabel}
+                          </Badge>
+                        )}
+
                         {product.isFeatured && (
                           <Badge
                             variant="destructive"
