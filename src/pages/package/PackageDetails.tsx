@@ -149,11 +149,18 @@ export default function PackageDetails() {
                       t("packages.view.noDescription")}
                   </p>
                 </div>
-                <Badge variant={packageData.isActive ? "default" : "secondary"}>
-                  {packageData.isActive
-                    ? t("packages.status.active")
-                    : t("packages.status.inactive")}
-                </Badge>
+                <div className="flex items-center gap-2">
+                  <Badge
+                    variant={packageData.isActive ? "default" : "secondary"}
+                  >
+                    {packageData.isActive
+                      ? t("packages.status.active")
+                      : t("packages.status.inactive")}
+                  </Badge>
+                  {packageData.badge && (
+                    <Badge variant="primary">{packageData.badge}</Badge>
+                  )}
+                </div>
               </div>
             </CardHeader>
             <CardContent>

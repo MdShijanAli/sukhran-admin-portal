@@ -310,6 +310,14 @@ function Packages() {
                           {t("packages.status.featured")}
                         </Badge>
                       )}
+                      {pkg.badge && (
+                        <Badge
+                          variant="primary"
+                          className="text-[10px] px-1.5 py-0"
+                        >
+                          {pkg.badge}
+                        </Badge>
+                      )}
                     </div>
                     {/* Type Badge */}
                     <Badge

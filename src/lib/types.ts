@@ -170,6 +170,7 @@ export interface Package {
   packageType: "admin" | "custom";
   fixedPrice: number;
   coinsReward: number;
+  badge?: string;
   discountPercent: number;
   pricing?: PackagePricing;
   displayOrder: string;

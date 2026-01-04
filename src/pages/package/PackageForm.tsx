@@ -33,6 +33,7 @@ interface PackageFormData {
   name: string;
   description: string;
   packageType: "admin" | "custom";
+  badge?: string;
   fixedPrice: string;
   coinsReward: number;
   discountPercent: string;
@@ -66,6 +67,7 @@ export default function PackageForm() {
     name: "",
     description: "",
     packageType: "admin",
+    badge: "",
     fixedPrice: "",
     coinsReward: 0,
     discountPercent: "0",
@@ -130,6 +132,7 @@ export default function PackageForm() {
       setFormData({
         name: packageData.name || "",
         description: packageData.description || "",
+        badge: packageData.badge || "",
         packageType: packageData.packageType || "admin",
         fixedPrice:
           packageData.pricing?.fixedPrice?.toString() ||
@@ -293,6 +296,7 @@ export default function PackageForm() {
       // Append basic fields
       formDataToSubmit.append("name", formData.name);
       formDataToSubmit.append("description", formData.description);
+      formDataToSubmit.append("badge", formData.badge || "");
       formDataToSubmit.append("packageType", formData.packageType);
       formDataToSubmit.append("fixedPrice", formData.fixedPrice);
       formDataToSubmit.append("coinsReward", formData.coinsReward.toString());
@@ -425,18 +429,31 @@ export default function PackageForm() {
                   <CardTitle>{t("packages.form.basicInformation")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">
-                      {t("packages.form.packageName")}{" "}
-                      <span className="text-destructive">*</span>
-                    </Label>
-                    <Input
-                      id="name"
-                      placeholder={t("packages.form.enterPackageName")}
-                      value={formData.name}
-                      onChange={(e) => updateField("name", e.target.value)}
-                      required
-                    />
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="space-y-2 col-span-2">
+                      <Label htmlFor="name">
+                        {t("packages.form.packageName")}{" "}
+                        <span className="text-destructive">*</span>
+                      </Label>
+                      <Input
+                        id="name"
+                        placeholder={t("packages.form.enterPackageName")}
+                        value={formData.name}
+                        onChange={(e) => updateField("name", e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="badge">
+                        {t("packages.form.packageBadge")}
+                      </Label>
+                      <Input
+                        id="badge"
+                        placeholder={t("packages.form.enterPackageBadge")}
+                        value={formData.badge}
+                        onChange={(e) => updateField("badge", e.target.value)}
+                      />
+                    </div>
                   </div>
 
                   <div className="space-y-2">

@@ -30,6 +30,8 @@
     "coinsReward": "কয়েন পুরস্কার",
     "packageName": "প্যাকেজের নাম",
     "enterPackageName": "প্যাকেজের নাম লিখুন",
+    "packageBadge": "প্যাকেজ ব্যাজ",
+    "enterPackageBadge": "প্যাকেজ ব্যাজ লিখুন",
     "description": "বিবরণ",
     "enterDescription": "প্যাকেজ বিবরণ লিখুন",
     "packageType": "প্যাকেজ ধরন",

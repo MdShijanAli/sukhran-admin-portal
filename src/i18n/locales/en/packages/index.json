@@ -29,6 +29,8 @@
     "basicInformation": "Basic Information",
     "packageInformation": "Package Information",
     "packageName": "Package Name",
+    "packageBadge": "Package Badge",
+    "enterPackageBadge": "Type package badge",
     "enterPackageName": "Enter package name",
     "description": "Description",
     "enterDescription": "Enter package description",
