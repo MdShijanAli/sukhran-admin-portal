@@ -95,13 +95,13 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="grid gap-3">
             <div className="space-y-1">
-              <Label htmlFor="email">{t("auth.email")}</Label>
+              <Label htmlFor="email">Email or Phone</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
                 <Input
                   id="email"
                   type="text"
-                  placeholder="admin@example.com"
+                  placeholder="admin@example.com or +1234567890"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10"

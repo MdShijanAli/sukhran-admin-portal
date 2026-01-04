@@ -31,7 +31,6 @@ export default function Profile() {
   const [lastName, setLastName] = useState(user.lastName || "");
   const [email, setEmail] = useState(user?.email || "");
   const [phone, setPhone] = useState(user.mobile || "");
-  const [location, setLocation] = useState("");
   const [showPassword, setShowPassword] = useState({
     old_password: false,
     new_password: false,
@@ -69,7 +68,6 @@ export default function Profile() {
         lastName: lastName,
         email: email,
         mobile: phone,
-        location: location,
       });
       console.log("Profile update response:", response);
       toast.success("Profile updated successfully");
@@ -276,6 +274,7 @@ export default function Profile() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      disabled
                     />
                   </div>
 
@@ -288,22 +287,7 @@ export default function Profile() {
                       id="phone"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="grid gap-2">
-                    <Label
-                      htmlFor="location"
-                      className="flex items-center gap-2"
-                    >
-                      <MapPin className="h-4 w-4" />
-                      {t("profile.location")}
-                    </Label>
-                    <Input
-                      id="location"
-                      value={location}
-                      placeholder="Enter your location"
-                      onChange={(e) => setLocation(e.target.value)}
+                      disabled
                     />
                   </div>
 
