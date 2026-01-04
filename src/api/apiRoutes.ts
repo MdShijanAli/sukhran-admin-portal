@@ -189,6 +189,8 @@ export const apiRoutes = {
     getAll: createApiUrl("admin/transactions"),
     getById: (id: number | string) => createApiUrl(`admin/transactions/${id}`),
     getStatistics: createApiUrl("admin/transactions/statistics"),
+    refundTransaction: (id: number | string) =>
+      createApiUrl(`admin/transactions/${id}/refund`),
   },
 
   coins: {

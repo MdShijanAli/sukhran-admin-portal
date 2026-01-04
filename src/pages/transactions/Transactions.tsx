@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Transaction } from "@/lib/types";
 import { useTransactionStore } from "@/stores/transactionStore";
@@ -9,6 +9,7 @@ import {
   DropdownMenuActions,
 } from "@/components/table/DropdownMenuActions";
 import ViewModal from "./modal/ViewModal";
+import RefundModal from "./modal/RefundModal";
 import { Badge } from "@/components/ui/badge";
 import {
   Eye,
@@ -34,6 +35,7 @@ const Transactions = () => {
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [showRefund, setShowRefund] = useState(false);
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {
@@ -43,6 +45,15 @@ const Transactions = () => {
   const handleViewDetails = (transaction: Transaction) => {
     setSelectedTransaction(transaction);
     setShowDetails(true);
+  };
+
+  const handleRefund = (transaction: Transaction) => {
+    setSelectedTransaction(transaction);
+    setShowRefund(true);
+  };
+
+  const handleRefundSuccess = () => {
+    refreshTable?.();
   };
 
   const getStatusBadge = (status: string) => {
@@ -87,13 +98,24 @@ const Transactions = () => {
   };
 
   // Define actions for dropdown menu
-  const transactionActions: ActionItem<Transaction>[] = [
-    {
-      label: t("view"),
-      icon: Eye,
-      onClick: handleViewDetails,
-    },
-  ];
+  const transactionActions = useMemo(
+    (): ActionItem<Transaction>[] => [
+      {
+        label: t("view"),
+        icon: Eye,
+        onClick: handleViewDetails,
+      },
+      {
+        label: t("refund"),
+        icon: DollarSign,
+        onClick: handleRefund,
+        show: (transaction) =>
+          hasPermission(permissions.transactions.refund) &&
+          transaction.status === "success",
+      },
+    ],
+    [t, handleViewDetails, handleRefund]
+  );
 
   // Define table columns
   const columns: Column<Transaction>[] = [
@@ -262,6 +284,15 @@ const Transactions = () => {
         open={showDetails}
         onClose={() => setShowDetails(false)}
         transactionId={selectedTransaction?.id || null}
+      />
+
+      <RefundModal
+        open={showRefund}
+        onClose={() => setShowRefund(false)}
+        transactionId={selectedTransaction?.id || null}
+        transactionAmount={selectedTransaction?.amount || 0}
+        paymentMethod={selectedTransaction?.paymentGateway || "online"}
+        onSuccess={handleRefundSuccess}
       />
     </div>
   );

@@ -12,6 +12,10 @@ const apiService = createApiService<Transaction>(
 
 interface TransactionService extends ApiService<Transaction> {
   getStatistics: () => Promise<unknown>;
+  refundTransaction: (
+    id: number | string,
+    data: { amount: number; reason: string } | FormData
+  ) => Promise<unknown>;
 }
 
 const transactionService: TransactionService = {
@@ -27,6 +31,30 @@ const transactionService: TransactionService = {
       return response.data;
     } catch (error) {
       console.error("Error fetching transaction statistics:", error);
+      throw error;
+    }
+  },
+
+  refundTransaction: async (
+    id: number | string,
+    data: { amount: number; reason: string } | FormData
+  ) => {
+    try {
+      const isFormData = data instanceof FormData;
+      const response = await apiClient.post(
+        apiRoutes.transactions.refundTransaction(id),
+        data,
+        isFormData
+          ? {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          : undefined
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error processing refund:", error);
       throw error;
     }
   },

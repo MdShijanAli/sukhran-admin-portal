@@ -71,6 +71,45 @@
     "viewDetails": "View Details",
     "close": "Close"
   },
+  "refund": {
+    "title": "Process Refund",
+    "processRefund": "Process Refund",
+    "cancel": "Cancel",
+    "alertMessage": "You are about to process a refund for this transaction. Maximum refundable amount:",
+    "refundType": "Refund Type",
+    "selectType": "Select refund type",
+    "types": {
+      "online": "Online Payment Refund",
+      "cod": "Cash on Delivery Refund"
+    },
+    "onlineHint": "Amount will be refunded to the customer's payment method",
+    "codHint": "Manual refund - proof of refund is required",
+    "amount": "Refund Amount",
+    "amountPlaceholder": "Enter refund amount",
+    "maxAmount": "Maximum refundable amount",
+    "reason": "Refund Reason",
+    "reasonPlaceholder": "Explain why this refund is being processed...",
+    "reasonHint": "Minimum 10 characters required",
+    "notes": "Additional Notes",
+    "notesPlaceholder": "Add any additional notes or instructions...",
+    "notesHint": "Optional notes for internal reference",
+    "proof": "Refund Proof",
+    "changeProof": "Change Proof",
+    "proofPlaceholder": "Click to upload proof of refund (Image or PDF)",
+    "proofHint": "Upload receipt, screenshot, or document as proof. Max 5MB",
+    "summary": "Refund Summary",
+    "refundAmount": "Refund Amount",
+    "proofAttached": "Proof Attached",
+    "invalidFileType": "Invalid file type. Please upload an image (JPEG, PNG, WebP) or PDF",
+    "fileTooLarge": "File size exceeds 5MB limit",
+    "noTransactionId": "Transaction ID is required",
+    "invalidAmount": "Please enter a valid refund amount",
+    "amountExceedsTransaction": "Refund amount cannot exceed transaction amount",
+    "reasonTooShort": "Refund reason must be at least 10 characters",
+    "proofRequired": "Proof of refund is required for COD transactions",
+    "success": "Refund processed successfully",
+    "failed": "Failed to process refund. Please try again"
+  },
   "messages": {
     "loadError": "Failed to load transaction details"
   }
