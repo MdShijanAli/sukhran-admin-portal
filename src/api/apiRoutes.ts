@@ -173,6 +173,9 @@ export const apiRoutes = {
       "admin/subscription-settings/preferred_delivery_dates"
     ),
     updateSetting: (key: string) => createApiUrl(`admin/settings/${key}`),
+    updateDeliveryDate: createApiUrl(
+      "admin/settings/min_delivery_lead_time_days"
+    ),
   },
 
   coupons: {

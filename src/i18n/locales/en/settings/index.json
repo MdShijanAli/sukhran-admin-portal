@@ -3,6 +3,7 @@
   "description": "Manage your store settings and preferences",
   "actions": {
     "save": "Save Changes",
+    "saving": "Saving...",
     "cancel": "Cancel",
     "add": "Add",
     "testEmail": "Send Test Email"
@@ -48,6 +49,10 @@
     "tab": "Business",
     "title": "Business Information",
     "description": "Update your store's business details and contact information",
+    "deliveryDate": "Delivery Dates",
+    "deliveryDateDescription": "Configure available delivery date options for customers",
+    "minDeliveryDate": "Minimum Delivery Date (in days)",
+    "minDeliveryDateDescription": "Minimum number of days required to process and deliver an order",
     "businessName": "Business Name",
     "businessEmail": "Business Email",
     "businessPhone": "Business Phone",

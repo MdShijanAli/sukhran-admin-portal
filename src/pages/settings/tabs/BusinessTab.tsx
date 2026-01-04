@@ -10,13 +10,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { toast } from "sonner";
 import settingsService from "@/services/settingsService";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -29,15 +22,6 @@ export default function BusinessTab() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-  const [businessName, setBusinessName] = useState("My E-Commerce Store");
-  const [businessEmail, setBusinessEmail] = useState("business@example.com");
-  const [businessPhone, setBusinessPhone] = useState("+880 1712-345678");
-  const [businessAddress, setBusinessAddress] = useState(
-    "123 Main Street, Dhaka"
-  );
-  const [taxId, setTaxId] = useState("TAX123456");
-  const [currency, setCurrency] = useState("BDT");
-  const [timezone, setTimezone] = useState("Asia/Dhaka");
 
   // API Settings
   const [vatPercentage, setVatPercentage] = useState<number>(0);
@@ -107,26 +91,6 @@ export default function BusinessTab() {
     }
   };
 
-  const handleSaveMinPackage = async () => {
-    try {
-      setIsSaving(true);
-      await settingsService.updateSetting(
-        "min_custom_package_amount",
-        minCustomPackageAmount
-      );
-      toast.success(t("settings.messages.businessSettingsSaved"));
-    } catch (error) {
-      console.error("Error saving min package:", error);
-      toast.error(t("settings.messages.saveError"));
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const handleSave = () => {
-    toast.success(t("settings.messages.businessSettingsSaved"));
-  };
-
   if (isLoading) {
     return (
       <div className="grid gap-3 md:grid-cols-2">
@@ -155,7 +119,7 @@ export default function BusinessTab() {
   return (
     <div className="grid gap-3 md:grid-cols-2">
       {/* Business Information */}
-      <Card>
+      {/* <Card>
         <CardHeader>
           <CardTitle>{t("settings.business.title")}</CardTitle>
           <CardDescription>
@@ -220,57 +184,9 @@ export default function BusinessTab() {
             )}
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
 
       <div className="space-y-3">
-        {/* Regional Settings */}
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("settings.business.regional")}</CardTitle>
-            <CardDescription>
-              {t("settings.business.regionalDescription")}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="currency">
-                {t("settings.business.currency")}
-              </Label>
-              <Select value={currency} onValueChange={setCurrency}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="BDT">BDT - Bangladeshi Taka</SelectItem>
-                  <SelectItem value="USD">USD - US Dollar</SelectItem>
-                  <SelectItem value="EUR">EUR - Euro</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="timezone">
-                {t("settings.business.timezone")}
-              </Label>
-              <Select value={timezone} onValueChange={setTimezone}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Asia/Dhaka">Asia/Dhaka</SelectItem>
-                  <SelectItem value="UTC">UTC</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex justify-end">
-              {hasPermission(permissions.settings.edit) && (
-                <Button onClick={handleSave} disabled={isSaving}>
-                  {t("settings.actions.save")}
-                </Button>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Pricing Settings */}
         <Card>
           <CardHeader>

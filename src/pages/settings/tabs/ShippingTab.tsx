@@ -28,6 +28,8 @@ export default function ShippingTab() {
   const [deliveryCharge, setDeliveryCharge] = useState<number>(0);
   const [freeShippingThreshold, setFreeShippingThreshold] = useState<number>(0);
   const [enableFreeShipping, setEnableFreeShipping] = useState<boolean>(false);
+  const [isDeliveryDateSaving, setIsDeliveryDateSaving] = useState(false);
+  const [deliveryDate, setDeliveryDate] = useState<number>(0);
 
   useEffect(() => {
     fetchSettings();
@@ -48,6 +50,8 @@ export default function ShippingTab() {
                 setFreeShippingThreshold(Number(setting.value));
               } else if (setting.key === "enable_free_delivery") {
                 setEnableFreeShipping(Boolean(setting.value));
+              } else if (setting.key === "min_delivery_lead_time_days") {
+                setDeliveryDate(Number(setting.value));
               }
             });
           }
@@ -99,6 +103,21 @@ export default function ShippingTab() {
       console.error("Error toggling free shipping:", error);
       toast.error(t("settings.messages.saveError"));
       setEnableFreeShipping(!checked);
+    }
+  };
+
+  const handleSaveDeliveryDate = async () => {
+    try {
+      setIsDeliveryDateSaving(true);
+      await settingsService.updateDeliveryDate(deliveryDate);
+      toast.success(t("settings.messages.businessSettingsSaved"));
+    } catch (error) {
+      console.error("Error saving delivery date:", error);
+      toast.error(
+        error.response?.data?.message || t("settings.messages.saveError")
+      );
+    } finally {
+      setIsDeliveryDateSaving(false);
     }
   };
 
@@ -162,6 +181,43 @@ export default function ShippingTab() {
           </div>
         </CardContent>
       </Card>
+
+      <div className="space-y-3">
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("settings.business.deliveryDate")}</CardTitle>
+            <CardDescription>
+              {t("settings.business.deliveryDateDescription")}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="minDeliveryDate">
+                {t("settings.business.minDeliveryDate")}
+              </Label>
+              <div className="flex gap-2">
+                <Input
+                  id="minDeliveryDate"
+                  type="number"
+                  step="0.1"
+                  value={deliveryDate}
+                  onChange={(e) => setDeliveryDate(Number(e.target.value))}
+                />
+                {hasPermission(permissions.settings.edit) && (
+                  <Button onClick={handleSaveDeliveryDate} disabled={isSaving}>
+                    {isDeliveryDateSaving
+                      ? t("settings.actions.saving")
+                      : t("settings.actions.save")}
+                  </Button>
+                )}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {t("settings.business.minDeliveryDateDescription")}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Free Shipping Settings */}
       <Card>

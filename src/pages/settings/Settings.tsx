@@ -22,16 +22,16 @@ function Settings() {
       label: t("settings.business.tab"),
       icon: Building2,
     },
-    {
-      id: "notifications",
-      label: t("settings.notifications.tab"),
-      icon: Bell,
-    },
-    {
-      id: "system",
-      label: t("settings.system.tab"),
-      icon: Settings2,
-    },
+    // {
+    //   id: "notifications",
+    //   label: t("settings.notifications.tab"),
+    //   icon: Bell,
+    // },
+    // {
+    //   id: "system",
+    //   label: t("settings.system.tab"),
+    //   icon: Settings2,
+    // },
     // {
     //   id: "payment",
     //   label: t("settings.payment.tab"),
@@ -90,9 +90,9 @@ function Settings() {
           <BusinessTab />
         </TabsContent>
 
-        <TabsContent value="notifications" className="space-y-3">
+        {/* <TabsContent value="notifications" className="space-y-3">
           <NotificationsTab />
-        </TabsContent>
+        </TabsContent> */}
 
         <TabsContent value="system" className="space-y-3">
           <SystemTab />

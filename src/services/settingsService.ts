@@ -146,6 +146,20 @@ const settingsService = {
     }
   },
 
+  // Update minimum delivery lead time days
+  updateDeliveryDate: async (days: number) => {
+    try {
+      const response = await apiClient.put(
+        apiRoutes.settings.updateDeliveryDate,
+        { value: days }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error updating delivery date:", error);
+      throw error;
+    }
+  },
+
   // Get legal document by type
   getLegalDocumentByType: async (
     type: "privacy_policy" | "terms_and_conditions"
