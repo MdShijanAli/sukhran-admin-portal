@@ -119,12 +119,12 @@ const Transactions = () => {
       label: t("transactions.columns.customer"),
       render: (transaction) => (
         <div>
-          <p className="font-medium">{transaction.customer.name}</p>
+          <p className="font-medium">{transaction?.customer?.name}</p>
           <p className="text-xs text-muted-foreground">
-            {transaction.customer.email}
+            {transaction?.customer?.email}
           </p>
           <p className="text-xs text-muted-foreground">
-            {transaction.customer.mobile}
+            {transaction?.customer?.mobile}
           </p>
         </div>
       ),
