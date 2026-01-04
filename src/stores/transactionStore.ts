@@ -28,6 +28,7 @@ interface TransactionState {
   isLoading: boolean;
   error: string | null;
   setItems: (transactions: unknown) => void;
+  updateItem: (id: number | string, data: unknown) => void;
   getTransactionById: (id: number | string) => Transaction | undefined;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -90,6 +91,18 @@ export const useTransactionStore = createStore<TransactionState>(
           (data as { meta: TransactionPaginationMeta })?.meta ||
           get().pagination,
       });
+    },
+
+    updateItem: (id: number | string, data: unknown) => {
+      const transaction =
+        (data as { data?: Partial<Transaction> })?.data || data;
+      set((state) => ({
+        transactions: state.transactions.map((r) =>
+          r.id === id ? { ...r, ...(transaction as Partial<Transaction>) } : r
+        ),
+        isLoading: false,
+        error: null,
+      }));
     },
 
     getTransactionById: (id: number | string) => {

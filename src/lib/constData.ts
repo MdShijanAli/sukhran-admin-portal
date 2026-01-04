@@ -28,6 +28,8 @@ const constData = {
     RETURN: "return",
     OTHER: "other",
   },
+
+  SSLCOMMERZ: "sslcommerz",
 };
 
 export default constData;

@@ -77,6 +77,7 @@ interface OrderService extends ApiService<Order> {
     orderId: number | string,
     data: CancelOrderPayload
   ) => Promise<unknown>;
+  markCODOrderAsPaid: (id: number | string, data: unknown) => Promise<unknown>;
 }
 
 const orderService: OrderService = {
@@ -334,6 +335,19 @@ const orderService: OrderService = {
       return response.data;
     } catch (error) {
       console.error("Error cancelling order:", error);
+      throw error;
+    }
+  },
+
+  markCODOrderAsPaid: async (id: number | string, data: unknown) => {
+    try {
+      const response = await apiClient.put(
+        apiRoutes.orders.markCODOrderAsPaid(id),
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error marking COD order as paid:", error);
       throw error;
     }
   },

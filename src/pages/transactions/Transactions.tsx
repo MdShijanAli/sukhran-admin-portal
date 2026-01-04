@@ -52,10 +52,6 @@ const Transactions = () => {
     setShowRefund(true);
   };
 
-  const handleRefundSuccess = () => {
-    refreshTable?.();
-  };
-
   const getStatusBadge = (status: string) => {
     const variants = {
       success: {
@@ -291,8 +287,7 @@ const Transactions = () => {
         onClose={() => setShowRefund(false)}
         transactionId={selectedTransaction?.id || null}
         transactionAmount={selectedTransaction?.amount || 0}
-        paymentMethod={selectedTransaction?.paymentGateway || "online"}
-        onSuccess={handleRefundSuccess}
+        paymentMethod={selectedTransaction?.paymentGateway || "cod"}
       />
     </div>
   );

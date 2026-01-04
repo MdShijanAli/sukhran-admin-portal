@@ -200,6 +200,20 @@ function Orders() {
     }
   };
 
+  const handleMarkAsPaid = async (order: Order) => {
+    try {
+      await orderService.markCODOrderAsPaid(order.id, {
+        payment_status: "paid",
+        notes: "Cash received from customer",
+      });
+      toast.success(t("orders.messages.markedAsPaid"));
+      // refreshTable?.();
+    } catch (error) {
+      console.error("Error marking order as paid:", error);
+      toast.error(t("orders.messages.failedToMarkAsPaid"));
+    }
+  };
+
   // Define actions for dropdown menu
   const orderActions = (order: Order): ActionItem<Order>[] => [
     {
@@ -213,9 +227,7 @@ function Orders() {
       onClick: handleEdit,
       show:
         hasPermission(permissions.orders.edit) &&
-        order.status !== "delivered" &&
-        order.status !== "cancelled" &&
-        order.status !== "returned",
+        (order.status === "pending" || order.status === "approved"),
     },
     {
       label: t("orders.actions.updateStatus"),
@@ -242,6 +254,12 @@ function Orders() {
       show:
         hasPermission(permissions.orders.delete) &&
         (order.status === "pending" || order.status === "cancelled"),
+    },
+    {
+      label: t("orders.actions.markAsPaid"),
+      icon: CheckCircle,
+      onClick: handleMarkAsPaid,
+      show: !import.meta.env.PROD,
     },
   ];
 
@@ -456,7 +474,7 @@ function Orders() {
       <FormModal
         open={dialogMode !== null}
         onClose={() => setDialogMode(null)}
-        editData={selectedOrder || undefined}
+        orderId={selectedOrder?.id || ""}
         onSuccess={() => refreshTable?.()}
       />
 

@@ -61,6 +61,7 @@
     "orders": "Orders",
     "package_orders": "Package Orders",
     "actions": "Actions",
+    "markAsPaid": "Mark as Paid",
     "edit": "Edit",
     "pauseOrder": "Pause Order",
     "setDeliveryDate": "Set Delivery Date"
@@ -154,7 +155,8 @@
     "failedToAssignAgent": "Failed to assign delivery agent",
     "failedToFetchFiltered": "Failed to fetch filtered orders",
     "filtersApplied": "Filters applied successfully",
-    "filtersCleared": "Filters cleared"
+    "filtersCleared": "Filters cleared",
+    "markedAsPaid": "Order marked as paid successfully"
   },
   "delete": {
     "title": "Delete Order",

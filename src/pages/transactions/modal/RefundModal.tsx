@@ -16,9 +16,9 @@ import transactionService from "@/services/transactionService";
 import { Upload, X, DollarSign, FileText, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import constData from "@/lib/constData";
 
 interface RefundFormData {
-  refund_type: "online" | "cod";
   amount: string;
   reason: string;
   notes: string;
@@ -31,7 +31,6 @@ interface RefundModalProps {
   transactionId: number | string | null;
   transactionAmount?: number;
   paymentMethod?: string;
-  onSuccess?: () => void;
 }
 
 export default function RefundModal({
@@ -39,14 +38,12 @@ export default function RefundModal({
   onClose,
   transactionId,
   transactionAmount = 0,
-  paymentMethod = "online",
-  onSuccess,
+  paymentMethod = "cod",
 }: RefundModalProps) {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [proofPreview, setProofPreview] = useState<string | null>(null);
   const [formData, setFormData] = useState<RefundFormData>({
-    refund_type: paymentMethod.toLowerCase() === "cod" ? "cod" : "online",
     amount: "",
     reason: "",
     notes: "",
@@ -56,7 +53,6 @@ export default function RefundModal({
   useEffect(() => {
     if (open) {
       setFormData({
-        refund_type: paymentMethod.toLowerCase() === "cod" ? "cod" : "online",
         amount: transactionAmount.toString(),
         reason: "",
         notes: "",
@@ -136,15 +132,10 @@ export default function RefundModal({
       return;
     }
 
-    if (formData.refund_type === "cod" && !formData.proof) {
-      toast.error(t("transactions.refund.proofRequired"));
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
-      if (formData.refund_type === "online") {
+      if (paymentMethod === constData.SSLCOMMERZ) {
         // Online refund - JSON body
         await transactionService.refundTransaction(transactionId, {
           amount: parseFloat(formData.amount),
@@ -161,17 +152,17 @@ export default function RefundModal({
         if (formData.proof) {
           submitData.append("refund_proof", formData.proof);
         }
-
-        await transactionService.refundTransaction(transactionId, submitData);
+        await transactionService.refundCODTransaction(
+          transactionId,
+          submitData
+        );
       }
 
       toast.success(t("transactions.refund.success"));
-      onSuccess?.();
       onClose();
 
       // Reset form
       setFormData({
-        refund_type: "online",
         amount: "",
         reason: "",
         notes: "",
@@ -210,37 +201,6 @@ export default function RefundModal({
             </span>
           </AlertDescription>
         </Alert>
-
-        {/* Refund Type */}
-        <div className="space-y-2">
-          <Label htmlFor="refund_type">
-            {t("transactions.refund.refundType")}{" "}
-            <span className="text-destructive">*</span>
-          </Label>
-          <Select
-            value={formData.refund_type}
-            onValueChange={(value: "online" | "cod") =>
-              updateField("refund_type", value)
-            }
-          >
-            <SelectTrigger id="refund_type">
-              <SelectValue placeholder={t("transactions.refund.selectType")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="online">
-                {t("transactions.refund.types.online")}
-              </SelectItem>
-              <SelectItem value="cod">
-                {t("transactions.refund.types.cod")}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-          <p className="text-xs text-muted-foreground">
-            {formData.refund_type === "online"
-              ? t("transactions.refund.onlineHint")
-              : t("transactions.refund.codHint")}
-          </p>
-        </div>
 
         {/* Refund Amount */}
         <div className="space-y-2">
@@ -289,7 +249,7 @@ export default function RefundModal({
         </div>
 
         {/* COD Specific Fields */}
-        {formData.refund_type === "cod" && (
+        {paymentMethod !== constData.SSLCOMMERZ && (
           <>
             {/* Additional Notes */}
             <div className="space-y-2">
@@ -425,7 +385,7 @@ export default function RefundModal({
                 {t("transactions.refund.refundType")}:
               </span>
               <span className="font-medium capitalize">
-                {formData.refund_type}
+                {paymentMethod !== constData.SSLCOMMERZ ? "cod" : "online"}
               </span>
             </div>
             <div className="flex justify-between text-sm">
@@ -436,15 +396,13 @@ export default function RefundModal({
                 {formData.amount || "0"} BDT
               </span>
             </div>
-            {formData.refund_type === "cod" && (
+            {paymentMethod !== constData.SSLCOMMERZ && (
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">
                   {t("transactions.refund.proofAttached")}:
                 </span>
                 <span className="font-medium">
-                  {formData.proof
-                    ? "✓ " + t("common.yes")
-                    : "✗ " + t("common.no")}
+                  {formData.proof ? "✓ " + t("yes") : "✗ " + t("no")}
                 </span>
               </div>
             )}

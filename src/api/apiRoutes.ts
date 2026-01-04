@@ -146,6 +146,8 @@ export const apiRoutes = {
       createApiUrl(`admin/orders/${id}/resume`),
     cancelOrder: (id: number | string) =>
       createApiUrl(`admin/orders/${id}/cancel`),
+    markCODOrderAsPaid: (id: number | string) =>
+      createApiUrl(`admin/orders/${id}/payment-status`),
   },
 
   delivery: {
@@ -194,6 +196,8 @@ export const apiRoutes = {
     getStatistics: createApiUrl("admin/transactions/statistics"),
     refundTransaction: (id: number | string) =>
       createApiUrl(`admin/transactions/${id}/refund`),
+    refundCODTransaction: (id: number | string) =>
+      createApiUrl(`admin/orders/${id}/refund-cod`),
   },
 
   coins: {
