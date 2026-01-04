@@ -17,7 +17,8 @@
     "linkDetails": "Link Details",
     "displayOrder": "Order",
     "status": "Status",
-    "actions": "Actions"
+    "actions": "Actions",
+    "createdAt": "Created At"
   },
 
   "linkTypes": {

@@ -193,16 +193,6 @@ function BannersTab() {
         ),
       },
       {
-        key: "display_order",
-        label: t("banners.columns.displayOrder"),
-        render: (banner) => (
-          <span className="font-mono text-sm font-medium">
-            {banner.display_order}
-          </span>
-        ),
-        className: "text-center",
-      },
-      {
         key: "status",
         label: t("banners.columns.status"),
         render: (banner) => (
@@ -223,11 +213,9 @@ function BannersTab() {
       },
       {
         key: "created_at",
-        label: t("common.createdAt"),
+        label: t("banners.columns.createdAt"),
         render: (banner) => (
-          <div className="w-[100px] text-xs">
-            {formatDate(banner.created_at)}
-          </div>
+          <div className="w-[100px]">{formatDate(banner.created_at)}</div>
         ),
       },
       {

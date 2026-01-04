@@ -17,7 +17,8 @@
     "linkDetails": "লিঙ্ক বিস্তারিত",
     "displayOrder": "ক্রম",
     "status": "অবস্থা",
-    "actions": "কার্যক্রম"
+    "actions": "কার্যক্রম",
+    "createdAt": "তৈরির তারিখ"
   },
 
   "linkTypes": {

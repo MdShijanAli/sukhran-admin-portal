@@ -187,6 +187,7 @@ export function BaseTableList<T>({
     store.tickets ||
     store.notifications ||
     store.referrals ||
+    store.banners ||
     []) as T[];
   const isLoading = store.isLoading || false;
   const pagination = store.pagination;
@@ -203,6 +204,7 @@ export function BaseTableList<T>({
     async (forceFetch = false) => {
       // Check if we should skip fetching
       // Get fresh data from store at call time to avoid stale closures
+      console.log("Store at fetch time:", store);
       const currentData = (store.items ||
         store.categories ||
         store.orders ||

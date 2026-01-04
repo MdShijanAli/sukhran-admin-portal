@@ -16,6 +16,11 @@ import { toast } from "sonner";
 import bannerService from "@/services/bannerService";
 import { Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ComboboxSelect } from "@/components/custom/ComboboxSelect";
+import { usePackageStore } from "@/stores/packageStore";
+import { useProductStore } from "@/stores/productStore";
+import packageService from "@/services/packageService";
+import productService from "@/services/productService";
 
 interface BannerFormData {
   title: string;
@@ -40,6 +45,8 @@ export default function FormModal({
   editData,
 }: BannerDialogProps) {
   const { t } = useTranslation();
+  const packageStore = usePackageStore();
+  const productStore = useProductStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -415,12 +422,30 @@ export default function FormModal({
               {t("banners.form.package")}{" "}
               <span className="text-destructive">*</span>
             </Label>
-            <Input
-              id="package_id"
-              type="text"
+            <ComboboxSelect
+              service={packageService}
+              store={packageStore}
+              storeDataKey="packages"
+              enableApiSearch={true}
               value={formData.package_id}
-              onChange={(e) => updateField("package_id", e.target.value)}
+              onValueChange={(value) =>
+                updateField("package_id", value.toString())
+              }
               placeholder={t("banners.form.packagePlaceholder")}
+              searchPlaceholder="Search packages..."
+              emptyText="No packages found"
+              getOptionValue={(pkg) => pkg.id.toString()}
+              getOptionLabel={(pkg) =>
+                pkg?.name + ` - ${pkg.pricing?.currentPrice} BDT`
+              }
+              renderOption={(pkg) => (
+                <div className="flex flex-col">
+                  <span className="font-medium">{pkg.name}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {pkg.pricing?.currentPrice} BDT
+                  </span>
+                </div>
+              )}
             />
             <p className="text-xs text-muted-foreground">
               {t("banners.form.packageHint")}
@@ -434,12 +459,28 @@ export default function FormModal({
               {t("banners.form.product")}{" "}
               <span className="text-destructive">*</span>
             </Label>
-            <Input
-              id="product_id"
-              type="text"
+            <ComboboxSelect
+              service={productService}
+              store={productStore}
+              storeDataKey="products"
+              enableApiSearch={true}
               value={formData.product_id}
-              onChange={(e) => updateField("product_id", e.target.value)}
+              onValueChange={(value) =>
+                updateField("product_id", value.toString())
+              }
               placeholder={t("banners.form.productPlaceholder")}
+              searchPlaceholder="Search products..."
+              emptyText="No products found"
+              getOptionValue={(product) => product.id.toString()}
+              getOptionLabel={(product) => product?.name}
+              renderOption={(product) => (
+                <div className="flex flex-col">
+                  <span className="font-medium">{product.name}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {product.category?.name}
+                  </span>
+                </div>
+              )}
             />
             <p className="text-xs text-muted-foreground">
               {t("banners.form.productHint")}
