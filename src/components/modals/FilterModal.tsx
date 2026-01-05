@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BaseModal } from "@/components/modals";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
@@ -41,6 +42,11 @@ interface FilterModalProps<T = unknown> {
   store?: StoreWithData<T>;
   // Additional query params to include with filters
   additionalParams?: Record<string, string>;
+  // Callback to get active filters for display
+  onFiltersChange?: (
+    filters: Record<string, string>,
+    activeCount: number
+  ) => void;
 }
 
 export default function FilterModal<T = unknown>({
@@ -57,9 +63,15 @@ export default function FilterModal<T = unknown>({
   serviceMethod,
   store,
   additionalParams = {},
+  onFiltersChange,
 }: FilterModalProps<T>) {
   const [filterData, setFilterData] = useState<Record<string, string>>({});
   const [isApplying, setIsApplying] = useState(false);
+
+  // Calculate active filters count (excluding "all" and empty values)
+  const activeFiltersCount = Object.entries(filterData).filter(
+    ([_, value]) => value && value !== "all" && value !== ""
+  ).length;
 
   // Internal method to fetch data with filters
   const fetchWithFilters = async (filters: Record<string, string>) => {
@@ -138,6 +150,11 @@ export default function FilterModal<T = unknown>({
         onApplyFilters(filterData);
       }
 
+      // Notify parent about filter changes
+      if (onFiltersChange) {
+        onFiltersChange(filterData, activeFiltersCount);
+      }
+
       // If service is provided, fetch data automatically
       if (service && store) {
         await fetchWithFilters(filterData);
@@ -163,6 +180,11 @@ export default function FilterModal<T = unknown>({
     }
     if (onClearFilters) {
       onClearFilters();
+    }
+
+    // Notify parent about cleared filters
+    if (onFiltersChange) {
+      onFiltersChange(clearedFilters, 0);
     }
 
     // If service is provided, fetch data with cleared filters
@@ -201,7 +223,11 @@ export default function FilterModal<T = unknown>({
     <BaseModal
       open={open}
       onOpenChange={onClose}
-      title={title}
+      title={
+        activeFiltersCount > 0
+          ? `${title} (${activeFiltersCount} active)`
+          : title
+      }
       onSubmit={handleApply}
       submitButtonText={submitButtonText}
       closeButtonText={clearButtonText}

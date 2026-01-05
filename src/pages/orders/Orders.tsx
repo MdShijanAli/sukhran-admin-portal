@@ -57,6 +57,10 @@ function Orders() {
     payment_status: "",
     payment_mode: "",
   });
+  const [activeFiltersCount, setActiveFiltersCount] = useState(0);
+  const [activeFiltersList, setActiveFiltersList] = useState<
+    Array<{ key: string; label: string; value: string }>
+  >([]);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -95,12 +99,37 @@ function Orders() {
     toast.success(t("orders.messages.filtersApplied"));
   };
 
+  const handleFiltersChange = (
+    filters: Record<string, string>,
+    count: number
+  ) => {
+    // Build active filters list for display
+    const activeList: Array<{ key: string; label: string; value: string }> = [];
+    orderFilterConfigs.forEach((config) => {
+      const value = filters[config.key];
+      if (value && value !== "all" && value !== "") {
+        const option = config.options.find((opt) => opt.value === value);
+        if (option) {
+          activeList.push({
+            key: config.key,
+            label: config.label,
+            value: option.label,
+          });
+        }
+      }
+    });
+    setActiveFiltersList(activeList);
+    setActiveFiltersCount(count);
+  };
+
   const handleClearFilters = () => {
     setFilterData({
       status: "all",
       payment_status: "all",
       payment_mode: "all",
     });
+    setActiveFiltersCount(0);
+    setActiveFiltersList([]);
     toast.info(t("orders.messages.filtersCleared"));
     setShowFilterModal(false);
   };
@@ -432,9 +461,21 @@ function Orders() {
             <p className="text-muted-foreground">{t("orders.subtitle")}</p>
           </div>
           <div className="flex items-center gap-3">
-            <Button variant="outline" onClick={() => setShowFilterModal(true)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowFilterModal(true)}
+              className="relative"
+            >
               <Filter className="mr-2 h-4 w-4" />
               {t("filter")}
+              {activeFiltersCount > 0 && (
+                <Badge
+                  variant="default"
+                  className="ml-2 h-5 w-5 rounded-full p-0 flex items-center justify-center"
+                >
+                  {activeFiltersCount}
+                </Badge>
+              )}
             </Button>
             <TabsList className="gap-2">
               <TabsTrigger value="orders" className="gap-2">
@@ -448,6 +489,29 @@ function Orders() {
             </TabsList>
           </div>
         </div>
+
+        {/* Active Filters Display */}
+        {activeFiltersList.length > 0 && (
+          <div className="flex items-center gap-2 mb-4 flex-wrap">
+            <span className="text-sm text-muted-foreground">
+              {t("orders.filter.activeFilters")}:
+            </span>
+            {activeFiltersList.map((filter) => (
+              <Badge key={filter.key} variant="secondary" className="gap-1">
+                <span className="text-xs font-medium">{filter.label}:</span>
+                <span className="text-xs">{filter.value}</span>
+              </Badge>
+            ))}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleClearFilters}
+              className="h-6 text-xs"
+            >
+              {t("orders.filter.clearAll")}
+            </Button>
+          </div>
+        )}
 
         <TabsContent value="orders" className="mt-0">
           <BaseTableList<Order>
@@ -519,6 +583,7 @@ function Orders() {
         currentFilters={filterData}
         onApplyFilters={handleApplyFilters}
         onClearFilters={handleClearFilters}
+        onFiltersChange={handleFiltersChange}
         submitButtonText={t("orders.filter.apply")}
         clearButtonText={t("orders.filter.clear")}
       />

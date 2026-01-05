@@ -173,7 +173,9 @@
     "paymentStatus": "Payment Status",
     "paymentMode": "Payment Mode",
     "apply": "Apply Filters",
-    "clear": "Clear Filters"
+    "clear": "Clear Filters",
+    "activeFilters": "Active Filters",
+    "clearAll": "Clear All"
   },
   "tabs": {
     "regularOrders": "Regular Orders",
