@@ -1,27 +1,25 @@
 const permissions = {
-  // Dashboard
-  dashboard: {
-    view: "dashboard.view",
+  // activity_logs
+  activity_logs: {
+    view: "activity_logs.view",
+    view_own: "activity_logs.view_own",
   },
 
-  // Users Management
-  users: {
-    view: "users.view",
-    create: "users.create",
-    edit: "users.update",
-    delete: "users.delete",
-    restore: "users.restore",
-    forceDelete: "users.force_delete",
-    resetPassword: "users.reset_password",
+  // banners
+  banners: {
+    create: "banners.create",
+    reorder: "banners.reorder",
+    view: "banners.view",
+    edit: "banners.update",
+    delete: "banners.delete",
   },
 
-  // Roles Management
-  roles: {
-    view: "roles.view",
-    create: "roles.create",
-    edit: "roles.update",
-    delete: "roles.delete",
-    assignPermissions: "roles.assign_permissions",
+  brands: {
+    view: "brands.view",
+    create: "brands.create",
+    edit: "brands.update",
+    delete: "brands.delete",
+    reorder: "brands.reorder",
   },
 
   // Categories Management
@@ -32,54 +30,19 @@ const permissions = {
     delete: "categories.delete",
   },
 
-  activity_logs: {
-    view: "activity_logs.view",
-    view_own: "activity_logs.view_own",
+  coins: {
+    view: "coins.view",
+    manage: "coins.manage",
+    send: "coins.send",
+    view_transactions: "coins.view_transactions",
   },
 
-  // Products Management
-  products: {
-    view: "products.view",
-    create: "products.create",
-    edit: "products.update",
-    delete: "products.delete",
-  },
-
-  // Packages Management
-  packages: {
-    view: "packages.view",
-    create: "packages.create",
-    edit: "packages.update",
-    delete: "packages.delete",
-  },
-
-  package_schedule_options: {
-    view: "package_schedule_options.view",
-    create: "package_schedule_options.create",
-    edit: "package_schedule_options.update",
-    delete: "package_schedule_options.delete",
-  },
-
-  // Orders Management
-  orders: {
-    view: "orders.view",
-    create: "orders.create",
-    edit: "orders.update",
-    manage: "orders.manage",
-    modify_items: "orders.modify_items",
-    delete: "orders.delete",
-    updateStatus: "orders.update_status",
-    updateDeliveryTime: "orders.update_delivery_time",
-  },
-
-  // Delivery Management
-  delivery: {
-    view: "delivery.view",
-    create: "delivery.create",
-    edit: "delivery.update",
-    delete: "delivery.delete",
-    assignAgent: "delivery.assign_agent",
-    track: "delivery.track",
+  // Coupons
+  coupons: {
+    view: "coupons.view",
+    create: "coupons.create",
+    edit: "coupons.update",
+    delete: "coupons.delete",
   },
 
   // Coverage Areas
@@ -91,11 +54,136 @@ const permissions = {
     bulk_action: "coverage_areas.bulk_action",
   },
 
+  // donations
+  donations: {
+    view: "donations.view",
+    create: "donations.create",
+    edit: "donations.update",
+    delete: "donations.delete",
+    manage: "donations.manage",
+  },
+
+  legal_documents: {
+    create: "legal_documents.create",
+    view: "legal_documents.view",
+    edit: "legal_documents.update",
+    delete: "legal_documents.delete",
+  },
+
+  // Notifications
+  notifications: {
+    view: "notifications.view",
+    send: "notifications.send",
+    delete: "notifications.delete",
+    test: "notifications.test",
+  },
+
+  // Orders Management
+  orders: {
+    delete: "orders.delete",
+    manage: "orders.manage",
+    modify_items: "orders.modify_items",
+    refund: "orders.refund",
+    edit: "orders.update",
+    view: "orders.view",
+  },
+
+  package_schedule_options: {
+    view: "package_schedule_options.view",
+    create: "package_schedule_options.create",
+    edit: "package_schedule_options.update",
+    delete: "package_schedule_options.delete",
+  },
+
+  // Packages Management
+  packages: {
+    view: "packages.view",
+    create: "packages.create",
+    edit: "packages.update",
+    delete: "packages.delete",
+  },
+
+  // Products Management
+  products: {
+    view: "products.view",
+    create: "products.create",
+    edit: "products.update",
+    delete: "products.delete",
+  },
+
+  // Referrals
+  referrals: {
+    view: "referrals.view",
+    manage: "referrals.manage",
+    update_settings: "referrals.update_settings",
+    view_settings: "referrals.view_settings",
+  },
+
+  // Roles Management
+  roles: {
+    view: "roles.view",
+    create: "roles.create",
+    edit: "roles.update",
+    delete: "roles.delete",
+    assignPermissions: "roles.assign_permissions",
+  },
+
+  // Settings
+  settings: {
+    view: "settings.view",
+    create: "settings.create",
+    edit: "settings.update",
+    delete: "settings.delete",
+  },
+
+  subscriptions: {
+    view: "subscriptions.view",
+    edit: "subscriptions.update",
+    delete: "subscriptions.delete",
+    settings: "subscriptions.manage_settings",
+  },
+
+  // Support
+  support: {
+    create: "support.create",
+    delete: "support.delete",
+    edit: "support.edit",
+    manage: "support.manage",
+    view: "support.view",
+    search: "support.search",
+  },
+
   // Financial
   transactions: {
-    view: "transactions.view",
     export: "transactions.export",
     refund: "transactions.refund",
+    view: "transactions.view",
+  },
+
+  // Users Management
+  users: {
+    create: "users.create",
+    delete: "users.delete",
+    forceDelete: "users.force_delete",
+    resetPassword: "users.reset_password",
+    restore: "users.restore",
+    edit: "users.update",
+    view: "users.view",
+  },
+
+  // Dashboard
+  dashboard: {
+    view: "dashboard.view",
+  },
+  // --------------------------------------------------------------------
+  // Delivery Management
+  delivery: {
+    view: "delivery.view",
+    create: "delivery.create",
+    edit: "delivery.update",
+    delete: "delivery.delete",
+    assignAgent: "delivery.assign_agent",
+    track: "delivery.track",
   },
 
   // Loyalty & Rewards
@@ -114,31 +202,10 @@ const permissions = {
     delete: "marketing.delete",
   },
 
-  // Support
-  support: {
-    view: "support.view",
-    respond: "support.respond",
-  },
-
   // Analytics
   analytics: {
     view: "analytics.view",
     export: "analytics.export",
-  },
-
-  // Coupons
-  coupons: {
-    view: "coupons.view",
-    create: "coupons.create",
-    edit: "coupons.update",
-    delete: "coupons.delete",
-  },
-
-  coins: {
-    view: "coins.view",
-    manage: "coins.manage",
-    send: "coins.send",
-    view_transactions: "coins.view_transactions",
   },
 
   // Content Management
@@ -164,48 +231,10 @@ const permissions = {
     reject: "returns.reject",
   },
 
-  // donations
-  donations: {
-    view: "donations.view",
-    create: "donations.create",
-    edit: "donations.update",
-    delete: "donations.delete",
-    manage: "donations.manage",
-  },
-
-  // Notifications
-  notifications: {
-    view: "notifications.view",
-    create: "notifications.create",
-    send: "notifications.send",
-  },
-
-  // Settings
-  settings: {
-    view: "settings.view",
-    create: "settings.create",
-    edit: "settings.update",
-    delete: "settings.delete",
-  },
-
   // Reports
   reports: {
     view: "reports.view",
     export: "reports.export",
-  },
-
-  subscriptions: {
-    view: "subscriptions.view",
-    create: "subscriptions.create",
-    edit: "subscriptions.update",
-    delete: "subscriptions.delete",
-    settings: "subscriptions.manage_settings",
-  },
-
-  // Referrals
-  referrals: {
-    view: "referrals.view",
-    manage: "referrals.manage",
   },
 };
 
