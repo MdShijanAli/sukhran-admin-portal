@@ -1,7 +1,7 @@
 {
   "title": "Brands",
   "description": "Manage your product brands",
-  "createBrand": "Create Brand",
+  "createBrand": "Add",
   "searchPlaceholder": "Search by brand name...",
   "noBrandsFound": "No brands found",
   "totalBrands": "Total Brands",
