@@ -37,6 +37,7 @@ import PackageSettings from "@/pages/package/settings/PackageSettings";
 import Donations from "@/pages/donations";
 import CreateSupport from "@/pages/supports/CreateSupport";
 import Referrals from "@/pages/referrals/Referrals";
+import Brands from "@/pages/brands/Brands";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -94,6 +95,14 @@ const AppRoutes: React.FC = () => {
           element={
             <PrivateRoute>
               <Products />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="brands"
+          element={
+            <PrivateRoute>
+              <Brands />
             </PrivateRoute>
           }
         />

@@ -291,4 +291,14 @@ export const apiRoutes = {
     toggleStatus: (id: number | string) =>
       createApiUrl(`admin/banners/${id}/toggle`),
   },
+
+  brands: {
+    getAll: createApiUrl("admin/brands"),
+    getById: (id: number | string) => createApiUrl(`admin/brands/${id}`),
+    create: createApiUrl("admin/brands"),
+    update: (id: number | string) => createApiUrl(`admin/brands/${id}`),
+    delete: (id: number | string) => createApiUrl(`admin/brands/${id}`),
+    toggleStatus: (id: number | string) =>
+      createApiUrl(`admin/brands/${id}/toggle-status`),
+  },
 };

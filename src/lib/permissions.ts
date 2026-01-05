@@ -175,7 +175,7 @@ const permissions = {
   dashboard: {
     view: "dashboard.view",
   },
-  // --------------------------------------------------------------------
+  // ---------------------------------- Extra ---------------------------------- //
   // Delivery Management
   delivery: {
     view: "delivery.view",

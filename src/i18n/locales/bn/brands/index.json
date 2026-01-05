@@ -1,0 +1,78 @@
+{
+  "title": "ব্র্যান্ড",
+  "description": "আপনার পণ্যের ব্র্যান্ড পরিচালনা করুন",
+  "createBrand": "ব্র্যান্ড তৈরি করুন",
+  "searchPlaceholder": "ব্র্যান্ড নাম দিয়ে অনুসন্ধান করুন...",
+  "noBrandsFound": "কোন ব্র্যান্ড পাওয়া যায়নি",
+  "totalBrands": "মোট ব্র্যান্ড",
+  "activeBrands": "সক্রিয় ব্র্যান্ড",
+  "inactiveBrands": "নিষ্ক্রিয় ব্র্যান্ড",
+  "status": {
+    "active": "সক্রিয়",
+    "inactive": "নিষ্ক্রিয়"
+  },
+  "columns": {
+    "sl": "ক্রমিক",
+    "image": "ছবি",
+    "title": "শিরোনাম",
+    "description": "বিবরণ",
+    "displayOrder": "প্রদর্শন ক্রম",
+    "status": "অবস্থা",
+    "actions": "কার্যক্রম"
+  },
+  "actions": {
+    "viewDetails": "বিস্তারিত দেখুন",
+    "editBrand": "ব্র্যান্ড সম্পাদনা করুন",
+    "deleteBrand": "ব্র্যান্ড মুছুন"
+  },
+  "form": {
+    "createNewBrand": "নতুন ব্র্যান্ড তৈরি করুন",
+    "editBrand": "ব্র্যান্ড সম্পাদনা করুন",
+    "title": "ব্র্যান্ড শিরোনাম",
+    "titlePlaceholder": "যেমন: Nike",
+    "titleHelp": "একটি অনন্য এবং বর্ণনামূলক ব্র্যান্ড নাম লিখুন",
+    "description": "বিবরণ",
+    "descriptionPlaceholder": "যেমন: Just Do It - প্রিমিয়াম অ্যাথলেটিক পোশাক এবং জুতা",
+    "image": "ব্র্যান্ড ছবি",
+    "uploadImage": "ব্র্যান্ড ছবি আপলোড করতে ক্লিক করুন",
+    "imageHelp": "PNG, JPG বা WEBP (সর্বোচ্চ ৫MB)। প্রস্তাবিত আকার: ৮০০x৮০০px",
+    "chooseFile": "ফাইল নির্বাচন করুন",
+    "displayOrder": "প্রদর্শন ক্রম",
+    "displayOrderPlaceholder": "যেমন: ১",
+    "displayOrderHelp": "কম সংখ্যা তালিকায় প্রথমে প্রদর্শিত হয়",
+    "status": "সক্রিয় অবস্থা",
+    "statusHelp": "এই ব্র্যান্ডটি সক্রিয় বা নিষ্ক্রিয় করুন",
+    "updateBrand": "ব্র্যান্ড আপডেট করুন",
+    "createBrand": "ব্র্যান্ড তৈরি করুন",
+    "characters": "অক্ষর"
+  },
+  "view": {
+    "brandDetails": "ব্র্যান্ড বিবরণ",
+    "description": "বিবরণ",
+    "displayOrder": "প্রদর্শন ক্রম",
+    "status": "অবস্থা",
+    "noImage": "কোন ছবি উপলব্ধ নেই"
+  },
+  "messages": {
+    "titleTooShort": "ব্র্যান্ড শিরোনাম কমপক্ষে ২ অক্ষরের হতে হবে",
+    "descriptionTooShort": "বিবরণ কমপক্ষে ১০ অক্ষরের হতে হবে",
+    "imageRequired": "অনুগ্রহ করে একটি ব্র্যান্ড ছবি আপলোড করুন",
+    "imageTooLarge": "ছবির আকার ৫MB এর বেশি হতে পারবে না",
+    "invalidImageType": "শুধুমাত্র ছবি ফাইল অনুমোদিত",
+    "invalidDisplayOrder": "প্রদর্শন ক্রম কমপক্ষে ১ হতে হবে",
+    "brandCreated": "ব্র্যান্ড সফলভাবে তৈরি হয়েছে",
+    "brandUpdated": "ব্র্যান্ড সফলভাবে আপডেট হয়েছে",
+    "brandDeleted": "ব্র্যান্ড সফলভাবে মুছে ফেলা হয়েছে",
+    "brandActivated": "ব্র্যান্ড সফলভাবে সক্রিয় করা হয়েছে",
+    "brandDeactivated": "ব্র্যান্ড সফলভাবে নিষ্ক্রিয় করা হয়েছে",
+    "failedToCreate": "ব্র্যান্ড তৈরি করতে ব্যর্থ",
+    "failedToUpdate": "ব্র্যান্ড আপডেট করতে ব্যর্থ",
+    "failedToDelete": "ব্র্যান্ড মুছে ফেলতে ব্যর্থ",
+    "failedToLoad": "ব্র্যান্ড বিবরণ লোড করতে ব্যর্থ",
+    "failedToToggleStatus": "ব্র্যান্ড স্ট্যাটাস আপডেট করতে ব্যর্থ"
+  },
+  "deleteDialog": {
+    "title": "ব্র্যান্ড মুছুন",
+    "description": "আপনি কি নিশ্চিত যে আপনি \"{{name}}\" ব্র্যান্ডটি মুছে ফেলতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।"
+  }
+}

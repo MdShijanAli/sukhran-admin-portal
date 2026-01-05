@@ -124,6 +124,34 @@ export interface CoverageAreaPaginationMeta {
   stats?: CoverageAreaStats;
 }
 
+export interface Brand {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  image_url: string;
+  is_active: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BrandFormData {
+  title: string;
+  description: string;
+  image?: File;
+  is_active: boolean;
+  display_order: number;
+}
+
+export interface BrandPaginationMeta extends PaginationMeta {
+  stats?: {
+    total_brands: number;
+    active_brands: number;
+    inactive_brands: number;
+  };
+}
+
 export interface PackageProduct {
   id: number;
   name: string;

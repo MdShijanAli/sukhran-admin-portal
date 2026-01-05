@@ -18,6 +18,7 @@ import referrals from "./referrals/index.json";
 import support from "./support/index.json";
 import notifications from "./notifications/index.json";
 import banners from "./banners/index.json";
+import brands from "./brands/index.json";
 
 /**
  * follow the file structure.
@@ -46,6 +47,7 @@ const combined = {
   support,
   notifications,
   banners,
+  brands,
 };
 
 export default combined;

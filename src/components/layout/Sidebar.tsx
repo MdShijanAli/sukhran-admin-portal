@@ -53,6 +53,12 @@ const menuItems = [
   },
   {
     icon: FileText,
+    label: "nav.brands",
+    path: "/brands",
+    permission: permissions.brands.view,
+  },
+  {
+    icon: FileText,
     label: "nav.categories",
     path: "/categories",
     permission: permissions.categories.view,

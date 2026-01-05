@@ -73,7 +73,7 @@ export function BaseTable<T>({
     onSelectionChange?.(newSelected);
   };
 
-  const selectableItems = data.filter(
+  const selectableItems = data?.filter(
     (item) => !checkboxCondition || checkboxCondition(item)
   );
   const isAllSelected =
