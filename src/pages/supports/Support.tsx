@@ -17,10 +17,14 @@ import ViewTicketModal from "./modal/ViewTicketModal";
 import CreateTicketModal from "./modal/CreateTicketModal";
 import StatisticsTab from "./tabs/StatisticsTab";
 import { useNavigate } from "react-router-dom";
+import { withPermission } from "@/hoc/withPermission";
+import permissions from "@/lib/permissions";
+import usePermissions from "@/hooks/use-permissions";
 
 function Support() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { hasPermission } = usePermissions();
 
   // State for modals
   const [showCreateTicket, setShowCreateTicket] = useState(false);
@@ -115,10 +119,12 @@ function Support() {
           <h1 className="text-3xl font-bold">{t("support.title")}</h1>
           <p className="text-muted-foreground mt-1">{t("support.subtitle")}</p>
         </div>
-        <Button onClick={handleCreateTicket}>
-          <Plus className="mr-2 h-4 w-4" />
-          {t("support.addTicket")}
-        </Button>
+        {hasPermission(permissions.support.create) && (
+          <Button onClick={handleCreateTicket}>
+            <Plus className="mr-2 h-4 w-4" />
+            {t("support.addTicket")}
+          </Button>
+        )}
       </div>
 
       {/* Tabs */}
@@ -210,4 +216,4 @@ function Support() {
   );
 }
 
-export default Support;
+export default withPermission(Support, permissions.support.view);

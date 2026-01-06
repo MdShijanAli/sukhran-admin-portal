@@ -12,6 +12,8 @@ import FilterModal from "@/components/modals/FilterModal";
 import constData from "@/lib/constData";
 import { ActionItem, DropdownMenuActions } from "@/components/table";
 import getSerialNumber from "@/lib/getSerialNumber";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
 
 interface TicketsTabProps {
   onView: (ticket: SupportTicket) => void;
@@ -34,6 +36,7 @@ export default function TicketsTab({
 }: TicketsTabProps) {
   const { t } = useTranslation();
   const store = useSupportStore();
+  const { hasPermission } = usePermissions();
 
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [filterData, setFilterData] = useState<Record<string, string>>({});
@@ -79,31 +82,49 @@ export default function TicketsTab({
       label: t("support.actions.changeStatus"),
       icon: Edit,
       onClick: onChangeStatus,
-      show: ticket.status !== "closed" && ticket.status !== "resolved",
+      show:
+        ticket.status !== "closed" &&
+        ticket.status !== "resolved" &&
+        hasPermission(permissions.support.edit),
     },
     {
       label: t("support.actions.changePriority"),
       icon: Flag,
       onClick: onChangePriority,
-      show: ticket.status !== "closed" && ticket.status !== "resolved",
+      show:
+        ticket.status !== "closed" &&
+        ticket.status !== "resolved" &&
+        hasPermission(permissions.support.edit),
     },
     {
       label: t("support.actions.resolve"),
       icon: Flag,
       onClick: onResolve,
-      show: ticket.status !== "resolved" && ticket.status !== "closed",
+      show:
+        ticket.status !== "resolved" &&
+        ticket.status !== "closed" &&
+        hasPermission(permissions.support.edit),
+      separator: true,
     },
     {
       label: t("support.actions.close"),
       icon: XCircle,
       onClick: onClose,
-      show: ticket.status !== "closed" && ticket.status === "resolved",
+      show:
+        ticket.status !== "closed" &&
+        ticket.status === "resolved" &&
+        hasPermission(permissions.support.edit),
+      separator: true,
     },
     {
       label: t("support.actions.delete"),
       icon: Trash2,
       onClick: onDelete,
-      show: ticket.status !== "closed" && ticket.status !== "resolved",
+      variant: "destructive",
+      show:
+        ticket.status !== "closed" &&
+        ticket.status !== "resolved" &&
+        hasPermission(permissions.support.delete),
     },
   ];
 
