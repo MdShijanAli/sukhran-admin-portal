@@ -202,7 +202,7 @@ const Users = () => {
       onClick: handleDelete,
       show:
         !user.isDeleted &&
-        user.role.name !== constData.roles.ADMIN &&
+        user?.role?.name !== constData.roles.ADMIN &&
         hasPermission(permissions.users.delete),
       variant: "destructive",
       separator: true,
@@ -277,7 +277,7 @@ const Users = () => {
             </div>
           ) : (
             <div className="flex items-center justify-end gap-2">
-              {user.role.name !== constData.roles.ADMIN ? (
+              {user?.role?.name !== constData.roles.ADMIN ? (
                 <>
                   {hasPermission(permissions.users.delete) && (
                     <Switch

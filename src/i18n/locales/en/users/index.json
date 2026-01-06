@@ -91,7 +91,8 @@
     "userUpdated": "User updated successfully",
     "failedToCreate": "Failed to create user",
     "failedToUpdate": "Failed to update user",
-    "failedToLoadRoles": "Failed to load roles"
+    "failedToLoadRoles": "Failed to load roles",
+    "submissionFailed": "Failed to submit the form"
   },
   "delete": {
     "title": "Delete User",

@@ -110,13 +110,21 @@ export default function FormModal({
 
       onSuccess?.();
       onClose();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error submitting form:", error);
-      toast.error(
-        isEditing
-          ? t("users.messages.failedToUpdate")
-          : t("users.messages.failedToCreate")
-      );
+
+      // Handle validation errors from API
+      if (error?.response?.data?.errors) {
+        const errors = error.response.data.errors;
+        const firstError = Object.values(errors)[0];
+        toast.error(
+          (firstError as string) || t("users.messages.submissionFailed")
+        );
+      } else if (error?.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(t("users.messages.submissionFailed"));
+      }
     } finally {
       setIsSubmitting(false);
     }

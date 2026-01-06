@@ -91,7 +91,8 @@
     "userUpdated": "ব্যবহারকারী সফলভাবে আপডেট হয়েছে",
     "failedToCreate": "ব্যবহারকারী তৈরি করতে ব্যর্থ",
     "failedToUpdate": "ব্যবহারকারী আপডেট করতে ব্যর্থ",
-    "failedToLoadRoles": "ভূমিকা লোড করতে ব্যর্থ"
+    "failedToLoadRoles": "ভূমিকা লোড করতে ব্যর্থ",
+    "submissionFailed": "ফর্ম জমা দিতে ব্যর্থ হয়েছে"
   },
   "delete": {
     "title": "ব্যবহারকারী মুছুন",
