@@ -319,45 +319,6 @@ const UsersTab = () => {
     },
   ];
 
-  const summaryLists = [
-    {
-      title: t("users.summary.totalUsers"),
-      value: store.statistics.total_users,
-      icon: UsersIcon,
-      color: "text-muted-foreground",
-    },
-    {
-      title: t("users.summary.activeUsers"),
-      value: store.statistics.active_users,
-      icon: UserCheck,
-      color: "text-green-600",
-    },
-    {
-      title: t("users.summary.inactiveUsers"),
-      value: store.statistics.inactive_users,
-      icon: UserX,
-      color: "text-orange-600",
-    },
-    {
-      title: t("users.summary.blockedUsers"),
-      value: store.statistics.deleted_users,
-      icon: UserMinus,
-      color: "text-red-600",
-    },
-    // {
-    //   title: "Verified Users",
-    //   value: stats.verified_users,
-    //   icon: UserCheck,
-    //   color: "text-green-600",
-    // },
-    // {
-    //   title: "Unverified Users",
-    //   value: stats.unverified_users,
-    //   icon: UserX,
-    //   color: "text-orange-600",
-    // },
-  ];
-
   return (
     <div className="animate-fade-in">
       <BaseTableList<User>
@@ -383,11 +344,11 @@ const UsersTab = () => {
         enableSearch={true}
         columns={columns}
         service={userService}
+        queryParams={{ status: "" }}
         store={store}
         emptyMessage={t("users.noUsersFound")}
         getRowKey={(user) => user.id}
         onRefresh={handleSetRefresh}
-        summaryLists={summaryLists}
       />
 
       {/* Dialogs */}

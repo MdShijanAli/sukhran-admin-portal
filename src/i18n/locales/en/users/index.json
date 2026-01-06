@@ -1,6 +1,8 @@
 {
   "title": "User Management",
   "subtitle": "Manage platform users and their roles",
+  "deletedUsersTitle": "Deleted Users",
+  "deletedUsersDescription": "Manage users who have been deleted from your platform",
   "addUser": "Add",
   "searchPlaceholder": "Search users...",
   "noUsersFound": "No users found",

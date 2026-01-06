@@ -128,6 +128,7 @@ export interface BaseTableListProps<T> {
     value: string | number;
   }>;
   summaryLoading?: boolean;
+  queryParams?: Record<string, string>;
 }
 
 export function BaseTableList<T>({
@@ -154,6 +155,7 @@ export function BaseTableList<T>({
   summaryLists = [],
   summaryLoading = false,
   onRefresh,
+  queryParams,
 }: BaseTableListProps<T>) {
   // Local state for query params
   const [searchQuery, setSearchQuery] = useState("");
@@ -171,6 +173,9 @@ export function BaseTableList<T>({
       return initial;
     }
   );
+
+  // Serialize queryParams to detect changes
+  const serializedQueryParams = queryParams ? JSON.stringify(queryParams) : "";
 
   // Get data from store
   const data = (store.items ||
@@ -226,7 +231,16 @@ export function BaseTableList<T>({
         store.brands ||
         []) as T[];
       const hasData = currentData.length > 0;
-      if (!forceFetch && !hasInitialFetch && isFirstRender && hasData) {
+      // If queryParams are provided, always fetch (don't use cache) as data might be filtered
+      const shouldSkipCache =
+        queryParams && Object.keys(queryParams).length > 0;
+      if (
+        !forceFetch &&
+        !hasInitialFetch &&
+        isFirstRender &&
+        hasData &&
+        !shouldSkipCache
+      ) {
         console.log("Using cached data from store, skipping API call");
         setHasInitialFetch(true);
         return;
@@ -239,6 +253,12 @@ export function BaseTableList<T>({
 
         // Build query string
         const params = new URLSearchParams();
+
+        if (queryParams) {
+          Object.entries(queryParams).forEach(([key, value]) => {
+            params.append(key, value);
+          });
+        }
 
         if (searchQuery) {
           params.append("search", searchQuery);
@@ -302,6 +322,7 @@ export function BaseTableList<T>({
       localFilters,
       hasInitialFetch,
       isFirstRender,
+      serializedQueryParams,
     ]
   );
 
@@ -333,12 +354,12 @@ export function BaseTableList<T>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
-  // Handle filter, page, and perPage changes
+  // Handle filter, page, perPage, and queryParams changes
   useEffect(() => {
     if (isFirstRender) return; // Skip on first render
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterValues, currentPage, perPage]);
+  }, [filterValues, currentPage, perPage, serializedQueryParams]);
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
