@@ -26,6 +26,8 @@ import {
   Column,
   DropdownMenuActions,
 } from "@/components/table";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
 
 interface PackageBatchDetailsModalProps {
   open: boolean;
@@ -39,6 +41,7 @@ export default function PackageBatchDetailsModal({
   batchId,
 }: PackageBatchDetailsModalProps) {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [details, setDetails] = useState<PackageBatchDetails | null>(null);
@@ -108,30 +111,32 @@ export default function PackageBatchDetailsModal({
     onClose();
   };
 
-  const handleViewDetails = (order: PackageOrder) => {};
-
   // Define actions for dropdown menu
   const orderActions = (order: PackageOrder): ActionItem<PackageOrder>[] => [
     {
       label: t("orders.actions.edit"),
       icon: Edit,
       onClick: handleModifyItems,
+      show: hasPermission(permissions.orders.manage),
     },
     {
       label: t("orders.actions.setDeliveryDate"),
       icon: Calendar,
       onClick: handleSetDeliveryDate,
+      show: hasPermission(permissions.orders.manage),
     },
     {
       label: t("orders.actions.pauseOrder"),
       icon: Pause,
       onClick: handlePause,
+      show: hasPermission(permissions.orders.manage),
       separator: true, // Show separator after this item
     },
     {
       label: t("orders.actions.deleteOrder"),
       icon: Trash2,
       onClick: handleCancel,
+      show: hasPermission(permissions.orders.delete),
       variant: "destructive",
     },
   ];

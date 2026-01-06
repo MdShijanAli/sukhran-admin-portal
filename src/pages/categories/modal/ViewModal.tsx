@@ -11,6 +11,8 @@ import SubCategoryFormModal from "./SubCategoryFormModal";
 import { DeleteModal } from "@/components/modals";
 import { toast } from "sonner";
 import TimeStaps from "@/components/custom/TimeStamps";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
 
 interface SubCategory {
   id: number;
@@ -47,6 +49,7 @@ export default function ViewModal({
   categoryId,
 }: ViewModalProps) {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
   const [category, setCategory] = useState<CategoryDetails | null>(null);
   const [isCategoryLoading, setIsCategoryLoading] = useState(false);
   const [selectedSubCategory, setSelectedSubCategory] =
@@ -261,22 +264,27 @@ export default function ViewModal({
                                 ? t("categories.view.active")
                                 : t("categories.view.inactive")}
                             </Badge>
-                            <Button
-                              size="icon"
-                              variant="ghost"
-                              className="h-8 w-8"
-                              onClick={() => handleEditSubCategory(subCat)}
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              size="icon"
-                              variant="ghost"
-                              className="h-8 w-8 text-destructive hover:text-destructive"
-                              onClick={() => handleDeleteSubCategory(subCat)}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                            {hasPermission(permissions.categories.edit) && (
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8"
+                                onClick={() => handleEditSubCategory(subCat)}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                            )}
+
+                            {hasPermission(permissions.categories.delete) && (
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8 text-destructive hover:text-destructive"
+                                onClick={() => handleDeleteSubCategory(subCat)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            )}
                           </div>
                         </div>
                         {subCat.description && (

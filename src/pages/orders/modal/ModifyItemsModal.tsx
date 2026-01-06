@@ -16,6 +16,8 @@ import { Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import orderService from "@/services/orderService";
 import type { PackageOrderItem } from "@/lib/types";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
 
 interface ModifyItemsModalProps {
   open: boolean;
@@ -33,6 +35,7 @@ export default function ModifyItemsModal({
   onSuccess,
 }: ModifyItemsModalProps) {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [items, setItems] = useState<PackageOrderItem[]>([]);
 
@@ -89,6 +92,7 @@ export default function ModifyItemsModal({
       title={t("orders.packageOrders.modals.modifyItems.title")}
       onSubmit={handleSubmit}
       isSubmitting={isSubmitting}
+      showSubmitButton={hasPermission(permissions.orders.modify_items)}
       submitButtonText={t("save")}
       size="xl"
     >

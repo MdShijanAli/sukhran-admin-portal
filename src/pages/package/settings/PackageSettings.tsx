@@ -28,11 +28,14 @@ import packageSettingsService from "@/services/packageSettingsService";
 import { ScheduleOption } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import ScheduleOptionFormModal from "./modal/ScheduleOptionFormModal";
+import { withPermission } from "@/hoc/withPermission";
+import permissions from "@/lib/permissions";
+import usePermissions from "@/hooks/use-permissions";
 
-export default function PackageSettings() {
+function PackageSettings() {
   const { t } = useTranslation();
-  const store = usePackageSettingsStore();
-  const { settings, scheduleOptions, isLoading } = store;
+  const { settings, scheduleOptions, isLoading } = usePackageSettingsStore();
+  const { hasPermission } = usePermissions();
 
   // Local state for settings
   const [customPackageMinAmount, setCustomPackageMinAmount] =
@@ -222,15 +225,17 @@ export default function PackageSettings() {
               {icon}
               <CardTitle>{title}</CardTitle>
             </div>
-            <Button
-              size="sm"
-              onClick={() => {
-                openAddDialog(options[0]?.option_type || "schedule_months");
-              }}
-            >
-              <Plus className="h-4 w-4 mr-1" />
-              {t("packageSettings.addOption")}
-            </Button>
+            {hasPermission(permissions.package_schedule_options.create) && (
+              <Button
+                size="sm"
+                onClick={() => {
+                  openAddDialog(options[0]?.option_type || "schedule_months");
+                }}
+              >
+                <Plus className="h-4 w-4 mr-1" />
+                {t("packageSettings.addOption")}
+              </Button>
+            )}
           </div>
         </CardHeader>
         <CardContent>
@@ -287,24 +292,37 @@ export default function PackageSettings() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Switch
-                      checked={option.isActive}
-                      onCheckedChange={() => handleToggleOption(option)}
-                    />
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      onClick={() => openEditDialog(option)}
-                    >
-                      <Edit2 className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      onClick={() => handleDeleteOptions([option.id!])}
-                    >
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
+                    {hasPermission(
+                      permissions.package_schedule_options.edit
+                    ) && (
+                      <Switch
+                        checked={option.isActive}
+                        onCheckedChange={() => handleToggleOption(option)}
+                      />
+                    )}
+
+                    {hasPermission(
+                      permissions.package_schedule_options.edit
+                    ) && (
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => openEditDialog(option)}
+                      >
+                        <Edit2 className="h-4 w-4" />
+                      </Button>
+                    )}
+                    {hasPermission(
+                      permissions.package_schedule_options.delete
+                    ) && (
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => handleDeleteOptions([option.id!])}
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -370,31 +388,34 @@ export default function PackageSettings() {
                 </div>
               )}
 
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="enabled">
-                    {t("packageSettings.customPackageEnabled")}
-                  </Label>
-                  <p className="text-sm text-muted-foreground">
-                    {t("packageSettings.enabledDesc")}
-                  </p>
+              {hasPermission(permissions.settings.edit) && (
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="enabled">
+                      {t("packageSettings.customPackageEnabled")}
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      {t("packageSettings.enabledDesc")}
+                    </p>
+                  </div>
+                  <Switch
+                    id="enabled"
+                    checked={customPackageEnabled}
+                    onCheckedChange={handleEnabledChange}
+                  />
                 </div>
-                <Switch
-                  id="enabled"
-                  checked={customPackageEnabled}
-                  onCheckedChange={handleEnabledChange}
-                />
-              </div>
-
-              {customPackageEnabled && (
-                <Button
-                  onClick={handleSaveGeneralSettings}
-                  disabled={isSavingSettings}
-                >
-                  <Save className="h-4 w-4 mr-2" />
-                  {t("packageSettings.saveSettings")}
-                </Button>
               )}
+
+              {customPackageEnabled &&
+                hasPermission(permissions.settings.edit) && (
+                  <Button
+                    onClick={handleSaveGeneralSettings}
+                    disabled={isSavingSettings}
+                  >
+                    <Save className="h-4 w-4 mr-2" />
+                    {t("packageSettings.saveSettings")}
+                  </Button>
+                )}
             </>
           )}
         </CardContent>
@@ -409,28 +430,36 @@ export default function PackageSettings() {
                 {selectedOptions.length} {t("packageSettings.optionsSelected")}
               </span>
               <div className="flex gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleBulkToggle(true)}
-                >
-                  {t("packageSettings.activateSelected")}
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleBulkToggle(false)}
-                >
-                  {t("packageSettings.deactivateSelected")}
-                </Button>
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => handleDeleteOptions(selectedOptions)}
-                >
-                  <Trash2 className="h-4 w-4 mr-1" />
-                  {t("packageSettings.deleteSelected")}
-                </Button>
+                {hasPermission(permissions.package_schedule_options.edit) && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleBulkToggle(true)}
+                  >
+                    {t("packageSettings.activateSelected")}
+                  </Button>
+                )}
+
+                {hasPermission(permissions.package_schedule_options.edit) && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleBulkToggle(false)}
+                  >
+                    {t("packageSettings.deactivateSelected")}
+                  </Button>
+                )}
+
+                {hasPermission(permissions.package_schedule_options.delete) && (
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => handleDeleteOptions(selectedOptions)}
+                  >
+                    <Trash2 className="h-4 w-4 mr-1" />
+                    {t("packageSettings.deleteSelected")}
+                  </Button>
+                )}
               </div>
             </div>
           </CardContent>
@@ -438,31 +467,33 @@ export default function PackageSettings() {
       )}
 
       {/* Schedule Options */}
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold">
-          {t("packageSettings.scheduleOptions")}
-        </h2>
+      {hasPermission(permissions.package_schedule_options.view) && (
+        <div className="space-y-4">
+          <h2 className="text-2xl font-bold">
+            {t("packageSettings.scheduleOptions")}
+          </h2>
 
-        {scheduleOptions && (
-          <>
-            {renderScheduleSection(
-              t("packageSettings.scheduleMonths"),
-              scheduleOptions.schedule_months,
-              <Calendar className="h-5 w-5" />
-            )}
-            {renderScheduleSection(
-              t("packageSettings.frequencyPerMonth"),
-              scheduleOptions.frequency_per_month,
-              <RotateCcw className="h-5 w-5" />
-            )}
-            {renderScheduleSection(
-              t("packageSettings.deliveryTime"),
-              scheduleOptions.delivery_time,
-              <Clock className="h-5 w-5" />
-            )}
-          </>
-        )}
-      </div>
+          {scheduleOptions && (
+            <>
+              {renderScheduleSection(
+                t("packageSettings.scheduleMonths"),
+                scheduleOptions.schedule_months,
+                <Calendar className="h-5 w-5" />
+              )}
+              {renderScheduleSection(
+                t("packageSettings.frequencyPerMonth"),
+                scheduleOptions.frequency_per_month,
+                <RotateCcw className="h-5 w-5" />
+              )}
+              {renderScheduleSection(
+                t("packageSettings.deliveryTime"),
+                scheduleOptions.delivery_time,
+                <Clock className="h-5 w-5" />
+              )}
+            </>
+          )}
+        </div>
+      )}
 
       {/* Form Modal */}
       <ScheduleOptionFormModal
@@ -478,3 +509,5 @@ export default function PackageSettings() {
     </div>
   );
 }
+
+export default withPermission(PackageSettings, permissions.settings.view);

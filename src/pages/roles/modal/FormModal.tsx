@@ -45,6 +45,7 @@ export default function FormModal({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [formData, setFormData] = useState<RoleFormData>({
     name: "",
     display_name: "",
@@ -188,6 +189,22 @@ export default function FormModal({
     );
   };
 
+  // Filter permissions based on search query
+  const filteredPermissions = permissions.filter((module) => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+
+    // Check if module name matches
+    if (module.module.toLowerCase().includes(query)) return true;
+
+    // Check if any permission in the module matches
+    return module.permissions.some(
+      (permission) =>
+        permission.display_name.toLowerCase().includes(query) ||
+        permission.description?.toLowerCase().includes(query)
+    );
+  });
+
   return (
     <BaseModal
       open={open}
@@ -289,14 +306,40 @@ export default function FormModal({
             </button>
           </div>
 
+          {/* Search Input */}
+          <div className="relative">
+            <Input
+              type="text"
+              placeholder={
+                t("roles.form.searchPermissions") ||
+                "Search permissions or modules..."
+              }
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
           <div className="max-h-[400px] overflow-y-auto border rounded-lg">
-            {permissions.length === 0 && (
+            {filteredPermissions.length === 0 && (
               <p className="text-sm text-muted-foreground text-center py-8">
-                {t("roles.form.noPermissionsAvailable")}
+                {searchQuery
+                  ? t("roles.form.noMatchingPermissions") ||
+                    "No matching permissions found"
+                  : t("roles.form.noPermissionsAvailable")}
               </p>
             )}
             <Accordion type="multiple" className="w-full">
-              {permissions.map((module) => {
+              {filteredPermissions.map((module) => {
                 const modulePermissionIds = module.permissions.map((p) => p.id);
                 const selectedCount = modulePermissionIds.filter((id) =>
                   formData.permission_ids.includes(id)

@@ -15,10 +15,13 @@ import { toast } from "sonner";
 import FormModal from "../modal/FormModal";
 import ViewModal from "../modal/ViewModal";
 import DeleteModal from "@/components/modals/DeleteModal";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
 
 function BannersTab() {
   const { t } = useTranslation();
   const store = useBannerStore();
+  const { hasPermission } = usePermissions();
 
   const [selectedBanner, setSelectedBanner] = useState<Banner | null>(null);
   const [dialogMode, setDialogMode] = useState<"create" | "edit" | null>(null);
@@ -96,12 +99,14 @@ function BannersTab() {
         label: t("banners.actions.editBanner"),
         icon: Edit,
         onClick: handleEdit,
+        show: hasPermission(permissions.banners.edit),
       },
       {
         label: t("banners.actions.deleteBanner"),
         icon: Trash2,
         onClick: handleDelete,
         variant: "destructive",
+        show: hasPermission(permissions.banners.delete),
       },
     ],
     [t, handleViewDetails, handleEdit, handleDelete]
@@ -197,11 +202,14 @@ function BannersTab() {
         label: t("banners.columns.status"),
         render: (banner) => (
           <div className="flex items-center justify-center gap-2">
-            <Switch
-              checked={banner.is_active}
-              onCheckedChange={() => handleStatusToggle(banner)}
-              disabled={togglingBannerId === banner.id}
-            />
+            {hasPermission(permissions.banners.edit) && (
+              <Switch
+                checked={banner.is_active}
+                onCheckedChange={() => handleStatusToggle(banner)}
+                disabled={togglingBannerId === banner.id}
+              />
+            )}
+
             <Badge variant={banner.is_active ? "default" : "secondary"}>
               {banner.is_active
                 ? t("banners.status.active")
@@ -256,14 +264,16 @@ function BannersTab() {
       <BaseTableList<Banner>
         title={t("banners.title")}
         description={t("banners.subtitle")}
-        headerActions={[
-          {
-            label: t("banners.addBanner"),
-            icon: Plus,
-            onClick: handleCreate,
-            variant: "default",
-          },
-        ]}
+        headerActions={
+          hasPermission(permissions.banners.create) && [
+            {
+              label: t("banners.addBanner"),
+              icon: Plus,
+              onClick: handleCreate,
+              variant: "default",
+            },
+          ]
+        }
         searchPlaceholder={t("banners.searchPlaceholder")}
         enableSearch={true}
         columns={columns}

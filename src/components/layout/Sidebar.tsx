@@ -4,23 +4,18 @@ import {
   Users,
   Package,
   ShoppingCart,
-  Truck,
   DollarSign,
   Gift,
   HeadphonesIcon,
-  BarChart3,
   Heart,
   Ticket,
   FileText,
-  UserPlus,
-  RefreshCw,
   Settings,
   ChevronLeft,
   ChevronRight,
   Shield,
   Bell,
   Coins,
-  Mail,
   MapPin,
   Settings2,
   ChevronDown,
@@ -67,7 +62,7 @@ const menuItems = [
     icon: Gift,
     label: "nav.packages",
     path: "/packages",
-    permission: permissions.packages.view,
+    permission: "",
     subItems: [
       {
         icon: Package,
@@ -79,7 +74,7 @@ const menuItems = [
         icon: Settings2,
         label: "nav.packageSettings",
         path: "/package/settings",
-        permission: permissions.packages.view,
+        permission: permissions.settings.view,
       },
     ],
   },
@@ -226,12 +221,30 @@ export default function Sidebar() {
   // Filter menu items based on search query
   const filteredMenuItems = useMemo(() => {
     if (!searchQuery.trim()) {
-      return menuItems.filter((item) => hasPermission(item.permission));
+      return menuItems.filter((item) => {
+        // For items with subItems, check if user has permission for at least one subItem
+        if (item.subItems && item.subItems.length > 0) {
+          return item.subItems.some((subItem) =>
+            hasPermission(subItem.permission)
+          );
+        }
+        // For regular items, check the item's permission
+        return hasPermission(item.permission);
+      });
     }
 
     const query = searchQuery.toLowerCase();
     return menuItems
-      .filter((item) => hasPermission(item.permission))
+      .filter((item) => {
+        // For items with subItems, check if user has permission for at least one subItem
+        if (item.subItems && item.subItems.length > 0) {
+          return item.subItems.some((subItem) =>
+            hasPermission(subItem.permission)
+          );
+        }
+        // For regular items, check the item's permission
+        return hasPermission(item.permission);
+      })
       .filter((item) => {
         // Check if parent item matches
         const labelMatches = t(item.label).toLowerCase().includes(query);

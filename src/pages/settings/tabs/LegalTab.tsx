@@ -15,9 +15,12 @@ import { Shield, FileText, Eye, Save, RotateCcw, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { BaseModal } from "@/components/modals";
 import settingsService, { LegalDocument } from "@/services/settingsService";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
 
 export default function LegalTab() {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
 
   const [termsDocument, setTermsDocument] = useState<LegalDocument | null>(
     null
@@ -184,14 +187,17 @@ export default function LegalTab() {
 
               <div className="flex items-center justify-between pt-4 border-t">
                 <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => handleReset("terms")}
-                    disabled={isSaving}
-                  >
-                    <RotateCcw className="h-4 w-4 mr-2" />
-                    {t("settings.legal.reset")}
-                  </Button>
+                  {hasPermission(permissions.legal_documents.edit) && (
+                    <Button
+                      variant="outline"
+                      onClick={() => handleReset("terms")}
+                      disabled={isSaving}
+                    >
+                      <RotateCcw className="h-4 w-4 mr-2" />
+                      {t("settings.legal.reset")}
+                    </Button>
+                  )}
+
                   <Button
                     variant="outline"
                     onClick={() => handlePreview("terms")}
@@ -200,19 +206,24 @@ export default function LegalTab() {
                     {t("settings.legal.preview")}
                   </Button>
                 </div>
-                <Button onClick={() => handleSave("terms")} disabled={isSaving}>
-                  {isSaving ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      {t("settings.legal.saving")}
-                    </>
-                  ) : (
-                    <>
-                      <Save className="h-4 w-4 mr-2" />
-                      {t("settings.legal.saveTerms")}
-                    </>
-                  )}
-                </Button>
+                {hasPermission(permissions.legal_documents.edit) && (
+                  <Button
+                    onClick={() => handleSave("terms")}
+                    disabled={isSaving}
+                  >
+                    {isSaving ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        {t("settings.legal.saving")}
+                      </>
+                    ) : (
+                      <>
+                        <Save className="h-4 w-4 mr-2" />
+                        {t("settings.legal.saveTerms")}
+                      </>
+                    )}
+                  </Button>
+                )}
               </div>
 
               {termsDocument && (
@@ -263,14 +274,17 @@ export default function LegalTab() {
 
               <div className="flex items-center justify-between pt-4 border-t">
                 <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => handleReset("privacy")}
-                    disabled={isSaving}
-                  >
-                    <RotateCcw className="h-4 w-4 mr-2" />
-                    {t("settings.legal.reset")}
-                  </Button>
+                  {hasPermission(permissions.legal_documents.edit) && (
+                    <Button
+                      variant="outline"
+                      onClick={() => handleReset("privacy")}
+                      disabled={isSaving}
+                    >
+                      <RotateCcw className="h-4 w-4 mr-2" />
+                      {t("settings.legal.reset")}
+                    </Button>
+                  )}
+
                   <Button
                     variant="outline"
                     onClick={() => handlePreview("privacy")}
@@ -279,22 +293,24 @@ export default function LegalTab() {
                     {t("settings.legal.preview")}
                   </Button>
                 </div>
-                <Button
-                  onClick={() => handleSave("privacy")}
-                  disabled={isSaving}
-                >
-                  {isSaving ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      {t("settings.legal.saving")}
-                    </>
-                  ) : (
-                    <>
-                      <Save className="h-4 w-4 mr-2" />
-                      {t("settings.legal.savePrivacy")}
-                    </>
-                  )}
-                </Button>
+                {hasPermission(permissions.legal_documents.edit) && (
+                  <Button
+                    onClick={() => handleSave("privacy")}
+                    disabled={isSaving}
+                  >
+                    {isSaving ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        {t("settings.legal.saving")}
+                      </>
+                    ) : (
+                      <>
+                        <Save className="h-4 w-4 mr-2" />
+                        {t("settings.legal.savePrivacy")}
+                      </>
+                    )}
+                  </Button>
+                )}
               </div>
 
               {privacyDocument && (

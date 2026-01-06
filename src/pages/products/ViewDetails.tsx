@@ -19,6 +19,8 @@ import { toast } from "sonner";
 import noProductImage from "@/assets/images/no_product_image.png";
 import TimeStaps from "@/components/custom/TimeStamps";
 import { formatNumberWithCommas } from "@/lib/utils";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
 
 interface ProductDetails {
   id: number;
@@ -83,6 +85,7 @@ interface ProductDetails {
 const ProductViewDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
+  const { hasPermission } = usePermissions();
   const navigate = useNavigate();
   const [product, setProduct] = useState<ProductDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -169,13 +172,15 @@ const ProductViewDetails = () => {
                 description={product.description || "Amazing product!"}
                 price={product.skus[0]?.pricing?.currentPrice}
               /> */}
-              <Button
-                variant="outline"
-                onClick={() => navigate(`/products/edit/${product.id}`)}
-              >
-                <Edit className="h-4 w-4 mr-2" />
-                {t("products.form.editProduct")}
-              </Button>
+              {hasPermission(permissions.products.edit) && (
+                <Button
+                  variant="outline"
+                  onClick={() => navigate(`/products/edit/${product.id}`)}
+                >
+                  <Edit className="h-4 w-4 mr-2" />
+                  {t("products.form.editProduct")}
+                </Button>
+              )}
             </div>
           </div>
         </CardContent>

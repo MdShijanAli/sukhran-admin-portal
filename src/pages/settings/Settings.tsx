@@ -12,15 +12,18 @@ import LegalTab from "./tabs/LegalTab";
 import permissions from "@/lib/permissions";
 import { withPermission } from "@/hoc/withPermission";
 import BannersTab from "./tabs/BannersTab";
+import usePermissions from "@/hooks/use-permissions";
 
 function Settings() {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
 
   const tabLists = [
     {
       id: "business",
       label: t("settings.business.tab"),
       icon: Building2,
+      permission: permissions.settings.view,
     },
     // {
     //   id: "notifications",
@@ -41,16 +44,19 @@ function Settings() {
       id: "shipping",
       label: t("settings.shipping.tab"),
       icon: Truck,
+      permission: permissions.settings.view,
     },
     {
       id: "legal",
       label: t("settings.terms_condition.tab"),
       icon: Shield,
+      permission: permissions.legal_documents.view,
     },
     {
       id: "banners",
       label: t("settings.banners.tab"),
       icon: Image,
+      permission: permissions.banners.view,
     },
     // {
   ];
@@ -68,12 +74,15 @@ function Settings() {
 
       <Tabs defaultValue="business" className="mt-3">
         <TabsList className="flex flex-wrap gap-2 justify-start">
-          {tabLists.map((tab) => (
-            <TabsTrigger key={tab.id} value={tab.id} className="gap-2">
-              <tab.icon className="h-4 w-4" />
-              <span className="hidden sm:inline">{tab.label}</span>
-            </TabsTrigger>
-          ))}
+          {tabLists.map(
+            (tab) =>
+              hasPermission(tab.permission) && (
+                <TabsTrigger key={tab.id} value={tab.id} className="gap-2">
+                  <tab.icon className="h-4 w-4" />
+                  <span className="hidden sm:inline">{tab.label}</span>
+                </TabsTrigger>
+              )
+          )}
           {/* <TabsTrigger value="email" className="gap-2">
             <Mail className="h-4 w-4" />
             <span className="hidden sm:inline">{t("settings.email.tab")}</span>

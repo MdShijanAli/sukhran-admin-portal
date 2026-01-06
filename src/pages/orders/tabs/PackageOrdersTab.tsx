@@ -23,21 +23,11 @@ export default function PackageOrdersTab() {
   const [showDetails, setShowDetails] = useState(false);
   const { hasPermission } = usePermissions();
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
-  const [selectedOrder, setSelectedOrder] = useState<PackageOrderBatch | null>(
-    null
-  );
-  const [showUpdateDeliveryTimeModal, setShowUpdateDeliveryTimeModal] =
-    useState(false);
 
   const handleViewDetails = (batch: PackageOrderBatch) => {
     setSelectedBatch(batch);
     setShowDetails(true);
   };
-
-  //   const handleUpdateDeliveryTime = (order: PackageOrderBatch) => {
-  //     setSelectedOrder(order);
-  //     setShowUpdateDeliveryTimeModal(true);
-  //   };
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {
     setRefreshTable(() => refreshFn);
@@ -52,42 +42,6 @@ export default function PackageOrdersTab() {
       icon: Eye,
       onClick: handleViewDetails,
     },
-    // {
-    //   label: t("orders.actions.editOrder"),
-    //   icon: Edit,
-    //   onClick: handleEdit,
-    //   show:
-    //     hasPermission(permissions.orders.edit) &&
-    //     order.status !== "delivered" &&
-    //     order.status !== "cancelled" &&
-    //     order.status !== "returned",
-    // },
-    // {
-    //   label: t("orders.actions.updateStatus"),
-    //   icon: Edit,
-    //   onClick: handleUpdateStatus,
-    //   show: hasPermission(permissions.orders.edit),
-    // },
-    // {
-    //   label: t("orders.actions.updateDeliveryTime"),
-    //   icon: Clock,
-    //   onClick: handleUpdateDeliveryTime,
-    //   show:
-    //     hasPermission(permissions.orders.edit) &&
-    //     order.status !== "delivered" &&
-    //     order.status !== "cancelled",
-    //   separator: true, // Show separator after this item
-    // },
-    // {
-    //   label: t("orders.actions.deleteOrder"),
-    //   icon: Trash2,
-    //   onClick: handleDelete,
-    //   variant: "destructive",
-    //   separator: true,
-    //   show:
-    //     hasPermission(permissions.orders.delete) &&
-    //     (order.status === "pending" || order.status === "cancelled"),
-    // },
   ];
 
   const columns: Column<PackageOrderBatch>[] = useMemo(
