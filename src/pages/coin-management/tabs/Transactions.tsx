@@ -25,6 +25,8 @@ import SendCoinModal from "../modal/SendCoinModal";
 import UserCoinDetailsModal from "../modal/UserCoinDetailsModal";
 import getSerialNumber from "@/lib/getSerialNumber";
 import { useCoinStore } from "@/stores/coinStore";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
 
 interface UserBalancesProps {
   topHolders: TopHolder[];
@@ -39,6 +41,7 @@ export default function UserBalances({
 }: UserBalancesProps) {
   const { t } = useTranslation();
   const store = useCoinStore();
+  const { hasPermission } = usePermissions();
   const [showSendCoinModal, setShowSendCoinModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<TopHolder | null>(null);
@@ -118,14 +121,16 @@ export default function UserBalances({
             <Eye className="h-3 w-3 mr-1" />
             {t("coinManagement.userBalances.viewDetails")}
           </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => handleSendCoins(holder)}
-          >
-            <Send className="h-3 w-3 mr-1" />
-            {t("coinManagement.userBalances.sendCoins")}
-          </Button>
+          {hasPermission(permissions.coins.send) && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => handleSendCoins(holder)}
+            >
+              <Send className="h-3 w-3 mr-1" />
+              {t("coinManagement.userBalances.sendCoins")}
+            </Button>
+          )}
         </div>
       ),
     },
@@ -142,15 +147,17 @@ export default function UserBalances({
                 {t("coinManagement.userBalances.description")}
               </CardDescription>
             </div>
-            <Button
-              onClick={() => {
-                setSelectedUser(null);
-                setShowSendCoinModal(true);
-              }}
-            >
-              <SendIcon className="h-4 w-4 mr-2" />
-              {t("coinManagement.userBalances.sendCoins")}
-            </Button>
+            {hasPermission(permissions.coins.send) && (
+              <Button
+                onClick={() => {
+                  setSelectedUser(null);
+                  setShowSendCoinModal(true);
+                }}
+              >
+                <SendIcon className="h-4 w-4 mr-2" />
+                {t("coinManagement.userBalances.sendCoins")}
+              </Button>
+            )}
           </div>
         </CardHeader>
         <CardContent>

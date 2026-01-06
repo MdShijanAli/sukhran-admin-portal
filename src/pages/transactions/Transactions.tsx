@@ -19,6 +19,8 @@ import {
   CheckCircle2,
   XCircle,
   Clock,
+  TrendingUpDown,
+  Download,
 } from "lucide-react";
 import { BaseTableList } from "@/components/table";
 import permissions from "@/lib/permissions";
@@ -26,6 +28,7 @@ import usePermissions from "@/hooks/use-permissions";
 import { withPermission } from "@/hoc/withPermission";
 import { formatNumberWithCommas } from "@/lib/utils";
 import getSerialNumber from "@/lib/getSerialNumber";
+import { toast } from "sonner";
 
 const Transactions = () => {
   const { t } = useTranslation();
@@ -50,6 +53,10 @@ const Transactions = () => {
   const handleRefund = (transaction: Transaction) => {
     setSelectedTransaction(transaction);
     setShowRefund(true);
+  };
+
+  const handleExport = () => {
+    toast.info("This feature is coming soon!");
   };
 
   const getStatusBadge = (status: string) => {
@@ -264,6 +271,16 @@ const Transactions = () => {
       <BaseTableList<Transaction>
         title={t("transactions.title")}
         description={t("transactions.subtitle")}
+        headerActions={
+          hasPermission(permissions.transactions.export) && [
+            {
+              label: t("export"),
+              icon: Download,
+              onClick: handleExport,
+              variant: "default",
+            },
+          ]
+        }
         searchPlaceholder={t("transactions.searchPlaceholder")}
         enableSearch={true}
         columns={columns}

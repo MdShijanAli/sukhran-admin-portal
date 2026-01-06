@@ -106,7 +106,7 @@ const menuItems = [
     icon: Coins,
     label: "nav.coinManagement",
     path: "/coin-management",
-    permission: permissions.coinManagement.view,
+    permission: permissions.coins.view,
   },
   // {
   //   icon: Mail,

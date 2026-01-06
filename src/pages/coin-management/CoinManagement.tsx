@@ -10,10 +10,14 @@ import coinService from "@/services/coinService";
 import CoinStatistics from "./tabs/CoinStatistics";
 import UserBalances from "./tabs/Transactions";
 import AllTransactions from "./tabs/AllTransactions";
+import { withPermission } from "@/hoc/withPermission";
+import permissions from "@/lib/permissions";
+import usePermissions from "@/hooks/use-permissions";
 
-export default function CoinManagement() {
+function CoinManagement() {
   const { t } = useTranslation();
   const store = useCoinStore();
+  const { hasPermission } = usePermissions();
   const { statistics, transactions, pagination, isLoading } = store;
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -86,10 +90,12 @@ export default function CoinManagement() {
             <Users className="h-4 w-4" />
             {t("coinManagement.tabs.userBalances")}
           </TabsTrigger>
-          <TabsTrigger value="allTransactions" className="gap-2">
-            <History className="h-4 w-4" />
-            {t("coinManagement.tabs.allTransactions")}
-          </TabsTrigger>
+          {hasPermission(permissions.coins.view_transactions) && (
+            <TabsTrigger value="allTransactions" className="gap-2">
+              <History className="h-4 w-4" />
+              {t("coinManagement.tabs.allTransactions")}
+            </TabsTrigger>
+          )}
         </TabsList>
 
         {/* Statistics Tab */}
@@ -119,3 +125,5 @@ export default function CoinManagement() {
     </div>
   );
 }
+
+export default withPermission(CoinManagement, permissions.coins.view);

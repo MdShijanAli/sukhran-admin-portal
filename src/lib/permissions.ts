@@ -186,14 +186,6 @@ const permissions = {
     track: "delivery.track",
   },
 
-  // Loyalty & Rewards
-  coinManagement: {
-    view: "coin_management.view",
-    create: "coin_management.create",
-    edit: "coin_management.update",
-    delete: "coin_management.delete",
-  },
-
   // Marketing
   marketing: {
     view: "marketing.view",

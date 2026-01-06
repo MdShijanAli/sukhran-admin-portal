@@ -172,6 +172,7 @@ const CoverageAreas = () => {
       icon: Edit,
       onClick: handleEdit,
       show: hasPermission(permissions.coverageAreas.edit),
+      separator: true,
     },
     {
       label: t("coverage_area.actions.deleteArea"),
@@ -227,11 +228,14 @@ const CoverageAreas = () => {
       label: t("coverage_area.columns.status"),
       render: (area) => (
         <div className="flex items-center justify-center gap-2">
-          <Switch
-            checked={area.is_active}
-            onCheckedChange={() => handleStatusToggle(area)}
-            disabled={togglingAreaId === area.id}
-          />
+          {hasPermission(permissions.coverageAreas.edit) && (
+            <Switch
+              checked={area.is_active}
+              onCheckedChange={() => handleStatusToggle(area)}
+              disabled={togglingAreaId === area.id}
+            />
+          )}
+
           <Badge variant={area.is_active ? "default" : "secondary"}>
             {area.is_active
               ? t("coverage_area.status.active")
