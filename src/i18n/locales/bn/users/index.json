@@ -4,6 +4,11 @@
   "addUser": "যোগ করুন",
   "searchPlaceholder": "ব্যবহারকারী অনুসন্ধান করুন...",
   "noUsersFound": "কোন ব্যবহারকারী পাওয়া যায়নি",
+  "tabs": {
+    "users": "ব্যবহারকারী",
+    "statistics": "পরিসংখ্যান",
+    "deletedUsers": "মুছে ফেলা ব্যবহারকারী"
+  },
   "columns": {
     "sl": "ক্রমিক",
     "image": "ছবি",
@@ -104,5 +109,29 @@
     "activeUsers": "সক্রিয় ব্যবহারকারী",
     "inactiveUsers": "নিষ্ক্রিয় ব্যবহারকারী",
     "blockedUsers": "অবরুদ্ধ ব্যবহারকারী"
+  },
+  "statistics": {
+    "overview": "সংক্ষিপ্ত বিবরণ",
+    "totalUsers": "মোট ব্যবহারকারী",
+    "activeUsers": "সক্রিয় ব্যবহারকারী",
+    "inactiveUsers": "নিষ্ক্রিয় ব্যবহারকারী",
+    "deletedUsers": "মুছে ফেলা ব্যবহারকারী",
+    "allRegistered": "সকল নিবন্ধিত ব্যবহারকারী",
+    "ofTotal": "মোটের",
+    "softDeleted": "সফট মুছে ফেলা",
+    "verificationStatus": "যাচাইকরণ অবস্থা",
+    "verified": "যাচাইকৃত",
+    "unverified": "অযাচাইকৃত",
+    "verificationRate": "যাচাইকরণ হার",
+    "accountStatusSummary": "অ্যাকাউন্ট স্ট্যাটাস সারাংশ",
+    "activeAccounts": "সক্রিয় অ্যাকাউন্ট",
+    "inactiveAccounts": "নিষ্ক্রিয় অ্যাকাউন্ট",
+    "deletedAccounts": "মুছে ফেলা অ্যাকাউন্ট",
+    "canAccessPlatform": "প্ল্যাটফর্ম অ্যাক্সেস করতে পারে",
+    "temporarilyDisabled": "সাময়িকভাবে নিষ্ক্রিয়",
+    "markedForDeletion": "মুছে ফেলার জন্য চিহ্নিত",
+    "usersByRole": "ভূমিকা অনুসারে ব্যবহারকারী",
+    "roleId": "ভূমিকা আইডি",
+    "noDataAvailable": "কোন পরিসংখ্যান তথ্য উপলব্ধ নেই"
   }
 }

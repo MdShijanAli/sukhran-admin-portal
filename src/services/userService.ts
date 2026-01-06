@@ -14,6 +14,7 @@ interface UserService extends ApiService<User> {
   getUsersStatistics: () => Promise<unknown>;
   resetUserPassword: (id: number | string) => Promise<unknown>;
   restoreUser: (id: number | string) => Promise<unknown>;
+  statistics: () => Promise<unknown>;
 }
 
 const userService: UserService = {
@@ -65,6 +66,16 @@ const userService: UserService = {
       return response.data;
     } catch (error) {
       console.error("Error restoring user:", error);
+      throw error;
+    }
+  },
+
+  statistics: async () => {
+    try {
+      const response = await apiClient.get(apiRoutes.users.statistics);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching user statistics:", error);
       throw error;
     }
   },

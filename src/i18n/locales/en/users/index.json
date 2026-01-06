@@ -4,6 +4,11 @@
   "addUser": "Add",
   "searchPlaceholder": "Search users...",
   "noUsersFound": "No users found",
+  "tabs": {
+    "users": "Users",
+    "statistics": "Statistics",
+    "deletedUsers": "Deleted Users"
+  },
   "columns": {
     "sl": "SL.",
     "image": "Image",
@@ -104,5 +109,29 @@
     "activeUsers": "Active Users",
     "inactiveUsers": "Inactive Users",
     "blockedUsers": "Blocked Users"
+  },
+  "statistics": {
+    "overview": "Overview",
+    "totalUsers": "Total Users",
+    "activeUsers": "Active Users",
+    "inactiveUsers": "Inactive Users",
+    "deletedUsers": "Deleted Users",
+    "allRegistered": "All registered users",
+    "ofTotal": "of total",
+    "softDeleted": "Soft deleted",
+    "verificationStatus": "Verification Status",
+    "verified": "Verified",
+    "unverified": "Unverified",
+    "verificationRate": "Verification Rate",
+    "accountStatusSummary": "Account Status Summary",
+    "activeAccounts": "Active Accounts",
+    "inactiveAccounts": "Inactive Accounts",
+    "deletedAccounts": "Deleted Accounts",
+    "canAccessPlatform": "Can access platform",
+    "temporarilyDisabled": "Temporarily disabled",
+    "markedForDeletion": "Marked for deletion",
+    "usersByRole": "Users by Role",
+    "roleId": "Role ID",
+    "noDataAvailable": "No statistics data available"
   }
 }

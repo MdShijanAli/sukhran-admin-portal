@@ -42,6 +42,7 @@ export const apiRoutes = {
       createApiUrl(`admin/users/${id}/reset-password`),
     restoreUser: (id: number | string) =>
       createApiUrl(`admin/users/${id}/restore`),
+    statistics: createApiUrl("admin/users/statistics"),
   },
 
   categories: {
