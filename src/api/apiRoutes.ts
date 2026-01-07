@@ -151,6 +151,11 @@ export const apiRoutes = {
       createApiUrl(`admin/orders/${id}/cancel`),
     markCODOrderAsPaid: (id: number | string) =>
       createApiUrl(`admin/orders/${id}/payment-status`),
+    settings: createApiUrl("admin/settings/delivery"),
+    minDeliveryDays: createApiUrl("admin/settings/min_delivery_lead_time_days"),
+    bulkUpdateSettings: createApiUrl(
+      "admin/settings/min_delivery_lead_time_days"
+    ),
   },
 
   delivery: {

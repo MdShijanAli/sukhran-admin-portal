@@ -78,6 +78,17 @@ interface OrderService extends ApiService<Order> {
     data: CancelOrderPayload
   ) => Promise<unknown>;
   markCODOrderAsPaid: (id: number | string, data: unknown) => Promise<unknown>;
+  getDeliverySettings: () => Promise<unknown>;
+  updateDeliverySettings: (data: {
+    min_delivery_lead_time_days: number;
+    max_delivery_lead_time_days: number;
+    same_day_delivery_cutoff_hour: number;
+    skip_friday_delivery: boolean;
+  }) => Promise<unknown>;
+  updateMinDeliveryDays: (value: number) => Promise<unknown>;
+  bulkUpdateDeliverySettings: (
+    settings: Array<{ key: string; value: string }>
+  ) => Promise<unknown>;
 }
 
 const orderService: OrderService = {
@@ -348,6 +359,59 @@ const orderService: OrderService = {
       return response.data;
     } catch (error) {
       console.error("Error marking COD order as paid:", error);
+      throw error;
+    }
+  },
+
+  // Delivery Settings Methods
+  getDeliverySettings: async () => {
+    try {
+      const response = await apiClient.get(apiRoutes.orders.settings);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching delivery settings:", error);
+      throw error;
+    }
+  },
+
+  updateDeliverySettings: async (data: {
+    min_delivery_lead_time_days: number;
+    max_delivery_lead_time_days: number;
+    same_day_delivery_cutoff_hour: number;
+    skip_friday_delivery: boolean;
+  }) => {
+    try {
+      const response = await apiClient.put(apiRoutes.orders.settings, data);
+      return response.data;
+    } catch (error) {
+      console.error("Error updating delivery settings:", error);
+      throw error;
+    }
+  },
+
+  updateMinDeliveryDays: async (value: number) => {
+    try {
+      const response = await apiClient.put(apiRoutes.orders.minDeliveryDays, {
+        value,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error updating min delivery days:", error);
+      throw error;
+    }
+  },
+
+  bulkUpdateDeliverySettings: async (
+    settings: Array<{ key: string; value: string }>
+  ) => {
+    try {
+      const response = await apiClient.post(
+        apiRoutes.orders.bulkUpdateSettings,
+        { settings }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error bulk updating delivery settings:", error);
       throw error;
     }
   },

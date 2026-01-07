@@ -36,6 +36,7 @@ import usePermissions from "@/hooks/use-permissions";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import PackageOrdersTab from "./tabs/PackageOrdersTab";
 import getSerialNumber from "@/lib/getSerialNumber";
+import Settings from "./tabs/Settings";
 
 function Orders() {
   const { t } = useTranslation();
@@ -490,6 +491,10 @@ function Orders() {
                 <Package className="h-4 w-4" />
                 {t("orders.tabs.packageOrders")}
               </TabsTrigger>
+              <TabsTrigger value="settings" className="gap-2">
+                <Package className="h-4 w-4" />
+                {t("orders.tabs.settings")}
+              </TabsTrigger>
             </TabsList>
           </div>
         </div>
@@ -535,6 +540,10 @@ function Orders() {
 
         <TabsContent value="package_orders" className="mt-0">
           <PackageOrdersTab />
+        </TabsContent>
+
+        <TabsContent value="settings" className="mt-0">
+          <Settings />
         </TabsContent>
       </Tabs>
 
