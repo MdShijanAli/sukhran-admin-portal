@@ -162,6 +162,7 @@ export default function PackageOrdersTab() {
         onRefresh={handleSetRefresh}
         emptyMessage={t("orders.packageOrders.noOrders")}
         getRowKey={(batch) => batch.batch_id}
+        showDateFilter={true}
       />
 
       <PackageBatchDetailsModal

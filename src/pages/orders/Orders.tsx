@@ -535,6 +535,7 @@ function Orders() {
             getRowKey={(order) => order.id}
             onRefresh={handleSetRefresh}
             summaryLists={summaryLists}
+            showDateFilter={true}
           />
         </TabsContent>
 
