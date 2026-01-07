@@ -290,6 +290,7 @@ const Transactions = () => {
         getRowKey={(transaction) => transaction.id}
         onRefresh={handleSetRefresh}
         summaryLists={summaryLists}
+        showDateFilter={true}
       />
 
       {/* Modals */}

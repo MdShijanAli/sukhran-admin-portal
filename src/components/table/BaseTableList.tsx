@@ -20,6 +20,10 @@ import { ApiService } from "@/services/createApiService";
 import { RefreshCw, X } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 import { Pagination } from "./Pagination";
+import { useTranslation } from "react-i18next";
+import { format } from "date-fns";
+import { DateRange } from "react-day-picker";
+import { BaseDatePicker } from "@/components/custom/BaseDatePicker";
 
 export interface FilterOption {
   label: string;
@@ -129,6 +133,9 @@ export interface BaseTableListProps<T> {
   }>;
   summaryLoading?: boolean;
   queryParams?: Record<string, string>;
+
+  // Date Filter
+  showDateFilter?: boolean;
 }
 
 export function BaseTableList<T>({
@@ -156,14 +163,17 @@ export function BaseTableList<T>({
   summaryLoading = false,
   onRefresh,
   queryParams,
+  showDateFilter = false,
 }: BaseTableListProps<T>) {
   // Local state for query params
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const currentPage = store.pagination?.current_page || 1;
   const perPage = store.pagination?.per_page || 20;
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [hasInitialFetch, setHasInitialFetch] = useState(false);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [localFilters, setLocalFilters] = useState<Record<string, string>>(
     () => {
       const initial: Record<string, string> = {};
@@ -269,6 +279,14 @@ export function BaseTableList<T>({
           params.append("per_page", perPage.toString());
         }
 
+        // Add date filter params
+        if (dateRange?.from) {
+          params.append("start_date", format(dateRange.from, "yyyy-MM-dd"));
+        }
+        if (dateRange?.to) {
+          params.append("end_date", format(dateRange.to, "yyyy-MM-dd"));
+        }
+
         // Add filter params
         if (filters) {
           filters.forEach((filter, index) => {
@@ -354,12 +372,12 @@ export function BaseTableList<T>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
-  // Handle filter, page, perPage, and queryParams changes
+  // Handle filter, page, perPage, queryParams, and date changes
   useEffect(() => {
     if (isFirstRender) return; // Skip on first render
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterValues, currentPage, perPage, serializedQueryParams]);
+  }, [filterValues, currentPage, perPage, serializedQueryParams, dateRange]);
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
@@ -487,6 +505,23 @@ export function BaseTableList<T>({
 
                   {/* Additional Toolbar Actions */}
                   {toolbarActions}
+
+                  {/* Date Range Filter */}
+                  {showDateFilter && (
+                    <BaseDatePicker
+                      value={dateRange}
+                      onChange={(range) => {
+                        setDateRange(range);
+                        // Reset to page 1 when date changes
+                        if (currentPage !== 1 && store.setPagination) {
+                          store.setPagination({
+                            ...store.pagination,
+                            current_page: 1,
+                          });
+                        }
+                      }}
+                    />
+                  )}
                 </div>
               )}
               <div className="flex items-center gap-2 w-full sm:w-auto">
