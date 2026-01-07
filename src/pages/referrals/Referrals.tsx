@@ -7,9 +7,13 @@ import SettingsTab from "./tabs/SettingsTab";
 import ViewReferralModal from "./modal/ViewReferralModal";
 import UserReferralsModal from "./modal/UserReferralsModal";
 import { Referral } from "@/lib/types";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
+import { withPermission } from "@/hoc/withPermission";
 
 function Referrals() {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
 
   // State for modals
   const [showReferralView, setShowReferralView] = useState(false);
@@ -73,9 +77,11 @@ function Referrals() {
           <TabsTrigger value="statistics">
             {t("referrals.tabs.statistics")}
           </TabsTrigger>
-          <TabsTrigger value="settings">
-            {t("referrals.tabs.settings")}
-          </TabsTrigger>
+          {hasPermission(permissions.referrals.view_settings) && (
+            <TabsTrigger value="settings">
+              {t("referrals.tabs.settings")}
+            </TabsTrigger>
+          )}
         </TabsList>
 
         {/* All Referrals Tab */}
@@ -114,4 +120,4 @@ function Referrals() {
   );
 }
 
-export default Referrals;
+export default withPermission(Referrals, permissions.referrals.view);

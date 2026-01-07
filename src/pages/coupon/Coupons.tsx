@@ -20,8 +20,6 @@ import {
   Edit,
   Trash2,
   Eye,
-  Percent,
-  DollarSign,
   TrendingUp,
   Users,
   Plus,
@@ -262,11 +260,14 @@ const Coupons = () => {
       label: t("coupon.columns.status"),
       render: (coupon) => (
         <div className="flex items-center justify-center gap-2">
-          <Switch
-            checked={coupon.isActive}
-            onCheckedChange={() => handleStatusToggle(coupon)}
-            disabled={togglingCouponId === coupon.id}
-          />
+          {!coupon.validity.is_expired && (
+            <Switch
+              checked={coupon.isActive}
+              onCheckedChange={() => handleStatusToggle(coupon)}
+              disabled={togglingCouponId === coupon.id}
+            />
+          )}
+
           {getStatusBadge(coupon)}
         </div>
       ),

@@ -166,7 +166,7 @@ const menuItems = [
     icon: Bell,
     label: "nav.notificationsSettings",
     path: "/notification-settings",
-    permission: permissions.notifications.view,
+    permission: permissions.notification.view,
   },
   {
     icon: Users,

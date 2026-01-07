@@ -58,7 +58,7 @@ const permissions = {
   donations: {
     view: "donations.view",
     create: "donations.create",
-    edit: "donations.update",
+    edit: "donations.edit",
     delete: "donations.delete",
     manage: "donations.manage",
   },
@@ -71,11 +71,11 @@ const permissions = {
   },
 
   // Notifications
-  notifications: {
-    view: "notifications.view",
-    send: "notifications.send",
-    delete: "notifications.delete",
-    test: "notifications.test",
+  notification: {
+    view: "notification.view",
+    send: "notification.send",
+    delete: "notification.delete",
+    test: "notification.test",
   },
 
   // Orders Management

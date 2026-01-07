@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
+import usePermissions from "@/hooks/use-permissions";
 
 interface StatusSwitchProps {
   checked: boolean;
@@ -11,6 +12,7 @@ interface StatusSwitchProps {
   inactiveLabel?: string;
   showLabel?: boolean;
   size?: "sm" | "md" | "lg";
+  permission?: string;
 }
 
 export function StatusSwitch({
@@ -21,8 +23,10 @@ export function StatusSwitch({
   inactiveLabel = "Inactive",
   showLabel = true,
   size = "md",
+  permission,
 }: StatusSwitchProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const { hasPermission } = usePermissions();
 
   const handleToggle = async () => {
     if (disabled || isLoading) return;
@@ -46,11 +50,13 @@ export function StatusSwitch({
       {isLoading ? (
         <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
       ) : (
-        <Switch
-          checked={checked}
-          onCheckedChange={handleToggle}
-          disabled={disabled}
-        />
+        hasPermission(permission || "") && (
+          <Switch
+            checked={checked}
+            onCheckedChange={handleToggle}
+            disabled={disabled}
+          />
+        )
       )}
       {showLabel && (
         <Label

@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 import { ReferralSettings } from "@/lib/types";
 import { toast } from "sonner";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
 
 interface SettingsTabProps {
   onSuccess?: () => void;
@@ -27,6 +29,7 @@ interface SettingsTabProps {
 
 const SettingsTab = ({ onSuccess }: SettingsTabProps) => {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
   const store = useReferralStore.getState();
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<Partial<ReferralSettings>>({
@@ -121,11 +124,15 @@ const SettingsTab = ({ onSuccess }: SettingsTabProps) => {
                 {t("referrals.settings.form.isEnabledDescription")}
               </p>
             </div>
-            <Switch
-              id="isEnabled"
-              checked={formData.isEnabled}
-              onCheckedChange={(checked) => handleChange("isEnabled", checked)}
-            />
+            {hasPermission(permissions.referrals.update_settings) && (
+              <Switch
+                id="isEnabled"
+                checked={formData.isEnabled}
+                onCheckedChange={(checked) =>
+                  handleChange("isEnabled", checked)
+                }
+              />
+            )}
           </div>
 
           {/* Coins Per Referral */}
@@ -204,21 +211,23 @@ const SettingsTab = ({ onSuccess }: SettingsTabProps) => {
           </div>
 
           {/* Submit Button */}
-          <div className="flex gap-3">
-            <Button type="submit" disabled={isSaving}>
-              {isSaving ? (
-                <>
-                  <Save className="w-4 h-4 mr-2 animate-spin" />
-                  {t("referrals.settings.form.saving")}
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4 mr-2" />
-                  {t("referrals.settings.form.save")}
-                </>
-              )}
-            </Button>
-          </div>
+          {hasPermission(permissions.referrals.update_settings) && (
+            <div className="flex gap-3">
+              <Button type="submit" disabled={isSaving}>
+                {isSaving ? (
+                  <>
+                    <Save className="w-4 h-4 mr-2 animate-spin" />
+                    {t("referrals.settings.form.saving")}
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
+                    {t("referrals.settings.form.save")}
+                  </>
+                )}
+              </Button>
+            </div>
+          )}
         </form>
       </Card>
 

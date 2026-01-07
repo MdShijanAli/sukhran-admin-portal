@@ -12,6 +12,8 @@ import { ActionItem, DropdownMenuActions } from "@/components/table";
 import { Edit, Eye, Send, Trash2 } from "lucide-react";
 import { StatusSwitch } from "@/components/custom/StatusSwitch";
 import getSerialNumber from "@/lib/getSerialNumber";
+import usePermissions from "@/hooks/use-permissions";
+import permissions from "@/lib/permissions";
 
 interface DonationChannelsTabProps {
   onViewDetails?: (channel: DonationChannel) => void;
@@ -31,6 +33,7 @@ export default function DonationChannelsTab({
   onToggleStatus,
 }: DonationChannelsTabProps) {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
 
   const store = useDonationChannelStore();
 
@@ -67,11 +70,13 @@ export default function DonationChannelsTab({
       label: t("donations.actions.edit"),
       icon: Edit,
       onClick: handleEdit,
+      show: hasPermission(permissions.donations.edit),
     },
     {
       label: t("donations.actions.fulfillCoins"),
       icon: Send,
       onClick: handleFulfillCoins,
+      show: hasPermission(permissions.donations.manage),
     },
     {
       label: t("donations.actions.viewHistory"),
@@ -84,6 +89,7 @@ export default function DonationChannelsTab({
       icon: Trash2,
       onClick: handleDelete,
       variant: "destructive",
+      show: hasPermission(permissions.donations.delete),
     },
   ];
 
@@ -168,6 +174,7 @@ export default function DonationChannelsTab({
           activeLabel={t("active")}
           inactiveLabel={t("inactive")}
           size="sm"
+          permission={permissions.donations.edit}
         />
       ),
     },

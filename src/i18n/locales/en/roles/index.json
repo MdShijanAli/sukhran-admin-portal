@@ -40,6 +40,7 @@
     "descriptionPlaceholder": "Brief description of the role",
     "status": "Status",
     "permissions": "Permissions",
+    "searchPermissions": "Search permissions...",
     "selected": "selected",
     "selectAll": "Select All",
     "deselectAll": "Deselect All",

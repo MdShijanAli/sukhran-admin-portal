@@ -17,9 +17,13 @@ import ViewChannelModal from "./modal/ViewChannelModal";
 import StatisticsTab from "./tabs/StatisticsTab";
 import CoinReportTab from "./tabs/CoinReportTab";
 import FulfillHistoryModal from "./modal/FulfillHistoryModal";
+import { withPermission } from "@/hoc/withPermission";
+import permissions from "@/lib/permissions";
+import usePermissions from "@/hooks/use-permissions";
 
 function Donations() {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
 
   // State for modals
   const [showChannelForm, setShowChannelForm] = useState(false);
@@ -142,10 +146,12 @@ function Donations() {
             {t("donations.subtitle")}
           </p>
         </div>
-        <Button onClick={handleCreateChannel}>
-          <Plus className="mr-2 h-4 w-4" />
-          {t("donations.channels.addChannel")}
-        </Button>
+        {hasPermission(permissions.donations.create) && (
+          <Button onClick={handleCreateChannel}>
+            <Plus className="mr-2 h-4 w-4" />
+            {t("donations.channels.addChannel")}
+          </Button>
+        )}
       </div>
 
       {/* Tabs */}
@@ -250,4 +256,4 @@ function Donations() {
   );
 }
 
-export default Donations;
+export default withPermission(Donations, permissions.donations.view);

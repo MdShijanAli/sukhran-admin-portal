@@ -15,10 +15,14 @@ import ViewNotificationModal from "./modal/ViewNotificationModal";
 import { useTranslation } from "react-i18next";
 import { formatDate } from "@/lib/utils";
 import getSerialNumber from "@/lib/getSerialNumber";
+import { withPermission } from "@/hoc/withPermission";
+import permissions from "@/lib/permissions";
+import usePermissions from "@/hooks/use-permissions";
 
 const Notifications = () => {
   const { t } = useTranslation();
   const store = useNotificationStore();
+  const { hasPermission } = usePermissions();
 
   const [showSendModal, setShowSendModal] = useState(false);
   const [showTestModal, setShowTestModal] = useState(false);
@@ -176,25 +180,35 @@ const Notifications = () => {
     },
   ];
 
-  return (
-    <div className="animate-fade-in">
-      <BaseTableList<Notification>
-        title={t("notifications.title")}
-        description={t("notifications.description")}
-        headerActions={[
+  const headerActions = [
+    ...(hasPermission(permissions.notification.test)
+      ? [
           {
             label: t("notifications.buttons.test"),
             icon: TestTube,
             onClick: handleTest,
             variant: "outline",
           },
+        ]
+      : []),
+    ...(hasPermission(permissions.notification.send)
+      ? [
           {
             label: t("notifications.buttons.send"),
             icon: Plus,
             onClick: handleCreate,
             variant: "default",
           },
-        ]}
+        ]
+      : []),
+  ];
+
+  return (
+    <div className="animate-fade-in">
+      <BaseTableList<Notification>
+        title={t("notifications.title")}
+        description={t("notifications.description")}
+        headerActions={headerActions}
         searchPlaceholder={t("notifications.searchPlaceholder")}
         enableSearch={true}
         columns={columns}
@@ -226,4 +240,4 @@ const Notifications = () => {
   );
 };
 
-export default Notifications;
+export default withPermission(Notifications, permissions.notification.view);
