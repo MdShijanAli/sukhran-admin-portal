@@ -104,7 +104,14 @@
   "delete": {
     "title": "ব্যবহারকারী মুছুন",
     "message": "আপনি কি নিশ্চিত যে আপনি এই ব্যবহারকারীকে মুছে ফেলতে চান? এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না।",
-    "confirm": "হ্যাঁ, মুছুন"
+    "confirm": "হ্যাঁ, মুছুন",
+    "typeToConfirm": "লিখুন",
+    "toConfirm": "নিশ্চিত করতে",
+    "confirmationText": "PERMANENTLY_DELETE",
+    "reasonLabel": "মুছে ফেলার কারণ",
+    "reasonPlaceholder": "এই ব্যবহারকারীকে মুছে ফেলার কারণ লিখুন...",
+    "confirmationRequired": "নিশ্চিত করতে \"PERMANENTLY_DELETE\" টাইপ করুন",
+    "reasonRequired": "অনুগ্রহ করে মুছে ফেলার কারণ প্রদান করুন"
   },
   "summary": {
     "totalUsers": "মোট ব্যবহারকারী",

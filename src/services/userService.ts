@@ -15,6 +15,7 @@ interface UserService extends ApiService<User> {
   resetUserPassword: (id: number | string) => Promise<unknown>;
   restoreUser: (id: number | string) => Promise<unknown>;
   statistics: () => Promise<unknown>;
+  forceDeleteUser: (id: number | string) => Promise<unknown>;
 }
 
 const userService: UserService = {
@@ -66,6 +67,22 @@ const userService: UserService = {
       return response.data;
     } catch (error) {
       console.error("Error restoring user:", error);
+      throw error;
+    }
+  },
+
+  forceDeleteUser: async (
+    id: number | string,
+    body?: { confirmation: string; reason: string }
+  ) => {
+    try {
+      const response = await apiClient.delete(
+        apiRoutes.users.forceDeleteUser(id),
+        { data: body }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error force deleting user:", error);
       throw error;
     }
   },

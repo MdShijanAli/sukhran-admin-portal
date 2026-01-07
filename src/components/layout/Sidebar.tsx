@@ -172,7 +172,7 @@ const menuItems = [
     icon: Users,
     label: "nav.usersSettings",
     path: "/users",
-    permission: permissions.users.view,
+    permission: "",
     subItems: [
       {
         icon: Users,

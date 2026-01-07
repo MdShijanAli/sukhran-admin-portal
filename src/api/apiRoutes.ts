@@ -43,6 +43,8 @@ export const apiRoutes = {
     restoreUser: (id: number | string) =>
       createApiUrl(`admin/users/${id}/restore`),
     statistics: createApiUrl("admin/users/statistics"),
+    forceDeleteUser: (id: number | string) =>
+      createApiUrl(`admin/users/${id}/force`),
   },
 
   categories: {

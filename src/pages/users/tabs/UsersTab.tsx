@@ -72,7 +72,12 @@ const UsersTab = () => {
         toast.error("Failed to fetch user roles");
       }
     };
-    fetchRoles();
+    if (
+      hasPermission(permissions.users.create) ||
+      hasPermission(permissions.users.edit)
+    ) {
+      fetchRoles();
+    }
   }, []);
 
   // Filter configurations
@@ -88,18 +93,22 @@ const UsersTab = () => {
       ],
       defaultValue: "active",
     },
-    {
-      key: "role",
-      label: t("users.filter.user_role"),
-      options: [
-        { label: t("users.filter.allRoles"), value: "all" },
-        ...roleStore.roles.map((role) => ({
-          label: role?.display_name,
-          value: role.id,
-        })),
-      ],
-      defaultValue: "all",
-    },
+    ...(hasPermission(permissions.roles.view)
+      ? [
+          {
+            key: "role",
+            label: t("users.filter.user_role"),
+            options: [
+              { label: t("users.filter.allRoles"), value: "all" },
+              ...roleStore.roles.map((role) => ({
+                label: role?.display_name,
+                value: role.id,
+              })),
+            ],
+            defaultValue: "all",
+          },
+        ]
+      : []),
   ];
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {

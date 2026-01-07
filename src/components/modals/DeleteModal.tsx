@@ -9,6 +9,7 @@ export interface DeleteModalProps {
   description?: string | ReactNode;
   onConfirm: () => void;
   isDeleting?: boolean;
+  children?: ReactNode;
 }
 
 export default function DeleteModal({
@@ -18,6 +19,7 @@ export default function DeleteModal({
   description,
   onConfirm,
   isDeleting = false,
+  children,
 }: DeleteModalProps) {
   const { t } = useTranslation();
   return (
@@ -32,7 +34,12 @@ export default function DeleteModal({
       closeButtonText={t("cancel")}
       size="md"
     >
-      <p className="text-sm text-muted-foreground">{description}</p>
+      <div className="space-y-4">
+        {description && (
+          <p className="text-sm text-muted-foreground">{description}</p>
+        )}
+        {children}
+      </div>
     </BaseModal>
   );
 }
