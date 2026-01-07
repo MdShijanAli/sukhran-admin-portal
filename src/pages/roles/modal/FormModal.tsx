@@ -16,6 +16,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import usePermissions from "@/hooks/use-permissions";
+import authPermissions from "@/lib/permissions";
 
 interface RoleFormData {
   name: string;
@@ -40,6 +42,7 @@ export default function FormModal({
 }: FormModalProps) {
   const { t } = useTranslation();
   const { permissions, totalPermissions } = useRoleStore();
+  const { hasPermission } = usePermissions();
 
   console.log("Total Permissions from Store:", permissions, totalPermissions);
 
@@ -65,7 +68,11 @@ export default function FormModal({
       }
     };
 
-    if (open && permissions.length === 0) {
+    if (
+      open &&
+      permissions.length === 0 &&
+      hasPermission(authPermissions.roles.assignPermissions)
+    ) {
       fetchPermissions();
     }
   }, [open, permissions.length]);
@@ -286,127 +293,132 @@ export default function FormModal({
           </div>
         </div>
 
-        <div className="space-y-3 border-t pt-4">
-          <div className="flex items-center justify-between">
-            <Label className="text-base">
-              {t("roles.form.permissions")}{" "}
-              <span className="text-sm text-muted-foreground">
-                ({formData.permission_ids.length} / {getTotalPermissions()}{" "}
-                {t("roles.form.selected")})
-              </span>
-            </Label>
-            <button
-              type="button"
-              onClick={handleSelectAll}
-              className="text-sm text-primary hover:underline"
-            >
-              {formData.permission_ids.length === getTotalPermissions()
-                ? t("roles.form.deselectAll")
-                : t("roles.form.selectAll")}
-            </button>
-          </div>
-
-          {/* Search Input */}
-          <div className="relative">
-            <Input
-              type="text"
-              placeholder={
-                t("roles.form.searchPermissions") ||
-                "Search permissions or modules..."
-              }
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full"
-            />
-            {searchQuery && (
+        {hasPermission(authPermissions.roles.assignPermissions) && (
+          <div className="space-y-3 border-t pt-4">
+            <div className="flex items-center justify-between">
+              <Label className="text-base">
+                {t("roles.form.permissions")}{" "}
+                <span className="text-sm text-muted-foreground">
+                  ({formData.permission_ids.length} / {getTotalPermissions()}{" "}
+                  {t("roles.form.selected")})
+                </span>
+              </Label>
               <button
                 type="button"
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                onClick={handleSelectAll}
+                className="text-sm text-primary hover:underline"
               >
-                ✕
+                {formData.permission_ids.length === getTotalPermissions()
+                  ? t("roles.form.deselectAll")
+                  : t("roles.form.selectAll")}
               </button>
-            )}
-          </div>
+            </div>
 
-          <div className="max-h-[400px] overflow-y-auto border rounded-lg">
-            {filteredPermissions.length === 0 && (
-              <p className="text-sm text-muted-foreground text-center py-8">
-                {searchQuery
-                  ? t("roles.form.noMatchingPermissions") ||
-                    "No matching permissions found"
-                  : t("roles.form.noPermissionsAvailable")}
-              </p>
-            )}
-            <Accordion type="multiple" className="w-full">
-              {filteredPermissions.map((module) => {
-                const modulePermissionIds = module.permissions.map((p) => p.id);
-                const selectedCount = modulePermissionIds.filter((id) =>
-                  formData.permission_ids.includes(id)
-                ).length;
-                const allSelected = selectedCount === module.permissions.length;
+            {/* Search Input */}
+            <div className="relative">
+              <Input
+                type="text"
+                placeholder={
+                  t("roles.form.searchPermissions") ||
+                  "Search permissions or modules..."
+                }
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
 
-                return (
-                  <AccordionItem key={module.module} value={module.module}>
-                    <div className="flex items-center border-b">
-                      <div className="flex items-center gap-2 px-4 py-3">
-                        <Checkbox
-                          checked={allSelected}
-                          onCheckedChange={() =>
-                            handleModuleToggle(module.permissions)
-                          }
-                        />
-                      </div>
-                      <AccordionTrigger className="flex-1 px-0 py-3 hover:bg-muted/50 hover:no-underline">
-                        <div className="flex items-center justify-between w-full pr-4">
-                          <span className="font-medium capitalize">
-                            {module.module}
-                          </span>
-                          <Badge variant="outline" className="text-xs">
-                            {selectedCount} / {module.permissions.length}
-                          </Badge>
+            <div className="max-h-[400px] overflow-y-auto border rounded-lg">
+              {filteredPermissions.length === 0 && (
+                <p className="text-sm text-muted-foreground text-center py-8">
+                  {searchQuery
+                    ? t("roles.form.noMatchingPermissions") ||
+                      "No matching permissions found"
+                    : t("roles.form.noPermissionsAvailable")}
+                </p>
+              )}
+              <Accordion type="multiple" className="w-full">
+                {filteredPermissions.map((module) => {
+                  const modulePermissionIds = module.permissions.map(
+                    (p) => p.id
+                  );
+                  const selectedCount = modulePermissionIds.filter((id) =>
+                    formData.permission_ids.includes(id)
+                  ).length;
+                  const allSelected =
+                    selectedCount === module.permissions.length;
+
+                  return (
+                    <AccordionItem key={module.module} value={module.module}>
+                      <div className="flex items-center border-b">
+                        <div className="flex items-center gap-2 px-4 py-3">
+                          <Checkbox
+                            checked={allSelected}
+                            onCheckedChange={() =>
+                              handleModuleToggle(module.permissions)
+                            }
+                          />
                         </div>
-                      </AccordionTrigger>
-                    </div>
-                    <AccordionContent className="px-4 pb-4">
-                      <div className="space-y-2 pt-2">
-                        {module.permissions.map((permission) => (
-                          <div
-                            key={permission.id}
-                            className="flex items-start space-x-3 p-2 rounded hover:bg-muted/50"
-                          >
-                            <Checkbox
-                              id={`permission-${permission.id}`}
-                              checked={formData.permission_ids.includes(
-                                permission.id
-                              )}
-                              onCheckedChange={() =>
-                                handlePermissionToggle(permission.id)
-                              }
-                            />
-                            <div className="flex-1">
-                              <Label
-                                htmlFor={`permission-${permission.id}`}
-                                className="font-medium cursor-pointer text-sm"
-                              >
-                                {permission.display_name}
-                              </Label>
-                              {permission.description && (
-                                <p className="text-xs text-muted-foreground mt-0.5">
-                                  {permission.description}
-                                </p>
-                              )}
-                            </div>
+                        <AccordionTrigger className="flex-1 px-0 py-3 hover:bg-muted/50 hover:no-underline">
+                          <div className="flex items-center justify-between w-full pr-4">
+                            <span className="font-medium capitalize">
+                              {module.module}
+                            </span>
+                            <Badge variant="outline" className="text-xs">
+                              {selectedCount} / {module.permissions.length}
+                            </Badge>
                           </div>
-                        ))}
+                        </AccordionTrigger>
                       </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                );
-              })}
-            </Accordion>
+                      <AccordionContent className="px-4 pb-4">
+                        <div className="space-y-2 pt-2">
+                          {module.permissions.map((permission) => (
+                            <div
+                              key={permission.id}
+                              className="flex items-start space-x-3 p-2 rounded hover:bg-muted/50"
+                            >
+                              <Checkbox
+                                id={`permission-${permission.id}`}
+                                checked={formData.permission_ids.includes(
+                                  permission.id
+                                )}
+                                onCheckedChange={() =>
+                                  handlePermissionToggle(permission.id)
+                                }
+                              />
+                              <div className="flex-1">
+                                <Label
+                                  htmlFor={`permission-${permission.id}`}
+                                  className="font-medium cursor-pointer text-sm"
+                                >
+                                  {permission.display_name}
+                                </Label>
+                                {permission.description && (
+                                  <p className="text-xs text-muted-foreground mt-0.5">
+                                    {permission.description}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  );
+                })}
+              </Accordion>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </BaseModal>
   );

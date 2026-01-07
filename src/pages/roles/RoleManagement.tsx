@@ -109,6 +109,7 @@ const RoleManagement = () => {
         role.name !== constData.roles.SUPER_ADMIN &&
         role.name !== constData.roles.CUSTOMER, // Prevent editing super admin and admin roles
       onClick: handleEdit,
+      separator: true,
     },
     {
       label: t("roles.actions.deleteRole"),
