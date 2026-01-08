@@ -1,13 +1,14 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import {
-  TrendingUp,
-  DollarSign,
-  Users,
-  ShoppingCart,
-  Package,
-  Calendar,
-  Download,
   FileText,
+  Search,
+  Package,
+  ShoppingCart,
+  CreditCard,
+  TrendingUp,
+  ArrowRight,
 } from "lucide-react";
 import {
   Card,
@@ -16,185 +17,166 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { reportTypes } from "@/data/mockData";
-import ComingSoon from "@/components/custom/ComingSoon";
+import { Input } from "@/components/ui/input";
 
-const iconMap = {
-  TrendingUp,
-  DollarSign,
-  Users,
-  ShoppingCart,
-  Package,
-  Calendar,
-};
+interface Report {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  route: string;
+  color: string;
+}
 
 const Reports = () => {
   const { t } = useTranslation();
-  const isProduction = import.meta.env.PROD;
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const handleGenerateReport = (reportId: string) => {
-    console.log("Generating report:", reportId);
-    // Report generation logic here
+  const reports: Report[] = [
+    {
+      id: "transaction-report",
+      name: t("reports.transactionReport"),
+      description: t("reports.transactionReportDesc"),
+      icon: "CreditCard",
+      route: "/reports/transactions",
+      color: "from-blue-500 to-cyan-500",
+    },
+    {
+      id: "package-sales-report",
+      name: t("reports.packageSalesReport"),
+      description: t("reports.packageSalesReportDesc"),
+      icon: "Package",
+      route: "/reports/package-sales",
+      color: "from-purple-500 to-pink-500",
+    },
+    {
+      id: "package-orders-report",
+      name: t("reports.packageOrdersReport"),
+      description: t("reports.packageOrdersReportDesc"),
+      icon: "ShoppingCart",
+      route: "/reports/package-orders",
+      color: "from-green-500 to-emerald-500",
+    },
+    {
+      id: "regular-sales-report",
+      name: t("reports.regularSalesReport"),
+      description: t("reports.regularSalesReportDesc"),
+      icon: "TrendingUp",
+      route: "/reports/regular-sales",
+      color: "from-orange-500 to-red-500",
+    },
+    {
+      id: "regular-orders-report",
+      name: t("reports.regularOrdersReport"),
+      description: t("reports.regularOrdersReportDesc"),
+      icon: "FileText",
+      route: "/reports/regular-orders",
+      color: "from-indigo-500 to-purple-500",
+    },
+  ];
+
+  const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+    CreditCard,
+    Package,
+    ShoppingCart,
+    TrendingUp,
+    FileText,
   };
 
-  // Show Coming Soon in production mode
-  if (isProduction) {
-    return (
-      <div className="animate-fade-in">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold">Reports</h1>
-          <p className="text-muted-foreground mt-1">
-            Welcome back! Here's what's happening today.
-          </p>
-        </div>
-        <ComingSoon />
-      </div>
-    );
-  }
+  // Filter reports based on search query
+  const filteredReports = reports.filter(
+    (report) =>
+      report.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      report.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleNavigateToReport = (route: string) => {
+    navigate(route);
+  };
 
   return (
-    <div className="">
+    <div className="animate-fade-in space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
-            Reports & Analytics
+            {t("reports.title")}
           </h1>
-          <p className="text-muted-foreground mt-1">
-            Generate and export detailed business reports
-          </p>
+          <p className="text-muted-foreground mt-1">{t("reports.subtitle")}</p>
         </div>
-        <Button className="gap-2">
-          <FileText className="h-4 w-4" />
-          Custom Report
-        </Button>
+
+        {/* Search Bar */}
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            placeholder={t("reports.searchReports")}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9"
+          />
+        </div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Reports</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">142</div>
-            <p className="text-xs text-muted-foreground">
-              Generated this month
+      {/* Reports Grid */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {filteredReports.length === 0 ? (
+          <div className="col-span-full text-center py-12">
+            <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <p className="text-lg text-muted-foreground">
+              {t("reports.noReportsFound")}
             </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Scheduled</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground">
-              Auto-generated reports
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Downloads</CardTitle>
-            <Download className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">856</div>
-            <p className="text-xs text-muted-foreground">Total downloads</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Exports</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+23%</div>
-            <p className="text-xs text-muted-foreground">From last month</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Report Types */}
-      <div>
-        <h2 className="text-xl font-semibold mb-4">Available Reports</h2>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {reportTypes.map((report) => {
-            const IconComponent = iconMap[report.icon as keyof typeof iconMap];
+          </div>
+        ) : (
+          filteredReports.map((report) => {
+            const IconComponent = iconMap[report.icon] || FileText;
             return (
               <Card
                 key={report.id}
-                className="group hover:shadow-lg transition-all"
+                className="group cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-primary/50"
+                onClick={() => handleNavigateToReport(report.route)}
               >
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                        <IconComponent className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg">{report.name}</CardTitle>
-                        <CardDescription className="mt-1">
-                          Last generated: Today
-                        </CardDescription>
-                      </div>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex gap-2">
-                    <Button
-                      variant="default"
-                      size="sm"
-                      className="flex-1 gap-2"
-                      onClick={() => handleGenerateReport(report.id)}
+                <CardHeader className="pb-4">
+                  <div className="flex items-start justify-between">
+                    <div
+                      className={`flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${report.color} shadow-lg`}
                     >
-                      <FileText className="h-4 w-4" />
-                      Generate
-                    </Button>
-                    <Button variant="outline" size="sm" className="gap-2">
-                      <Download className="h-4 w-4" />
-                      Export
-                    </Button>
+                      <IconComponent className="h-7 w-7 text-white" />
+                    </div>
+                    <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                  </div>
+                  <CardTitle className="text-xl mt-4 group-hover:text-primary transition-colors">
+                    {report.name}
+                  </CardTitle>
+                  <CardDescription className="mt-2 line-clamp-2">
+                    {report.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center text-sm text-primary font-medium group-hover:gap-2 transition-all">
+                    {t("reports.viewReport")}
+                    <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0 transition-all" />
                   </div>
                 </CardContent>
               </Card>
             );
-          })}
-        </div>
+          })
+        )}
       </div>
 
-      {/* Export Options */}
-      <Card>
+      {/* Info Section */}
+      <Card className="border-dashed">
         <CardHeader>
-          <CardTitle>Export Options</CardTitle>
-          <CardDescription>
-            Choose your preferred format for report exports
-          </CardDescription>
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="h-5 w-5" />
+            {t("reports.aboutReports")}
+          </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-3">
-            <Button variant="outline" className="gap-2">
-              <Download className="h-4 w-4" />
-              Export as PDF
-            </Button>
-            <Button variant="outline" className="gap-2">
-              <Download className="h-4 w-4" />
-              Export as Excel
-            </Button>
-            <Button variant="outline" className="gap-2">
-              <Download className="h-4 w-4" />
-              Export as CSV
-            </Button>
-            <Button variant="outline" className="gap-2">
-              <Download className="h-4 w-4" />
-              Email Report
-            </Button>
-          </div>
+        <CardContent className="space-y-2 text-sm text-muted-foreground">
+          <p>• {t("reports.reportInfo1")}</p>
+          <p>• {t("reports.reportInfo2")}</p>
+          <p>• {t("reports.reportInfo3")}</p>
+          <p>• {t("reports.reportInfo4")}</p>
         </CardContent>
       </Card>
     </div>

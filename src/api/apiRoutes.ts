@@ -311,4 +311,23 @@ export const apiRoutes = {
     toggleStatus: (id: number | string) =>
       createApiUrl(`admin/brands/${id}/toggle-status`),
   },
+
+  reports: {
+    transactions: createApiUrl("admin/transactions/report-data"),
+    exortTransactions: createApiUrl("admin/transactions/export"),
+    packageSales: createApiUrl("admin/orders/package-orders/sales-report-data"),
+    exportPackageSales: createApiUrl(
+      "admin/orders/package-orders/export-sales"
+    ),
+    packageOrders: createApiUrl(
+      "admin/orders/package-orders/orders-report-data"
+    ),
+    exportPackageOrders: createApiUrl(
+      "admin/orders/package-orders/orders-report-data"
+    ),
+    regularSales: createApiUrl("admin/orders/sales-report-data"),
+    exportRegularSales: createApiUrl("admin/orders/export-sales"),
+    regularOrders: createApiUrl("admin/orders/orders-report-data"),
+    exportRegularOrders: createApiUrl("admin/orders/export-orders"),
+  },
 };

@@ -38,6 +38,11 @@ import Donations from "@/pages/donations";
 import CreateSupport from "@/pages/supports/CreateSupport";
 import Referrals from "@/pages/referrals/Referrals";
 import Brands from "@/pages/brands/Brands";
+import TransactionReport from "@/pages/reports/reports/TransactionReport";
+import PackageSalesReport from "@/pages/reports/reports/PackageSalesReport";
+import PackageOrdersReport from "@/pages/reports/reports/PackageOrdersReport";
+import RegularSalesReport from "@/pages/reports/reports/RegularSalesReport";
+import RegularOrdersReport from "@/pages/reports/reports/RegularOrdersReport";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -332,6 +337,49 @@ const AppRoutes: React.FC = () => {
             </PrivateRoute>
           }
         />
+
+        {/* Reports */}
+        <Route
+          path="reports/transactions"
+          element={
+            <PrivateRoute>
+              <TransactionReport />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="reports/package-sales"
+          element={
+            <PrivateRoute>
+              <PackageSalesReport />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="reports/package-orders"
+          element={
+            <PrivateRoute>
+              <PackageOrdersReport />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="reports/regular-sales"
+          element={
+            <PrivateRoute>
+              <RegularSalesReport />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="reports/regular-orders"
+          element={
+            <PrivateRoute>
+              <RegularOrdersReport />
+            </PrivateRoute>
+          }
+        />
+
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="*" element={<NotFound />} />
       </Route>

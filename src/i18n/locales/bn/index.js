@@ -19,6 +19,7 @@ import support from "./support/index.json";
 import notifications from "./notifications/index.json";
 import banners from "./banners/index.json";
 import brands from "./brands/index.json";
+import reports from "./reports/index.json";
 
 /**
  * follow the file structure.
@@ -48,6 +49,7 @@ const combined = {
   notifications,
   banners,
   brands,
+  reports,
 };
 
 export default combined;
