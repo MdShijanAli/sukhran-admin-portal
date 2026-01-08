@@ -206,12 +206,46 @@ export const createApiService = <T = unknown>(
       if (!apiRoutes.export) {
         throw new Error("export route not configured");
       }
-      const response = await apiClient.get<T>(
-        apiRoutes.export + (queryString ? `?${queryString}` : "")
+      const response = await apiClient.get(
+        apiRoutes.export + (queryString ? `?${queryString}` : ""),
+        {
+          responseType: "blob", // Important: tell axios to expect a blob
+        }
       );
-      console.log("Export response in service:", response);
+
       if (response && response.status === 200) {
-        return response.data;
+        // Create a download link and trigger it
+        const blob = new Blob([response.data], {
+          type:
+            response.headers["content-type"] ||
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+
+        // Get filename from content-disposition header or use default
+        const contentDisposition = response.headers["content-disposition"];
+        let filename = "export.xlsx";
+        if (contentDisposition) {
+          const filenameMatch = contentDisposition.match(
+            /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+          );
+          if (filenameMatch && filenameMatch[1]) {
+            filename = filenameMatch[1].replace(/['"]/g, "");
+          }
+        }
+
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+
+        // Cleanup
+        link.remove();
+        window.URL.revokeObjectURL(url);
+
+        return { success: true, filename };
       }
     } catch (error) {
       console.error("Error exporting data:", error);

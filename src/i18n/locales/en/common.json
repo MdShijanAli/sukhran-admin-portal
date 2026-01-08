@@ -36,6 +36,8 @@
   "lastWeek": "Last Week",
   "lastMonth": "Last Month",
   "lastYear": "Last Year",
+  "exportFailed": "Export failed. Please try again.",
+  "exportSuccess": "Export successful",
   "thisWeek": "This Week",
   "thisMonth": "This Month",
   "thisYear": "This Year",

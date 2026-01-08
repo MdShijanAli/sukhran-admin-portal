@@ -16,7 +16,7 @@ import Packages from "@/pages/package/Packages";
 import PackageForm from "@/pages/package/PackageForm";
 import PackageDetails from "@/pages/package/PackageDetails";
 import Profile from "@/pages/profile/Profile";
-import Reports from "@/pages/Reports";
+import Reports from "@/pages/reports/Reports";
 import Delivery from "@/pages/delivery/Delivery";
 import Transactions from "@/pages/transactions/Transactions";
 import Support from "@/pages/supports/Support";
