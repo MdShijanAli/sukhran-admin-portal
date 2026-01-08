@@ -92,6 +92,7 @@ export interface CoverageArea {
   city: string;
   latitude: string;
   longitude: string;
+  custom_route_id?: string | number;
   radius_km: string;
   is_active: boolean;
   created_at: string;

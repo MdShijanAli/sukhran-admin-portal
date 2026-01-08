@@ -11,8 +11,8 @@ import TimeStaps from "@/components/custom/TimeStamps";
 
 interface Address {
   id: number;
-  user_id: string;
-  coverage_area_id: string;
+  user_id: number;
+  coverage_area_id: number;
   house: string;
   road: string;
   block: string;
@@ -20,12 +20,16 @@ interface Address {
   category: string;
   label: string | null;
   landmark: string | null;
+  latitude: string | null;
+  longitude: string | null;
+  location_source: string;
   is_default: boolean;
   created_at: string;
   updated_at: string;
 }
 
 interface CoverageAreaDetails extends CoverageArea {
+  custom_route_id?: string;
   addresses_count?: number;
   addresses?: Address[];
 }
@@ -84,7 +88,17 @@ export default function ViewModal({
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-2xl font-bold">{area?.name}</h3>
-              <p className="text-muted-foreground">{area?.city}</p>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <p>{area?.city}</p>
+                {area?.custom_route_id && (
+                  <>
+                    <span>•</span>
+                    <p className="text-sm">
+                      {t("coverage_area.view.routeId")}: {area.custom_route_id}
+                    </p>
+                  </>
+                )}
+              </div>
             </div>
             <Badge variant={area?.is_active ? "default" : "secondary"}>
               {area?.is_active
@@ -194,11 +208,24 @@ export default function ViewModal({
                               {t("coverage_area.view.label")} {address.label}
                             </p>
                           )}
+                          {address.latitude && address.longitude && (
+                            <p className="font-mono text-xs">
+                              {t("coverage_area.view.coordinates")}:{" "}
+                              {address.latitude}, {address.longitude}
+                            </p>
+                          )}
                         </div>
-                        <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground flex-wrap">
                           <span>
                             {t("coverage_area.view.userId")} {address.user_id}
                           </span>
+                          <span>•</span>
+                          <Badge
+                            variant="outline"
+                            className="text-xs capitalize"
+                          >
+                            {address.location_source}
+                          </Badge>
                           <span>•</span>
                           <span>
                             {t("coverage_area.view.added")}{" "}

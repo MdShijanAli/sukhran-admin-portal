@@ -14,6 +14,7 @@ interface CoverageAreaFormData {
   latitude: number;
   longitude: number;
   radius_km: number;
+  custom_route_id?: string | number;
   is_active: boolean;
 }
 
@@ -37,6 +38,7 @@ export default function FormModal({
     latitude: 0,
     longitude: 0,
     radius_km: 5,
+    custom_route_id: "",
     is_active: true,
   });
 
@@ -46,6 +48,7 @@ export default function FormModal({
       setFormData({
         name: editData.name,
         city: editData.city,
+        custom_route_id: editData.custom_route_id,
         latitude: parseFloat(editData.latitude),
         longitude: parseFloat(editData.longitude),
         radius_km: parseFloat(editData.radius_km),
@@ -58,6 +61,7 @@ export default function FormModal({
         city: "",
         latitude: 0,
         longitude: 0,
+        custom_route_id: "",
         radius_km: 5,
         is_active: true,
       });
@@ -103,6 +107,7 @@ export default function FormModal({
         latitude: formData.latitude,
         longitude: formData.longitude,
         radius_km: formData.radius_km,
+        custom_route_id: formData.custom_route_id,
         is_active: formData.is_active,
       };
 
@@ -211,24 +216,40 @@ export default function FormModal({
               {t("coverage_area.form.longitudeHint")}
             </p>
           </div>
-        </div>
 
-        {/* Radius */}
-        <div className="space-y-2">
-          <Label htmlFor="radius_km">{t("coverage_area.form.radiusKm")}</Label>
-          <Input
-            id="radius_km"
-            type="number"
-            step="0.1"
-            value={formData.radius_km}
-            onChange={(e) =>
-              updateField("radius_km", parseFloat(e.target.value) || 0)
-            }
-            placeholder={t("coverage_area.form.radiusPlaceholder")}
-          />
-          <p className="text-xs text-muted-foreground">
-            {t("coverage_area.form.radiusHint")}
-          </p>
+          {/* Radius */}
+          <div className="space-y-2">
+            <Label htmlFor="radius_km">
+              {t("coverage_area.form.radiusKm")}
+            </Label>
+            <Input
+              id="radius_km"
+              type="number"
+              step="0.1"
+              value={formData.radius_km}
+              onChange={(e) =>
+                updateField("radius_km", parseFloat(e.target.value) || 0)
+              }
+              placeholder={t("coverage_area.form.radiusPlaceholder")}
+            />
+            <p className="text-xs text-muted-foreground">
+              {t("coverage_area.form.radiusHint")}
+            </p>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="custom_route_id">
+              {t("coverage_area.form.customRouteId")}
+            </Label>
+            <Input
+              id="custom_route_id"
+              value={formData.custom_route_id}
+              onChange={(e) => updateField("custom_route_id", e.target.value)}
+              placeholder={t("coverage_area.form.customRouteIdPlaceholder")}
+            />
+            <p className="text-xs text-muted-foreground">
+              {t("coverage_area.form.customRouteIdHint")}
+            </p>
+          </div>
         </div>
 
         {/* Active Status */}

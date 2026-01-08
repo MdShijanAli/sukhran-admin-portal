@@ -219,6 +219,11 @@ const CoverageAreas = () => {
       ),
     },
     {
+      key: "custom_route_id",
+      label: t("coverage_area.columns.customRouteId"),
+      className: "text-center",
+    },
+    {
       key: "radius_km",
       label: t("coverage_area.columns.radiusKm"),
       className: "text-center",

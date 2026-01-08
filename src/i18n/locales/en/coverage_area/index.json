@@ -21,7 +21,8 @@
     "coordinates": "Coordinates",
     "radiusKm": "Radius (km)",
     "status": "Status",
-    "actions": "Actions"
+    "actions": "Actions",
+    "customRouteId": "Route ID"
   },
   "actions": {
     "viewDetails": "View Details",
@@ -45,6 +46,9 @@
     "latitudePlaceholder": "e.g., 23.7808",
     "latitudeHint": "Between -90 and 90",
     "longitude": "Longitude",
+    "customRouteIdHint": "Custom Route ID (optional)",
+    "customRouteId": "Custom Route ID",
+    "customRouteIdPlaceholder": "e.g., 101",
     "longitudePlaceholder": "e.g., 90.4156",
     "longitudeHint": "Between -180 and 180",
     "radiusKm": "Radius (km)",
@@ -61,6 +65,7 @@
     "coverageRadius": "Coverage Radius",
     "locationInformation": "Location Information",
     "latitude": "Latitude",
+    "routeId": "Route ID:",
     "longitude": "Longitude",
     "addressesCount": "Addresses",
     "default": "Default",

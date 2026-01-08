@@ -21,7 +21,8 @@
     "coordinates": "স্থানাঙ্ক",
     "radiusKm": "ব্যাসার্ধ (কিমি)",
     "status": "স্ট্যাটাস",
-    "actions": "কার্যক্রম"
+    "actions": "কার্যক্রম",
+    "customRouteId": "রুট আইডি"
   },
   "actions": {
     "viewDetails": "বিস্তারিত দেখুন",
@@ -48,6 +49,9 @@
     "longitudePlaceholder": "যেমন, ৯০.৪১৫৬",
     "longitudeHint": "-১৮০ এবং ১৮০ এর মধ্যে",
     "radiusKm": "ব্যাসার্ধ (কিমি)",
+    "customRouteIdHint": "কাস্টম রুট আইডি (ঐচ্ছিক)",
+    "customRouteId": "কাস্টম রুট আইডি",
+    "customRouteIdPlaceholder": "যেমন, ১০১",
     "radiusPlaceholder": "যেমন, ৫",
     "radiusHint": "সেবা কভারেজ ব্যাসার্ধ কিলোমিটারে",
     "activeStatus": "সক্রিয় স্ট্যাটাস",
@@ -63,6 +67,7 @@
     "latitude": "অক্ষাংশ",
     "longitude": "দ্রাঘিমাংশ",
     "addressesCount": "ঠিকানা",
+    "routeId": "রুট আইডি:",
     "default": "ডিফল্ট",
     "road": "রোড:",
     "block": "ব্লক:",
