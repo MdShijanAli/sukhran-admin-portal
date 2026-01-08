@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { ReportTableList } from "@/components/table/ReportTableList";
 import { transactionReportService } from "@/services/reportService";
+import { ReportTableList } from "@/components/table/ReportTableList";
 
 const TransactionReport = () => {
   const { t } = useTranslation();
@@ -11,6 +11,7 @@ const TransactionReport = () => {
         title={t("reports.transactionReport")}
         description={t("reports.transactionReportDesc")}
         service={transactionReportService}
+        reportName="transaction_report"
       />
     </div>
   );

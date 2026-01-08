@@ -1,51 +1,35 @@
 import { apiRoutes } from "@/api/apiRoutes";
 import { createApiService } from "./createApiService";
-import { useReportStore } from "@/stores/reportStore";
 
 // Generic report data type
 export type ReportData = Record<string, unknown>;
 
 // Transaction Report Service
-export const transactionReportService = createApiService<ReportData[]>(
-  {
-    getAll: apiRoutes.reports.transactions,
-    export: apiRoutes.reports.exortTransactions,
-  },
-  useReportStore.getState()
-);
+export const transactionReportService = createApiService<ReportData[]>({
+  getAll: apiRoutes.reports.transactions,
+  export: apiRoutes.reports.exortTransactions,
+});
 
 // Package Sales Report Service
-export const packageSalesReportService = createApiService<ReportData[]>(
-  {
-    getAll: apiRoutes.reports.packageSales,
-    export: apiRoutes.reports.exportPackageSales,
-  },
-  useReportStore.getState()
-);
+export const packageSalesReportService = createApiService<ReportData[]>({
+  getAll: apiRoutes.reports.packageSales,
+  export: apiRoutes.reports.exportPackageSales,
+});
 
 // Package Orders Report Service
-export const packageOrdersReportService = createApiService<ReportData[]>(
-  {
-    getAll: apiRoutes.reports.packageOrders,
-    export: apiRoutes.reports.exportPackageOrders,
-  },
-  useReportStore.getState()
-);
+export const packageOrdersReportService = createApiService<ReportData[]>({
+  getAll: apiRoutes.reports.packageOrders,
+  export: apiRoutes.reports.exportPackageOrders,
+});
 
 // Regular Sales Report Service
-export const regularSalesReportService = createApiService<ReportData[]>(
-  {
-    getAll: apiRoutes.reports.regularSales,
-    export: apiRoutes.reports.exportRegularSales,
-  },
-  useReportStore.getState()
-);
+export const regularSalesReportService = createApiService<ReportData[]>({
+  getAll: apiRoutes.reports.regularSales,
+  export: apiRoutes.reports.exportRegularSales,
+});
 
 // Regular Orders Report Service
-export const regularOrdersReportService = createApiService<ReportData[]>(
-  {
-    getAll: apiRoutes.reports.regularOrders,
-    export: apiRoutes.reports.exportRegularOrders,
-  },
-  useReportStore.getState()
-);
+export const regularOrdersReportService = createApiService<ReportData[]>({
+  getAll: apiRoutes.reports.regularOrders,
+  export: apiRoutes.reports.exportRegularOrders,
+});

@@ -27,7 +27,10 @@ export interface ApiService<T = unknown> {
   toggleStatus: (id: number | string) => Promise<T>;
   customFetchLists?: (queryString?: string) => Promise<T>;
   statistics?: (queryString?: string) => Promise<T>;
-  exportData?: (queryString?: string) => Promise<T>;
+  exportData?: (params: {
+    queryString?: string;
+    reportName?: string;
+  }) => Promise<T>;
 }
 
 export const createApiService = <T = unknown>(
@@ -201,7 +204,13 @@ export const createApiService = <T = unknown>(
     }
   };
 
-  const exportData = async (queryString?: string) => {
+  const exportData = async ({
+    queryString,
+    reportName,
+  }: {
+    queryString?: string;
+    reportName?: string;
+  }) => {
     try {
       if (!apiRoutes.export) {
         throw new Error("export route not configured");
@@ -225,16 +234,37 @@ export const createApiService = <T = unknown>(
         const link = document.createElement("a");
         link.href = url;
 
-        // Get filename from content-disposition header or use default
+        // Get filename from content-disposition header or generate timestamp-based name
         const contentDisposition = response.headers["content-disposition"];
-        let filename = "export.xlsx";
+        let filename = "";
+
         if (contentDisposition) {
-          const filenameMatch = contentDisposition.match(
-            /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
-          );
-          if (filenameMatch && filenameMatch[1]) {
-            filename = filenameMatch[1].replace(/['"]/g, "");
+          // Try multiple patterns to extract filename
+          const patterns = [
+            /filename\*=UTF-8''(.+)/,
+            /filename="(.+)"/,
+            /filename=([^;\s]+)/,
+          ];
+
+          for (const pattern of patterns) {
+            const match = contentDisposition.match(pattern);
+            if (match && match[1]) {
+              filename = decodeURIComponent(match[1].replace(/['"]/g, ""));
+              break;
+            }
           }
+        }
+
+        // If no filename from header, generate one with timestamp
+        if (!filename) {
+          const timestamp = new Date()
+            .toISOString()
+            .replace(/[:.]/g, "-")
+            .slice(0, -5);
+          const extension = response.headers["content-type"]?.includes("csv")
+            ? "csv"
+            : "xlsx";
+          filename = `${reportName || "report"}_${timestamp}.${extension}`;
         }
 
         link.setAttribute("download", filename);

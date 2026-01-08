@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ApiService } from "@/services/createApiService";
-import { useReportStore } from "@/stores/reportStore";
 import { toast } from "@/hooks/use-toast";
 import { BaseDatePicker } from "../custom/BaseDatePicker";
 import { useNavigate } from "react-router-dom";
@@ -35,6 +34,7 @@ export interface ReportTableListProps {
     onChange: (value: string) => void;
     placeholder?: string;
   }[];
+  reportName?: string;
 }
 
 // Helper to format column names (snake_case to Title Case)
@@ -67,7 +67,9 @@ const generateColumns = <T extends Record<string, unknown>>(
         if (
           key.toLowerCase().includes("price") ||
           key.toLowerCase().includes("amount") ||
-          key.toLowerCase().includes("total")
+          key.toLowerCase().includes("total") ||
+          key.toLowerCase().includes("charge") ||
+          key.toLowerCase().includes("vat")
         ) {
           return `৳${value.toFixed(2)}`;
         }
@@ -84,118 +86,104 @@ export function ReportTableList({
   description,
   service,
   filters,
+  reportName,
 }: ReportTableListProps) {
   const { t } = useTranslation();
-  const store = useReportStore();
+  const navigate = useNavigate();
+
+  // Local state for report data
+  const [reportData, setReportData] = useState<Record<string, unknown>[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [isExporting, setIsExporting] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [localFilters, setLocalFilters] = useState<Record<string, string>>({});
-  const [hasInitialFetch, setHasInitialFetch] = useState(false);
-  const nevigate = useNavigate();
-
-  const currentPage = store.pagination?.current_page || 1;
-  const perPage = store.pagination?.per_page || 20;
 
   // Generate columns from report data
-  const columns = generateColumns(
-    store.reportData as Record<string, unknown>[]
-  );
-
-  // Serialize filters to detect changes
-  const filterValues = Object.values(localFilters).join(",");
+  const columns = generateColumns(reportData);
 
   // Build query string
-  const buildQueryString = useCallback(
-    (includePagination = true) => {
-      const params = new URLSearchParams();
+  const buildQueryString = useCallback(() => {
+    const params = new URLSearchParams();
 
-      if (searchQuery) {
-        params.append("search", searchQuery);
+    if (searchQuery) {
+      params.append("search", searchQuery);
+    }
+
+    if (dateRange?.from) {
+      params.append("from_date", dateRange.from.toISOString().split("T")[0]);
+    }
+    if (dateRange?.to) {
+      params.append("to_date", dateRange.to.toISOString().split("T")[0]);
+    }
+
+    // Add filter params
+    Object.entries(localFilters).forEach(([key, value]) => {
+      if (value) {
+        params.append(key, value);
       }
+    });
 
-      if (includePagination) {
-        params.append("page", currentPage.toString());
-        params.append("per_page", perPage.toString());
-      }
-
-      if (dateRange?.from) {
-        params.append("from_date", dateRange.from.toISOString().split("T")[0]);
-      }
-      if (dateRange?.to) {
-        params.append("to_date", dateRange.to.toISOString().split("T")[0]);
-      }
-
-      // Add filter params
-      Object.entries(localFilters).forEach(([key, value]) => {
-        if (value) {
-          params.append(key, value);
-        }
-      });
-
-      return params.toString();
-    },
-    [searchQuery, currentPage, perPage, dateRange, filterValues]
-  );
-
-  // Fetch report data
-  const fetchReportData = useCallback(
-    async (forceFetch = false) => {
-      if (!forceFetch && hasInitialFetch) return;
-
-      try {
-        store.setLoading(true);
-        store.setError(null);
-
-        const queryString = buildQueryString();
-        await service.fetchLists(queryString);
-
-        setHasInitialFetch(true);
-      } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : "Failed to fetch report data";
-        store.setError(message);
-        toast({
-          title: "Error",
-          description: message,
-          variant: "destructive",
-        });
-      } finally {
-        store.setLoading(false);
-      }
-    },
-    [service, buildQueryString, hasInitialFetch, store]
-  );
+    return params.toString();
+  }, [searchQuery, dateRange, localFilters]);
 
   // Handle generate report
   const handleGenerate = async () => {
     setIsGenerating(true);
+    setIsLoading(true);
     try {
-      await fetchReportData(true);
+      const queryString = buildQueryString();
+
+      // Fetch data using the service's fetchLists method
+      const response = await service.fetchLists(queryString);
+
+      // Handle response - check if data is nested or direct array
+      let data: Record<string, unknown>[] = [];
+
+      if (response && typeof response === "object") {
+        if (Array.isArray(response.data)) {
+          data = response.data;
+        } else if (Array.isArray(response)) {
+          data = response;
+        }
+      }
+
+      setReportData(data);
+
       toast({
         title: t("reports.success"),
         description: t("reports.reportGenerated"),
       });
     } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to fetch report data";
       toast({
         title: t("reports.error"),
-        description: t("reports.generateError"),
+        description: message,
         variant: "destructive",
       });
     } finally {
       setIsGenerating(false);
+      setIsLoading(false);
     }
   };
 
   // Handle export
   const handleExport = async () => {
+    if (reportData.length === 0) {
+      toast({
+        title: t("reports.error"),
+        description: "Please generate report first",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsExporting(true);
     try {
-      const queryString = buildQueryString(false);
-      await service.exportData?.(queryString);
+      const queryString = buildQueryString();
+      await service.exportData?.({ queryString, reportName });
       toast({
         title: t("reports.success"),
         description: t("reports.exportSuccess"),
@@ -210,28 +198,6 @@ export function ReportTableList({
       setIsExporting(false);
     }
   };
-
-  // Initial fetch
-  useEffect(() => {
-    fetchReportData();
-  }, []);
-
-  // Refetch on filter changes
-  useEffect(() => {
-    if (hasInitialFetch) {
-      fetchReportData(true);
-    }
-  }, [searchQuery, dateRange, filterValues, currentPage, perPage]);
-
-  // Handle search with debounce
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (hasInitialFetch && searchQuery) {
-        fetchReportData(true);
-      }
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
 
   return (
     <div className="space-y-4">
@@ -249,7 +215,7 @@ export function ReportTableList({
 
             <Button
               variant="dark"
-              onClick={() => nevigate(-1)}
+              onClick={() => navigate(-1)}
               className="gap-2"
             >
               <Undo2 className="h-4 w-4" />
@@ -260,9 +226,9 @@ export function ReportTableList({
 
         <CardContent className="space-y-4">
           {/* Search and Filters */}
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:flex-wrap">
             {/* Search */}
-            <div className="relative flex-1">
+            <div className="relative flex-1 min-w-[200px]">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder={t("reports.searchPlaceholder")}
@@ -278,24 +244,6 @@ export function ReportTableList({
               onChange={setDateRange}
               className="w-full sm:w-auto"
             />
-
-            <Button
-              onClick={handleGenerate}
-              disabled={isGenerating}
-              className="gap-2"
-            >
-              <FileText className="h-4 w-4" />
-              {isGenerating ? t("reports.generating") : t("reports.generate")}
-            </Button>
-            <Button
-              onClick={handleExport}
-              disabled={isExporting || store.reportData.length === 0}
-              variant="outline"
-              className="gap-2"
-            >
-              <Download className="h-4 w-4" />
-              {isExporting ? t("reports.exporting") : t("reports.export")}
-            </Button>
 
             {/* Custom Filters */}
             {filters?.map((filter, index) => (
@@ -324,55 +272,37 @@ export function ReportTableList({
                 </SelectContent>
               </Select>
             ))}
+
+            <Button
+              onClick={handleGenerate}
+              disabled={isGenerating}
+              className="gap-2"
+            >
+              <FileText className="h-4 w-4" />
+              {isGenerating ? t("reports.generating") : t("reports.generate")}
+            </Button>
+
+            <Button
+              onClick={handleExport}
+              disabled={isExporting || reportData.length === 0}
+              variant="outline"
+              className="gap-2"
+            >
+              <Download className="h-4 w-4" />
+              {isExporting ? t("reports.exporting") : t("reports.export")}
+            </Button>
           </div>
 
-          {/* Table */}
-          <BaseTable
-            columns={columns}
-            data={store.reportData as Record<string, unknown>[]}
-            isLoading={store.isLoading}
-            emptyMessage={t("reports.noData")}
-            getRowKey={(item, index) => `row-${index}`}
-          />
-
-          {/* Pagination */}
-          {store.pagination && store.pagination.last_page > 1 && (
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-muted-foreground">
-                {t("common.showing")} {store.pagination.from} {t("common.to")}{" "}
-                {store.pagination.to} {t("common.of")} {store.pagination.total}{" "}
-                {t("common.results")}
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    store.setPagination({
-                      ...store.pagination!,
-                      current_page: currentPage - 1,
-                    })
-                  }
-                  disabled={currentPage === 1}
-                >
-                  {t("common.previous")}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    store.setPagination({
-                      ...store.pagination!,
-                      current_page: currentPage + 1,
-                    })
-                  }
-                  disabled={currentPage === store.pagination.last_page}
-                >
-                  {t("common.next")}
-                </Button>
-              </div>
-            </div>
-          )}
+          {/* Table with horizontal scroll */}
+          <div className="overflow-x-auto border rounded-lg">
+            <BaseTable
+              columns={columns}
+              data={reportData}
+              isLoading={isLoading}
+              emptyMessage={t("reports.noData")}
+              getRowKey={(item, index) => `row-${index}`}
+            />
+          </div>
         </CardContent>
       </Card>
     </div>
