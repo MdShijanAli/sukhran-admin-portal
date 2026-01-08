@@ -17,13 +17,14 @@ import {
 } from "@/components/ui/select";
 import { BaseTable, Column } from "./BaseTable";
 import { ApiService } from "@/services/createApiService";
-import { RefreshCw, X } from "lucide-react";
+import { Download, Loader2, RefreshCw, X } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 import { Pagination } from "./Pagination";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { BaseDatePicker } from "@/components/custom/BaseDatePicker";
+import { toast } from "sonner";
 
 export interface FilterOption {
   label: string;
@@ -136,6 +137,7 @@ export interface BaseTableListProps<T> {
 
   // Date Filter
   showDateFilter?: boolean;
+  showExportButton?: boolean;
 }
 
 export function BaseTableList<T>({
@@ -164,6 +166,7 @@ export function BaseTableList<T>({
   onRefresh,
   queryParams,
   showDateFilter = false,
+  showExportButton = false,
 }: BaseTableListProps<T>) {
   // Local state for query params
   const { t } = useTranslation();
@@ -183,6 +186,7 @@ export function BaseTableList<T>({
       return initial;
     }
   );
+  const [isExporting, setIsExporting] = useState(false);
 
   // Serialize queryParams to detect changes
   const serializedQueryParams = queryParams ? JSON.stringify(queryParams) : "";
@@ -215,6 +219,58 @@ export function BaseTableList<T>({
 
   // Serialize filters to detect changes
   const filterValues = Object.values(localFilters).join(",");
+
+  // Build query string helper function
+  const buildQueryString = useCallback(
+    (includePagination = true) => {
+      const params = new URLSearchParams();
+
+      if (queryParams) {
+        Object.entries(queryParams).forEach(([key, value]) => {
+          params.append(key, value);
+        });
+      }
+
+      if (searchQuery) {
+        params.append("search", searchQuery);
+      }
+
+      if (includePagination && showPagination) {
+        params.append("page", currentPage.toString());
+        params.append("per_page", perPage.toString());
+      }
+
+      // Add date filter params
+      if (dateRange?.from) {
+        params.append("start_date", format(dateRange.from, "yyyy-MM-dd"));
+      }
+      if (dateRange?.to) {
+        params.append("end_date", format(dateRange.to, "yyyy-MM-dd"));
+      }
+
+      // Add filter params
+      if (filters) {
+        filters.forEach((filter, index) => {
+          const filterKey = filter.label || `filter_${index}`;
+          const filterValue = localFilters[filterKey];
+          if (filterValue) {
+            params.append(filter.label || "filter", filterValue);
+          }
+        });
+      }
+
+      return params.toString();
+    },
+    [
+      serializedQueryParams,
+      searchQuery,
+      showPagination,
+      currentPage,
+      perPage,
+      dateRange,
+      filterValues,
+    ]
+  );
 
   // Fetch data function with query params
   const fetchData = useCallback(
@@ -261,45 +317,7 @@ export function BaseTableList<T>({
           setLoading(true);
         }
 
-        // Build query string
-        const params = new URLSearchParams();
-
-        if (queryParams) {
-          Object.entries(queryParams).forEach(([key, value]) => {
-            params.append(key, value);
-          });
-        }
-
-        if (searchQuery) {
-          params.append("search", searchQuery);
-        }
-
-        if (showPagination) {
-          params.append("page", currentPage.toString());
-          params.append("per_page", perPage.toString());
-        }
-
-        // Add date filter params
-        if (dateRange?.from) {
-          params.append("start_date", format(dateRange.from, "yyyy-MM-dd"));
-        }
-        if (dateRange?.to) {
-          params.append("end_date", format(dateRange.to, "yyyy-MM-dd"));
-        }
-
-        // Add filter params
-        if (filters) {
-          filters.forEach((filter, index) => {
-            const filterKey = filter.label || `filter_${index}`;
-            const filterValue = localFilters[filterKey];
-            if (filterValue) {
-              // Use filter.label as the param key (e.g., "status")
-              params.append(filter.label || "filter", filterValue);
-            }
-          });
-        }
-
-        const queryString = params.toString();
+        const queryString = buildQueryString();
         if (serviceMethod) {
           await serviceMethod.call(service, queryString);
         } else {
@@ -332,15 +350,9 @@ export function BaseTableList<T>({
       serviceMethod,
       setLoading,
       setError,
-      searchQuery,
-      currentPage,
-      perPage,
-      showPagination,
-      filters,
-      localFilters,
       hasInitialFetch,
       isFirstRender,
-      serializedQueryParams,
+      buildQueryString,
     ]
   );
 
@@ -396,6 +408,31 @@ export function BaseTableList<T>({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // handleRefresh is stable via useCallback
+
+  const handleExport = async () => {
+    try {
+      setIsExporting(true);
+
+      // Build query string without pagination for export (get all data)
+      const queryString = buildQueryString(false);
+      const response = await service.exportData?.(queryString);
+
+      console.log("Export response:", response);
+
+      if (response) {
+        toast.success(t("exportSuccess") || "Export completed successfully");
+      }
+    } catch (error) {
+      console.error("Export failed:", error);
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : t("exportFailed") || "Export failed"
+      );
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   return (
     <div className="space-y-3">
@@ -555,6 +592,16 @@ export function BaseTableList<T>({
                       );
                     })}
                   </div>
+                )}
+                {showExportButton && (
+                  <Button onClick={handleExport} disabled={isExporting}>
+                    {isExporting ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Download className="mr-2 h-4 w-4" />
+                    )}
+                    {t("export")}
+                  </Button>
                 )}
                 {headerSlots}
               </div>

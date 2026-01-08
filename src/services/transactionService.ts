@@ -11,7 +11,6 @@ const apiService = createApiService<Transaction>(
 );
 
 interface TransactionService extends ApiService<Transaction> {
-  getStatistics: () => Promise<unknown>;
   refundTransaction: (
     id: number | string,
     data: { amount: number; reason: string } | FormData
@@ -32,19 +31,6 @@ interface TransactionService extends ApiService<Transaction> {
 const transactionService: TransactionService = {
   // Inherit all basic CRUD operations
   ...apiService,
-
-  // Add extra custom API methods here
-  getStatistics: async () => {
-    try {
-      const response = await apiClient.get(
-        apiRoutes.transactions.getStatistics
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching transaction statistics:", error);
-      throw error;
-    }
-  },
 
   refundTransaction: async (
     id: number | string,

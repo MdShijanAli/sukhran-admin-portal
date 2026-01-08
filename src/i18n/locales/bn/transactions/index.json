@@ -14,6 +14,10 @@
     "status": "অবস্থা",
     "date": "তারিখ"
   },
+  "tabs": {
+    "transactions": "লেনদেন",
+    "statistics": "পরিসংখ্যান"
+  },
   "status": {
     "success": "সফল",
     "pending": "অপেক্ষমাণ",
@@ -112,5 +116,33 @@
   },
   "messages": {
     "loadError": "লেনদেনের বিবরণ লোড করতে ব্যর্থ"
+  },
+  "statistics": {
+    "noDataAvailable": "কোন পরিসংখ্যান ডেটা উপলব্ধ নেই",
+    "overview": "সংক্ষিপ্ত বিবরণ",
+    "totalTransactions": "মোট লেনদেন",
+    "allTransactions": "সকল লেনদেন",
+    "totalAmount": "মোট পরিমাণ",
+    "revenue": "রাজস্ব",
+    "totalRefunds": "মোট ফেরত",
+    "netRevenue": "নিট রাজস্ব",
+    "afterRefunds": "ফেরতের পরে",
+    "avgTransaction": "গড় লেনদেন",
+    "perTransaction": "প্রতি লেনদেন",
+    "statusBreakdown": "স্ট্যাটাস বিভাজন",
+    "transactions": "লেনদেন",
+    "paymentGatewayBreakdown": "পেমেন্ট গেটওয়ে বিভাজন",
+    "successRate": "সফলতার হার",
+    "dailyBreakdown": "দৈনিক বিভাজন",
+    "refundAnalysis": "ফেরত বিশ্লেষণ",
+    "refundRate": "ফেরত হার",
+    "totalRefundsVsTransactions": "মোট ফেরত বনাম লেনদেন",
+    "avgRefundAmount": "গড় ফেরত পরিমাণ",
+    "perRefund": "প্রতি ফেরত",
+    "revenueInsights": "রাজস্ব অন্তর্দৃষ্টি",
+    "revenueImpact": "রাজস্ব প্রভাব",
+    "refundsVsRevenue": "ফেরত বনাম রাজস্ব",
+    "netRevenueRate": "নিট রাজস্ব হার",
+    "afterAllDeductions": "সকল কর্তনের পরে"
   }
 }

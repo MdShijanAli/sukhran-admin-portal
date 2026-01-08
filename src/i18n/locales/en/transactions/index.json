@@ -71,6 +71,10 @@
     "viewDetails": "View Details",
     "close": "Close"
   },
+  "tabs": {
+    "transactions": "Transactions",
+    "statistics": "Statistics"
+  },
   "refund": {
     "title": "Process Refund",
     "processRefund": "Process Refund",
@@ -112,5 +116,33 @@
   },
   "messages": {
     "loadError": "Failed to load transaction details"
+  },
+  "statistics": {
+    "noDataAvailable": "No statistics data available",
+    "overview": "Overview",
+    "totalTransactions": "Total Transactions",
+    "allTransactions": "All transactions",
+    "totalAmount": "Total Amount",
+    "revenue": "Revenue",
+    "totalRefunds": "Total Refunds",
+    "netRevenue": "Net Revenue",
+    "afterRefunds": "After refunds",
+    "avgTransaction": "Avg Transaction",
+    "perTransaction": "Per transaction",
+    "statusBreakdown": "Status Breakdown",
+    "transactions": "transactions",
+    "paymentGatewayBreakdown": "Payment Gateway Breakdown",
+    "successRate": "Success Rate",
+    "dailyBreakdown": "Daily Breakdown",
+    "refundAnalysis": "Refund Analysis",
+    "refundRate": "Refund Rate",
+    "totalRefundsVsTransactions": "Total refunds vs transactions",
+    "avgRefundAmount": "Avg Refund Amount",
+    "perRefund": "Per refund",
+    "revenueInsights": "Revenue Insights",
+    "revenueImpact": "Revenue Impact",
+    "refundsVsRevenue": "Refunds vs revenue",
+    "netRevenueRate": "Net Revenue Rate",
+    "afterAllDeductions": "After all deductions"
   }
 }

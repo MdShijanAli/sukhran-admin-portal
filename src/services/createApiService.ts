@@ -13,6 +13,8 @@ interface ApiRoutes {
   create?: string;
   update?: (id: number | string) => string;
   delete?: (id: number | string) => string;
+  statistics?: string;
+  export?: string;
 }
 
 export interface ApiService<T = unknown> {
@@ -24,6 +26,8 @@ export interface ApiService<T = unknown> {
   deleteItem: (id: number | string) => Promise<T>;
   toggleStatus: (id: number | string) => Promise<T>;
   customFetchLists?: (queryString?: string) => Promise<T>;
+  statistics?: (queryString?: string) => Promise<T>;
+  exportData?: (queryString?: string) => Promise<T>;
 }
 
 export const createApiService = <T = unknown>(
@@ -152,7 +156,7 @@ export const createApiService = <T = unknown>(
         if (store && store.removeItem) {
           store.removeItem(id);
         }
-        return response;
+        return response.data;
       }
       throw new Error("Failed to delete item");
     } catch (error) {
@@ -163,7 +167,7 @@ export const createApiService = <T = unknown>(
 
   const toggleStatus = async (id: number | string) => {
     try {
-      const response = await apiClient.patch(
+      const response = await apiClient.patch<T>(
         `${apiRoutes.getAll}/${id}/toggle-status`
       );
 
@@ -180,12 +184,49 @@ export const createApiService = <T = unknown>(
     }
   };
 
+  const statistics = async (queryString?: string) => {
+    try {
+      if (!apiRoutes.statistics) {
+        throw new Error("statistics route not configured");
+      }
+      const response = await apiClient.get<T>(
+        apiRoutes.statistics + (queryString ? `?${queryString}` : "")
+      );
+      if (response && response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error("Error fetching statistics:", error);
+      throw error;
+    }
+  };
+
+  const exportData = async (queryString?: string) => {
+    try {
+      if (!apiRoutes.export) {
+        throw new Error("export route not configured");
+      }
+      const response = await apiClient.get<T>(
+        apiRoutes.export + (queryString ? `?${queryString}` : "")
+      );
+      console.log("Export response in service:", response);
+      if (response && response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error("Error exporting data:", error);
+      throw error;
+    }
+  };
+
   return {
     fetchLists,
     fetchAll: fetchLists, // Alias for fetchLists
     fetchDetails,
     storeItem,
     updateItem,
+    statistics,
+    exportData,
     deleteItem,
     toggleStatus,
   };
