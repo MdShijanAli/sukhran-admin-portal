@@ -54,31 +54,74 @@ const generateColumns = <T extends Record<string, unknown>>(
   const firstRow = data[0];
   const keys = Object.keys(firstRow);
 
-  return keys.map((key) => ({
-    key,
-    label: formatColumnName(key),
-    render: (item: T) => {
-      const value = item[key];
-      // Format value based on type
-      if (value === null || value === undefined) return "-";
-      if (typeof value === "boolean") return value ? "Yes" : "No";
-      if (typeof value === "number") {
-        // Check if it looks like a price
-        if (
-          key.toLowerCase().includes("price") ||
-          key.toLowerCase().includes("amount") ||
-          key.toLowerCase().includes("total") ||
-          key.toLowerCase().includes("charge") ||
-          key.toLowerCase().includes("vat")
-        ) {
-          return `৳${value.toFixed(2)}`;
+  // Add serial number column first
+  const serialColumn: Column<T> = {
+    key: "sl",
+    label: "Sl",
+    render: (_item: T, index?: number) => <div>{String((index ?? 0) + 1)}</div>,
+  };
+
+  const dataColumns = keys.map((key) => {
+    // Determine min width based on column type
+    let minWidth = "100px"; // Default min width
+
+    const keyLower = key.toLowerCase();
+    if (
+      keyLower.includes("date") ||
+      keyLower.includes("time") ||
+      keyLower.includes("created") ||
+      keyLower.includes("order_id") ||
+      keyLower.includes("updated")
+    ) {
+      minWidth = "180px"; // Wider for dates
+    } else if (
+      keyLower.includes("description") ||
+      keyLower.includes("address") ||
+      keyLower.includes("note") ||
+      keyLower.includes("comment")
+    ) {
+      minWidth = "250px"; // Wider for long text
+    } else if (keyLower.includes("id") || keyLower.includes("code")) {
+      minWidth = "120px"; // Narrower for IDs
+    }
+
+    return {
+      key,
+      label: formatColumnName(key),
+      render: (item: T) => {
+        const value = item[key];
+        let displayValue: React.ReactNode;
+
+        // Format value based on type
+        if (value === null || value === undefined) {
+          displayValue = "-";
+        } else if (typeof value === "boolean") {
+          displayValue = value ? "Yes" : "No";
+        } else if (typeof value === "number") {
+          // Check if it looks like a price
+          if (
+            key.toLowerCase().includes("price") ||
+            key.toLowerCase().includes("amount") ||
+            key.toLowerCase().includes("total") ||
+            key.toLowerCase().includes("charge") ||
+            key.toLowerCase().includes("vat")
+          ) {
+            displayValue = `৳${value.toFixed(2)}`;
+          } else {
+            displayValue = value.toString();
+          }
+        } else if (typeof value === "object") {
+          displayValue = JSON.stringify(value);
+        } else {
+          displayValue = String(value);
         }
-        return value.toString();
-      }
-      if (typeof value === "object") return JSON.stringify(value);
-      return String(value);
-    },
-  }));
+
+        return <div style={{ minWidth }}>{displayValue}</div>;
+      },
+    };
+  });
+
+  return [serialColumn, ...dataColumns];
 };
 
 export function ReportTableList({
@@ -300,7 +343,16 @@ export function ReportTableList({
               data={reportData}
               isLoading={isLoading}
               emptyMessage={t("reports.noData")}
-              getRowKey={(item, index) => `row-${index}`}
+              getRowKey={(item, index) => {
+                // Try to use an id field if available
+                if (item && typeof item === "object" && "id" in item) {
+                  return `row-${item.id}`;
+                }
+                // Use index with proper handling
+                return `row-${
+                  index ?? Math.random().toString(36).substr(2, 9)
+                }`;
+              }}
             />
           </div>
         </CardContent>
