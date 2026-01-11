@@ -11,6 +11,8 @@
   "reportInfo4": "Export feature allows you to download reports for offline analysis",
   "transactionReport": "Transaction Report",
   "transactionReportDesc": "View detailed transaction history with payment gateway breakdown and refund analysis",
+  "donationReport": "Donation Report",
+  "donationReportDesc": "Analyze donation activities, trends, and donors",
   "packageSalesReport": "Package Sales Report",
   "packageSalesReportDesc": "Analyze package sales performance, revenue trends, and customer preferences",
   "packageOrdersReport": "Package Orders Report",

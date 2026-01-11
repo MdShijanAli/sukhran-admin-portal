@@ -43,6 +43,7 @@ import PackageSalesReport from "@/pages/reports/reports/PackageSalesReport";
 import PackageOrdersReport from "@/pages/reports/reports/PackageOrdersReport";
 import RegularSalesReport from "@/pages/reports/reports/RegularSalesReport";
 import RegularOrdersReport from "@/pages/reports/reports/RegularOrdersReport";
+import DonationReport from "@/pages/reports/reports/DonationReport";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -344,6 +345,14 @@ const AppRoutes: React.FC = () => {
           element={
             <PrivateRoute>
               <TransactionReport />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="reports/donations"
+          element={
+            <PrivateRoute>
+              <DonationReport />
             </PrivateRoute>
           }
         />

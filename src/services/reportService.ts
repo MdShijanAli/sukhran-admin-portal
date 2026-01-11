@@ -10,6 +10,11 @@ export const transactionReportService = createApiService<ReportData[]>({
   export: apiRoutes.reports.exortTransactions,
 });
 
+export const donationReportService = createApiService<ReportData[]>({
+  getAll: apiRoutes.reports.donations,
+  export: apiRoutes.reports.exportDonations,
+});
+
 // Package Sales Report Service
 export const packageSalesReportService = createApiService<ReportData[]>({
   getAll: apiRoutes.reports.packageSales,

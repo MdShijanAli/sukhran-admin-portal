@@ -329,5 +329,7 @@ export const apiRoutes = {
     exportRegularSales: createApiUrl("admin/orders/export-sales"),
     regularOrders: createApiUrl("admin/orders/orders-report-data"),
     exportRegularOrders: createApiUrl("admin/orders/export-orders"),
+    donations: createApiUrl("admin/donations/report-data"),
+    exportDonations: createApiUrl("admin/donations/export"),
   },
 };

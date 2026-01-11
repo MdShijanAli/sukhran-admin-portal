@@ -74,6 +74,14 @@ const Reports = () => {
       route: "/reports/regular-orders",
       color: "from-indigo-500 to-purple-500",
     },
+    {
+      id: "donation-report",
+      name: t("reports.donationReport"),
+      description: t("reports.donationReportDesc"),
+      icon: "FileText",
+      route: "/reports/donations",
+      color: "from-indigo-500 to-purple-500",
+    },
   ];
 
   const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -119,7 +127,7 @@ const Reports = () => {
       </div>
 
       {/* Reports Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
         {filteredReports.length === 0 ? (
           <div className="col-span-full text-center py-12">
             <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
