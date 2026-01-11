@@ -29,6 +29,10 @@ export const apiRoutes = {
     updateProfile: createApiUrl("auth/profile"),
   },
 
+  dashboard: {
+    statistics: createApiUrl("admin/dashboard"),
+  },
+
   users: {
     getAll: createApiUrl("admin/users"),
     getById: (id: number | string) => createApiUrl(`admin/users/${id}`),

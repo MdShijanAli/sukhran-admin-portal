@@ -1,0 +1,67 @@
+{
+  "title": "Dashboard",
+  "subtitle": "Welcome back! Here's what's happening today.",
+  "loading": "Loading dashboard data...",
+  "error": "Error",
+  "fetchError": "Failed to fetch dashboard data. Please try again.",
+  "vsPrevious": "vs previous period",
+  "periods": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "last7Days": "Last 7 Days",
+    "last30Days": "Last 30 Days",
+    "thisMonth": "This Month",
+    "lastMonth": "Last Month",
+    "thisYear": "This Year"
+  },
+  "metrics": {
+    "revenue": "Total Revenue",
+    "orders": "Total Orders",
+    "averageOrderValue": "Average Order Value",
+    "newCustomers": "New Customers"
+  },
+  "orderTypes": {
+    "title": "Order Type Breakdown",
+    "package": "Package Orders",
+    "regular": "Regular Orders"
+  },
+  "paymentStatus": {
+    "title": "Payment Status",
+    "paid": "Paid",
+    "pending": "Pending",
+    "failed": "Failed",
+    "successRate": "Success Rate"
+  },
+  "charts": {
+    "monthlyTrend": "Monthly Trend",
+    "yearlyComparison": "Yearly Comparison",
+    "revenue": "Revenue",
+    "orders": "Orders"
+  },
+  "alerts": {
+    "pendingApprovals": "Pending Approvals",
+    "failedPayments": "Failed Payments",
+    "deliverySyncFailures": "Delivery Sync Failures",
+    "pendingRefunds": "Pending Refunds",
+    "lowCoinBalance": "Low Coin Balance"
+  },
+  "additional": {
+    "donations": "Donations",
+    "coins": "Coins Activity",
+    "referrals": "Referrals",
+    "count": "Count",
+    "amount": "Amount",
+    "earned": "Earned",
+    "spent": "Spent",
+    "net": "Net",
+    "total": "Total",
+    "credited": "Credited",
+    "coinsDistributed": "Coins Distributed"
+  },
+  "recentOrders": {
+    "title": "Recent Orders"
+  },
+  "recentTransactions": {
+    "title": "Recent Transactions"
+  }
+}
