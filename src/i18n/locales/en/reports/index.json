@@ -35,6 +35,8 @@
   "exportError": "Failed to export report. Please try again.",
   "refreshError": "Failed to refresh report. Please try again.",
   "refreshSuccess": "Report refreshed successfully",
+  "coinReport": "Coin Report",
+  "coinReportDesc": "Analyze coin activities, rewards, and users",
   "statistics": {
     "noStatistics": "No Statistics Available",
     "generateToView": "Generate a report to view statistics",

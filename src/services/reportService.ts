@@ -14,6 +14,10 @@ export const donationReportService = createApiService<ReportData[]>({
   getAll: apiRoutes.reports.donations,
   export: apiRoutes.reports.exportDonations,
 });
+export const coinReportService = createApiService<ReportData[]>({
+  getAll: apiRoutes.reports.coins,
+  export: apiRoutes.reports.exportCoins,
+});
 
 // Package Sales Report Service
 export const packageSalesReportService = createApiService<ReportData[]>({

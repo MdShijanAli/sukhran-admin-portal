@@ -285,14 +285,14 @@ export function ReportTableList({
             <div className="flex items-center gap-3">
               <ButtonGroup>
                 <Button
-                  variant="default"
+                  variant={selectedTab === "list" ? "default" : "outline"}
                   onClick={() => setSelectedTab && setSelectedTab("list")}
                   className="gap-2"
                 >
                   {t("list")}
                 </Button>
                 <Button
-                  variant="outline"
+                  variant={selectedTab === "statistics" ? "default" : "outline"}
                   onClick={() => setSelectedTab && setSelectedTab("statistics")}
                   className="gap-2"
                 >

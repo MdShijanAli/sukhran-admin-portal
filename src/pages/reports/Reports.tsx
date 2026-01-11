@@ -10,6 +10,7 @@ import {
   CreditCard,
   TrendingUp,
   ArrowRight,
+  DollarSign,
 } from "lucide-react";
 import {
   Card,
@@ -79,9 +80,17 @@ const Reports = () => {
       id: "donation-report",
       name: t("reports.donationReport"),
       description: t("reports.donationReportDesc"),
-      icon: "Coins",
+      icon: "DollarSign",
       route: "/reports/donations",
       color: "from-teal-500 to-cyan-500",
+    },
+    {
+      id: "coin-report",
+      name: t("reports.coinReport"),
+      description: t("reports.coinReportDesc"),
+      icon: "Coins",
+      route: "/reports/coins",
+      color: "from-yellow-500 to-orange-500",
     },
   ];
 
@@ -92,6 +101,7 @@ const Reports = () => {
     TrendingUp,
     FileText,
     Coins,
+    DollarSign,
   };
 
   // Filter reports based on search query
