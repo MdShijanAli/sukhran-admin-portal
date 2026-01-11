@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Download, FileText, Search, Undo2 } from "lucide-react";
+import { Download, FileText, RefreshCw, Search, Undo2 } from "lucide-react";
 import { BaseTable, Column } from "./BaseTable";
 import { DateRange } from "react-day-picker";
 import {
@@ -17,6 +17,8 @@ import { ApiService } from "@/services/createApiService";
 import { toast } from "@/hooks/use-toast";
 import { BaseDatePicker } from "../custom/BaseDatePicker";
 import { useNavigate } from "react-router-dom";
+import { ButtonGroup } from "../ui/button-group";
+import ReportStatistics from "../custom/ReportStatistics";
 
 export interface FilterOption {
   label: string;
@@ -136,12 +138,15 @@ export function ReportTableList({
 
   // Local state for report data
   const [reportData, setReportData] = useState<Record<string, unknown>[]>([]);
+  const [statistics, setStatistics] = useState<Record<string, unknown>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [isExporting, setIsExporting] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [localFilters, setLocalFilters] = useState<Record<string, string>>({});
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [selectedTab, setSelectedTab] = useState<string>("list");
 
   // Generate columns from report data
   const columns = generateColumns(reportData);
@@ -183,16 +188,21 @@ export function ReportTableList({
 
       // Handle response - check if data is nested or direct array
       let data: Record<string, unknown>[] = [];
+      let stats: Record<string, unknown> = {};
 
       if (response && typeof response === "object") {
         if (Array.isArray(response.data)) {
           data = response.data;
+          // Extract all fields except 'data' for statistics
+          const { data: _, ...restStats } = response;
+          stats = restStats;
         } else if (Array.isArray(response)) {
           data = response;
         }
       }
 
       setReportData(data);
+      setStatistics(stats);
 
       toast({
         title: t("reports.success"),
@@ -209,6 +219,22 @@ export function ReportTableList({
     } finally {
       setIsGenerating(false);
       setIsLoading(false);
+    }
+  };
+
+  const handleRefresh = async () => {
+    try {
+      setIsRefreshing(true);
+      await handleGenerate();
+    } catch (error) {
+      console.error("Refresh failed:", error);
+      toast({
+        title: t("reports.error"),
+        description: t("reports.refreshError"),
+        variant: "destructive",
+      });
+    } finally {
+      setIsRefreshing(false);
     }
   };
 
@@ -256,14 +282,32 @@ export function ReportTableList({
               )}
             </div>
 
-            <Button
-              variant="dark"
-              onClick={() => navigate(-1)}
-              className="gap-2"
-            >
-              <Undo2 className="h-4 w-4" />
-              Back
-            </Button>
+            <div className="flex items-center gap-3">
+              <ButtonGroup>
+                <Button
+                  variant="default"
+                  onClick={() => setSelectedTab && setSelectedTab("list")}
+                  className="gap-2"
+                >
+                  {t("list")}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setSelectedTab && setSelectedTab("statistics")}
+                  className="gap-2"
+                >
+                  {t("statistics")}
+                </Button>
+              </ButtonGroup>
+              <Button
+                variant="dark"
+                onClick={() => navigate(-1)}
+                className="gap-2"
+              >
+                <Undo2 className="h-4 w-4" />
+                {t("back")}
+              </Button>
+            </div>
           </div>
         </CardHeader>
 
@@ -280,6 +324,18 @@ export function ReportTableList({
                 className="pl-9"
               />
             </div>
+
+            <Button
+              variant="default"
+              size="icon"
+              onClick={handleRefresh}
+              disabled={isRefreshing || reportData.length < 1}
+              className="shrink-0"
+            >
+              <RefreshCw
+                className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+              />
+            </Button>
 
             {/* Date Range */}
             <BaseDatePicker
@@ -337,24 +393,30 @@ export function ReportTableList({
           </div>
 
           {/* Table with horizontal scroll */}
-          <div className="overflow-x-auto border rounded-lg">
-            <BaseTable
-              columns={columns}
-              data={reportData}
-              isLoading={isLoading}
-              emptyMessage={t("reports.noData")}
-              getRowKey={(item, index) => {
-                // Try to use an id field if available
-                if (item && typeof item === "object" && "id" in item) {
-                  return `row-${item.id}`;
-                }
-                // Use index with proper handling
-                return `row-${
-                  index ?? Math.random().toString(36).substr(2, 9)
-                }`;
-              }}
-            />
-          </div>
+          {selectedTab === "list" ? (
+            <div className="overflow-x-auto border rounded-lg">
+              <BaseTable
+                columns={columns}
+                data={reportData}
+                isLoading={isLoading}
+                emptyMessage={t("reports.noData")}
+                getRowKey={(item, index) => {
+                  // Try to use an id field if available
+                  if (item && typeof item === "object" && "id" in item) {
+                    return `row-${item.id}`;
+                  }
+                  // Use index with proper handling
+                  return `row-${
+                    index ?? Math.random().toString(36).substr(2, 9)
+                  }`;
+                }}
+              />
+            </div>
+          ) : (
+            <div>
+              <ReportStatistics data={statistics} />
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
