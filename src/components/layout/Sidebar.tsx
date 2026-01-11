@@ -313,9 +313,10 @@ export default function Sidebar() {
           } items-center justify-between border-white/10 px-4 transition-all duration-500 ease-in-out`}
         >
           <img
-            src={
-              language === "en" ? "/images/Skr-eng.png" : "/images/Skr-bng.png"
-            }
+            src="/images/Skr-Logo.png"
+            // src={
+            //   language === "en" ? "/images/Skr-Logo.png" : "/images/Skr-bng.png"
+            // }
             alt="Shukran Admin Portal"
             className={`mx-auto transition-all duration-500 ease-in-out ${
               isCollapsed ? "w-10" : "h-28 w-100"
