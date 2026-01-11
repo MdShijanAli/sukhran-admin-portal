@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import {
   FileText,
+  Coins,
   Search,
   Package,
   ShoppingCart,
@@ -78,9 +79,9 @@ const Reports = () => {
       id: "donation-report",
       name: t("reports.donationReport"),
       description: t("reports.donationReportDesc"),
-      icon: "FileText",
+      icon: "Coins",
       route: "/reports/donations",
-      color: "from-indigo-500 to-purple-500",
+      color: "from-teal-500 to-cyan-500",
     },
   ];
 
@@ -90,6 +91,7 @@ const Reports = () => {
     ShoppingCart,
     TrendingUp,
     FileText,
+    Coins,
   };
 
   // Filter reports based on search query
