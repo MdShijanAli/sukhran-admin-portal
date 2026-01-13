@@ -91,7 +91,7 @@ export default function FormModal({
 
   const handleRemoveImage = () => {
     updateField("image", undefined as unknown as File);
-    setImagePreview(isEditing ? editData?.image_url || "" : "");
+    setImagePreview("");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
