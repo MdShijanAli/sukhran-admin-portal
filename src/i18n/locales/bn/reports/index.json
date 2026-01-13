@@ -113,6 +113,10 @@
     "donation_type": "দান ধরন",
     "selectDonationType": "দান ধরন নির্বাচন করুন",
     "payment_method": "পেমেন্ট পদ্ধতি",
-    "selectPaymentMethod": "পেমেন্ট পদ্ধতি নির্বাচন করুন"
+    "selectPaymentMethod": "পেমেন্ট পদ্ধতি নির্বাচন করুন",
+    "source_type": "উৎস ধরন",
+    "selectSourceType": "উৎস ধরন নির্বাচন করুন",
+    "type": "ধরন",
+    "selectType": "ধরন নির্বাচন করুন"
   }
 }

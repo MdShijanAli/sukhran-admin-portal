@@ -113,6 +113,10 @@
     "donation_type": "Donation Type",
     "selectDonationType": "Select Donation Type",
     "payment_method": "Payment Method",
-    "selectPaymentMethod": "Select Payment Method"
+    "selectPaymentMethod": "Select Payment Method",
+    "source_type": "Source Type",
+    "selectSourceType": "Select Source Type",
+    "type": "Type",
+    "selectType": "Select Type"
   }
 }

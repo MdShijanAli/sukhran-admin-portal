@@ -7,27 +7,46 @@ const CoinReport = () => {
 
   const filterItmes = [
     {
-      label: t("reports.filters.payment_status"),
-      value: "status", // API parameter name
+      label: t("reports.filters.type"),
+      value: "type", // API parameter name
       options: [
         {
-          label: "Pending",
-          value: "pending",
+          label: "Earned",
+          value: "earned",
         },
         {
-          label: "Locked",
-          value: "locked",
-        },
-        {
-          label: "Credited",
-          value: "credited",
-        },
-        {
-          label: "Cancelled",
-          value: "cancelled",
+          label: "Spent",
+          value: "spent",
         },
       ],
-      placeholder: t("reports.filters.selectPaymentStatus"),
+      placeholder: t("reports.filters.selectType"),
+    },
+    {
+      label: t("reports.filters.source_type"),
+      value: "source_type", // API parameter name
+      options: [
+        {
+          label: "Admin Credit",
+          value: "admin_credit",
+        },
+        {
+          label: "Package Purchase",
+          value: "package_purchase",
+        },
+        {
+          label: "Order Discount",
+          value: "order_discount",
+        },
+        {
+          label: "Donation",
+          value: "donation",
+        },
+        {
+          label: "Referral Reward",
+          value: "referral_reward",
+        },
+      ],
+      placeholder: t("reports.filters.selectSourceType"),
     },
   ];
 

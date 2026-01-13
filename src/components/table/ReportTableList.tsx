@@ -3,42 +3,16 @@ import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Download,
-  FileText,
-  RefreshCw,
-  Search,
-  Undo2,
-  Filter,
-  X,
-  FilterX,
-} from "lucide-react";
+import { Download, FileText, RefreshCw, Search, Undo2 } from "lucide-react";
 import { BaseTable, Column } from "./BaseTable";
 import { DateRange } from "react-day-picker";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Badge } from "@/components/ui/badge";
 import { ApiService } from "@/services/createApiService";
 import { toast } from "@/hooks/use-toast";
 import { BaseDatePicker } from "../custom/BaseDatePicker";
 import { useNavigate } from "react-router-dom";
 import { ButtonGroup } from "../ui/button-group";
 import ReportStatistics from "../custom/ReportStatistics";
+import { FilterDrawer, FilterConfig } from "../custom/FilterDrawer";
 
 export interface FilterOption {
   label: string;
@@ -49,12 +23,7 @@ export interface ReportTableListProps {
   title: string;
   description?: string;
   service: ApiService;
-  filters?: {
-    label?: string;
-    value: string; // API parameter name (e.g., 'payment_mode', 'status')
-    options: FilterOption[];
-    placeholder?: string;
-  }[];
+  filters?: FilterConfig[];
   reportName?: string;
 }
 
@@ -164,10 +133,8 @@ export function ReportTableList({
   const [isExporting, setIsExporting] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [localFilters, setLocalFilters] = useState<Record<string, string>>({});
-  const [tempFilters, setTempFilters] = useState<Record<string, string>>({});
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedTab, setSelectedTab] = useState<string>("list");
-  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [shouldAutoRefresh, setShouldAutoRefresh] = useState(false);
 
   // Generate columns from report data
@@ -299,9 +266,8 @@ export function ReportTableList({
   };
 
   // Handle apply filters
-  const handleApplyFilters = () => {
-    setLocalFilters(tempFilters);
-    setIsFilterDrawerOpen(false);
+  const handleApplyFilters = (newFilters: Record<string, string>) => {
+    setLocalFilters(newFilters);
 
     // Auto-generate report if data already exists
     if (reportData.length > 0) {
@@ -317,7 +283,6 @@ export function ReportTableList({
   // Handle reset filters
   const handleResetFilters = () => {
     setLocalFilters({});
-    setTempFilters({});
 
     // Auto-generate report if data already exists
     if (reportData.length > 0) {
@@ -330,27 +295,11 @@ export function ReportTableList({
     }
   };
 
-  // Check if any filters are active
-  const hasActiveFilters = Object.values(localFilters).some(
-    (value) => value && value !== ""
-  );
-
-  // Get filter label by value
-  const getFilterLabel = (filterValue: string, selectedValue: string) => {
-    const filter = filters?.find((f) => f.value === filterValue);
-    const option = filter?.options.find((opt) => opt.value === selectedValue);
-    return {
-      filterLabel: filter?.label || filterValue,
-      optionLabel: option?.label || selectedValue,
-    };
-  };
-
   // Remove individual filter
   const handleRemoveFilter = (filterKey: string) => {
     const newFilters = { ...localFilters };
     delete newFilters[filterKey];
     setLocalFilters(newFilters);
-    setTempFilters(newFilters);
 
     // Auto-refresh if data exists
     if (reportData.length > 0) {
@@ -436,104 +385,13 @@ export function ReportTableList({
 
             {/* Filter Drawer */}
             {filters && filters.length > 0 && (
-              <>
-                <Drawer
-                  open={isFilterDrawerOpen}
-                  onOpenChange={setIsFilterDrawerOpen}
-                  direction="right"
-                >
-                  <DrawerTrigger asChild>
-                    <Button variant="outline" className="gap-2 relative">
-                      <Filter className="h-4 w-4" />
-                      {t("reports.filters.filter")}
-                      {hasActiveFilters && (
-                        <Badge
-                          variant="destructive"
-                          className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center"
-                        >
-                          {Object.keys(localFilters).length}
-                        </Badge>
-                      )}
-                    </Button>
-                  </DrawerTrigger>
-                  <DrawerContent className="h-screen top-0 right-0 left-auto mt-0 w-[400px] rounded-none">
-                    <DrawerHeader>
-                      <DrawerTitle>
-                        {t("reports.filters.filterOptions")}
-                      </DrawerTitle>
-                      <DrawerDescription>
-                        {t("reports.filters.filterDescription")}
-                      </DrawerDescription>
-                    </DrawerHeader>
-                    <div className="p-4 space-y-4 overflow-y-auto flex-1">
-                      {filters.map((filter, index) => (
-                        <div key={index} className="space-y-2">
-                          <label className="text-sm font-medium">
-                            {filter.label}
-                          </label>
-                          <Select
-                            value={tempFilters[filter.value] || ""}
-                            onValueChange={(value) => {
-                              setTempFilters((prev) => ({
-                                ...prev,
-                                [filter.value]: value,
-                              }));
-                            }}
-                          >
-                            <SelectTrigger className="w-full">
-                              <SelectValue
-                                placeholder={
-                                  filter.placeholder || filter.label || "Select"
-                                }
-                              />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {filter.options.map((option) => (
-                                <SelectItem
-                                  key={option.value}
-                                  value={option.value}
-                                >
-                                  {option.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      ))}
-                    </div>
-                    <DrawerFooter className="flex flex-row gap-2">
-                      <Button
-                        variant="outline"
-                        onClick={handleResetFilters}
-                        className="flex-1 gap-2"
-                      >
-                        <FilterX className="h-4 w-4" />
-                        {t("reports.filters.resetFilters")}
-                      </Button>
-                      <Button
-                        onClick={handleApplyFilters}
-                        className="flex-1 gap-2"
-                      >
-                        <Filter className="h-4 w-4" />
-                        {t("reports.filters.applyFilters")}
-                      </Button>
-                    </DrawerFooter>
-                  </DrawerContent>
-                </Drawer>
-
-                {/* Reset Filters Button */}
-                {hasActiveFilters && (
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={handleResetFilters}
-                    className="shrink-0"
-                    title="Reset all filters"
-                  >
-                    <FilterX className="h-4 w-4" />
-                  </Button>
-                )}
-              </>
+              <FilterDrawer
+                filters={filters}
+                localFilters={localFilters}
+                onApplyFilters={handleApplyFilters}
+                onResetFilters={handleResetFilters}
+                onRemoveFilter={handleRemoveFilter}
+              />
             )}
 
             <Button
@@ -555,34 +413,6 @@ export function ReportTableList({
               {isExporting ? t("reports.exporting") : t("reports.export")}
             </Button>
           </div>
-
-          {/* Active Filters Display */}
-          {hasActiveFilters && (
-            <div className="flex flex-wrap gap-2 items-center">
-              <span className="text-sm text-muted-foreground">
-                {t("reports.filters.activeFilters")}:
-              </span>
-              {Object.entries(localFilters).map(([key, value]) => {
-                if (!value) return null;
-                const { filterLabel, optionLabel } = getFilterLabel(key, value);
-                return (
-                  <Badge key={key} variant="secondary" className="gap-1 pr-1">
-                    <span className="text-xs">
-                      {filterLabel}: {optionLabel}
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-4 w-4 p-0 hover:bg-transparent"
-                      onClick={() => handleRemoveFilter(key)}
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </Badge>
-                );
-              })}
-            </div>
-          )}
 
           {/* Table with horizontal scroll */}
           {selectedTab === "list" ? (
