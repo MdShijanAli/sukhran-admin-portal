@@ -101,6 +101,8 @@
     "payment_mode": "পেমেন্ট মোড",
     "selectTransactionType": "লেনদেনের ধরন নির্বাচন করুন",
     "status": "অবস্থা",
-    "selectStatus": "অবস্থা নির্বাচন করুন"
+    "selectStatus": "অবস্থা নির্বাচন করুন",
+    "date_filter_type": "তারিখ ফিল্টার ধরন",
+    "selectDateFilterType": "তারিখ ফিল্টার ধরন নির্বাচন করুন"
   }
 }

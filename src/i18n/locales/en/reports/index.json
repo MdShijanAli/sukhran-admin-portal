@@ -101,6 +101,8 @@
     "payment_mode": "Payment Mode",
     "selectTransactionType": "Select Transaction Type",
     "status": "Status",
-    "selectStatus": "Select Status"
+    "selectStatus": "Select Status",
+    "date_filter_type": "Date Filter Type",
+    "selectDateFilterType": "Select Date Filter Type"
   }
 }

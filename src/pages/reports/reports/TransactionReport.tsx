@@ -5,7 +5,6 @@ import { ReportTableList } from "@/components/table/ReportTableList";
 const TransactionReport = () => {
   const { t } = useTranslation();
 
-  // all|online|cod status=success|pending|failed|refunded
   const filterItmes = [
     {
       label: t("reports.filters.payment_mode"),
