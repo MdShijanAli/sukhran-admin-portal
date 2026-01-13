@@ -297,7 +297,7 @@ const UsersTab = () => {
       ? [
           {
             label: t("users.filter.user_role"),
-            value: "role",
+            value: "role_id",
             options: [
               { label: t("users.filter.allRoles"), value: "all" },
               ...roleStore.roles.map((role) => ({
