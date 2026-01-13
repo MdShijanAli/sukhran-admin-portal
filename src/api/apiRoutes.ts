@@ -337,5 +337,7 @@ export const apiRoutes = {
     exportDonations: createApiUrl("admin/donations/export"),
     coins: createApiUrl("admin/coins/report-data"),
     exportCoins: createApiUrl("admin/coins/export"),
+    referrals: createApiUrl("admin/referrals/report-data"),
+    exportReferrals: createApiUrl("admin/referrals/export"),
   },
 };

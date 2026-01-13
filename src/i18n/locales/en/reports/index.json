@@ -37,6 +37,8 @@
   "refreshSuccess": "Report refreshed successfully",
   "coinReport": "Coin Report",
   "coinReportDesc": "Analyze coin activities, rewards, and users",
+  "referralReport": "Referral Report",
+  "referralReportDesc": "Analyze referral activities, trends, and users",
   "statistics": {
     "noStatistics": "No Statistics Available",
     "generateToView": "Generate a report to view statistics",

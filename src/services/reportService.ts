@@ -42,3 +42,8 @@ export const regularOrdersReportService = createApiService<ReportData[]>({
   getAll: apiRoutes.reports.regularOrders,
   export: apiRoutes.reports.exportRegularOrders,
 });
+
+export const referralReportService = createApiService<ReportData[]>({
+  getAll: apiRoutes.reports.referrals,
+  export: apiRoutes.reports.exportReferrals,
+});

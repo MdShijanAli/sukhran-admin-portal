@@ -92,6 +92,14 @@ const Reports = () => {
       route: "/reports/coins",
       color: "from-yellow-500 to-orange-500",
     },
+    {
+      id: "referral-report",
+      name: t("reports.referralReport"),
+      description: t("reports.referralReportDesc"),
+      icon: "TrendingUp",
+      route: "/reports/referrals",
+      color: "from-pink-500 to-red-500",
+    },
   ];
 
   const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
