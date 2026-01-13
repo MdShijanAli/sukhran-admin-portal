@@ -7,6 +7,15 @@
     "statistics": "Statistics",
     "coinReport": "Coin Donations Report"
   },
+  "filter": {
+    "pending": "Pending",
+    "package": "Package",
+    "product": "Product",
+    "failed": "Failed",
+    "standalone": "Standalone",
+    "cod": "Cash on Delivery",
+    "online": "Online Payment"
+  },
   "channels": {
     "title": "Donation Channels",
     "subtitle": "Manage and organize donation campaigns",

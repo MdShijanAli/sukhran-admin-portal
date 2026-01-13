@@ -8,13 +8,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { BaseTable, Column } from "./BaseTable";
 import { ApiService } from "@/services/createApiService";
 import { Download, Loader2, RefreshCw, X } from "lucide-react";
@@ -530,53 +523,6 @@ export function BaseTableList<T>({
                     </div>
                   )}
 
-                  {/* Filters */}
-                  {/* {filters &&
-                    filters.map((filter, index) => {
-                      const filterKey = filter.label || `filter_${index}`;
-                      return (
-                        <Select
-                          key={index}
-                          value={localFilters[filterKey] || filter.value}
-                          onValueChange={(value) => {
-                            // Update local filter state
-                            setLocalFilters((prev) => ({
-                              ...prev,
-                              [filterKey]: value,
-                            }));
-                            filter.onChange(value);
-                            // Reset to page 1 when filter changes
-                            if (currentPage !== 1 && store.setPagination) {
-                              store.setPagination({
-                                ...store.pagination,
-                                current_page: 1,
-                              });
-                            }
-                          }}
-                        >
-                          <SelectTrigger
-                            className={
-                              filter.className || "w-full sm:w-[180px]"
-                            }
-                          >
-                            <SelectValue
-                              placeholder={filter.placeholder || "Select..."}
-                            />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {filter.options.map((option) => (
-                              <SelectItem
-                                key={option.value}
-                                value={option.value}
-                              >
-                                {option.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      );
-                    })} */}
-
                   {/* Additional Toolbar Actions */}
                   {toolbarActions}
 
@@ -610,6 +556,16 @@ export function BaseTableList<T>({
                     className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
                   />
                 </Button>
+                {/* Filter Drawer */}
+                {filters && filters.length > 0 && (
+                  <FilterDrawer
+                    filters={filters}
+                    localFilters={localFilters}
+                    onApplyFilters={handleApplyFilters}
+                    onResetFilters={handleResetFilters}
+                    onRemoveFilter={handleRemoveFilter}
+                  />
+                )}
                 {headerActions && headerActions.length > 0 && (
                   <div className="flex items-center gap-2 flex-wrap flex-1 sm:flex-initial">
                     {headerActions.map((action, index) => {
@@ -630,16 +586,7 @@ export function BaseTableList<T>({
                     })}
                   </div>
                 )}
-                {/* Filter Drawer */}
-                {filters && filters.length > 0 && (
-                  <FilterDrawer
-                    filters={filters}
-                    localFilters={localFilters}
-                    onApplyFilters={handleApplyFilters}
-                    onResetFilters={handleResetFilters}
-                    onRemoveFilter={handleRemoveFilter}
-                  />
-                )}
+
                 {showExportButton && (
                   <Button onClick={handleExport} disabled={isExporting}>
                     {isExporting ? (

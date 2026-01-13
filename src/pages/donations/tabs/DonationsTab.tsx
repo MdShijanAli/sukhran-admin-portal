@@ -8,7 +8,7 @@ import { useDonationStore } from "@/stores/donationStore";
 import donationService from "@/services/donationService";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { ActionItem, DropdownMenuActions } from "@/components/table";
-import { Edit, Eye, Trash2 } from "lucide-react";
+import { Eye } from "lucide-react";
 import getSerialNumber from "@/lib/getSerialNumber";
 
 interface DonationsTabProps {
@@ -153,7 +153,7 @@ export default function DonationsTab({ onViewDetails }: DonationsTabProps) {
       key: "donatedAt",
       label: t("donations.donations.columns.date"),
       render: (donation) => (
-        <div className="w-[100px]">{formatDate(donation.donatedAt)}</div>
+        <div className="w-[100px]">{formatDate(donation.created_at)}</div>
       ),
     },
     {
@@ -169,18 +169,37 @@ export default function DonationsTab({ onViewDetails }: DonationsTabProps) {
     },
   ];
 
-  const getActions = (donation: Donation) => {
-    const actions = [];
-
-    if (onViewDetails) {
-      actions.push({
-        label: t("donations.actions.viewDetails"),
-        onClick: () => onViewDetails(donation),
-      });
-    }
-
-    return actions;
-  };
+  const filterItemes = [
+    {
+      label: t("status"),
+      value: "status",
+      options: [
+        { label: t("donations.filter.pending"), value: "pending" },
+        { label: t("donations.filter.package"), value: "package" },
+        { label: t("donations.filter.failed"), value: "failed" },
+      ],
+      placeholder: t("selectStatus"),
+    },
+    {
+      label: t("donation_type"),
+      value: "donation_type",
+      options: [
+        { label: t("donations.filter.product"), value: "product" },
+        { label: t("donations.filter.package"), value: "package" },
+        { label: t("donations.filter.standalone"), value: "standalone" },
+      ],
+      placeholder: t("selectDonationType"),
+    },
+    {
+      label: t("payment_method"),
+      value: "payment_method",
+      options: [
+        { label: t("donations.filter.cod"), value: "cod" },
+        { label: t("donations.filter.online"), value: "online" },
+      ],
+      placeholder: t("selectPaymentMethod"),
+    },
+  ];
 
   return (
     <BaseTableList<Donation>
@@ -193,6 +212,7 @@ export default function DonationsTab({ onViewDetails }: DonationsTabProps) {
       store={store}
       getRowKey={(order) => order.id}
       showDateFilter={true}
+      filters={filterItemes}
     />
   );
 }
