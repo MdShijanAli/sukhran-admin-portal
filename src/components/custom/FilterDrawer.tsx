@@ -19,7 +19,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { toast } from "@/hooks/use-toast";
 
 export interface FilterOption {
   label: string;
@@ -183,34 +182,6 @@ export function FilterDrawer({
           </Button>
         )}
       </div>
-
-      {/* Active Filters Display */}
-      {hasActiveFilters && (
-        <div className="flex flex-wrap gap-2 items-center w-full">
-          <span className="text-sm text-muted-foreground">
-            {t("reports.filters.activeFilters")}:
-          </span>
-          {Object.entries(localFilters).map(([key, value]) => {
-            if (!value) return null;
-            const { filterLabel, optionLabel } = getFilterLabel(key, value);
-            return (
-              <Badge key={key} variant="secondary" className="gap-1 pr-1">
-                <span className="text-xs">
-                  {filterLabel}: {optionLabel}
-                </span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-4 w-4 p-0 hover:bg-transparent"
-                  onClick={() => onRemoveFilter(key)}
-                >
-                  <X className="h-3 w-3" />
-                </Button>
-              </Badge>
-            );
-          })}
-        </div>
-      )}
     </>
   );
 }

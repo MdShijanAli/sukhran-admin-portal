@@ -1,7 +1,6 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Eye,
   Edit,
@@ -12,7 +11,6 @@ import {
   XCircle,
   Package,
   CheckCircle,
-  Filter,
 } from "lucide-react";
 import {
   BaseTableList,
@@ -25,7 +23,6 @@ import { Order, useOrderStore } from "@/stores/orderStore";
 import orderService from "@/services/orderService";
 import { toast } from "sonner";
 import { DeleteModal } from "@/components/modals";
-import FilterModal from "@/components/modals/FilterModal";
 import FormModal from "./modal/FormModal";
 import ViewModal from "./modal/ViewModal";
 import UpdateOrderStatusModal from "./modal/UpdateOrderStatusModal";
@@ -52,142 +49,10 @@ function Orders() {
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [showUpdateDeliveryTimeModal, setShowUpdateDeliveryTimeModal] =
     useState(false);
-  const [showFilterModal, setShowFilterModal] = useState(false);
-  const [filterData, setFilterData] = useState<Record<string, string>>({
-    status: "",
-    payment_status: "",
-    payment_mode: "",
-  });
-  const [activeFiltersCount, setActiveFiltersCount] = useState(0);
-  const [activeFiltersList, setActiveFiltersList] = useState<
-    Array<{ key: string; label: string; value: string }>
-  >([]);
-
-  useEffect(() => {
-    const params = new URLSearchParams();
-    if (filterData.status) {
-      params.append("status", filterData.status);
-    }
-    if (filterData.payment_status) {
-      params.append("payment_status", filterData.payment_status);
-    }
-    if (filterData.payment_mode) {
-      params.append("payment_mode", filterData.payment_mode);
-    }
-    const queryString = params.toString();
-    const fetchLists = async () => {
-      store.setLoading(true);
-      try {
-        await orderService.fetchLists(queryString);
-      } catch (error) {
-        console.error("Error fetching filtered order list:", error);
-        toast.error(t("orders.messages.failedToFetchFiltered"));
-      } finally {
-        store.setLoading(false);
-      }
-    };
-    if (!queryString) {
-      return;
-    } else {
-      fetchLists();
-    }
-  }, [filterData.status, filterData.payment_status, filterData.payment_mode]);
-
-  const handleApplyFilters = (filters: Record<string, string>) => {
-    console.log("Applying filters:", filters);
-    setFilterData(filters);
-    console.log("Applied filters:", filters);
-    toast.success(t("orders.messages.filtersApplied"));
-  };
-
-  const handleFiltersChange = (
-    filters: Record<string, string>,
-    count: number
-  ) => {
-    // Build active filters list for display
-    const activeList: Array<{ key: string; label: string; value: string }> = [];
-    orderFilterConfigs.forEach((config) => {
-      const value = filters[config.key];
-      if (value && value !== "all" && value !== "") {
-        const option = config.options.find((opt) => opt.value === value);
-        if (option) {
-          activeList.push({
-            key: config.key,
-            label: config.label,
-            value: option.label,
-          });
-        }
-      }
-    });
-    setActiveFiltersList(activeList);
-    setActiveFiltersCount(count);
-  };
-
-  const handleClearFilters = () => {
-    setFilterData({
-      status: "all",
-      payment_status: "all",
-      payment_mode: "all",
-    });
-    setActiveFiltersCount(0);
-    setActiveFiltersList([]);
-    toast.info(t("orders.messages.filtersCleared"));
-    setShowFilterModal(false);
-  };
-
-  // Filter configurations
-  const orderFilterConfigs = [
-    {
-      key: "status",
-      label: t("orders.filter.orderStatus"),
-      options: [
-        { label: t("orders.filter.allStatuses"), value: "all" },
-        { label: t("orders.status.pending"), value: "pending" },
-        { label: t("orders.status.approved"), value: "approved" },
-        { label: t("orders.status.shipped"), value: "shipped" },
-        { label: t("orders.status.delivered"), value: "delivered" },
-        { label: t("orders.status.cancelled"), value: "cancelled" },
-        {
-          label: t("orders.status.cancelled_at_delivery"),
-          value: "cancelled_at_delivery",
-        },
-        { label: t("orders.status.returned"), value: "returned" },
-      ],
-      defaultValue: "all",
-    },
-    {
-      key: "payment_status",
-      label: t("orders.filter.paymentStatus"),
-      options: [
-        { label: t("orders.filter.allPaymentStatuses"), value: "all" },
-        { label: t("orders.paymentStatus.pending"), value: "pending" },
-        { label: t("orders.paymentStatus.paid"), value: "paid" },
-        { label: t("orders.paymentStatus.failed"), value: "failed" },
-        { label: t("orders.paymentStatus.cancelled"), value: "cancelled" },
-        { label: t("orders.paymentStatus.refunded"), value: "refunded" },
-      ],
-      defaultValue: "all",
-    },
-    {
-      key: "payment_mode",
-      label: t("orders.filter.paymentMode"),
-      options: [
-        { label: t("orders.filter.allPaymentMethods"), value: "all" },
-        { label: t("orders.paymentMethod.cod"), value: "cod" },
-        { label: t("orders.paymentMethod.online"), value: "online" },
-      ],
-      defaultValue: "all",
-    },
-  ];
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {
     setRefreshTable(() => refreshFn);
   }, []);
-
-  const handleCreate = () => {
-    setSelectedOrder(null);
-    setDialogMode("create");
-  };
 
   const handleEdit = (order: Order) => {
     setSelectedOrder(order);
@@ -457,6 +322,50 @@ function Orders() {
     },
   ];
 
+  const filterItemes = [
+    {
+      label: t("orders.filter.orderStatus"),
+      value: "status",
+      options: [
+        { label: t("orders.filter.allStatuses"), value: "all" },
+        { label: t("orders.status.pending"), value: "pending" },
+        { label: t("orders.status.approved"), value: "approved" },
+        { label: t("orders.status.shipped"), value: "shipped" },
+        { label: t("orders.status.delivered"), value: "delivered" },
+        { label: t("orders.status.cancelled"), value: "cancelled" },
+        {
+          label: t("orders.status.cancelled_at_delivery"),
+          value: "cancelled_at_delivery",
+        },
+        { label: t("orders.status.returned"), value: "returned" },
+      ],
+      placeholder: t("orders.filter.selectOrderStatus"),
+    },
+    {
+      label: t("orders.filter.paymentStatus"),
+      value: "payment_status",
+      options: [
+        { label: t("orders.filter.allPaymentStatuses"), value: "all" },
+        { label: t("orders.paymentStatus.pending"), value: "pending" },
+        { label: t("orders.paymentStatus.paid"), value: "paid" },
+        { label: t("orders.paymentStatus.failed"), value: "failed" },
+        { label: t("orders.paymentStatus.cancelled"), value: "cancelled" },
+        { label: t("orders.paymentStatus.refunded"), value: "refunded" },
+      ],
+      placeholder: t("orders.filter.selectPaymentStatus"),
+    },
+    {
+      label: t("orders.filter.paymentMode"),
+      value: "payment_mode",
+      options: [
+        { label: t("orders.filter.allPaymentMethods"), value: "all" },
+        { label: t("orders.paymentMethod.cod"), value: "cod" },
+        { label: t("orders.paymentMethod.online"), value: "online" },
+      ],
+      placeholder: t("orders.filter.selectPaymentMethod"),
+    },
+  ];
+
   return (
     <div className="animate-fade-in">
       <Tabs defaultValue="orders" className="w-full">
@@ -466,22 +375,6 @@ function Orders() {
             <p className="text-muted-foreground">{t("orders.subtitle")}</p>
           </div>
           <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              onClick={() => setShowFilterModal(true)}
-              className="relative"
-            >
-              <Filter className="mr-2 h-4 w-4" />
-              {t("filter")}
-              {activeFiltersCount > 0 && (
-                <Badge
-                  variant="default"
-                  className="ml-2 h-5 w-5 rounded-full p-0 flex items-center justify-center"
-                >
-                  {activeFiltersCount}
-                </Badge>
-              )}
-            </Button>
             <TabsList className="gap-2">
               <TabsTrigger value="orders" className="gap-2">
                 <ShoppingCart className="h-4 w-4" />
@@ -499,29 +392,6 @@ function Orders() {
           </div>
         </div>
 
-        {/* Active Filters Display */}
-        {activeFiltersList.length > 0 && (
-          <div className="flex items-center gap-2 mb-4 flex-wrap">
-            <span className="text-sm text-muted-foreground">
-              {t("orders.filter.activeFilters")}:
-            </span>
-            {activeFiltersList.map((filter) => (
-              <Badge key={filter.key} variant="secondary" className="gap-1">
-                <span className="text-xs font-medium">{filter.label}:</span>
-                <span className="text-xs">{filter.value}</span>
-              </Badge>
-            ))}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleClearFilters}
-              className="h-6 text-xs"
-            >
-              {t("orders.filter.clearAll")}
-            </Button>
-          </div>
-        )}
-
         <TabsContent value="orders" className="mt-0">
           <BaseTableList<Order>
             title=""
@@ -536,6 +406,7 @@ function Orders() {
             onRefresh={handleSetRefresh}
             summaryLists={summaryLists}
             showDateFilter={true}
+            filters={filterItemes}
           />
         </TabsContent>
 
@@ -586,20 +457,6 @@ function Orders() {
         onClose={setShowUpdateDeliveryTimeModal}
         orderId={selectedOrder?.orderId || null}
         onSuccess={() => refreshTable?.()}
-      />
-
-      {/* Filter Modal */}
-      <FilterModal
-        open={showFilterModal}
-        onClose={() => setShowFilterModal(false)}
-        title={t("filter")}
-        filters={orderFilterConfigs}
-        currentFilters={filterData}
-        onApplyFilters={handleApplyFilters}
-        onClearFilters={handleClearFilters}
-        onFiltersChange={handleFiltersChange}
-        submitButtonText={t("orders.filter.apply")}
-        clearButtonText={t("orders.filter.clear")}
       />
     </div>
   );

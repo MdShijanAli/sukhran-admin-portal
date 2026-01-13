@@ -2,8 +2,9 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Download, FileText, RefreshCw, Search, Undo2 } from "lucide-react";
+import { Download, FileText, RefreshCw, Search, Undo2, X } from "lucide-react";
 import { BaseTable, Column } from "./BaseTable";
 import { DateRange } from "react-day-picker";
 import { ApiService } from "@/services/createApiService";
@@ -139,6 +140,21 @@ export function ReportTableList({
 
   // Generate columns from report data
   const columns = generateColumns(reportData);
+
+  // Check if any filters are active
+  const hasActiveFilters = Object.values(localFilters).some(
+    (value) => value && value !== ""
+  );
+
+  // Get filter label by value
+  const getFilterLabel = (filterValue: string, selectedValue: string) => {
+    const filter = filters?.find((f) => f.value === filterValue);
+    const option = filter?.options.find((opt) => opt.value === selectedValue);
+    return {
+      filterLabel: filter?.label || filterValue,
+      optionLabel: option?.label || selectedValue,
+    };
+  };
 
   // Auto-refresh when filters change (if data exists and auto-refresh is enabled)
   useEffect(() => {
@@ -413,6 +429,34 @@ export function ReportTableList({
               {isExporting ? t("reports.exporting") : t("reports.export")}
             </Button>
           </div>
+
+          {/* Active Filters Display */}
+          {hasActiveFilters && (
+            <div className="flex flex-wrap gap-2 items-center w-full">
+              <span className="text-sm text-muted-foreground">
+                {t("reports.filters.activeFilters")}:
+              </span>
+              {Object.entries(localFilters).map(([key, value]) => {
+                if (!value) return null;
+                const { filterLabel, optionLabel } = getFilterLabel(key, value);
+                return (
+                  <Badge key={key} variant="secondary" className="gap-1 pr-1">
+                    <span className="text-xs">
+                      {filterLabel}: {optionLabel}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-4 w-4 p-0 hover:bg-transparent"
+                      onClick={() => handleRemoveFilter(key)}
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </Badge>
+                );
+              })}
+            </div>
+          )}
 
           {/* Table with horizontal scroll */}
           {selectedTab === "list" ? (

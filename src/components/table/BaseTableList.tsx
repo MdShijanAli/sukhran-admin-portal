@@ -25,6 +25,8 @@ import { format } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { BaseDatePicker } from "@/components/custom/BaseDatePicker";
 import { toast } from "sonner";
+import { FilterConfig, FilterDrawer } from "../custom/FilterDrawer";
+import { Badge } from "../ui/badge";
 
 export interface FilterOption {
   label: string;
@@ -90,15 +92,7 @@ export interface BaseTableListProps<T> {
   searchPlaceholder?: string;
   enableSearch?: boolean;
 
-  // Filters
-  filters?: {
-    label?: string;
-    value: string;
-    options: FilterOption[];
-    onChange: (value: string) => void;
-    placeholder?: string;
-    className?: string;
-  }[];
+  filters?: FilterConfig[];
 
   // Additional toolbar elements
   toolbarActions?: ReactNode;
@@ -147,7 +141,6 @@ export function BaseTableList<T>({
   headerSlots,
   searchPlaceholder = "Search...",
   enableSearch = true,
-  filters,
   toolbarActions,
   columns,
   service,
@@ -167,6 +160,7 @@ export function BaseTableList<T>({
   queryParams,
   showDateFilter = false,
   showExportButton = false,
+  filters,
 }: BaseTableListProps<T>) {
   // Local state for query params
   const { t } = useTranslation();
@@ -177,16 +171,9 @@ export function BaseTableList<T>({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [hasInitialFetch, setHasInitialFetch] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const [localFilters, setLocalFilters] = useState<Record<string, string>>(
-    () => {
-      const initial: Record<string, string> = {};
-      filters?.forEach((filter, index) => {
-        initial[filter.label || `filter_${index}`] = filter.value;
-      });
-      return initial;
-    }
-  );
+  const [localFilters, setLocalFilters] = useState<Record<string, string>>({});
   const [isExporting, setIsExporting] = useState(false);
+  const [shouldAutoRefresh, setShouldAutoRefresh] = useState(false);
 
   // Serialize queryParams to detect changes
   const serializedQueryParams = queryParams ? JSON.stringify(queryParams) : "";
@@ -250,11 +237,10 @@ export function BaseTableList<T>({
 
       // Add filter params
       if (filters) {
-        filters.forEach((filter, index) => {
-          const filterKey = filter.label || `filter_${index}`;
-          const filterValue = localFilters[filterKey];
+        filters.forEach((filter) => {
+          const filterValue = localFilters[filter.value];
           if (filterValue) {
-            params.append(filter.label || "filter", filterValue);
+            params.append(filter.value, filterValue);
           }
         });
       }
@@ -434,6 +420,57 @@ export function BaseTableList<T>({
     }
   };
 
+  // Check if any filters are active
+  const hasActiveFilters = Object.values(localFilters).some(
+    (value) => value && value !== ""
+  );
+
+  // Get filter label by value
+  const getFilterLabel = (filterValue: string, selectedValue: string) => {
+    const filter = filters?.find((f) => f.value === filterValue);
+    const option = filter?.options.find((opt) => opt.value === selectedValue);
+    return {
+      filterLabel: filter?.label || filterValue,
+      optionLabel: option?.label || selectedValue,
+    };
+  };
+
+  // Handle apply filters
+  const handleApplyFilters = (newFilters: Record<string, string>) => {
+    setLocalFilters(newFilters);
+
+    // Auto-generate report if data already exists
+    if (data.length > 0) {
+      setShouldAutoRefresh(true);
+    } else {
+      toast.success("Filters applied successfully");
+    }
+  };
+
+  // Handle reset filters
+  const handleResetFilters = () => {
+    setLocalFilters({});
+
+    // Auto-generate report if data already exists
+    if (data.length > 0) {
+      setShouldAutoRefresh(true);
+    } else {
+      toast.success("Filters reset successfully");
+    }
+  };
+
+  // Remove individual filter
+  const handleRemoveFilter = (filterKey: string) => {
+    const newFilters = { ...localFilters };
+    delete newFilters[filterKey];
+    setLocalFilters(newFilters);
+
+    // Auto-refresh if data exists
+    if (data.length > 0) {
+      setShouldAutoRefresh(true);
+    }
+  };
+
   return (
     <div className="space-y-3">
       {summaryLists.length > 0 && (
@@ -494,7 +531,7 @@ export function BaseTableList<T>({
                   )}
 
                   {/* Filters */}
-                  {filters &&
+                  {/* {filters &&
                     filters.map((filter, index) => {
                       const filterKey = filter.label || `filter_${index}`;
                       return (
@@ -538,7 +575,7 @@ export function BaseTableList<T>({
                           </SelectContent>
                         </Select>
                       );
-                    })}
+                    })} */}
 
                   {/* Additional Toolbar Actions */}
                   {toolbarActions}
@@ -593,6 +630,16 @@ export function BaseTableList<T>({
                     })}
                   </div>
                 )}
+                {/* Filter Drawer */}
+                {filters && filters.length > 0 && (
+                  <FilterDrawer
+                    filters={filters}
+                    localFilters={localFilters}
+                    onApplyFilters={handleApplyFilters}
+                    onResetFilters={handleResetFilters}
+                    onRemoveFilter={handleRemoveFilter}
+                  />
+                )}
                 {showExportButton && (
                   <Button onClick={handleExport} disabled={isExporting}>
                     {isExporting ? (
@@ -607,6 +654,34 @@ export function BaseTableList<T>({
               </div>
             </div>
           </div>
+
+          {/* Active Filters Display */}
+          {hasActiveFilters && (
+            <div className="flex flex-wrap gap-2 items-center w-full">
+              <span className="text-sm text-muted-foreground">
+                {t("reports.filters.activeFilters")}:
+              </span>
+              {Object.entries(localFilters).map(([key, value]) => {
+                if (!value) return null;
+                const { filterLabel, optionLabel } = getFilterLabel(key, value);
+                return (
+                  <Badge key={key} variant="secondary" className="gap-1 pr-1">
+                    <span className="text-xs">
+                      {filterLabel}: {optionLabel}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-4 w-4 p-0 hover:bg-transparent"
+                      onClick={() => handleRemoveFilter(key)}
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </Badge>
+                );
+              })}
+            </div>
+          )}
         </CardHeader>
         <CardContent>
           {/* Table */}

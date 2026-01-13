@@ -173,7 +173,10 @@
     "paymentStatus": "পেমেন্ট স্ট্যাটাস",
     "paymentMode": "পেমেন্ট মোড",
     "apply": "ফিল্টার প্রয়োগ করুন",
-    "clear": "ফিল্টার মুছুন"
+    "clear": "ফিল্টার মুছুন",
+    "selectOrderStatus": "অর্ডার স্ট্যাটাস নির্বাচন করুন",
+    "selectPaymentStatus": "পেমেন্ট স্ট্যাটাস নির্বাচন করুন",
+    "selectPaymentMethod": "পেমেন্ট পদ্ধতি নির্বাচন করুন"
   },
   "tabs": {
     "regularOrders": "নিয়মিত অর্ডার",

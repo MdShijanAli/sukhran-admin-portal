@@ -175,7 +175,10 @@
     "apply": "Apply Filters",
     "clear": "Clear Filters",
     "activeFilters": "Active Filters",
-    "clearAll": "Clear All"
+    "clearAll": "Clear All",
+    "selectOrderStatus": "Select Order Status",
+    "selectPaymentStatus": "Select Payment Status",
+    "selectPaymentMethod": "Select Payment Method"
   },
   "tabs": {
     "regularOrders": "Regular Orders",
