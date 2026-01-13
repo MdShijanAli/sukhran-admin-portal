@@ -203,6 +203,7 @@ export default function ReferralsTab({
       store={store}
       getRowKey={(referral) => referral.id}
       onRefresh={onSetRefresh}
+      showDateFilter={true}
     />
   );
 }

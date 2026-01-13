@@ -217,6 +217,7 @@ const Notifications = () => {
         emptyMessage={t("notifications.emptyMessage")}
         getRowKey={(notification) => notification.id}
         onRefresh={handleSetRefresh}
+        showDateFilter={true}
       />
 
       {/* Modals */}

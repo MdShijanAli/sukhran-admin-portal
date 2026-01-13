@@ -5,10 +5,6 @@ import {
   Trash2,
   Plus,
   Users as UsersIcon,
-  UserCheck,
-  UserX,
-  UserMinus,
-  Filter,
   FolderSync,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -24,8 +20,6 @@ import userService from "@/services/userService";
 import { toast } from "sonner";
 import noImage from "@/assets/images/avatar-ractangle.jpg";
 import { Switch } from "@/components/ui/switch";
-import FilterModal from "@/components/modals/FilterModal";
-import { Button } from "@/components/ui/button";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import constData from "@/lib/constData";
 import { useTranslation } from "react-i18next";
@@ -51,13 +45,6 @@ const UsersTab = () => {
     null
   );
 
-  const [showFilterModal, setShowFilterModal] = useState(false);
-  const [filterData, setFilterData] = useState<Record<string, string>>({
-    status: "",
-    subscription: "",
-    role: "",
-  });
-
   const store = useUserStore();
   const roleStore = useRoleStore();
   const { t } = useTranslation();
@@ -79,37 +66,6 @@ const UsersTab = () => {
       fetchRoles();
     }
   }, []);
-
-  // Filter configurations
-  const userFilterConfigs = [
-    {
-      key: "status",
-      label: t("users.filter.account_status"),
-      options: [
-        { label: t("users.filter.allStatuses"), value: "all" },
-        { label: t("users.filter.active"), value: "active" },
-        { label: t("users.filter.inactive"), value: "inactive" },
-        { label: t("users.filter.deleted"), value: "deleted" },
-      ],
-      defaultValue: "active",
-    },
-    ...(hasPermission(permissions.roles.view)
-      ? [
-          {
-            key: "role",
-            label: t("users.filter.user_role"),
-            options: [
-              { label: t("users.filter.allRoles"), value: "all" },
-              ...roleStore.roles.map((role) => ({
-                label: role?.display_name,
-                value: role.id,
-              })),
-            ],
-            defaultValue: "all",
-          },
-        ]
-      : []),
-  ];
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {
     setRefreshTable(() => refreshFn);
@@ -179,9 +135,6 @@ const UsersTab = () => {
       toast.success(
         `User ${!user.isActive ? "activated" : "deactivated"} successfully`
       );
-      if (result && result.user) {
-        setFilterData((prev) => ({ ...prev, status: "active" }));
-      }
     } catch (error) {
       console.error("Error toggling user status:", error);
       toast.error(
@@ -328,6 +281,36 @@ const UsersTab = () => {
     },
   ];
 
+  const filterItemes = [
+    {
+      label: t("users.filter.account_status"),
+      value: "status",
+      options: [
+        { label: t("users.filter.allStatuses"), value: "all" },
+        { label: t("users.filter.active"), value: "active" },
+        { label: t("users.filter.inactive"), value: "inactive" },
+        { label: t("users.filter.deleted"), value: "deleted" },
+      ],
+      placeholder: t("users.filter.selectAccountStatus"),
+    },
+    ...(hasPermission(permissions.roles.view)
+      ? [
+          {
+            label: t("users.filter.user_role"),
+            value: "role",
+            options: [
+              { label: t("users.filter.allRoles"), value: "all" },
+              ...roleStore.roles.map((role) => ({
+                label: role?.display_name,
+                value: role.id,
+              })),
+            ],
+            placeholder: t("users.filter.selectUserRole"),
+          },
+        ]
+      : []),
+  ];
+
   return (
     <div className="animate-fade-in">
       <BaseTableList<User>
@@ -343,12 +326,6 @@ const UsersTab = () => {
             },
           ]
         }
-        toolbarActions={
-          <Button variant="outline" onClick={() => setShowFilterModal(true)}>
-            <Filter className="mr-2 h-4 w-4" />
-            {t("filter")}
-          </Button>
-        }
         searchPlaceholder={t("users.searchPlaceholder")}
         enableSearch={true}
         columns={columns}
@@ -358,6 +335,7 @@ const UsersTab = () => {
         emptyMessage={t("users.noUsersFound")}
         getRowKey={(user) => user.id}
         onRefresh={handleSetRefresh}
+        filters={filterItemes}
       />
 
       {/* Dialogs */}
@@ -392,20 +370,6 @@ const UsersTab = () => {
         description={`Are you sure you want to restore ${selectedUser?.firstName} ${selectedUser?.lastName}?`}
         onConfirm={handleRestoreUser}
         isProcessing={isRestoring}
-      />
-
-      {/* Filter Modal */}
-      <FilterModal<User>
-        open={showFilterModal}
-        onClose={() => setShowFilterModal(false)}
-        title={t("filter")}
-        filters={userFilterConfigs}
-        currentFilters={filterData}
-        onApplyFilters={(filters) => setFilterData(filters)}
-        service={userService}
-        store={store}
-        submitButtonText={t("users.filter.apply")}
-        clearButtonText={t("users.filter.clear")}
       />
     </div>
   );

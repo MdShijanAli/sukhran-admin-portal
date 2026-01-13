@@ -64,7 +64,9 @@
     "allGenders": "All Genders",
     "active": "Active",
     "inactive": "Inactive",
-    "deleted": "Deleted"
+    "deleted": "Deleted",
+    "selectAccountStatus": "Select Account Status",
+    "selectUserRole": "Select User Role"
   },
   "view": {
     "personalInformation": "Personal Information",

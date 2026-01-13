@@ -64,7 +64,9 @@
     "allGenders": "সকল লিঙ্গ",
     "active": "সক্রিয়",
     "inactive": "নিষ্ক্রিয়",
-    "deleted": "মুছে ফেলা"
+    "deleted": "মুছে ফেলা",
+    "selectAccountStatus": "অ্যাকাউন্ট স্ট্যাটাস নির্বাচন করুন",
+    "selectUserRole": "ব্যবহারকারীর ভূমিকা নির্বাচন করুন"
   },
   "view": {
     "personalInformation": "ব্যক্তিগত তথ্য",

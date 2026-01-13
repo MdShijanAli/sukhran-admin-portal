@@ -128,14 +128,6 @@ function Donations() {
     // Refresh coin report if needed
   };
 
-  const handleSetRefreshChannels = useCallback((refreshFn: () => void) => {
-    setRefreshChannels(() => refreshFn);
-  }, []);
-
-  const handleSetRefreshDonations = useCallback((refreshFn: () => void) => {
-    setRefreshDonations(() => refreshFn);
-  }, []);
-
   return (
     <div className="animate-fade-in">
       {/* Header */}

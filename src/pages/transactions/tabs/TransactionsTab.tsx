@@ -218,48 +218,49 @@ const TransactionsTab = () => {
     },
   ];
 
-  //   const summaryLists = [
-  //     {
-  //       title: t("transactions.summary.totalTransactions"),
-  //       value: store.stats?.total_transactions,
-  //       icon: CreditCard,
-  //       color: "text-muted-foreground",
-  //     },
-  //     {
-  //       title: t("transactions.summary.totalAmount"),
-  //       value: `৳${parseFloat(store.stats?.total_amount).toLocaleString()}`,
-  //       icon: DollarSign,
-  //       color: "text-primary",
-  //     },
-  //     {
-  //       title: t("transactions.summary.successful"),
-  //       value: store.stats?.successful,
-  //       icon: CheckCircle2,
-  //       color: "text-green-600",
-  //     },
-  //     {
-  //       title: t("transactions.summary.pending"),
-  //       value:
-  //         store.stats.total_transactions -
-  //         store.stats.successful -
-  //         store.stats.failed -
-  //         store.stats.refunded,
-  //       icon: Clock,
-  //       color: "text-yellow-600",
-  //     },
-  //     {
-  //       title: t("transactions.summary.failed"),
-  //       value: store.stats.failed,
-  //       icon: XCircle,
-  //       color: "text-red-600",
-  //     },
-  //     {
-  //       title: t("transactions.summary.thisMonth"),
-  //       value: `৳${parseFloat(store.stats?.this_month?.amount).toLocaleString()}`,
-  //       icon: TrendingUp,
-  //       color: "text-blue-600",
-  //     },
-  //   ];
+  const filterItemes = [
+    {
+      label: t("orders.filter.orderStatus"),
+      value: "status",
+      options: [
+        { label: t("orders.filter.allStatuses"), value: "all" },
+        { label: t("orders.status.pending"), value: "pending" },
+        { label: t("orders.status.approved"), value: "approved" },
+        { label: t("orders.status.shipped"), value: "shipped" },
+        { label: t("orders.status.delivered"), value: "delivered" },
+        { label: t("orders.status.cancelled"), value: "cancelled" },
+        {
+          label: t("orders.status.cancelled_at_delivery"),
+          value: "cancelled_at_delivery",
+        },
+        { label: t("orders.status.returned"), value: "returned" },
+      ],
+      placeholder: t("orders.filter.selectOrderStatus"),
+    },
+    {
+      label: t("orders.filter.paymentStatus"),
+      value: "payment_status",
+      options: [
+        { label: t("orders.filter.allPaymentStatuses"), value: "all" },
+        { label: t("orders.paymentStatus.pending"), value: "pending" },
+        { label: t("orders.paymentStatus.paid"), value: "paid" },
+        { label: t("orders.paymentStatus.failed"), value: "failed" },
+        { label: t("orders.paymentStatus.cancelled"), value: "cancelled" },
+        { label: t("orders.paymentStatus.refunded"), value: "refunded" },
+      ],
+      placeholder: t("orders.filter.selectPaymentStatus"),
+    },
+    {
+      label: t("orders.filter.paymentMode"),
+      value: "payment_mode",
+      options: [
+        { label: t("orders.filter.allPaymentMethods"), value: "all" },
+        { label: t("orders.paymentMethod.cod"), value: "cod" },
+        { label: t("orders.paymentMethod.online"), value: "online" },
+      ],
+      placeholder: t("orders.filter.selectPaymentMethod"),
+    },
+  ];
 
   return (
     <div className="animate-fade-in">
@@ -274,9 +275,9 @@ const TransactionsTab = () => {
         emptyMessage={t("transactions.emptyState")}
         getRowKey={(transaction) => transaction.id}
         onRefresh={handleSetRefresh}
-        // summaryLists={summaryLists}
         showDateFilter={true}
         showExportButton={true}
+        filters={filterItemes}
       />
 
       {/* Modals */}

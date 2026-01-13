@@ -192,6 +192,7 @@ export default function DonationsTab({ onViewDetails }: DonationsTabProps) {
       service={donationService}
       store={store}
       getRowKey={(order) => order.id}
+      showDateFilter={true}
     />
   );
 }
