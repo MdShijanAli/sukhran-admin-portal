@@ -103,6 +103,14 @@
     "status": "অবস্থা",
     "selectStatus": "অবস্থা নির্বাচন করুন",
     "date_filter_type": "তারিখ ফিল্টার ধরন",
-    "selectDateFilterType": "তারিখ ফিল্টার ধরন নির্বাচন করুন"
+    "selectDateFilterType": "তারিখ ফিল্টার ধরন নির্বাচন করুন",
+    "payment_status": "পেমেন্ট অবস্থা",
+    "selectPaymentStatus": "পেমেন্ট অবস্থা নির্বাচন করুন",
+    "orderStatus": "অর্ডার অবস্থা",
+    "selectOrderStatus": "অর্ডার অবস্থা নির্বাচন করুন",
+    "donation_type": "দান ধরন",
+    "selectDonationType": "দান ধরন নির্বাচন করুন",
+    "payment_method": "পেমেন্ট পদ্ধতি",
+    "selectPaymentMethod": "পেমেন্ট পদ্ধতি নির্বাচন করুন"
   }
 }

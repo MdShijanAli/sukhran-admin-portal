@@ -103,6 +103,14 @@
     "status": "Status",
     "selectStatus": "Select Status",
     "date_filter_type": "Date Filter Type",
-    "selectDateFilterType": "Select Date Filter Type"
+    "selectDateFilterType": "Select Date Filter Type",
+    "payment_status": "Payment Status",
+    "selectPaymentStatus": "Select Payment Status",
+    "orderStatus": "Order Status",
+    "selectOrderStatus": "Select Order Status",
+    "donation_type": "Donation Type",
+    "selectDonationType": "Select Donation Type",
+    "payment_method": "Payment Method",
+    "selectPaymentMethod": "Select Payment Method"
   }
 }
