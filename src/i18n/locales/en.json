@@ -51,6 +51,37 @@
     "loading": "Loading...",
     "noData": "No data available"
   },
+  "reports": {
+    "success": "Success",
+    "error": "Error",
+    "reportGenerated": "Report generated successfully",
+    "searchPlaceholder": "Search report...",
+    "noData": "No data available",
+    "generate": "Generate Report",
+    "generating": "Generating...",
+    "export": "Export",
+    "exporting": "Exporting...",
+    "exportSuccess": "Report exported successfully",
+    "exportError": "Failed to export report",
+    "refreshError": "Failed to refresh data",
+    "transactionReport": "Transaction Report",
+    "transactionReportDesc": "View all transaction details",
+    "filters": {
+      "filter": "Filter",
+      "filterOptions": "Filter Options",
+      "filterDescription": "Select filters to refine your report",
+      "applyFilters": "Apply Filters",
+      "resetFilters": "Reset Filters",
+      "activeFilters": "Active Filters",
+      "payment_mode": "Payment Mode",
+      "status": "Status",
+      "selectTransactionType": "Select payment mode",
+      "selectStatus": "Select status"
+    }
+  },
+  "list": "List",
+  "statistics": "Statistics",
+  "back": "Back",
   "dashboard": {
     "todayOrders": "Today's Orders",
     "totalRevenue": "Total Revenue",

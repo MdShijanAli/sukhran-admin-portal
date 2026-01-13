@@ -21,7 +21,7 @@
   "regularSalesReportDesc": "Monitor regular product sales, revenue metrics, and order fulfillment",
   "regularOrdersReport": "Regular Orders Report",
   "regularOrdersReportDesc": "Comprehensive view of all regular orders with status tracking and analytics",
-  "generate": "Generate Report",
+  "generate": "Generate",
   "generating": "Generating...",
   "export": "Export",
   "exporting": "Exporting...",
@@ -82,5 +82,25 @@
     "average_items_per_order": "Avg Items/Order",
     "total_coins_awarded": "Total Coins Awarded",
     "date_filter_type": "Date Filter Type"
+  },
+  "filters": {
+    "filter": "Filter",
+    "filterOptions": "Filter Options",
+    "selectFilter": "Select Filter",
+    "filterDescription": "Select filters to refine your report",
+    "applyFilters": "Apply Filters",
+    "resetFilters": "Reset Filters",
+    "activeFilters": "Active Filters",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "last7Days": "Last 7 Days",
+    "last30Days": "Last 30 Days",
+    "thisMonth": "This Month",
+    "lastMonth": "Last Month",
+    "customRange": "Custom Range",
+    "payment_mode": "Payment Mode",
+    "selectTransactionType": "Select Transaction Type",
+    "status": "Status",
+    "selectStatus": "Select Status"
   }
 }

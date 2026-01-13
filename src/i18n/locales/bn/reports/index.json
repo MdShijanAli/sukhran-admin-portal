@@ -21,7 +21,7 @@
   "regularSalesReportDesc": "নিয়মিত পণ্য বিক্রয়, রাজস্ব মেট্রিক্স এবং অর্ডার পূরণ পর্যবেক্ষণ করুন",
   "regularOrdersReport": "নিয়মিত অর্ডার প্রতিবেদন",
   "regularOrdersReportDesc": "স্ট্যাটাস ট্র্যাকিং এবং বিশ্লেষণ সহ সমস্ত নিয়মিত অর্ডারের সম্পূর্ণ দৃশ্য",
-  "generate": "প্রতিবেদন তৈরি করুন",
+  "generate": "তৈরি করুন",
   "generating": "তৈরি হচ্ছে...",
   "export": "রপ্তানি",
   "exporting": "রপ্তানি হচ্ছে...",
@@ -82,5 +82,25 @@
     "average_items_per_order": "গড় আইটেম/অর্ডার",
     "total_coins_awarded": "মোট কয়েন প্রদান",
     "date_filter_type": "তারিখ ফিল্টার ধরন"
+  },
+  "filters": {
+    "filter": "ফিল্টার",
+    "filterOptions": "ফিল্টার অপশন",
+    "filterDescription": "আপনার প্রতিবেদন পরিমার্জন করতে ফিল্টার নির্বাচন করুন",
+    "applyFilters": "ফিল্টার প্রয়োগ করুন",
+    "selectFilter": "ফিল্টার নির্বাচন করুন",
+    "resetFilters": "ফিল্টার রিসেট করুন",
+    "activeFilters": "সক্রিয় ফিল্টার",
+    "today": "আজ",
+    "yesterday": "গতকাল",
+    "last7Days": "গত ৭ দিন",
+    "last30Days": "গত ৩০ দিন",
+    "thisMonth": "এই মাস",
+    "lastMonth": "গত মাস",
+    "customRange": "কাস্টম পরিসীমা",
+    "payment_mode": "পেমেন্ট মোড",
+    "selectTransactionType": "লেনদেনের ধরন নির্বাচন করুন",
+    "status": "অবস্থা",
+    "selectStatus": "অবস্থা নির্বাচন করুন"
   }
 }
