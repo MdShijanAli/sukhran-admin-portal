@@ -10,7 +10,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useThemeStore } from "@/stores/themeStore";
 import { useAuthStore } from "@/stores/authStore";
 import { Button } from "@/components/ui/button";
@@ -25,15 +25,11 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-interface Notification {
-  id: string;
-  type: "order" | "payment" | "delivery" | "alert";
-  title: string;
-  message: string;
-  time: string;
-  read: boolean;
-}
+import authService from "@/services/authService";
+import { toast } from "sonner";
+import { Notification } from "@/lib/types";
+import ENFlag from "@/assets/images/en.png";
+import BNFlag from "@/assets/images/bn.png";
 
 const mockNotifications: Notification[] = [
   {
@@ -88,12 +84,13 @@ const notificationIcons = {
 export default function Header() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { theme, toggleTheme } = useThemeStore();
-  const { user, logout } = useAuthStore();
+  const { theme, toggleTheme, setLanguage } = useThemeStore();
+  const { user } = useAuthStore();
 
   const toggleLanguage = () => {
     const newLang = i18n.language === "en" ? "bn" : "en";
     i18n.changeLanguage(newLang);
+    setLanguage(newLang);
   };
 
   const getInitials = (name: string) => {
@@ -102,6 +99,24 @@ export default function Header() {
       .map((n) => n[0])
       .join("")
       .toUpperCase();
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await authService.logout();
+      console.log("Logout response:", response);
+
+      if (response && response.success) {
+        toast.success("Logged out successfully");
+        navigate("/login");
+      } else {
+        toast.error(response?.message || "Logout failed");
+      }
+    } catch (error: unknown) {
+      console.error("Logout error:", error);
+      const message = error instanceof Error ? error.message : String(error);
+      toast.error(message || "An error occurred during logout");
+    }
   };
 
   return (
@@ -115,9 +130,9 @@ export default function Header() {
           className="rounded-full"
         >
           {theme === "light" ? (
-            <Moon className="h-5 w-5" />
+            <Moon className="h-8 w-8" />
           ) : (
-            <Sun className="h-5 w-5" />
+            <Sun className="h-8 w-8" />
           )}
         </Button>
 
@@ -127,20 +142,35 @@ export default function Header() {
           size="icon"
           onClick={toggleLanguage}
           className="rounded-full"
+          title={
+            i18n.language === "en" ? "Switch to বাংলা" : "Switch to English"
+          }
         >
-          <Globe className="h-5 w-5" />
+          {i18n.language === "en" ? (
+            <img
+              src={ENFlag}
+              alt="English"
+              className="h-6 w-6 rounded-full object-cover object-center"
+            />
+          ) : (
+            <img
+              src={BNFlag}
+              alt="Bangla"
+              className="h-6 w-6 rounded-full object-cover object-center"
+            />
+          )}
           <span className="sr-only">Toggle language</span>
         </Button>
 
         {/* Notifications */}
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               size="icon"
               className="rounded-full relative"
             >
-              <Bell className="h-5 w-5" />
+              <Bell className="h-8 w-8" />
               {mockNotifications.filter((n) => !n.read).length > 0 && (
                 <span className="absolute top-1 right-1 h-2 w-2 bg-destructive rounded-full" />
               )}
@@ -197,10 +227,12 @@ export default function Header() {
             </ScrollArea>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-center justify-center cursor-pointer">
-              View All Notifications
+              <NavLink to="/notifications" className="w-full">
+                View All Notifications
+              </NavLink>
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
 
         {/* User Menu */}
         <DropdownMenu>
@@ -208,7 +240,15 @@ export default function Header() {
             <Button variant="ghost" className="relative h-10 w-10 rounded-full">
               <Avatar>
                 <AvatarFallback className="bg-primary text-primary-foreground">
-                  {user ? getInitials(user.name) : "AD"}
+                  {user.image_url ? (
+                    <img
+                      src={user.image_url}
+                      alt={user.firstName}
+                      className="w-full h-full object-cover object-top border-2 border-primary rounded-full"
+                    />
+                  ) : (
+                    getInitials(user.firstName)
+                  )}
                 </AvatarFallback>
               </Avatar>
             </Button>
@@ -216,7 +256,9 @@ export default function Header() {
           <DropdownMenuContent className="w-56 bg-popover" align="end">
             <DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium">{user?.name}</p>
+                <p className="text-sm font-medium">
+                  {user?.firstName} {user?.lastName}
+                </p>
                 <p className="text-xs text-muted-foreground">{user?.email}</p>
               </div>
             </DropdownMenuLabel>
@@ -226,7 +268,10 @@ export default function Header() {
               <span>{t("nav.profile")}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={logout} className="text-destructive">
+            <DropdownMenuItem
+              onClick={handleLogout}
+              className="text-destructive"
+            >
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>

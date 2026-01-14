@@ -1,0 +1,101 @@
+import { createApiService, ApiService } from "./createApiService";
+import { apiRoutes } from "@/api/apiRoutes";
+import { useUserStore, User } from "@/stores/userStore";
+import apiClient from "@/api/apiClient";
+
+// Create base API service with all CRUD operations
+const apiService = createApiService<User>(
+  apiRoutes.users,
+  useUserStore.getState()
+);
+
+interface UserService extends ApiService<User> {
+  toggleUserStatus: (id: number | string) => Promise<unknown>;
+  getUsersStatistics: () => Promise<unknown>;
+  resetUserPassword: (id: number | string) => Promise<unknown>;
+  restoreUser: (id: number | string) => Promise<unknown>;
+  statistics: () => Promise<unknown>;
+  forceDeleteUser: (id: number | string) => Promise<unknown>;
+}
+
+const userService: UserService = {
+  // Inherit all basic CRUD operations
+  ...apiService,
+
+  // Add extra custom API methods here
+  toggleUserStatus: async (id: number | string): Promise<User> => {
+    try {
+      const response = await apiClient.patch(
+        apiRoutes.users.toggleUserStatus(id)
+      );
+      console.log("Toggle active status response:", response.data);
+      if (response && response.status === 200) {
+        useUserStore.getState().updateItem(id, response.data.user);
+      }
+      return response.data.user;
+    } catch (error) {
+      console.error("Error toggling user status:", error);
+      throw error;
+    }
+  },
+
+  getUsersStatistics: async () => {
+    try {
+      const response = await apiClient.get(apiRoutes.users.getUsersStatistics);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching users statistics:", error);
+      throw error;
+    }
+  },
+
+  resetUserPassword: async (id: number | string) => {
+    try {
+      const response = await apiClient.post(
+        apiRoutes.users.resetUserPassword(id)
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error resetting user password:", error);
+      throw error;
+    }
+  },
+
+  restoreUser: async (id: number | string) => {
+    try {
+      const response = await apiClient.post(apiRoutes.users.restoreUser(id));
+      return response.data;
+    } catch (error) {
+      console.error("Error restoring user:", error);
+      throw error;
+    }
+  },
+
+  forceDeleteUser: async (
+    id: number | string,
+    body?: { confirmation: string; reason: string }
+  ) => {
+    try {
+      const response = await apiClient.delete(
+        apiRoutes.users.forceDeleteUser(id),
+        { data: body }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error force deleting user:", error);
+      throw error;
+    }
+  },
+
+  statistics: async () => {
+    try {
+      const response = await apiClient.get(apiRoutes.users.statistics);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching user statistics:", error);
+      throw error;
+    }
+  },
+};
+
+export default userService;

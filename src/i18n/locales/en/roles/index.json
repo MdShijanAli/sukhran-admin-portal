@@ -1,0 +1,77 @@
+{
+  "title": "Role Management",
+  "subtitle": "Manage roles and permissions",
+  "addRole": "Add",
+  "searchPlaceholder": "Search by role name or description...",
+  "noRolesFound": "No roles found",
+  "totalRoles": "Total Roles",
+  "activeRoles": "Active Roles",
+  "inactiveRoles": "Inactive Roles",
+  "rolesWithUsers": "Roles with Users",
+  "rolesWithoutUsers": "Roles without Users",
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "columns": {
+    "sl": "Sl.",
+    "roleName": "Role Name",
+    "description": "Description",
+    "permissions": "Permissions",
+    "users": "Users",
+    "status": "Status",
+    "actions": "Actions",
+    "noDescription": "No description"
+  },
+  "actions": {
+    "viewDetails": "View Details",
+    "editRole": "Edit Role",
+    "deleteRole": "Delete Role"
+  },
+  "form": {
+    "createNewRole": "Create New Role",
+    "editRole": "Edit Role",
+    "roleName": "Role Name",
+    "roleNamePlaceholder": "e.g., store_manager",
+    "roleNameHint": "Use lowercase with underscores (e.g., store_manager)",
+    "displayName": "Display Name",
+    "displayNamePlaceholder": "e.g., Store Manager",
+    "description": "Description",
+    "descriptionPlaceholder": "Brief description of the role",
+    "status": "Status",
+    "permissions": "Permissions",
+    "searchPermissions": "Search permissions...",
+    "selected": "selected",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All",
+    "noPermissionsAvailable": "No permissions available",
+    "updateRole": "Update Role",
+    "createRole": "Create Role"
+  },
+  "view": {
+    "roleDetails": "Role Details",
+    "permissions": "Permissions",
+    "assignedUsers": "Assigned Users",
+    "created": "Created",
+    "assignedPermissions": "Assigned Permissions",
+    "total": "Total"
+  },
+  "messages": {
+    "fillRequiredFields": "Please fill in all required fields",
+    "roleCreated": "Role created successfully",
+    "roleUpdated": "Role updated successfully",
+    "roleDeleted": "Role deleted successfully",
+    "roleActivated": "Role activated successfully",
+    "roleDeactivated": "Role deactivated successfully",
+    "failedToCreate": "Failed to create role",
+    "failedToUpdate": "Failed to update role",
+    "failedToDelete": "Failed to delete role",
+    "failedToLoadPermissions": "Failed to load permissions",
+    "failedToToggleStatus": "Failed to update role status"
+  },
+  "delete": {
+    "title": "Delete Role",
+    "message": "Are you sure you want to delete",
+    "cannotUndo": "This action cannot be undone."
+  }
+}

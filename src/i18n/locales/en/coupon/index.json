@@ -1,0 +1,138 @@
+{
+  "title": "Coupon Management",
+  "subtitle": "Manage your coupons effectively",
+  "totalCoupons": "Total Coupons",
+  "activeCoupons": "Active Coupons",
+  "expiredCoupons": "Expired Coupons",
+  "totalUsage": "Total Usage",
+  "totalDiscount": "Total Discount Given",
+  "searchPlaceholder": "Search by coupon code or name...",
+  "createButton": "Add",
+  "emptyState": "No coupons found",
+
+  "columns": {
+    "sl": "SL",
+    "code": "Coupon Code",
+    "name": "Name",
+    "discount": "Discount",
+    "minOrder": "Min Order",
+    "validity": "Validity Period",
+    "usage": "Usage",
+    "status": "Status",
+    "actions": "Actions"
+  },
+
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "expired": "Expired",
+    "upcoming": "Upcoming"
+  },
+
+  "actions": {
+    "viewDetails": "View Details",
+    "editCoupon": "Edit Coupon",
+    "deleteCoupon": "Delete Coupon"
+  },
+
+  "filter": {
+    "status": "Status",
+    "discountType": "Discount Type",
+    "all": "All",
+    "active": "Active",
+    "inactive": "Inactive",
+    "expired": "Expired",
+    "upcoming": "Upcoming",
+    "percentage": "Percentage",
+    "fixed": "Fixed Amount"
+  },
+
+  "sort": {
+    "newest": "Newest First",
+    "oldest": "Oldest First",
+    "nameAZ": "Name (A-Z)",
+    "nameZA": "Name (Z-A)",
+    "mostUsed": "Most Used",
+    "highestDiscount": "Highest Discount"
+  },
+
+  "form": {
+    "createNewCoupon": "Create New Coupon",
+    "editCoupon": "Edit Coupon",
+    "createCoupon": "Create Coupon",
+    "updateCoupon": "Update Coupon",
+    "code": "Coupon Code",
+    "codePlaceholder": "e.g., SUMMER2024",
+    "codeHelp": "Code will be converted to uppercase automatically",
+    "name": "Coupon Name",
+    "namePlaceholder": "e.g., Summer Sale Discount",
+    "description": "Description",
+    "descriptionPlaceholder": "Optional description for internal use",
+    "discountType": "Discount Type",
+    "percentage": "Percentage (%)",
+    "fixed": "Fixed Amount (৳)",
+    "discountValue": "Discount Value",
+    "maxDiscount": "Max Discount Amount",
+    "maxDiscountHelp": "Maximum discount for percentage type",
+    "minOrderAmount": "Minimum Order Amount",
+    "minOrderHelp": "Minimum order value to use this coupon",
+    "validityPeriod": "Validity Period",
+    "validFrom": "Valid From",
+    "validTo": "Valid To",
+    "usageLimitTotal": "Total Usage Limit",
+    "usageLimitTotalHelp": "Total number of times coupon can be used",
+    "usageLimitPerUser": "Usage Limit Per User",
+    "usageLimitPerUserHelp": "How many times each user can use this coupon",
+    "activeStatus": "Active Status",
+    "activeStatusHelp": "Enable or disable this coupon"
+  },
+
+  "view": {
+    "couponDetails": "Coupon Details",
+    "discountInformation": "Discount Information",
+    "discountType": "Discount Type",
+    "discountValue": "Discount Value",
+    "maxDiscount": "Max Discount",
+    "orderRequirements": "Order Requirements",
+    "minOrderAmount": "Minimum Order Amount",
+    "validityPeriod": "Validity Period",
+    "validFrom": "Valid From",
+    "validTo": "Valid To",
+    "usageStatistics": "Usage Statistics",
+    "totalUsage": "Total Usage",
+    "remaining": "Remaining",
+    "limitPerUser": "Limit Per User",
+    "limitPerUserHelp": "Maximum uses per user",
+    "totalDiscountGiven": "Total Discount Given",
+    "totalDiscountHelp": "Total amount of discount provided using this coupon",
+    "createdBy": "Created By",
+    "updatedBy": "Updated By"
+  },
+
+  "delete": {
+    "title": "Delete Coupon",
+    "description": "Are you sure you want to delete the coupon '{{code}}'? This action cannot be undone."
+  },
+
+  "messages": {
+    "codeTooShort": "Coupon code must be at least 3 characters",
+    "nameTooShort": "Coupon name must be at least 3 characters",
+    "invalidDiscountValue": "Discount value must be greater than 0",
+    "percentageExceeds": "Percentage discount cannot exceed 100%",
+    "invalidMinOrder": "Minimum order amount must be 0 or greater",
+    "datesRequired": "Both start and end dates are required",
+    "invalidDateRange": "End date must be after start date",
+    "invalidUsageLimit": "Total usage limit must be greater than 0",
+    "invalidPerUserLimit": "Per user limit must be greater than 0",
+    "couponCreated": "Coupon created successfully",
+    "couponUpdated": "Coupon updated successfully",
+    "couponDeleted": "Coupon deleted successfully",
+    "statusUpdated": "Coupon status updated successfully",
+    "failedToCreate": "Failed to create coupon",
+    "failedToUpdate": "Failed to update coupon",
+    "failedToDelete": "Failed to delete coupon",
+    "failedToToggle": "Failed to update coupon status",
+    "failedToLoad": "Failed to load coupon details",
+    "codeCopied": "Coupon code copied to clipboard"
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "title": "ক্যাটাগরি",
+  "subtitle": "আপনার পণ্য ক্যাটাগরি পরিচালনা করুন",
+  "addCategory": "যোগ করুন",
+  "searchPlaceholder": "নাম বা বিবরণ দ্বারা অনুসন্ধান করুন...",
+  "noCategoriesFound": "কোন ক্যাটাগরি পাওয়া যায়নি",
+  "columns": {
+    "sl": "ক্রমিক",
+    "image": "ছবি",
+    "name": "নাম",
+    "description": "বিবরণ",
+    "subCategories": "সাব ক্যাটাগরি",
+    "products": "পণ্য",
+    "status": "স্ট্যাটাস",
+    "actions": "কার্যক্রম",
+    "active": "সক্রিয়",
+    "inactive": "নিষ্ক্রিয়"
+  },
+  "actions": {
+    "viewDetails": "বিস্তারিত দেখুন",
+    "editCategory": "ক্যাটাগরি সম্পাদনা করুন",
+    "deleteCategory": "ক্যাটাগরি মুছুন",
+    "addSubCategory": "সাব ক্যাটাগরি যোগ করুন"
+  },
+  "form": {
+    "createCategory": "নতুন ক্যাটাগরি তৈরি করুন",
+    "editCategory": "ক্যাটাগরি সম্পাদনা করুন",
+    "updateCategory": "ক্যাটাগরি আপডেট করুন",
+    "categoryImage": "ক্যাটাগরি ছবি",
+    "categoryName": "ক্যাটাগরি নাম",
+    "enterCategoryName": "ক্যাটাগরি নাম লিখুন",
+    "description": "বিবরণ",
+    "enterDescription": "ক্যাটাগরি বিবরণ লিখুন",
+    "displayOrder": "প্রদর্শন ক্রম",
+    "active": "সক্রিয়"
+  },
+  "subCategory": {
+    "addSubCategory": "সাব-ক্যাটাগরি যোগ করুন",
+    "editSubCategory": "সাব-ক্যাটাগরি সম্পাদনা করুন",
+    "createSubCategory": "সাব-ক্যাটাগরি তৈরি করুন",
+    "updateSubCategory": "সাব-ক্যাটাগরি আপডেট করুন",
+    "parentCategory": "প্যারেন্ট ক্যাটাগরি",
+    "subCategoryImage": "সাব-ক্যাটাগরি ছবি",
+    "subCategoryName": "সাব-ক্যাটাগরি নাম",
+    "enterSubCategoryName": "সাব-ক্যাটাগরি নাম লিখুন",
+    "description": "বিবরণ",
+    "enterDescription": "সাব-ক্যাটাগরি বিবরণ লিখুন",
+    "displayOrder": "প্রদর্শন ক্রম",
+    "active": "সক্রিয়"
+  },
+  "view": {
+    "categoryDetails": "ক্যাটাগরি বিবরণ",
+    "slug": "স্লাগ",
+    "active": "সক্রিয়",
+    "inactive": "নিষ্ক্রিয়",
+    "description": "বিবরণ",
+    "subCategories": "সাব ক্যাটাগরি",
+    "products": "পণ্য",
+    "displayOrder": "প্রদর্শন ক্রম",
+    "noSubCategoriesFound": "কোন সাব-ক্যাটাগরি পাওয়া যায়নি",
+    "created": "তৈরি"
+  },
+  "messages": {
+    "selectCategory": "অনুগ্রহ করে একটি ক্যাটাগরি নির্বাচন করুন",
+    "enterCategoryName": "অনুগ্রহ করে ক্যাটাগরি নাম লিখুন",
+    "enterSubCategoryName": "অনুগ্রহ করে সাব-ক্যাটাগরি নাম লিখুন",
+    "categoryCreated": "ক্যাটাগরি সফলভাবে তৈরি হয়েছে",
+    "categoryUpdated": "ক্যাটাগরি সফলভাবে আপডেট হয়েছে",
+    "categoryDeleted": "ক্যাটাগরি সফলভাবে মুছে ফেলা হয়েছে",
+    "subCategoryCreated": "সাব-ক্যাটাগরি সফলভাবে তৈরি হয়েছে",
+    "subCategoryUpdated": "সাব-ক্যাটাগরি সফলভাবে আপডেট হয়েছে",
+    "subCategoryDeleted": "সাব-ক্যাটাগরি সফলভাবে মুছে ফেলা হয়েছে",
+    "failedToCreate": "ক্যাটাগরি তৈরি করতে ব্যর্থ",
+    "failedToUpdate": "ক্যাটাগরি আপডেট করতে ব্যর্থ",
+    "failedToDelete": "ক্যাটাগরি মুছে ফেলতে ব্যর্থ",
+    "failedToCreateSubCategory": "সাব-ক্যাটাগরি তৈরি করতে ব্যর্থ",
+    "failedToUpdateSubCategory": "সাব-ক্যাটাগরি আপডেট করতে ব্যর্থ",
+    "failedToDeleteSubCategory": "সাব-ক্যাটাগরি মুছে ফেলতে ব্যর্থ"
+  },
+  "delete": {
+    "categoryTitle": "ক্যাটাগরি মুছুন",
+    "categoryMessage": "আপনি কি নিশ্চিত যে আপনি এই ক্যাটাগরিটি মুছে ফেলতে চান? এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না।",
+    "subCategoryTitle": "সাব-ক্যাটাগরি মুছুন",
+    "subCategoryMessage": "আপনি কি নিশ্চিত যে আপনি এই সাব-ক্যাটাগরিটি মুছে ফেলতে চান? এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না।"
+  }
+}

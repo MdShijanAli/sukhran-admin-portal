@@ -1,0 +1,138 @@
+{
+  "title": "কুপন ব্যবস্থাপনা",
+  "subtitle": "আপনার কুপনগুলি কার্যকরভাবে পরিচালনা করুন",
+  "totalCoupons": "মোট কুপন",
+  "activeCoupons": "সক্রিয় কুপন",
+  "expiredCoupons": "মেয়াদোত্তীর্ণ কুপন",
+  "totalUsage": "মোট ব্যবহার",
+  "totalDiscount": "মোট ছাড় প্রদান",
+  "searchPlaceholder": "কুপন কোড বা নাম অনুসন্ধান করুন...",
+  "createButton": "তৈরি করুন",
+  "emptyState": "কোনো কুপন পাওয়া যায়নি",
+
+  "columns": {
+    "sl": "ক্রমিক",
+    "code": "কুপন কোড",
+    "name": "নাম",
+    "discount": "ছাড়",
+    "minOrder": "ন্যূনতম অর্ডার",
+    "validity": "বৈধতার সময়কাল",
+    "usage": "ব্যবহার",
+    "status": "অবস্থা",
+    "actions": "কার্যক্রম"
+  },
+
+  "status": {
+    "active": "সক্রিয়",
+    "inactive": "নিষ্ক্রিয়",
+    "expired": "মেয়াদোত্তীর্ণ",
+    "upcoming": "আসন্ন"
+  },
+
+  "actions": {
+    "viewDetails": "বিস্তারিত দেখুন",
+    "editCoupon": "কুপন সম্পাদনা",
+    "deleteCoupon": "কুপন মুছুন"
+  },
+
+  "filter": {
+    "status": "অবস্থা",
+    "discountType": "ছাড়ের ধরন",
+    "all": "সব",
+    "active": "সক্রিয়",
+    "inactive": "নিষ্ক্রিয়",
+    "expired": "মেয়াদোত্তীর্ণ",
+    "upcoming": "আসন্ন",
+    "percentage": "শতাংশ",
+    "fixed": "নির্দিষ্ট পরিমাণ"
+  },
+
+  "sort": {
+    "newest": "নতুন প্রথম",
+    "oldest": "পুরানো প্রথম",
+    "nameAZ": "নাম (ক-হ)",
+    "nameZA": "নাম (হ-ক)",
+    "mostUsed": "সবচেয়ে বেশি ব্যবহৃত",
+    "highestDiscount": "সর্বোচ্চ ছাড়"
+  },
+
+  "form": {
+    "createNewCoupon": "নতুন কুপন তৈরি করুন",
+    "editCoupon": "কুপন সম্পাদনা করুন",
+    "createCoupon": "কুপন তৈরি করুন",
+    "updateCoupon": "কুপন আপডেট করুন",
+    "code": "কুপন কোড",
+    "codePlaceholder": "যেমন, SUMMER2024",
+    "codeHelp": "কোড স্বয়ংক্রিয়ভাবে বড় হাতের অক্ষরে রূপান্তরিত হবে",
+    "name": "কুপনের নাম",
+    "namePlaceholder": "যেমন, গ্রীষ্মকালীন বিক্রয় ছাড়",
+    "description": "বিবরণ",
+    "descriptionPlaceholder": "অভ্যন্তরীণ ব্যবহারের জন্য ঐচ্ছিক বিবরণ",
+    "discountType": "ছাড়ের ধরন",
+    "percentage": "শতাংশ (%)",
+    "fixed": "নির্দিষ্ট পরিমাণ (৳)",
+    "discountValue": "ছাড়ের মূল্য",
+    "maxDiscount": "সর্বোচ্চ ছাড়ের পরিমাণ",
+    "maxDiscountHelp": "শতাংশ ধরনের জন্য সর্বোচ্চ ছাড়",
+    "minOrderAmount": "ন্যূনতম অর্ডার পরিমাণ",
+    "minOrderHelp": "এই কুপন ব্যবহার করার জন্য ন্যূনতম অর্ডার মূল্য",
+    "validityPeriod": "বৈধতার সময়কাল",
+    "validFrom": "থেকে বৈধ",
+    "validTo": "পর্যন্ত বৈধ",
+    "usageLimitTotal": "মোট ব্যবহার সীমা",
+    "usageLimitTotalHelp": "কুপন মোট কতবার ব্যবহার করা যাবে",
+    "usageLimitPerUser": "প্রতি ব্যবহারকারী সীমা",
+    "usageLimitPerUserHelp": "প্রতিটি ব্যবহারকারী কতবার এই কুপন ব্যবহার করতে পারবে",
+    "activeStatus": "সক্রিয় অবস্থা",
+    "activeStatusHelp": "এই কুপন সক্ষম বা অক্ষম করুন"
+  },
+
+  "view": {
+    "couponDetails": "কুপনের বিস্তারিত",
+    "discountInformation": "ছাড়ের তথ্য",
+    "discountType": "ছাড়ের ধরন",
+    "discountValue": "ছাড়ের মূল্য",
+    "maxDiscount": "সর্বোচ্চ ছাড়",
+    "orderRequirements": "অর্ডার প্রয়োজনীয়তা",
+    "minOrderAmount": "ন্যূনতম অর্ডার পরিমাণ",
+    "validityPeriod": "বৈধতার সময়কাল",
+    "validFrom": "থেকে বৈধ",
+    "validTo": "পর্যন্ত বৈধ",
+    "usageStatistics": "ব্যবহারের পরিসংখ্যান",
+    "totalUsage": "মোট ব্যবহার",
+    "remaining": "অবশিষ্ট",
+    "limitPerUser": "প্রতি ব্যবহারকারী সীমা",
+    "limitPerUserHelp": "প্রতি ব্যবহারকারীর সর্বোচ্চ ব্যবহার",
+    "totalDiscountGiven": "মোট ছাড় প্রদান",
+    "totalDiscountHelp": "এই কুপন ব্যবহার করে প্রদত্ত মোট ছাড়ের পরিমাণ",
+    "createdBy": "তৈরি করেছেন",
+    "updatedBy": "আপডেট করেছেন"
+  },
+
+  "delete": {
+    "title": "কুপন মুছুন",
+    "description": "আপনি কি নিশ্চিত যে আপনি '{{code}}' কুপনটি মুছে ফেলতে চান? এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না।"
+  },
+
+  "messages": {
+    "codeTooShort": "কুপন কোড কমপক্ষে ৩টি অক্ষর হতে হবে",
+    "nameTooShort": "কুপনের নাম কমপক্ষে ৩টি অক্ষর হতে হবে",
+    "invalidDiscountValue": "ছাড়ের মূল্য ০ এর চেয়ে বড় হতে হবে",
+    "percentageExceeds": "শতাংশ ছাড় ১০০% অতিক্রম করতে পারে না",
+    "invalidMinOrder": "ন্যূনতম অর্ডার পরিমাণ ০ বা তার বেশি হতে হবে",
+    "datesRequired": "শুরু এবং শেষ উভয় তারিখ প্রয়োজন",
+    "invalidDateRange": "শেষ তারিখ শুরুর তারিখের পরে হতে হবে",
+    "invalidUsageLimit": "মোট ব্যবহার সীমা ০ এর চেয়ে বড় হতে হবে",
+    "invalidPerUserLimit": "প্রতি ব্যবহারকারী সীমা ০ এর চেয়ে বড় হতে হবে",
+    "couponCreated": "কুপন সফলভাবে তৈরি হয়েছে",
+    "couponUpdated": "কুপন সফলভাবে আপডেট হয়েছে",
+    "couponDeleted": "কুপন সফলভাবে মুছে ফেলা হয়েছে",
+    "statusUpdated": "কুপনের অবস্থা সফলভাবে আপডেট হয়েছে",
+    "failedToCreate": "কুপন তৈরি করতে ব্যর্থ",
+    "failedToUpdate": "কুপন আপডেট করতে ব্যর্থ",
+    "failedToDelete": "কুপন মুছতে ব্যর্থ",
+    "failedToToggle": "কুপনের অবস্থা আপডেট করতে ব্যর্থ",
+    "failedToLoad": "কুপনের বিস্তারিত লোড করতে ব্যর্থ",
+    "codeCopied": "কুপন কোড ক্লিপবোর্ডে কপি করা হয়েছে"
+  }
+}

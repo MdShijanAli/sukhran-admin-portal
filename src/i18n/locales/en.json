@@ -5,6 +5,8 @@
     "operationalDashboard": "Operational Dashboard",
     "users": "Users",
     "products": "Products",
+    "categories": "Categories",
+    "coverageAreas": "Coverage Areas",
     "packages": "Packages",
     "profile": "Profile",
     "subscriptions": "Subscriptions",
@@ -23,7 +25,9 @@
     "roles": "Role Management",
     "notifications": "Notifications",
     "settings": "Settings",
-    "reports": "Reports"
+    "reports": "Reports",
+    "searchMenu": "Search menu...",
+    "noMenuFound": "No menu items found"
   },
   "auth": {
     "login": "Login",
@@ -47,6 +51,37 @@
     "loading": "Loading...",
     "noData": "No data available"
   },
+  "reports": {
+    "success": "Success",
+    "error": "Error",
+    "reportGenerated": "Report generated successfully",
+    "searchPlaceholder": "Search report...",
+    "noData": "No data available",
+    "generate": "Generate Report",
+    "generating": "Generating...",
+    "export": "Export",
+    "exporting": "Exporting...",
+    "exportSuccess": "Report exported successfully",
+    "exportError": "Failed to export report",
+    "refreshError": "Failed to refresh data",
+    "transactionReport": "Transaction Report",
+    "transactionReportDesc": "View all transaction details",
+    "filters": {
+      "filter": "Filter",
+      "filterOptions": "Filter Options",
+      "filterDescription": "Select filters to refine your report",
+      "applyFilters": "Apply Filters",
+      "resetFilters": "Reset Filters",
+      "activeFilters": "Active Filters",
+      "payment_mode": "Payment Mode",
+      "status": "Status",
+      "selectTransactionType": "Select payment mode",
+      "selectStatus": "Select status"
+    }
+  },
+  "list": "List",
+  "statistics": "Statistics",
+  "back": "Back",
   "dashboard": {
     "todayOrders": "Today's Orders",
     "totalRevenue": "Total Revenue",
@@ -137,5 +172,93 @@
     "price": "Price (৳)",
     "stock": "Stock",
     "createProduct": "Create Product"
+  },
+  "users": {
+    "title": "User Management",
+    "subtitle": "Manage platform users and their roles",
+    "searchPlaceholder": "Search users...",
+    "noUsersFound": "No users found",
+    "columns": {
+      "userName": "User Name",
+      "email": "Email Address",
+      "role": "Role",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "blocked": "Blocked"
+    },
+    "form": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "preferredName": "Preferred Name",
+      "mobile": "Mobile",
+      "password": "Password",
+      "gender": "Gender",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "dateOfBirth": "Date of Birth",
+      "accountStatus": "Account Status",
+      "sendWelcomeEmail": "Send welcome email with login credentials",
+      "enterFirstName": "Enter first name",
+      "enterLastName": "Enter last name",
+      "enterEmail": "Enter email address",
+      "enterMobile": "Enter mobile number (e.g., 01XXXXXXXXX)",
+      "enterPassword": "Enter password",
+      "selectRole": "Select role"
+    },
+    "modal": {
+      "add": "Add User",
+      "edit": "Edit User",
+      "create": "Create New Staff User",
+      "view": "User Details",
+      "createUser": "Create User",
+      "updateUser": "Update User",
+      "close": "Close"
+    },
+    "filter": {
+      "apply": "Apply Filters",
+      "clear": "Clear Filters",
+      "byStatus": "Filter by Status",
+      "byRole": "Filter by Role",
+      "byGender": "Filter by Gender",
+      "allStatuses": "All Statuses",
+      "allRoles": "All Roles",
+      "allGenders": "All Genders"
+    },
+    "view": {
+      "personalInformation": "Personal Information",
+      "accountDetails": "Account Details",
+      "security": "Security",
+      "timeline": "Timeline",
+      "addresses": "Addresses",
+      "preferred": "Preferred",
+      "emailVerified": "Email",
+      "mobileVerified": "Mobile",
+      "referralCode": "Referral Code",
+      "referredBy": "Referred By",
+      "businessId": "Business ID",
+      "storeId": "Store ID",
+      "failedAttempts": "Failed Attempts",
+      "created": "Created",
+      "lastUpdated": "Last Updated",
+      "address": "Address",
+      "house": "House",
+      "road": "Road",
+      "block": "Block",
+      "zip": "Zip",
+      "label": "Label",
+      "landmark": "Landmark",
+      "default": "Default"
+    },
+    "messages": {
+      "requiredFields": "Please fill in all required fields",
+      "passwordRequired": "Password is required for new users",
+      "userCreated": "User created successfully",
+      "userUpdated": "User updated successfully",
+      "failedToCreate": "Failed to create user",
+      "failedToUpdate": "Failed to update user",
+      "failedToLoadRoles": "Failed to load roles"
+    }
   }
 }

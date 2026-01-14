@@ -1,0 +1,77 @@
+{
+  "title": "ভূমিকা পরিচালনা",
+  "subtitle": "ভূমিকা এবং অনুমতি পরিচালনা করুন",
+  "addRole": "যোগ করুন",
+  "searchPlaceholder": "ভূমিকার নাম বা বিবরণ দিয়ে খুঁজুন...",
+  "noRolesFound": "কোন ভূমিকা পাওয়া যায়নি",
+  "totalRoles": "মোট ভূমিকা",
+  "activeRoles": "সক্রিয় ভূমিকা",
+  "inactiveRoles": "নিষ্ক্রিয় ভূমিকা",
+  "rolesWithUsers": "ব্যবহারকারী সহ ভূমিকা",
+  "rolesWithoutUsers": "ব্যবহারকারী ছাড়া ভূমিকা",
+  "status": {
+    "active": "সক্রিয়",
+    "inactive": "নিষ্ক্রিয়"
+  },
+  "columns": {
+    "sl": "ক্রমিক",
+    "roleName": "ভূমিকার নাম",
+    "description": "বিবরণ",
+    "permissions": "অনুমতি",
+    "users": "ব্যবহারকারী",
+    "status": "স্ট্যাটাস",
+    "actions": "কার্যক্রম",
+    "noDescription": "কোন বিবরণ নেই"
+  },
+  "actions": {
+    "viewDetails": "বিস্তারিত দেখুন",
+    "editRole": "ভূমিকা সম্পাদনা করুন",
+    "deleteRole": "ভূমিকা মুছুন"
+  },
+  "form": {
+    "createNewRole": "নতুন ভূমিকা তৈরি করুন",
+    "editRole": "ভূমিকা সম্পাদনা করুন",
+    "roleName": "ভূমিকার নাম",
+    "roleNamePlaceholder": "যেমন, store_manager",
+    "roleNameHint": "আন্ডারস্কোর সহ ছোট হাতের অক্ষর ব্যবহার করুন (যেমন, store_manager)",
+    "displayName": "প্রদর্শন নাম",
+    "displayNamePlaceholder": "যেমন, স্টোর ম্যানেজার",
+    "description": "বিবরণ",
+    "descriptionPlaceholder": "ভূমিকার সংক্ষিপ্ত বিবরণ",
+    "searchPermissions": "অনুমতি অনুসন্ধান করুন...",
+    "status": "স্ট্যাটাস",
+    "permissions": "অনুমতি",
+    "selected": "নির্বাচিত",
+    "selectAll": "সব নির্বাচন করুন",
+    "deselectAll": "সব বাতিল করুন",
+    "noPermissionsAvailable": "কোন অনুমতি পাওয়া যায় না",
+    "updateRole": "ভূমিকা আপডেট করুন",
+    "createRole": "ভূমিকা তৈরি করুন"
+  },
+  "view": {
+    "roleDetails": "ভূমিকার বিবরণ",
+    "permissions": "অনুমতি",
+    "assignedUsers": "নিযুক্ত ব্যবহারকারী",
+    "created": "তৈরি হয়েছে",
+    "assignedPermissions": "নিযুক্ত অনুমতি",
+    "total": "মোট"
+  },
+  "messages": {
+    "fillRequiredFields": "অনুগ্রহ করে সমস্ত আবশ্যক ফিল্ড পূরণ করুন",
+    "roleCreated": "ভূমিকা সফলভাবে তৈরি হয়েছে",
+    "roleUpdated": "ভূমিকা সফলভাবে আপডেট হয়েছে",
+    "roleDeleted": "ভূমিকা সফলভাবে মুছে ফেলা হয়েছে",
+    "roleActivated": "ভূমিকা সফলভাবে সক্রিয় করা হয়েছে",
+    "roleDeactivated": "ভূমিকা সফলভাবে নিষ্ক্রিয় করা হয়েছে",
+    "failedToCreate": "ভূমিকা তৈরি করতে ব্যর্থ",
+    "failedToUpdate": "ভূমিকা আপডেট করতে ব্যর্থ",
+    "failedToDelete": "ভূমিকা মুছে ফেলতে ব্যর্থ",
+    "failedToLoadPermissions": "অনুমতি লোড করতে ব্যর্থ",
+    "failedToToggleStatus": "ভূমিকার স্ট্যাটাস আপডেট করতে ব্যর্থ"
+  },
+  "delete": {
+    "title": "ভূমিকা মুছুন",
+    "message": "আপনি কি নিশ্চিত যে আপনি মুছে ফেলতে চান",
+    "cannotUndo": "এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না।"
+  }
+}

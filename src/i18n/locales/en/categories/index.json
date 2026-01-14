@@ -1,0 +1,86 @@
+{
+  "title": "Categories",
+  "subtitle": "Manage your product categories",
+  "addCategory": "Add",
+  "searchPlaceholder": "Search by name or description...",
+  "noCategoriesFound": "No categories found",
+  "columns": {
+    "sl": "Sl.",
+    "image": "Image",
+    "name": "Name",
+    "description": "Description",
+    "subCategories": "Sub Categories",
+    "products": "Products",
+    "status": "Status",
+    "actions": "Actions",
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "actions": {
+    "viewDetails": "View Details",
+    "editCategory": "Edit Category",
+    "deleteCategory": "Delete Category",
+    "addSubCategory": "Add Sub Category"
+  },
+  "form": {
+    "createCategory": "Create New Category",
+    "editCategory": "Edit Category",
+    "updateCategory": "Update Category",
+    "categoryImage": "Category Image",
+    "categoryName": "Category Name",
+    "enterCategoryName": "Enter category name",
+    "description": "Description",
+    "enterDescription": "Enter category description",
+    "displayOrder": "Display Order",
+    "active": "Active"
+  },
+  "subCategory": {
+    "addSubCategory": "Add Sub-Category",
+    "editSubCategory": "Edit Sub-Category",
+    "createSubCategory": "Create Sub-Category",
+    "updateSubCategory": "Update Sub-Category",
+    "parentCategory": "Parent Category",
+    "subCategoryImage": "Sub-Category Image",
+    "subCategoryName": "Sub-Category Name",
+    "enterSubCategoryName": "Enter sub-category name",
+    "description": "Description",
+    "enterDescription": "Enter sub-category description",
+    "displayOrder": "Display Order",
+    "active": "Active"
+  },
+  "view": {
+    "categoryDetails": "Category Details",
+    "slug": "Slug",
+    "active": "Active",
+    "inactive": "Inactive",
+    "description": "Description",
+    "subCategories": "Sub Categories",
+    "products": "Products",
+    "displayOrder": "Display Order",
+    "noSubCategoriesFound": "No sub-categories found",
+    "created": "Created"
+  },
+  "messages": {
+    "selectCategory": "Please select a category",
+    "enterCategoryName": "Please enter category name",
+    "enterSubCategoryName": "Please enter sub-category name",
+    "categoryCreated": "Category created successfully",
+    "categoryUpdated": "Category updated successfully",
+    "categoryDeleted": "Category deleted successfully",
+    "subCategoryCreated": "Sub-category created successfully",
+    "subCategoryUpdated": "Sub-category updated successfully",
+    "subCategoryDeleted": "Sub-category deleted successfully",
+    "failedToCreate": "Failed to create category",
+    "failedToUpdate": "Failed to update category",
+    "failedToDelete": "Failed to delete category",
+    "failedToCreateSubCategory": "Failed to create sub-category",
+    "failedToUpdateSubCategory": "Failed to update sub-category",
+    "failedToDeleteSubCategory": "Failed to delete sub-category"
+  },
+  "delete": {
+    "categoryTitle": "Delete Category",
+    "categoryMessage": "Are you sure you want to delete this category? This action cannot be undone.",
+    "subCategoryTitle": "Delete Sub-Category",
+    "subCategoryMessage": "Are you sure you want to delete this sub-category? This action cannot be undone."
+  }
+}

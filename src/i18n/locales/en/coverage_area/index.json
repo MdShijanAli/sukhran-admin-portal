@@ -1,0 +1,112 @@
+{
+  "title": "Coverage Areas",
+  "subtitle": "Manage your service coverage areas",
+  "addCoverageArea": "Add",
+  "deleteAll": "Delete All",
+  "selected": "selected",
+  "searchPlaceholder": "Search by area name or city...",
+  "noCoverageAreasFound": "No coverage areas found",
+  "totalAreas": "Total Areas",
+  "activeAreas": "Active Areas",
+  "inactiveAreas": "Inactive Areas",
+  "cities": "Cities",
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "columns": {
+    "sl": "Sl.",
+    "name": "Name",
+    "city": "City",
+    "coordinates": "Coordinates",
+    "radiusKm": "Radius (km)",
+    "status": "Status",
+    "actions": "Actions",
+    "customRouteId": "Route ID"
+  },
+  "actions": {
+    "viewDetails": "View Details",
+    "editArea": "Edit Area",
+    "deleteArea": "Delete Area"
+  },
+  "bulkActions": {
+    "placeholder": "Bulk Actions",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "delete": "Delete"
+  },
+  "form": {
+    "createNewCoverageArea": "Create New Coverage Area",
+    "editCoverageArea": "Edit Coverage Area",
+    "areaName": "Area Name",
+    "areaNamePlaceholder": "e.g., Gulshan",
+    "city": "City",
+    "cityPlaceholder": "e.g., Dhaka",
+    "latitude": "Latitude",
+    "latitudePlaceholder": "e.g., 23.7808",
+    "latitudeHint": "Between -90 and 90",
+    "longitude": "Longitude",
+    "customRouteIdHint": "Custom Route ID (optional)",
+    "customRouteId": "Custom Route ID",
+    "customRouteIdPlaceholder": "e.g., 101",
+    "longitudePlaceholder": "e.g., 90.4156",
+    "longitudeHint": "Between -180 and 180",
+    "radiusKm": "Radius (km)",
+    "radiusPlaceholder": "e.g., 5",
+    "radiusHint": "Service coverage radius in kilometers",
+    "activeStatus": "Active Status",
+    "activeStatusHint": "Enable or disable this coverage area",
+    "updateArea": "Update Area",
+    "createArea": "Create Area"
+  },
+  "view": {
+    "coverageAreaDetails": "Coverage Area Details",
+    "addresses": "Addresses",
+    "coverageRadius": "Coverage Radius",
+    "locationInformation": "Location Information",
+    "latitude": "Latitude",
+    "routeId": "Route ID:",
+    "longitude": "Longitude",
+    "addressesCount": "Addresses",
+    "default": "Default",
+    "road": "Road:",
+    "block": "Block:",
+    "zipCode": "Zip Code:",
+    "landmark": "Landmark:",
+    "label": "Label:",
+    "userId": "User ID:",
+    "added": "Added:",
+    "noAddressesFound": "No addresses found in this area"
+  },
+  "messages": {
+    "nameTooShort": "Name must be at least 2 characters",
+    "cityTooShort": "City must be at least 2 characters",
+    "invalidLatitude": "Latitude must be between -90 and 90",
+    "invalidLongitude": "Longitude must be between -180 and 180",
+    "invalidRadius": "Radius must be between 0.1 and 100 km",
+    "areaCreated": "Coverage area created successfully",
+    "areaUpdated": "Coverage area updated successfully",
+    "areaDeleted": "Coverage area deleted successfully",
+    "areaActivated": "Area activated successfully",
+    "areaDeactivated": "Area deactivated successfully",
+    "failedToCreate": "Failed to create coverage area",
+    "failedToUpdate": "Failed to update coverage area",
+    "failedToDelete": "Failed to delete coverage area",
+    "failedToLoad": "Failed to load coverage area details",
+    "failedToToggleStatus": "Failed to update area status",
+    "bulkActivateSuccess": "{{count}} areas activated successfully",
+    "bulkDeactivateSuccess": "{{count}} areas deactivated successfully",
+    "bulkDeleteSuccess": "Selected areas deleted successfully",
+    "bulkDeleteFailed": "Failed to delete selected areas",
+    "bulkActionFailed": "Failed to perform bulk action"
+  },
+  "delete": {
+    "title": "Delete Coverage Area",
+    "message": "Are you sure you want to delete the coverage area",
+    "cannotUndo": "This action cannot be undone."
+  },
+  "deleteAllArea": {
+    "title": "Delete Selected Coverage Areas",
+    "message": "Are you sure you want to delete the selected coverage areas? This action cannot be undone."
+  }
+}

@@ -1,0 +1,278 @@
+{
+  "title": "Donations",
+  "subtitle": "Manage donation channels and track contributions",
+  "tabs": {
+    "channels": "Donation Channels",
+    "donations": "All Donations",
+    "statistics": "Statistics",
+    "coinReport": "Coin Donations Report"
+  },
+  "filter": {
+    "pending": "Pending",
+    "package": "Package",
+    "product": "Product",
+    "failed": "Failed",
+    "standalone": "Standalone",
+    "cod": "Cash on Delivery",
+    "online": "Online Payment"
+  },
+  "channels": {
+    "title": "Donation Channels",
+    "subtitle": "Manage and organize donation campaigns",
+    "addChannel": "Create Channel",
+    "noChannels": "No donation channels found",
+    "columns": {
+      "sl": "Sl.",
+      "name": "Channel Name",
+      "description": "Description",
+      "target": "Target Amount",
+      "collected": "Collected",
+      "remaining": "Remaining",
+      "progress": "Progress",
+      "donations": "Donations",
+      "status": "Status",
+      "order": "Order",
+      "created": "Created",
+      "actions": "Actions"
+    },
+    "form": {
+      "create": "Create Donation Channel",
+      "edit": "Edit Donation Channel",
+      "name": "Channel Name",
+      "namePlaceholder": "Enter channel name",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe the purpose of this donation channel",
+      "targetAmount": "Target Amount",
+      "targetAmountPlaceholder": "Enter target amount",
+      "displayOrder": "Display Order",
+      "displayOrderPlaceholder": "Enter display order",
+      "isActive": "Active Status",
+      "image": "Channel Image",
+      "selectImage": "Select Image",
+      "changeImage": "Change Image"
+    },
+    "messages": {
+      "created": "Channel created successfully",
+      "updated": "Channel updated successfully",
+      "deleted": "Channel deleted successfully",
+      "reordered": "Channels reordered successfully",
+      "statusToggled": "Channel status updated successfully",
+      "failedToCreate": "Failed to create channel",
+      "failedToUpdate": "Failed to update channel",
+      "failedToDelete": "Failed to delete channel",
+      "failedToReorder": "Failed to reorder channels"
+    },
+    "delete": {
+      "title": "Delete Channel",
+      "message": "Are you sure you want to delete this donation channel?",
+      "warning": "This will remove all associated data. This action cannot be undone."
+    }
+  },
+  "donations": {
+    "title": "All Donations",
+    "subtitle": "View and manage all donation records",
+    "noDonations": "No donations found",
+    "columns": {
+      "sl": "Sl.",
+      "donor": "Donor",
+      "channel": "Channel",
+      "amount": "Amount",
+      "type": "Type",
+      "paymentMethod": "Payment",
+      "status": "Status",
+      "transactionId": "Transaction ID",
+      "message": "Message",
+      "date": "Date",
+      "actions": "Actions"
+    },
+    "type": {
+      "standalone": "Standalone",
+      "product": "Product",
+      "package": "Package"
+    },
+    "paymentMethod": {
+      "cod": "Cash on Delivery",
+      "online": "Online Payment",
+      "coins": "Coins"
+    },
+    "status": {
+      "pending": "Pending",
+      "paid": "Paid",
+      "failed": "Failed"
+    },
+    "view": {
+      "title": "Donation Details",
+      "donorInfo": "Donor Information",
+      "channelInfo": "Channel Information",
+      "paymentInfo": "Payment Information",
+      "additionalInfo": "Additional Information",
+      "name": "Name",
+      "email": "Email",
+      "mobile": "Mobile",
+      "anonymous": "Anonymous Donor",
+      "channelName": "Channel Name",
+      "channelDescription": "Description",
+      "amount": "Donation Amount",
+      "type": "Donation Type",
+      "paymentMethod": "Payment Method",
+      "paymentStatus": "Payment Status",
+      "transactionId": "Transaction ID",
+      "donorMessage": "Donor Message",
+      "orderId": "Order ID",
+      "donatedAt": "Donated At",
+      "createdAt": "Created At"
+    },
+    "filter": {
+      "status": "Payment Status",
+      "allStatuses": "All Statuses",
+      "channel": "Channel",
+      "allChannels": "All Channels",
+      "type": "Donation Type",
+      "allTypes": "All Types",
+      "paymentMethod": "Payment Method",
+      "allMethods": "All Methods",
+      "dateFrom": "From Date",
+      "dateTo": "To Date",
+      "apply": "Apply Filters",
+      "clear": "Clear Filters"
+    }
+  },
+  "coinReport": {
+    "title": "Coin Donations Report",
+    "subtitle": "Track and fulfill coin-based donations",
+    "fulfillCoins": "Fulfill Coins",
+    "viewHistory": "Fulfillment History",
+    "overview": {
+      "title": "Overview",
+      "totalCoins": "Total Coin Donations",
+      "fulfilled": "Fulfilled",
+      "unfulfilled": "Unfulfilled",
+      "companyOwes": "Company Owes",
+      "percentage": "Fulfillment %"
+    },
+    "byChannel": {
+      "title": "By Channel",
+      "channel": "Channel",
+      "coins": "Coin Donations",
+      "fulfilled": "Fulfilled",
+      "unfulfilled": "Unfulfilled",
+      "percentage": "Fulfilled %",
+      "progress": "Progress"
+    },
+    "recentDonations": {
+      "title": "Recent Coin Donations",
+      "donor": "Donor",
+      "channel": "Channel",
+      "coins": "Coins",
+      "value": "Value",
+      "date": "Date"
+    },
+    "topDonors": {
+      "title": "Top Coin Donors",
+      "donor": "Donor",
+      "totalCoins": "Total Coins",
+      "donations": "Donations",
+      "value": "Total Value"
+    },
+    "fulfill": {
+      "title": "Fulfill Coin Donations",
+      "channel": "Channel",
+      "unfulfilledAmount": "Unfulfilled Amount",
+      "amount": "Amount to Fulfill",
+      "amountPlaceholder": "Enter amount",
+      "notes": "Notes",
+      "notesPlaceholder": "Add notes about this fulfillment",
+      "proofDocument": "Proof Document",
+      "selectFile": "Select File",
+      "changeFile": "Change File",
+      "fileFormats": "PDF, PNG, JPG up to 10MB",
+      "submit": "Fulfill Donation",
+      "amountRequired": "Please enter a valid amount",
+      "notesRequired": "Please add notes about this fulfillment",
+      "fileRequired": "Please select a proof document",
+      "amountExceedsLimit": "Amount cannot exceed unfulfilled amount"
+    },
+    "history": {
+      "title": "Fulfillment History",
+      "channel": "Channel",
+      "amount": "Amount",
+      "notes": "Notes",
+      "fulfilledBy": "Fulfilled By",
+      "date": "Date",
+      "document": "Proof Document",
+      "viewDocument": "View Document",
+      "noHistory": "No fulfillment history found",
+      "summary": {
+        "totalFulfilled": "Total Fulfilled",
+        "totalCoins": "Total Coin Donations",
+        "unfulfilled": "Unfulfilled"
+      }
+    },
+    "messages": {
+      "fulfilled": "Coin donation fulfilled successfully",
+      "failedToFulfill": "Failed to fulfill coin donation"
+    }
+  },
+  "statistics": {
+    "overview": "Overview",
+    "totalDonations": "Total Donations",
+    "totalDonors": "Total Donors",
+    "cashDonations": "Cash Donations",
+    "coinDonations": "Coin Donations",
+    "pendingDonations": "Pending",
+    "averageDonation": "Average Donation",
+    "failedDonations": "Failed Donations",
+    "today": "Today",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "topChannels": "Top Channels",
+    "topDonors": "Top Donors",
+    "recentDonations": "Recent Donations",
+    "dailyTrend": "Daily Trend",
+    "uniqueDonors": "Unique donors",
+    "onlineAndCod": "Online & COD",
+    "coinBased": "Coin-based",
+    "coinFulfillmentStatus": "Coin Fulfillment Status",
+    "totalCoins": "Total Coins",
+    "fulfilled": "Fulfilled",
+    "fulfillmentProgress": "Fulfillment Progress",
+    "companyOwes": "Company Owes (Unfulfilled)",
+    "timeBasedDonations": "Time-Based Donations",
+    "donationsToday": "Donations today",
+    "last7Days": "Last 7 days",
+    "last30Days": "Last 30 days",
+    "paymentMethodBreakdown": "Payment Method Breakdown",
+    "donations": "donations",
+    "donors": "donors",
+    "target": "Target",
+    "complete": "complete",
+    "cash": "Cash",
+    "coins": "Coins",
+    "unfulfilled": "Unfulfilled",
+    "noDataAvailable": "No statistics data available"
+  },
+  "fulfillHistory": {
+    "title": "Fulfillment History",
+    "totalFulfilled": "Total Fulfilled",
+    "totalDonations": "Total Coin Donations",
+    "unfulfilled": "Unfulfilled",
+    "records": "Fulfillment Records",
+    "noRecords": "No fulfillment records found",
+    "noData": "No data available",
+    "recordId": "Record ID",
+    "fulfilled": "Fulfilled",
+    "fulfilledBy": "Fulfilled By",
+    "notes": "Notes",
+    "viewProof": "View Proof",
+    "fulfilledAt": "Fulfilled At"
+  },
+  "actions": {
+    "viewDetails": "View Details",
+    "edit": "Edit Channel",
+    "delete": "Delete Channel",
+    "toggleStatus": "Toggle Status",
+    "reorder": "Reorder Channels",
+    "fulfillCoins": "Fulfill Coins",
+    "viewHistory": "View History"
+  }
+}

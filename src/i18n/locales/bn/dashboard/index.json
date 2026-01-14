@@ -1,0 +1,67 @@
+{
+  "title": "ড্যাশবোর্ড",
+  "subtitle": "স্বাগতম! আজকের কার্যক্রম এখানে।",
+  "loading": "ড্যাশবোর্ড ডেটা লোড হচ্ছে...",
+  "error": "ত্রুটি",
+  "fetchError": "ড্যাশবোর্ড ডেটা আনতে ব্যর্থ। আবার চেষ্টা করুন।",
+  "vsPrevious": "পূর্ববর্তী সময়ের তুলনায়",
+  "periods": {
+    "today": "আজ",
+    "yesterday": "গতকাল",
+    "last7Days": "গত ৭ দিন",
+    "last30Days": "গত ৩০ দিন",
+    "thisMonth": "এই মাস",
+    "lastMonth": "গত মাস",
+    "thisYear": "এই বছর"
+  },
+  "metrics": {
+    "revenue": "মোট রাজস্ব",
+    "orders": "মোট অর্ডার",
+    "averageOrderValue": "গড় অর্ডার মূল্য",
+    "newCustomers": "নতুন গ্রাহক"
+  },
+  "orderTypes": {
+    "title": "অর্ডার ধরন ভাঙ্গন",
+    "package": "প্যাকেজ অর্ডার",
+    "regular": "নিয়মিত অর্ডার"
+  },
+  "paymentStatus": {
+    "title": "পেমেন্ট অবস্থা",
+    "paid": "পরিশোধিত",
+    "pending": "পেন্ডিং",
+    "failed": "ব্যর্থ",
+    "successRate": "সফলতার হার"
+  },
+  "charts": {
+    "monthlyTrend": "মাসিক প্রবণতা",
+    "yearlyComparison": "বার্ষিক তুলনা",
+    "revenue": "রাজস্ব",
+    "orders": "অর্ডার"
+  },
+  "alerts": {
+    "pendingApprovals": "পেন্ডিং অনুমোদন",
+    "failedPayments": "ব্যর্থ পেমেন্ট",
+    "deliverySyncFailures": "ডেলিভারি সিঙ্ক ব্যর্থতা",
+    "pendingRefunds": "পেন্ডিং রিফান্ড",
+    "lowCoinBalance": "কম কয়েন ব্যালেন্স"
+  },
+  "additional": {
+    "donations": "দান",
+    "coins": "কয়েন কার্যকলাপ",
+    "referrals": "রেফারেল",
+    "count": "সংখ্যা",
+    "amount": "পরিমাণ",
+    "earned": "অর্জিত",
+    "spent": "ব্যয়িত",
+    "net": "নিট",
+    "total": "মোট",
+    "credited": "জমা",
+    "coinsDistributed": "কয়েন বিতরণ"
+  },
+  "recentOrders": {
+    "title": "সাম্প্রতিক অর্ডার"
+  },
+  "recentTransactions": {
+    "title": "সাম্প্রতিক লেনদেন"
+  }
+}

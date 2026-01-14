@@ -1,0 +1,78 @@
+{
+  "title": "Brands",
+  "description": "Manage your product brands",
+  "createBrand": "Add",
+  "searchPlaceholder": "Search by brand name...",
+  "noBrandsFound": "No brands found",
+  "totalBrands": "Total Brands",
+  "activeBrands": "Active Brands",
+  "inactiveBrands": "Inactive Brands",
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "columns": {
+    "sl": "Sl.",
+    "image": "Image",
+    "title": "Title",
+    "description": "Description",
+    "displayOrder": "Display Order",
+    "status": "Status",
+    "actions": "Actions"
+  },
+  "actions": {
+    "viewDetails": "View Details",
+    "editBrand": "Edit Brand",
+    "deleteBrand": "Delete Brand"
+  },
+  "form": {
+    "createNewBrand": "Create New Brand",
+    "editBrand": "Edit Brand",
+    "title": "Brand Title",
+    "titlePlaceholder": "e.g., Nike",
+    "titleHelp": "Enter a unique and descriptive brand name",
+    "description": "Description",
+    "descriptionPlaceholder": "e.g., Just Do It - Premium athletic wear and footwear",
+    "image": "Brand Image",
+    "uploadImage": "Click to upload brand image",
+    "imageHelp": "PNG, JPG or WEBP (max. 5MB). Recommended size: 800x800px",
+    "chooseFile": "Choose File",
+    "displayOrder": "Display Order",
+    "displayOrderPlaceholder": "e.g., 1",
+    "displayOrderHelp": "Lower numbers appear first in the list",
+    "status": "Active Status",
+    "statusHelp": "Enable or disable this brand",
+    "updateBrand": "Update Brand",
+    "createBrand": "Create Brand",
+    "characters": "characters"
+  },
+  "view": {
+    "brandDetails": "Brand Details",
+    "description": "Description",
+    "displayOrder": "Display Order",
+    "status": "Status",
+    "noImage": "No image available"
+  },
+  "messages": {
+    "titleTooShort": "Brand title must be at least 2 characters",
+    "descriptionTooShort": "Description must be at least 10 characters",
+    "imageRequired": "Please upload a brand image",
+    "imageTooLarge": "Image size must not exceed 5MB",
+    "invalidImageType": "Only image files are allowed",
+    "invalidDisplayOrder": "Display order must be at least 1",
+    "brandCreated": "Brand created successfully",
+    "brandUpdated": "Brand updated successfully",
+    "brandDeleted": "Brand deleted successfully",
+    "brandActivated": "Brand activated successfully",
+    "brandDeactivated": "Brand deactivated successfully",
+    "failedToCreate": "Failed to create brand",
+    "failedToUpdate": "Failed to update brand",
+    "failedToDelete": "Failed to delete brand",
+    "failedToLoad": "Failed to load brand details",
+    "failedToToggleStatus": "Failed to update brand status"
+  },
+  "deleteDialog": {
+    "title": "Delete Brand",
+    "description": "Are you sure you want to delete the brand \"{{name}}\"? This action cannot be undone."
+  }
+}
