@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { BaseModal } from "@/components/modals";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,

@@ -162,7 +162,7 @@ export function ReportTableList({
       handleGenerate();
       setShouldAutoRefresh(false);
     }
-  }, [localFilters, shouldAutoRefresh]);
+  }, [localFilters, shouldAutoRefresh, reportData.length]);
 
   // Build query string
   const buildQueryString = useCallback(() => {
