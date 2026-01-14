@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -10,35 +10,38 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  ShoppingCart,
-  DollarSign,
-  Users,
   TrendingUp,
   TrendingDown,
-  Package,
-  AlertCircle,
-  CreditCard,
   RefreshCw,
-  Clock,
-  CheckCircle,
-  XCircle,
-  Coins,
-  Gift,
-  UserPlus,
+  Filter,
+  Download,
+  ArrowRight,
+  MoreHorizontal,
 } from "lucide-react";
 import {
   BarChart,
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   ResponsiveContainer,
   Legend,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts";
 import dashboardService from "@/services/dashboardService";
 import { toast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface DashboardData {
   core_metrics: any;
@@ -51,20 +54,53 @@ interface DashboardData {
   additional_metrics: any;
 }
 
+// Chart colors matching the reference design
+const CHART_COLORS = {
+  desktop: "#f97316", // Orange
+  mobile: "#14b8a6", // Teal
+};
+
+const DONUT_COLORS = ["#f97316", "#14b8a6", "#ef4444", "#8b5cf6"];
+
+// Mock data for the revenue chart matching the design
+const revenueChartData = [
+  { month: "Jan", desktop: 186, mobile: 80 },
+  { month: "Feb", desktop: 305, mobile: 200 },
+  { month: "Mar", desktop: 237, mobile: 120 },
+  { month: "Apr", desktop: 73, mobile: 190 },
+  { month: "May", desktop: 209, mobile: 130 },
+  { month: "Jun", desktop: 214, mobile: 140 },
+];
+
+// Mock data for recent activity
+const recentActivityData = [
+  { id: 1, name: "Lera", email: "lera75@gmail.com", status: "Invited", orderId: "#329341", date: "40 min ago", amount: "$509.29" },
+  { id: 2, name: "Kailee", email: "kailee.grimes@yahoo.com", status: "Suspended", orderId: "#329341", date: "34 min ago", amount: "$292.23" },
+  { id: 3, name: "Karine", email: "karine59@yahoo.com", status: "Invited", orderId: "#329341", date: "44 min ago", amount: "$71.36" },
+  { id: 4, name: "Haylie", email: "haylie.koelpin40@gmail.com", status: "Delete", orderId: "#329341", date: "00 min ago", amount: "$467.67" },
+  { id: 5, name: "Lane", email: "lane.beer81@yahoo.com", status: "Suspended", orderId: "#329341", date: "02 min ago", amount: "$856.77" },
+];
+
+// Visitor donut chart data
+const visitorChartData = [
+  { name: "Desktop", value: 400 },
+  { name: "Mobile", value: 300 },
+  { name: "Tablet", value: 200 },
+  { name: "Other", value: 225 },
+];
+
 export default function Dashboard() {
   const { t } = useTranslation();
   const [period, setPeriod] = useState("today");
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(
-    null
-  );
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
 
   const fetchDashboardData = async (selectedPeriod: string) => {
     try {
       setIsLoading(true);
-      const response = await dashboardService.getStatistics(selectedPeriod);
-      setDashboardData(response.data);
+      const response = await dashboardService.getStatistics(selectedPeriod) as { data: DashboardData };
+      setDashboardData(response?.data);
     } catch (error) {
       toast({
         title: t("dashboard.error"),
@@ -86,57 +122,76 @@ export default function Dashboard() {
     fetchDashboardData(period);
   };
 
-  const MetricCard = ({
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "Invited":
+        return <span className="text-muted-foreground text-sm">{status}</span>;
+      case "Suspended":
+        return (
+          <Badge variant="outline" className="bg-orange-50 text-orange-600 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800">
+            {status}
+          </Badge>
+        );
+      case "Delete":
+        return (
+          <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800">
+            {status}
+          </Badge>
+        );
+      default:
+        return <span className="text-muted-foreground text-sm">{status}</span>;
+    }
+  };
+
+  // Stats Card Component
+  const StatsCard = ({
     title,
     value,
     growth,
     trend,
-    icon: Icon,
-    iconColor,
-    note,
+    todayValue,
+    iconBgColor,
   }: {
     title: string;
-    value: string | number;
-    growth?: number;
-    trend?: string;
-    icon: any;
-    iconColor?: string;
-    note?: string;
+    value: string;
+    growth: number;
+    trend: "up" | "down";
+    todayValue: string;
+    iconBgColor: string;
   }) => (
     <Card className="shadow-card hover:shadow-elegant transition-all duration-300">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">
-          {title}
-        </CardTitle>
-        <Icon className={`h-5 w-5 ${iconColor || "text-primary"}`} />
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-        {growth !== undefined && growth !== 0 && (
-          <div className="flex items-center gap-1 mt-1">
-            {trend === "up" ? (
-              <TrendingUp className="h-4 w-4 text-success" />
-            ) : trend === "down" ? (
-              <TrendingDown className="h-4 w-4 text-destructive" />
-            ) : null}
-            <span
-              className={`text-xs font-medium ${
-                trend === "up"
-                  ? "text-success"
-                  : trend === "down"
-                  ? "text-destructive"
-                  : "text-muted-foreground"
-              }`}
-            >
-              {growth > 0 ? "+" : ""}
-              {growth.toFixed(1)}%
-            </span>
-            <span className="text-xs text-muted-foreground ml-1">
-              {t("dashboard.vsPrevious")}
-            </span>
+        <div className="flex items-center gap-2">
+          <div className={`w-8 h-8 rounded-lg ${iconBgColor} flex items-center justify-center`}>
+            <div className="w-3 h-3 rounded-full bg-white" />
           </div>
-        )}
-        {note && <p className="text-xs text-muted-foreground mt-1">{note}</p>}
+          <CardTitle className="text-sm font-medium text-muted-foreground font-body">
+            {title}
+          </CardTitle>
+        </div>
+        <Button variant="ghost" size="icon" className="h-8 w-8">
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div className="text-3xl font-bold font-body">{value}</div>
+        <div className="flex items-center gap-2">
+          {trend === "up" ? (
+            <div className="flex items-center gap-1 text-teal-500">
+              <TrendingUp className="h-4 w-4" />
+              <span className="text-sm font-medium">{growth}%</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1 text-red-500">
+              <TrendingDown className="h-4 w-4" />
+              <span className="text-sm font-medium">{growth}%</span>
+            </div>
+          )}
+          <span className="text-sm text-muted-foreground">{todayValue}</span>
+        </div>
+        <Button variant="link" className="p-0 h-auto text-foreground hover:text-primary gap-1">
+          View Report <ArrowRight className="h-4 w-4" />
+        </Button>
       </CardContent>
     </Card>
   );
@@ -152,18 +207,8 @@ export default function Dashboard() {
     );
   }
 
-  if (!dashboardData) return null;
-
-  const {
-    core_metrics,
-    payment_analytics,
-    order_status_distribution,
-    charts,
-    operational_alerts,
-    recent_orders,
-    recent_transactions,
-    additional_metrics,
-  } = dashboardData;
+  // Calculate total visitors for donut chart center
+  const totalVisitors = visitorChartData.reduce((sum, item) => sum + item.value, 0);
 
   return (
     <div className="animate-fade-in space-y-6">
@@ -172,553 +217,226 @@ export default function Dashboard() {
         <div>
           <h1 className="text-3xl font-bold">{t("dashboard.title")}</h1>
           <p className="text-muted-foreground mt-1">
-            {t("dashboard.subtitle")}
+            Here're the details of your analysis.
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Select value={period} onValueChange={setPeriod}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="today">
-                {t("dashboard.periods.today")}
-              </SelectItem>
-              <SelectItem value="yesterday">
-                {t("dashboard.periods.yesterday")}
-              </SelectItem>
-              <SelectItem value="last_7_days">
-                {t("dashboard.periods.last7Days")}
-              </SelectItem>
-              <SelectItem value="last_30_days">
-                {t("dashboard.periods.last30Days")}
-              </SelectItem>
-              <SelectItem value="this_month">
-                {t("dashboard.periods.thisMonth")}
-              </SelectItem>
-              <SelectItem value="last_month">
-                {t("dashboard.periods.lastMonth")}
-              </SelectItem>
-              <SelectItem value="this_year">
-                {t("dashboard.periods.thisYear")}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={handleRefresh}
-            disabled={isRefreshing}
-          >
-            <RefreshCw
-              className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
-            />
+          <Button variant="outline" className="gap-2">
+            <Filter className="h-4 w-4" />
+            Filter By
+          </Button>
+          <Button className="gap-2">
+            <Download className="h-4 w-4" />
+            Export
           </Button>
         </div>
       </div>
 
-      {/* Core Metrics */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <MetricCard
-          title={t("dashboard.metrics.revenue")}
-          value={`৳${core_metrics.revenue.current.toLocaleString()}`}
-          growth={core_metrics.revenue.growth_percentage}
-          trend={core_metrics.revenue.trend}
-          icon={DollarSign}
-          iconColor="text-green-600"
-          note={core_metrics.revenue.note}
-        />
-        <MetricCard
-          title={t("dashboard.metrics.orders")}
-          value={core_metrics.orders.current}
-          growth={core_metrics.orders.growth_percentage}
-          trend={core_metrics.orders.trend}
-          icon={ShoppingCart}
-          iconColor="text-blue-600"
-        />
-        <MetricCard
-          title={t("dashboard.metrics.averageOrderValue")}
-          value={`৳${core_metrics.average_order_value.current.toLocaleString()}`}
-          growth={core_metrics.average_order_value.growth_percentage}
-          trend={core_metrics.average_order_value.trend}
-          icon={TrendingUp}
-          iconColor="text-purple-600"
-        />
-        <MetricCard
-          title={t("dashboard.metrics.newCustomers")}
-          value={additional_metrics.customers.new_registrations}
-          icon={UserPlus}
-          iconColor="text-orange-600"
-        />
-      </div>
+      {/* Stats Cards + Revenue Chart */}
+      <div className="grid gap-4 lg:grid-cols-3">
+        {/* Left side - 4 stat cards in 2x2 grid */}
+        <div className="lg:col-span-2 grid gap-4 sm:grid-cols-2">
+          <StatsCard
+            title="Total Sales"
+            value="$4,523,189"
+            growth={10.2}
+            trend="up"
+            todayValue="+1,454.89 today"
+            iconBgColor="bg-teal-500"
+          />
+          <StatsCard
+            title="Total Orders"
+            value="12,545"
+            growth={20.2}
+            trend="up"
+            todayValue="+1,589 today"
+            iconBgColor="bg-orange-500"
+          />
+          <StatsCard
+            title="Total Visitors"
+            value="8,344"
+            growth={14.2}
+            trend="down"
+            todayValue="-89 today"
+            iconBgColor="bg-teal-500"
+          />
+          <StatsCard
+            title="Refunded"
+            value="3,148"
+            growth={12.6}
+            trend="up"
+            todayValue="+48 today"
+            iconBgColor="bg-orange-500"
+          />
+        </div>
 
-      {/* Order Type Breakdown */}
-      <div className="grid gap-4 md:grid-cols-2">
+        {/* Right side - Revenue Chart */}
         <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Package className="h-5 w-5" />
-              {t("dashboard.orderTypes.title")}
-            </CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <div>
+              <CardTitle className="text-lg font-semibold font-body">Revenue</CardTitle>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-2xl font-bold font-body">$14,324</span>
+                <Badge className="bg-teal-500 text-white hover:bg-teal-600">+12%</Badge>
+              </div>
+            </div>
+            <Select defaultValue="2024">
+              <SelectTrigger className="w-[80px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="2024">2024</SelectItem>
+                <SelectItem value="2023">2023</SelectItem>
+                <SelectItem value="2022">2022</SelectItem>
+              </SelectContent>
+            </Select>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 rounded-lg bg-blue-50 dark:bg-blue-950">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">
-                    {t("dashboard.orderTypes.package")}
-                  </p>
-                  <p className="text-2xl font-bold">
-                    {core_metrics.package_orders.count}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm text-muted-foreground">
-                    ৳{core_metrics.package_orders.revenue.toLocaleString()}
-                  </p>
-                  <Badge variant="secondary">
-                    {core_metrics.package_orders.percentage.toFixed(1)}%
-                  </Badge>
-                </div>
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={revenueChartData} barGap={2}>
+                <XAxis 
+                  dataKey="month" 
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                />
+                <YAxis hide />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "8px",
+                  }}
+                />
+                <Bar 
+                  dataKey="desktop" 
+                  fill={CHART_COLORS.desktop}
+                  radius={[4, 4, 0, 0]}
+                  name="Desktop"
+                />
+                <Bar 
+                  dataKey="mobile" 
+                  fill={CHART_COLORS.mobile}
+                  radius={[4, 4, 0, 0]}
+                  name="Mobile"
+                />
+              </BarChart>
+            </ResponsiveContainer>
+            <div className="flex items-center justify-center gap-6 mt-2">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-sm bg-orange-500" />
+                <span className="text-sm text-muted-foreground">Desktop</span>
               </div>
-              <div className="flex items-center justify-between p-4 rounded-lg bg-green-50 dark:bg-green-950">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">
-                    {t("dashboard.orderTypes.regular")}
-                  </p>
-                  <p className="text-2xl font-bold">
-                    {core_metrics.regular_orders.count}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm text-muted-foreground">
-                    ৳{core_metrics.regular_orders.revenue.toLocaleString()}
-                  </p>
-                  <Badge variant="secondary">
-                    {core_metrics.regular_orders.percentage.toFixed(1)}%
-                  </Badge>
-                </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-sm bg-teal-500" />
+                <span className="text-sm text-muted-foreground">Mobile</span>
               </div>
             </div>
           </CardContent>
         </Card>
+      </div>
 
-        {/* Payment Status */}
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CreditCard className="h-5 w-5" />
-              {t("dashboard.paymentStatus.title")}
-            </CardTitle>
+      {/* Bottom Section - Recent Activity + Visitor Chart */}
+      <div className="grid gap-4 lg:grid-cols-3">
+        {/* Recent Activity Table */}
+        <Card className="lg:col-span-2 shadow-card">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-xl font-semibold font-body">Recent Activity</CardTitle>
+            <Select defaultValue="period">
+              <SelectTrigger className="w-[100px]">
+                <SelectValue placeholder="Period" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="period">Period</SelectItem>
+                <SelectItem value="today">Today</SelectItem>
+                <SelectItem value="week">This Week</SelectItem>
+                <SelectItem value="month">This Month</SelectItem>
+              </SelectContent>
+            </Select>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-success" />
-                  <span className="text-sm">
-                    {t("dashboard.paymentStatus.paid")}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <p className="font-semibold">
-                    {payment_analytics.payment_status.paid.count}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    ৳
-                    {payment_analytics.payment_status.paid.amount.toLocaleString()}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-warning" />
-                  <span className="text-sm">
-                    {t("dashboard.paymentStatus.pending")}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <p className="font-semibold">
-                    {payment_analytics.payment_status.pending.count}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    ৳
-                    {payment_analytics.payment_status.pending.amount.toLocaleString()}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <XCircle className="h-4 w-4 text-destructive" />
-                  <span className="text-sm">
-                    {t("dashboard.paymentStatus.failed")}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <p className="font-semibold">
-                    {payment_analytics.payment_status.failed.count}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    ৳
-                    {payment_analytics.payment_status.failed.amount.toLocaleString()}
-                  </p>
-                </div>
-              </div>
-              <div className="pt-3 border-t">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">
-                    {t("dashboard.paymentStatus.successRate")}
-                  </span>
-                  <Badge
-                    variant={
-                      payment_analytics.payment_status.success_rate > 50
-                        ? "default"
-                        : "destructive"
-                    }
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>User</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>ID</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {recentActivityData.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-9 w-9">
+                          <AvatarFallback className="bg-muted text-muted-foreground text-sm">
+                            {item.name.substring(0, 2)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-medium text-sm">{item.name}</p>
+                          <p className="text-xs text-muted-foreground">{item.email}</p>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>{getStatusBadge(item.status)}</TableCell>
+                    <TableCell className="text-muted-foreground">{item.orderId}</TableCell>
+                    <TableCell className="text-muted-foreground">{item.date}</TableCell>
+                    <TableCell className="text-right font-medium">{item.amount}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <p className="text-center text-sm text-muted-foreground mt-4">
+              A list of your recent activity.
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Total Visitor Donut Chart */}
+        <Card className="shadow-card">
+          <CardHeader className="text-center pb-2">
+            <CardTitle className="text-lg font-semibold font-body">Total Visitor - Chart</CardTitle>
+            <CardDescription>January - June 2024</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col items-center">
+            <div className="relative">
+              <ResponsiveContainer width={220} height={220}>
+                <PieChart>
+                  <Pie
+                    data={visitorChartData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={70}
+                    outerRadius={100}
+                    paddingAngle={2}
+                    dataKey="value"
                   >
-                    {payment_analytics.payment_status.success_rate.toFixed(1)}%
-                  </Badge>
-                </div>
+                    {visitorChartData.map((entry, index) => (
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={DONUT_COLORS[index % DONUT_COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+              {/* Center text */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-3xl font-bold font-body">1,125</span>
+                <span className="text-sm text-muted-foreground">Visitors</span>
               </div>
             </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Charts */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle>{t("dashboard.charts.monthlyTrend")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={charts.monthly_trend}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                <XAxis dataKey="month" className="text-xs" />
-                <YAxis className="text-xs" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
-                  }}
-                />
-                <Legend />
-                <Bar
-                  dataKey="revenue"
-                  fill="hsl(var(--primary))"
-                  radius={[8, 8, 0, 0]}
-                  name={t("dashboard.charts.revenue")}
-                />
-                <Bar
-                  dataKey="orders"
-                  fill="hsl(var(--success))"
-                  radius={[8, 8, 0, 0]}
-                  name={t("dashboard.charts.orders")}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle>{t("dashboard.charts.yearlyComparison")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart
-                data={charts.yearly_comparison.filter(
-                  (item: any) => item.revenue > 0 || item.orders > 0
-                )}
-              >
-                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                <XAxis dataKey="year" className="text-xs" />
-                <YAxis className="text-xs" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
-                  }}
-                />
-                <Legend />
-                <Bar
-                  dataKey="revenue"
-                  fill="hsl(var(--primary))"
-                  radius={[8, 8, 0, 0]}
-                  name={t("dashboard.charts.revenue")}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Operational Alerts */}
-      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-5">
-        <Card className="border-warning/50 bg-warning/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <AlertCircle className="h-8 w-8 text-warning" />
-              <div className="text-right">
-                <p className="text-2xl font-bold">
-                  {operational_alerts.pending_approvals}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t("dashboard.alerts.pendingApprovals")}
-                </p>
+            <div className="text-center mt-4 space-y-1">
+              <div className="flex items-center justify-center gap-1">
+                <span className="text-sm">Trending up by 5.2% this month</span>
+                <TrendingUp className="h-4 w-4 text-teal-500" />
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-destructive/50 bg-destructive/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <XCircle className="h-8 w-8 text-destructive" />
-              <div className="text-right">
-                <p className="text-2xl font-bold">
-                  {operational_alerts.failed_payments}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t("dashboard.alerts.failedPayments")}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-orange-500/50 bg-orange-50 dark:bg-orange-950">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <AlertCircle className="h-8 w-8 text-orange-600" />
-              <div className="text-right">
-                <p className="text-2xl font-bold">
-                  {operational_alerts.delivery_sync_failures}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t("dashboard.alerts.deliverySyncFailures")}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-blue-500/50 bg-blue-50 dark:bg-blue-950">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <DollarSign className="h-8 w-8 text-blue-600" />
-              <div className="text-right">
-                <p className="text-2xl font-bold">
-                  {operational_alerts.pending_refunds}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t("dashboard.alerts.pendingRefunds")}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-purple-500/50 bg-purple-50 dark:bg-purple-950">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <Coins className="h-8 w-8 text-purple-600" />
-              <div className="text-right">
-                <p className="text-2xl font-bold">
-                  {operational_alerts.low_coin_balance_users}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t("dashboard.alerts.lowCoinBalance")}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Additional Metrics */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Gift className="h-5 w-5" />
-              {t("dashboard.additional.donations")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {t("dashboard.additional.count")}
-                </span>
-                <span className="font-semibold">
-                  {additional_metrics.donations.count}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {t("dashboard.additional.amount")}
-                </span>
-                <span className="font-semibold">
-                  ৳{additional_metrics.donations.total_amount.toLocaleString()}
-                </span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Coins className="h-5 w-5" />
-              {t("dashboard.additional.coins")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {t("dashboard.additional.earned")}
-                </span>
-                <span className="font-semibold text-success">
-                  +{additional_metrics.coins.earned.toLocaleString()}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {t("dashboard.additional.spent")}
-                </span>
-                <span className="font-semibold text-destructive">
-                  -{additional_metrics.coins.spent.toLocaleString()}
-                </span>
-              </div>
-              <div className="flex justify-between pt-2 border-t">
-                <span className="text-sm font-medium">
-                  {t("dashboard.additional.net")}
-                </span>
-                <span className="font-bold">
-                  {additional_metrics.coins.net.toLocaleString()}
-                </span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="h-5 w-5" />
-              {t("dashboard.additional.referrals")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {t("dashboard.additional.total")}
-                </span>
-                <span className="font-semibold">
-                  {additional_metrics.referrals.total}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {t("dashboard.additional.credited")}
-                </span>
-                <span className="font-semibold">
-                  {additional_metrics.referrals.credited}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {t("dashboard.additional.coinsDistributed")}
-                </span>
-                <span className="font-semibold">
-                  {additional_metrics.referrals.coins_distributed.toLocaleString()}
-                </span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Recent Activity */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle>{t("dashboard.recentOrders.title")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {recent_orders.slice(0, 5).map((order: any) => (
-                <div
-                  key={order.id}
-                  className="flex items-center justify-between p-3 rounded-lg border"
-                >
-                  <div className="flex-1">
-                    <p className="font-medium text-sm">{order.orderId}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {order.customer.name}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-sm">
-                      ৳{order.amount.toLocaleString()}
-                    </p>
-                    <Badge
-                      variant={
-                        order.order_status === "Pending"
-                          ? "secondary"
-                          : order.order_status === "Cancelled"
-                          ? "destructive"
-                          : "default"
-                      }
-                      className="text-xs"
-                    >
-                      {order.order_status}
-                    </Badge>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle>{t("dashboard.recentTransactions.title")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {recent_transactions.slice(0, 5).map((txn: any) => (
-                <div
-                  key={txn.id}
-                  className="flex items-center justify-between p-3 rounded-lg border"
-                >
-                  <div className="flex-1">
-                    <p className="font-medium text-sm">{txn.transaction_id}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {txn.customer.name}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-sm">
-                      ৳{txn.amount.toLocaleString()}
-                    </p>
-                    <Badge
-                      variant={
-                        txn.status === "Success"
-                          ? "default"
-                          : txn.status === "Pending"
-                          ? "secondary"
-                          : "destructive"
-                      }
-                      className="text-xs"
-                    >
-                      {txn.status}
-                    </Badge>
-                  </div>
-                </div>
-              ))}
+              <p className="text-xs text-muted-foreground">
+                Showing total visitors for the last 6 months
+              </p>
             </div>
           </CardContent>
         </Card>
