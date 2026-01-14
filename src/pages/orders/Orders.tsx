@@ -366,6 +366,8 @@ function Orders() {
     },
   ];
 
+  console.log("Orders Page Rendered");
+
   return (
     <div className="animate-fade-in">
       <Tabs defaultValue="orders" className="w-full">

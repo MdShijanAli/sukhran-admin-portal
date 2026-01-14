@@ -13,17 +13,30 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Order, OrderItem } from "@/stores/orderStore";
+import { Order } from "@/stores/orderStore";
 import orderService from "@/services/orderService";
 import { Plus, Trash2 } from "lucide-react";
 import { formatNumberWithCommas, unFormatNumberWithCommas } from "@/lib/utils";
+import BaseSelect from "@/components/custom/BaseSelect";
+import productService from "@/services/productService";
+
+interface FormOrderItem {
+  id: string;
+  product_id: string;
+  itemType?: string;
+  product_name: string;
+  quantity: number;
+  unit_price: number;
+  total_price: number;
+  isEnabled?: boolean;
+}
 
 interface OrderFormData {
   customer_name: string;
   customer_phone: string;
   customer_email: string;
   delivery_address: string;
-  items: OrderItem[];
+  items: FormOrderItem[];
   subtotal: number;
   discount: number;
   delivery_fee: number;
@@ -132,6 +145,7 @@ export default function FormModal({
             quantity: parseInt(item.quantity) || 1,
             unit_price: item.unitPrice,
             total_price: item.itemCost,
+            isEnabled: false,
           })),
           subtotal: orderData.receipt.subTotal,
           discount: orderData.receipt.discount,
@@ -159,7 +173,7 @@ export default function FormModal({
   }, [orderId, open, t]);
 
   const calculateTotals = (
-    items: OrderItem[],
+    items: FormOrderItem[],
     discount: number,
     deliveryFee: number
   ) => {
@@ -176,10 +190,12 @@ export default function FormModal({
         {
           id: Date.now().toString(),
           product_id: "",
+          itemType: "product",
           product_name: "",
           quantity: 1,
           unit_price: 0,
           total_price: 0,
+          isEnabled: true,
         },
       ],
     }));
@@ -202,7 +218,7 @@ export default function FormModal({
 
   const handleItemChange = (
     index: number,
-    field: keyof OrderItem,
+    field: keyof FormOrderItem,
     value: string | number
   ) => {
     const newItems = [...formData.items];
@@ -393,17 +409,15 @@ export default function FormModal({
               <h3 className="text-sm font-semibold">
                 {t("orders.form.orderItems")}
               </h3>
-              {!isEditing && (
-                <Button
-                  type="button"
-                  onClick={handleAddItem}
-                  size="sm"
-                  variant="outline"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  {t("orders.form.addItem")}
-                </Button>
-              )}
+              <Button
+                type="button"
+                onClick={handleAddItem}
+                size="sm"
+                variant="outline"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                {t("orders.form.addItem")}
+              </Button>
             </div>
 
             <div className="space-y-3">
@@ -416,14 +430,32 @@ export default function FormModal({
                     <Label className="text-xs">
                       {t("orders.form.product")}
                     </Label>
-                    <Input
-                      value={item.product_name}
-                      onChange={(e) =>
-                        handleItemChange(index, "product_name", e.target.value)
-                      }
-                      placeholder={t("orders.form.selectProduct")}
-                      disabled={isEditing}
-                    />
+                    {item.isEnabled ? (
+                      <BaseSelect
+                        id="product"
+                        value={item.product_id}
+                        onValueChange={(value: string) =>
+                          handleItemChange(index, "product_id", value)
+                        }
+                        apiMethod={productService.fetchLists}
+                        placeholder={t("orders.form.selectProduct")}
+                        searchable
+                        searchPlaceholder={t("products.form.searchBadges")}
+                      />
+                    ) : (
+                      <Input
+                        value={item.product_name}
+                        onChange={(e) =>
+                          handleItemChange(
+                            index,
+                            "product_name",
+                            e.target.value
+                          )
+                        }
+                        placeholder={t("orders.form.selectProduct")}
+                        disabled={isEditing}
+                      />
+                    )}
                   </div>
 
                   <div className="col-span-2 space-y-2">
