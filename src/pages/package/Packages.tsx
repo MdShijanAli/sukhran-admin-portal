@@ -28,6 +28,7 @@ import { formatNumberWithCommas } from "@/lib/utils";
 import permissions from "@/lib/permissions";
 import { withPermission } from "@/hoc/withPermission";
 import usePermissions from "@/hooks/use-permissions";
+import { FilterDrawer } from "@/components/custom/FilterDrawer";
 
 function Packages() {
   const { t } = useTranslation();
@@ -50,6 +51,10 @@ function Packages() {
   const isLoading = store.isLoading || false;
   const [hasInitialFetch, setHasInitialFetch] = useState(false);
   const [isFirstRender, setIsFirstRender] = useState(true);
+  const [localFilters, setLocalFilters] = useState<Record<string, string>>({});
+
+  // Serialize filters to detect changes
+  const filterValues = Object.values(localFilters).join(",");
 
   const fetchPackages = useCallback(
     async (forceFetch = false) => {
@@ -72,6 +77,21 @@ function Packages() {
         params.append("packageType", "admin");
         params.append("page", currentPage.toString());
         params.append("per_page", perPage.toString());
+
+        // Add filter params
+        if (filters) {
+          filters.forEach((filter) => {
+            const filterValue = localFilters[filter.value];
+            if (
+              filterValue !== undefined &&
+              filterValue !== null &&
+              filterValue !== ""
+            ) {
+              params.append(filter.value, filterValue);
+            }
+          });
+        }
+
         await packageService.fetchLists(params.toString());
         if (!hasInitialFetch) {
           setHasInitialFetch(true);
@@ -90,6 +110,7 @@ function Packages() {
       packages.length,
       perPage,
       currentPage,
+      filterValues,
     ]
   );
 
@@ -126,7 +147,7 @@ function Packages() {
     if (isFirstRender) return; // Skip on first render
     fetchPackages();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, perPage]);
+  }, [filterValues, currentPage, perPage]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -163,6 +184,64 @@ function Packages() {
     }
   };
 
+  const filters = [
+    {
+      label: t("packages.filter.badge"),
+      value: "badge",
+      options: [
+        { value: "best_selling", label: "Best Selling" },
+        { value: "new_arrival", label: "New Arrival" },
+        { value: "hot_deal", label: "Hot Deal" },
+        { value: "organic", label: "Organic" },
+        { value: "limited_stock", label: "Limited Stock" },
+        { value: "flash_sale", label: "Flash Sale" },
+        { value: "halal_certified", label: "Halal Certified" },
+      ],
+      placeholder: t("packages.filter.selectBadge"),
+    },
+    {
+      label: t("packages.filter.isFeatured"),
+      value: "isFeatured",
+      options: [
+        { value: "1", label: "Yes" },
+        { value: "0", label: "No" },
+      ],
+      placeholder: t("packages.filter.selectFeatured"),
+    },
+  ];
+
+  // Check if any filters are active
+  const hasActiveFilters = Object.values(localFilters).some(
+    (value) => value !== undefined && value !== null && value !== ""
+  );
+
+  // Get filter label by value
+  const getFilterLabel = (filterValue: string, selectedValue: string) => {
+    const filter = filters?.find((f) => f.value === filterValue);
+    const option = filter?.options.find((opt) => opt.value === selectedValue);
+    return {
+      filterLabel: filter?.label || filterValue,
+      optionLabel: option?.label || selectedValue,
+    };
+  };
+
+  // Handle apply filters
+  const handleApplyFilters = (newFilters: Record<string, string>) => {
+    setLocalFilters(newFilters);
+  };
+
+  // Handle reset filters
+  const handleResetFilters = () => {
+    setLocalFilters({});
+  };
+
+  // Remove individual filter
+  const handleRemoveFilter = (filterKey: string) => {
+    const newFilters = { ...localFilters };
+    delete newFilters[filterKey];
+    setLocalFilters(newFilters);
+  };
+
   return (
     <div className="">
       {/* Header */}
@@ -197,6 +276,14 @@ function Packages() {
                   </Button>
                 )}
               </div>
+              {/* Filter Drawer */}
+              <FilterDrawer
+                filters={filters}
+                localFilters={localFilters}
+                onApplyFilters={handleApplyFilters}
+                onResetFilters={handleResetFilters}
+                onRemoveFilter={handleRemoveFilter}
+              />
               <Button
                 variant="outline"
                 onClick={handleRefresh}
@@ -220,7 +307,35 @@ function Packages() {
         </CardContent>
       </Card>
 
-      {/* Packages Grid */}
+      {/* Active Filters Display */}
+      {hasActiveFilters && (
+        <div className="flex flex-wrap mb-3 gap-2 items-center w-full">
+          <span className="text-sm text-muted-foreground">
+            {t("reports.filters.activeFilters")}:
+          </span>
+          {Object.entries(localFilters).map(([key, value]) => {
+            if (!value) return null;
+            const { filterLabel, optionLabel } = getFilterLabel(key, value);
+            return (
+              <Badge key={key} variant="secondary" className="gap-1 pr-1">
+                <span className="text-xs">
+                  {filterLabel}: {optionLabel}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-4 w-4 p-0 hover:bg-transparent"
+                  onClick={() => handleRemoveFilter(key)}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </Badge>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Packages Grid  */}
       <div>
         {isLoading ? (
           <div
@@ -306,7 +421,10 @@ function Packages() {
                           : t("packages.status.inactive")}
                       </Badge>
                       {pkg.isFeatured && (
-                        <Badge className="text-[10px] px-1.5 py-0">
+                        <Badge
+                          variant="destructive"
+                          className="text-[10px] px-1.5 py-0"
+                        >
                           {t("packages.status.featured")}
                         </Badge>
                       )}

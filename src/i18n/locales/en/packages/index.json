@@ -19,6 +19,12 @@
     "admin": "Admin",
     "custom": "Custom"
   },
+  "filter": {
+    "badge": "Badge",
+    "selectBadge": "Select Badge",
+    "isFeatured": "Featured Product",
+    "selectFeatured": "Select Featured Product"
+  },
   "form": {
     "createNewPackage": "Create New Package",
     "editPackage": "Edit Package",

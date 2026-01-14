@@ -19,6 +19,12 @@
     "admin": "অ্যাডমিন",
     "custom": "কাস্টম"
   },
+  "filter": {
+    "badge": "ব্যাজ",
+    "selectBadge": "ব্যাজ নির্বাচন করুন",
+    "isFeatured": "ফিচারড পণ্য",
+    "selectFeatured": "ফিচারড পণ্য নির্বাচন করুন"
+  },
   "form": {
     "createNewPackage": "নতুন প্যাকেজ তৈরি করুন",
     "editPackage": "প্যাকেজ সম্পাদনা করুন",

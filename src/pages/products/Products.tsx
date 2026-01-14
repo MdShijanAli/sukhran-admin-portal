@@ -90,7 +90,11 @@ const Products = () => {
         if (filters) {
           filters.forEach((filter) => {
             const filterValue = localFilters[filter.value];
-            if (filterValue) {
+            if (
+              filterValue !== undefined &&
+              filterValue !== null &&
+              filterValue !== ""
+            ) {
               params.append(filter.value, filterValue);
             }
           });
@@ -207,8 +211,8 @@ const Products = () => {
       label: t("products.filter.isFeatured"),
       value: "isFeatured",
       options: [
-        { value: "true", label: "Yes" },
-        { value: "false", label: "No" },
+        { value: "1", label: "Yes" },
+        { value: "0", label: "No" },
       ],
       placeholder: t("products.filter.selectFeatured"),
     },
@@ -216,7 +220,7 @@ const Products = () => {
 
   // Check if any filters are active
   const hasActiveFilters = Object.values(localFilters).some(
-    (value) => value && value !== ""
+    (value) => value !== undefined && value !== null && value !== ""
   );
 
   // Get filter label by value
@@ -337,7 +341,8 @@ const Products = () => {
             {t("reports.filters.activeFilters")}:
           </span>
           {Object.entries(localFilters).map(([key, value]) => {
-            if (!value) return null;
+            if (value === undefined || value === null || value === "")
+              return null;
             const { filterLabel, optionLabel } = getFilterLabel(key, value);
             return (
               <Badge key={key} variant="secondary" className="gap-1 pr-1">
