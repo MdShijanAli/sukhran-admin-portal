@@ -46,6 +46,7 @@ import RegularOrdersReport from "@/pages/reports/reports/RegularOrdersReport";
 import DonationReport from "@/pages/reports/reports/DonationReport";
 import CoinReport from "@/pages/reports/reports/CoinReport";
 import ReferralReport from "@/pages/reports/reports/ReferralsReport";
+import DashboardDraft from "@/pages/dashboard/DashboardDraft";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -78,7 +79,17 @@ const AppRoutes: React.FC = () => {
           path="dashboard"
           element={
             <PrivateRoute>
-              <Dashboard />
+              {/* <Dashboard /> */}
+              <DashboardDraft />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="analytics"
+          element={
+            <PrivateRoute>
+              {/* <Dashboard /> */}
+              <Analytics />
             </PrivateRoute>
           }
         />

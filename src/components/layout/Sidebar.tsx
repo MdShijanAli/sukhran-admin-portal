@@ -41,6 +41,12 @@ const menuItems = [
     permission: permissions.dashboard.view,
   },
   {
+    icon: LayoutDashboard,
+    label: "nav.analytics",
+    path: "/analytics",
+    permission: permissions.dashboard.view,
+  },
+  {
     icon: Package,
     label: "nav.products",
     path: "/products",
