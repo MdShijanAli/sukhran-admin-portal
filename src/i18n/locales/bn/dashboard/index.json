@@ -10,6 +10,10 @@
   "yearly": "বার্ষিক",
   "revenue": "রাজস্ব",
   "orders": "অর্ডার",
+  "sales": "বিক্রয়",
+  "product": "পণ্য",
+  "package": "প্যাকেজ",
+  "noDataFound": "এই তারিখ পরিসীমার জন্য কোন ডেটা পাওয়া যায়নি",
   "pendingDeliveries": "পেন্ডিং ডেলিভারি",
   "pendingDeliveriesDescription": "ডেলিভারি অ্যাসাইনমেন্টের জন্য অপেক্ষমাণ অর্ডার",
   "paymentFailures": "পেমেন্ট ব্যর্থতা",
@@ -23,6 +27,7 @@
   "revenueChart": "রাজস্ব চার্ট",
   "average_order": "গড় অর্ডার মূল্য",
   "topProducts": "শীর্ষ পণ্য",
+  "sales": "বিক্রয়",
   "periods": {
     "today": "আজ",
     "yesterday": "গতকাল",

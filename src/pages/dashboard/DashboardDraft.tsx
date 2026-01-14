@@ -8,7 +8,7 @@ import {
   RefreshCcw,
 } from "lucide-react";
 
-import { dashboardStats } from "@/data/mockData";
+import { dashboardStats, topProducts } from "@/data/mockData";
 import { useEffect, useState, useMemo } from "react";
 import dashboardService from "@/services/dashboardService";
 import { BaseDatePicker } from "@/components/custom/BaseDatePicker";
@@ -54,9 +54,9 @@ interface ChartDataPoint {
 
 interface TopProducts {
   id: string;
-  name: number;
-  sales: number;
-  revenue: number;
+  name: string;
+  total_quantity: number;
+  total_revenue: number;
 }
 
 interface DashboardData {
@@ -73,7 +73,10 @@ interface DashboardData {
       orders: number;
     }>;
   };
-  TopProducts: TopProducts[];
+  top_performers: {
+    top_products: TopProducts[];
+    top_packages: TopProducts[];
+  };
 }
 
 export default function Dashboard() {
@@ -104,14 +107,24 @@ export default function Dashboard() {
       orders: item.orders,
     }));
   }, [dashboardData]);
-  //   const topPerformingProducts = useMemo<TopProducts[]>(() => {
-  //     return dashboardStats?.topProducts.map((product) => ({
-  //       id: product.id,
-  //       name: product.name,
-  //       sales: product.sales,
-  //       revenue: product.revenue,
-  //     }));
-  //   }, [dashboardData]);
+  const topPerformingProducts = useMemo<TopProducts[]>(() => {
+    if (!dashboardData?.top_performers?.top_products) return [];
+    return dashboardData.top_performers.top_products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      sales: product.total_quantity,
+      revenue: `৳${product.total_revenue.toLocaleString()}`,
+    }));
+  }, [dashboardData]);
+  const topPerformingPackages = useMemo<TopProducts[]>(() => {
+    if (!dashboardData?.top_performers?.top_packages) return [];
+    return dashboardData.top_performers.top_packages.map((pkg) => ({
+      id: pkg.id,
+      name: pkg.name,
+      sales: pkg.total_quantity,
+      revenue: `৳${pkg.total_revenue.toLocaleString()}`,
+    }));
+  }, [dashboardData]);
 
   const fetchDashboardData = async (queryString?: string) => {
     try {
@@ -268,7 +281,10 @@ export default function Dashboard() {
               monthlyRevenueChart={monthlyRevenueChart}
               yearlyRevenueChart={yearlyRevenueChart}
             />
-            <TopProductsChart />
+            <TopProductsChart
+              productData={topPerformingProducts}
+              packageData={topPerformingPackages}
+            />
           </>
         )}
       </div>
