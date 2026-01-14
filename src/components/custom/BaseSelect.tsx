@@ -7,7 +7,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Loader2, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Loader2, Search, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface BaseSelectOption {
@@ -47,6 +48,8 @@ interface BaseSelectProps {
   // Additional features
   allowClear?: boolean;
   onClear?: () => void;
+  showRefresh?: boolean;
+  onRefresh?: () => void;
 }
 
 export function BaseSelect({
@@ -68,14 +71,19 @@ export function BaseSelect({
   loadingMessage = "Loading...",
   allowClear = false,
   onClear,
+  showRefresh,
+  onRefresh,
 }: BaseSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [apiOptions, setApiOptions] = useState<BaseSelectOption[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [hasInitiallyFetched, setHasInitiallyFetched] = useState(false);
 
   const isApiMode = !!apiMethod;
+  // Show refresh button if apiMethod exists and showRefresh is not explicitly false
+  const shouldShowRefresh = showRefresh !== undefined ? showRefresh : isApiMode;
 
   // Fetch API data
   const fetchApiData = useCallback(
@@ -114,6 +122,7 @@ export function BaseSelect({
         setApiOptions([]);
       } finally {
         setIsLoading(false);
+        setHasInitiallyFetched(true);
       }
     },
     [apiMethod, mapResponse]
@@ -146,12 +155,12 @@ export function BaseSelect({
     fetchApiData,
   ]);
 
-  // Initial fetch for API mode
+  // Initial fetch for API mode - only if not fetched before
   useEffect(() => {
-    if (isApiMode && isOpen && apiOptions.length === 0 && !isLoading) {
+    if (isApiMode && isOpen && !hasInitiallyFetched && !isLoading) {
       fetchApiData("");
     }
-  }, [isApiMode, isOpen, apiOptions.length, isLoading, fetchApiData]);
+  }, [isApiMode, isOpen, hasInitiallyFetched, isLoading, fetchApiData]);
 
   // Filter static options locally
   const filteredStaticOptions = useMemo(() => {
@@ -190,6 +199,18 @@ export function BaseSelect({
     }
   };
 
+  const handleRefresh = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSearchQuery("");
+    if (isApiMode) {
+      setHasInitiallyFetched(false);
+      fetchApiData("");
+    }
+    if (onRefresh) {
+      onRefresh();
+    }
+  };
+
   return (
     <Select
       value={value}
@@ -215,17 +236,35 @@ export function BaseSelect({
         )}
       </SelectTrigger>
       <SelectContent>
-        {searchable && (
-          <div className="flex items-center border-b px-3 pb-2">
-            <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
-            <Input
-              placeholder={searchPlaceholder}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-8 border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-              onClick={(e) => e.stopPropagation()}
-              onKeyDown={(e) => e.stopPropagation()}
-            />
+        {(searchable || shouldShowRefresh) && (
+          <div className="flex items-center border-b px-3 pb-2 gap-2">
+            {searchable && (
+              <>
+                <Search className="h-4 w-4 shrink-0 opacity-50" />
+                <Input
+                  placeholder={searchPlaceholder}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="h-8 border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  onClick={(e) => e.stopPropagation()}
+                  onKeyDown={(e) => e.stopPropagation()}
+                />
+              </>
+            )}
+            {shouldShowRefresh && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-8 px-2 ml-auto"
+                onClick={handleRefresh}
+                disabled={isLoading || disabled}
+              >
+                <RefreshCw
+                  className={cn("h-4 w-4", isLoading && "animate-spin")}
+                />
+              </Button>
+            )}
           </div>
         )}
 

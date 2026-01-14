@@ -15,10 +15,12 @@ import {
 import { toast } from "sonner";
 import { Order } from "@/stores/orderStore";
 import orderService from "@/services/orderService";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { formatNumberWithCommas, unFormatNumberWithCommas } from "@/lib/utils";
 import BaseSelect from "@/components/custom/BaseSelect";
 import productService from "@/services/productService";
+import QuantityUpdateModal from "./QuantityUpdateModal";
+import AddItemModal from "./AddItemModal";
 
 interface FormOrderItem {
   id: string;
@@ -33,6 +35,7 @@ interface FormOrderItem {
 }
 
 interface OrderFormData {
+  orderId?: string;
   customer_name: string;
   customer_phone: string;
   customer_email: string;
@@ -91,7 +94,7 @@ export default function FormModal({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<FormOrderItem | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [reason, setReason] = useState("");
+  const [deleteReason, setDeleteReason] = useState("");
   const [showQuantityUpdateModal, setShowQuantityUpdateModal] = useState(false);
   const [quantityUpdateData, setQuantityUpdateData] = useState<{
     index: number;
@@ -99,6 +102,8 @@ export default function FormModal({
     oldQuantity: number;
   } | null>(null);
   const [isUpdatingQuantity, setIsUpdatingQuantity] = useState(false);
+  const [showAddItemModal, setShowAddItemModal] = useState(false);
+  const [isAddingItem, setIsAddingItem] = useState(false);
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -146,6 +151,7 @@ export default function FormModal({
           .join(", ");
 
         setFormData({
+          orderId: orderData.orderId,
           customer_name: orderData.customer.name,
           customer_phone: orderData.customer.mobile,
           customer_email: orderData.customer.email || "",
@@ -196,22 +202,28 @@ export default function FormModal({
   };
 
   const handleAddItem = () => {
-    setFormData((prev) => ({
-      ...prev,
-      items: [
-        ...prev.items,
-        {
-          id: Date.now().toString(),
-          product_id: "",
-          itemType: "product",
-          product_name: "",
-          quantity: 1,
-          unit_price: 0,
-          total_price: 0,
-          isEnabled: true,
-        },
-      ],
-    }));
+    if (isEditing) {
+      // Show modal when editing existing order
+      setShowAddItemModal(true);
+    } else {
+      // Directly add to form when creating new order
+      setFormData((prev) => ({
+        ...prev,
+        items: [
+          ...prev.items,
+          {
+            id: Date.now().toString(),
+            product_id: "",
+            itemType: "product",
+            product_name: "",
+            quantity: 1,
+            unit_price: 0,
+            total_price: 0,
+            isEnabled: true,
+          },
+        ],
+      }));
+    }
   };
 
   const handleRemoveItem = (item: FormOrderItem) => {
@@ -239,7 +251,7 @@ export default function FormModal({
       const response = await orderService.removeItemFromOrder(
         selectedItem.orderId,
         selectedItem.id,
-        reason
+        deleteReason
       );
       console.log("Delete item response:", response);
       toast.success(t("orders.messages.itemDeleted"));
@@ -281,11 +293,11 @@ export default function FormModal({
       setIsDeleting(false);
       setShowDeleteModal(false);
       setSelectedItem(null);
-      setReason("");
+      setDeleteReason("");
     }
   };
 
-  const handleConfirmQuantityUpdate = async () => {
+  const handleConfirmQuantityUpdate = async (reason: string) => {
     if (!quantityUpdateData || !reason.trim()) {
       toast.error("Please provide a reason for the quantity change");
       return;
@@ -307,27 +319,6 @@ export default function FormModal({
       );
 
       toast.success("Item quantity updated successfully");
-
-      // Update local state
-      const newItems = [...formData.items];
-      newItems[quantityUpdateData.index].quantity =
-        quantityUpdateData.newQuantity;
-      newItems[quantityUpdateData.index].total_price =
-        quantityUpdateData.newQuantity *
-        newItems[quantityUpdateData.index].unit_price;
-
-      const { subtotal, total } = calculateTotals(
-        newItems,
-        formData.discount,
-        formData.delivery_fee
-      );
-
-      setFormData((prev) => ({
-        ...prev,
-        items: newItems,
-        subtotal,
-        total,
-      }));
 
       // Refresh order details to get updated data
       if (orderId) {
@@ -365,7 +356,66 @@ export default function FormModal({
       setIsUpdatingQuantity(false);
       setShowQuantityUpdateModal(false);
       setQuantityUpdateData(null);
-      setReason("");
+    }
+  };
+
+  const handleConfirmAddItem = async (data: {
+    productId: string;
+    skuId: string;
+    quantity: number;
+    reason: string;
+  }) => {
+    if (!data.productId || !data.skuId || !data.reason.trim()) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (!formData.orderId) {
+      toast.error("Order ID is missing");
+      return;
+    }
+
+    try {
+      setIsAddingItem(true);
+      await orderService.addItemToOrder(formData.orderId, {
+        itemType: "product",
+        productId: data.productId,
+        skuId: data.skuId,
+        quantity: data.quantity,
+        reason: data.reason,
+      });
+
+      toast.success("Item added successfully");
+
+      // Refresh order details
+      const refreshedOrder = await orderService.fetchDetails(orderId);
+      const responseData = refreshedOrder as unknown as Record<string, unknown>;
+      const orderData =
+        (responseData?.order as Order) || (refreshedOrder as unknown as Order);
+
+      setFormData((prev) => ({
+        ...prev,
+        items: orderData.items.map((item: any) => ({
+          id: item.id.toString(),
+          product_id: item.product?.id?.toString() || "",
+          product_name: item.product?.name || "Package",
+          quantity: parseInt(item.quantity) || 1,
+          unit_price: item.unitPrice,
+          total_price: item.itemCost,
+          isEnabled: false,
+          orderId: orderData.orderId,
+        })),
+        subtotal: orderData.receipt.subTotal,
+        discount: orderData.receipt.discount,
+        delivery_fee: orderData.receipt.deliveryCharge,
+        total: orderData.receipt.grandTotal,
+      }));
+      setShowAddItemModal(false);
+    } catch (error) {
+      console.error("Error adding item:", error);
+      toast.error("Failed to add item");
+    } finally {
+      setIsAddingItem(false);
     }
   };
 
@@ -819,8 +869,8 @@ export default function FormModal({
           <Label htmlFor="reason">{t("orders.form.deletionReason")} *</Label>
           <Textarea
             id="reason"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
+            value={deleteReason}
+            onChange={(e) => setDeleteReason(e.target.value)}
             placeholder={t("orders.form.deletionReasonPlaceholder")}
             rows={3}
             required
@@ -828,86 +878,32 @@ export default function FormModal({
         </div>
       </DeleteModal>
 
-      <BaseModal
+      <QuantityUpdateModal
         open={showQuantityUpdateModal}
-        onOpenChange={() => {
+        onClose={() => {
           setShowQuantityUpdateModal(false);
           setQuantityUpdateData(null);
-          setReason("");
         }}
-        title="Update Item Quantity"
-        onSubmit={handleConfirmQuantityUpdate}
+        oldQuantity={quantityUpdateData?.oldQuantity || 0}
+        newQuantity={quantityUpdateData?.newQuantity || 0}
+        onQuantityChange={(quantity) => {
+          if (quantityUpdateData) {
+            setQuantityUpdateData({
+              ...quantityUpdateData,
+              newQuantity: quantity,
+            });
+          }
+        }}
+        onConfirm={handleConfirmQuantityUpdate}
         isSubmitting={isUpdatingQuantity}
-        submitButtonText="Update Quantity"
-      >
-        <div className="space-y-4">
-          <div className="bg-muted p-4 rounded-lg space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Current Quantity:</span>
-              <span className="text-lg font-semibold">
-                {quantityUpdateData?.oldQuantity}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">New Quantity:</span>
-              <div className="flex items-center gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => {
-                    if (
-                      quantityUpdateData &&
-                      quantityUpdateData.newQuantity > 1
-                    ) {
-                      setQuantityUpdateData({
-                        ...quantityUpdateData,
-                        newQuantity: quantityUpdateData.newQuantity - 1,
-                      });
-                    }
-                  }}
-                  disabled={quantityUpdateData?.newQuantity === 1}
-                >
-                  <Minus className="h-4 w-4" />
-                </Button>
-                <span className="text-lg font-bold min-w-[3rem] text-center">
-                  {quantityUpdateData?.newQuantity}
-                </span>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => {
-                    if (quantityUpdateData) {
-                      setQuantityUpdateData({
-                        ...quantityUpdateData,
-                        newQuantity: quantityUpdateData.newQuantity + 1,
-                      });
-                    }
-                  }}
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="update-reason">
-              Reason for quantity change <span className="text-red-500">*</span>
-            </Label>
-            <Textarea
-              id="update-reason"
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              placeholder="e.g., Customer increased quantity via phone"
-              rows={3}
-              required
-            />
-          </div>
-        </div>
-      </BaseModal>
+      />
+
+      <AddItemModal
+        open={showAddItemModal}
+        onClose={() => setShowAddItemModal(false)}
+        onConfirm={handleConfirmAddItem}
+        isSubmitting={isAddingItem}
+      />
     </BaseModal>
   );
 }
