@@ -59,6 +59,11 @@ interface TopProducts {
   total_revenue: number;
 }
 
+interface OrderStat {
+  count: number;
+  percentage: number;
+}
+
 interface DashboardData {
   core_metrics: CoreMetrics;
   charts: {
@@ -76,6 +81,16 @@ interface DashboardData {
   top_performers: {
     top_products: TopProducts[];
     top_packages: TopProducts[];
+  };
+  order_status_distribution: {
+    returned: OrderStat;
+    pending: OrderStat;
+    delivered: OrderStat;
+    cancelled: OrderStat;
+    shipped: OrderStat;
+    approved: OrderStat;
+    confirmed: OrderStat;
+    out_for_delivery: OrderStat;
   };
 }
 
@@ -125,6 +140,23 @@ export default function Dashboard() {
       revenue: `৳${pkg.total_revenue.toLocaleString()}`,
     }));
   }, [dashboardData]);
+
+  const orderStatusDistribution = useMemo<OrderStat[]>(() => {
+    if (!dashboardData?.order_status_distribution) return [];
+    const statusDist = dashboardData.order_status_distribution;
+    return [
+      { name: "returned", ...statusDist.returned },
+      { name: "pending", ...statusDist.pending },
+      { name: "delivered", ...statusDist.delivered },
+      { name: "cancelled", ...statusDist.cancelled },
+      { name: "shipped", ...statusDist.shipped },
+      { name: "approved", ...statusDist.approved },
+      { name: "confirmed", ...statusDist.confirmed },
+      { name: "outForDelivery", ...statusDist.out_for_delivery },
+    ];
+  }, [dashboardData]);
+
+  console.log("Order Status Distribution:", orderStatusDistribution);
 
   const fetchDashboardData = async (queryString?: string) => {
     try {

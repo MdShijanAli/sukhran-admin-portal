@@ -29,7 +29,9 @@ const StatCard: FC<StatCardProps> = ({
         <Icon className="h-5 w-5 text-primary" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
+        <div className="text-2xl font-bold">
+          {typeof value === "number" ? value.toFixed(2) : value}
+        </div>
         {change !== undefined && (
           <div className="flex items-center gap-1 mt-1">
             {trend === "up" ? (
