@@ -89,6 +89,7 @@ interface OrderService extends ApiService<Order> {
   bulkUpdateDeliverySettings: (
     settings: Array<{ key: string; value: string }>
   ) => Promise<unknown>;
+  getModificationHistory: (orderId: number | string) => Promise<unknown>;
 }
 
 const orderService: OrderService = {
@@ -102,6 +103,18 @@ const orderService: OrderService = {
       return response.data;
     } catch (error) {
       console.error("Error fetching orders statistics:", error);
+      throw error;
+    }
+  },
+
+  getModificationHistory: async (orderId: number | string) => {
+    try {
+      const response = await apiClient.get(
+        apiRoutes.orders.modificationHistory(orderId)
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching modification history:", error);
       throw error;
     }
   },

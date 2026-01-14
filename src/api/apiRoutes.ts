@@ -160,6 +160,8 @@ export const apiRoutes = {
     bulkUpdateSettings: createApiUrl(
       "admin/settings/min_delivery_lead_time_days"
     ),
+    modificationHistory: (orderId: number | string) =>
+      createApiUrl(`admin/orders/${orderId}/modifications`),
   },
 
   delivery: {

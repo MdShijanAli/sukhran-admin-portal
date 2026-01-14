@@ -64,7 +64,8 @@
     "markAsPaid": "Mark as Paid",
     "edit": "Edit",
     "pauseOrder": "Pause Order",
-    "setDeliveryDate": "Set Delivery Date"
+    "setDeliveryDate": "Set Delivery Date",
+    "modificationHistory": "Modification History"
   },
   "form": {
     "createNewOrder": "Create New Order",
@@ -339,5 +340,26 @@
   "deleteDialog": {
     "title": "Delete Item",
     "description": "Are you sure you want to delete the item \"{{name}}\"? This action cannot be undone."
+  },
+  "modificationHistory": {
+    "title": "Order Modification History",
+    "loading": "Loading modification history...",
+    "noModifications": "No Modifications Yet",
+    "noModificationsDescription": "This order has not been modified yet.",
+    "totalModifications": "Total Modifications",
+    "quantityChanged": "Quantity Changed",
+    "itemAdded": "Item Added",
+    "itemRemoved": "Item Removed",
+    "item": "Item",
+    "product": "Product",
+    "variant": "Variant",
+    "quantity": "Quantity",
+    "oldQuantity": "Old Quantity",
+    "newQuantity": "New Quantity",
+    "unitPrice": "Unit Price",
+    "totalPrice": "Total Price",
+    "removedValue": "Removed Value",
+    "reason": "Reason",
+    "modifiedBy": "Modified by"
   }
 }

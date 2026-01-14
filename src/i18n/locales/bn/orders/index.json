@@ -64,7 +64,8 @@
     "actions": "কার্যক্রম",
     "edit": "সম্পাদনা",
     "pauseOrder": "অর্ডার বন্ধ করুন",
-    "setDeliveryDate": "ডেলিভারির তারিখ নির্ধারণ করুন"
+    "setDeliveryDate": "ডেলিভারির তারিখ নির্ধারণ করুন",
+    "modificationHistory": "পরিবর্তন ইতিহাস"
   },
   "form": {
     "createNewOrder": "নতুন অর্ডার তৈরি করুন",
@@ -337,5 +338,26 @@
   "deleteDialog": {
     "title": "আইটেম মুছুন",
     "description": "আপনি কি নিশ্চিত এই আইটেম \"{{name}}\" মুছতে চান? এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না।"
+  },
+  "modificationHistory": {
+    "title": "অর্ডার পরিবর্তন ইতিহাস",
+    "loading": "পরিবর্তন ইতিহাস লোড হচ্ছে...",
+    "noModifications": "এখনও কোন পরিবর্তন নেই",
+    "noModificationsDescription": "এই অর্ডারটি এখনও পরিবর্তন করা হয়নি।",
+    "totalModifications": "মোট পরিবর্তন",
+    "quantityChanged": "পরিমাণ পরিবর্তিত",
+    "itemAdded": "আইটেম যোগ করা হয়েছে",
+    "itemRemoved": "আইটেম সরানো হয়েছে",
+    "item": "আইটেম",
+    "product": "পণ্য",
+    "variant": "ভেরিয়েন্ট",
+    "quantity": "পরিমাণ",
+    "oldQuantity": "পুরাতন পরিমাণ",
+    "newQuantity": "নতুন পরিমাণ",
+    "unitPrice": "একক মূল্য",
+    "totalPrice": "মোট মূল্য",
+    "removedValue": "সরানো মূল্য",
+    "reason": "কারণ",
+    "modifiedBy": "পরিবর্তন করেছেন"
   }
 }

@@ -34,6 +34,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import PackageOrdersTab from "./tabs/PackageOrdersTab";
 import getSerialNumber from "@/lib/getSerialNumber";
 import Settings from "./tabs/Settings";
+import ModificaitonHistoryModal from "./modal/ModificaitonHisotryModal";
 
 function Orders() {
   const { t } = useTranslation();
@@ -48,6 +49,8 @@ function Orders() {
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
   const [showUpdateDeliveryTimeModal, setShowUpdateDeliveryTimeModal] =
+    useState(false);
+  const [showModificationHistoryModal, setShowModificationHistoryModal] =
     useState(false);
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {
@@ -77,6 +80,11 @@ function Orders() {
   const handleUpdateDeliveryTime = (order: Order) => {
     setSelectedOrder(order);
     setShowUpdateDeliveryTimeModal(true);
+  };
+
+  const handleViewModificationHistory = (order: Order) => {
+    setSelectedOrder(order);
+    setShowModificationHistoryModal(true);
   };
 
   const handleDeleteOrder = async () => {
@@ -139,6 +147,12 @@ function Orders() {
         order.status !== "delivered" &&
         order.status !== "cancelled",
       separator: true, // Show separator after this item
+    },
+    {
+      label: t("orders.actions.modificationHistory"),
+      icon: Clock,
+      onClick: handleViewModificationHistory,
+      show: true,
     },
     {
       label: t("orders.actions.deleteOrder"),
@@ -459,6 +473,12 @@ function Orders() {
         onClose={setShowUpdateDeliveryTimeModal}
         orderId={selectedOrder?.orderId || null}
         onSuccess={() => refreshTable?.()}
+      />
+
+      <ModificaitonHistoryModal
+        open={showModificationHistoryModal}
+        onClose={setShowModificationHistoryModal}
+        orderId={selectedOrder?.id || null}
       />
     </div>
   );
