@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { BaseModal } from "@/components/modals";
+import { BaseModal, DeleteModal } from "@/components/modals";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,7 +15,7 @@ import {
 import { toast } from "sonner";
 import { Order } from "@/stores/orderStore";
 import orderService from "@/services/orderService";
-import { Plus, Trash2 } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import { formatNumberWithCommas, unFormatNumberWithCommas } from "@/lib/utils";
 import BaseSelect from "@/components/custom/BaseSelect";
 import productService from "@/services/productService";
@@ -23,6 +23,7 @@ import productService from "@/services/productService";
 interface FormOrderItem {
   id: string;
   product_id: string;
+  orderId?: string;
   itemType?: string;
   product_name: string;
   quantity: number;
@@ -87,6 +88,17 @@ export default function FormModal({
     delivery_agent_id: "",
     notes: "",
   });
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<FormOrderItem | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [reason, setReason] = useState("");
+  const [showQuantityUpdateModal, setShowQuantityUpdateModal] = useState(false);
+  const [quantityUpdateData, setQuantityUpdateData] = useState<{
+    index: number;
+    newQuantity: number;
+    oldQuantity: number;
+  } | null>(null);
+  const [isUpdatingQuantity, setIsUpdatingQuantity] = useState(false);
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -146,6 +158,7 @@ export default function FormModal({
             unit_price: item.unitPrice,
             total_price: item.itemCost,
             isEnabled: false,
+            orderId: orderData.orderId,
           })),
           subtotal: orderData.receipt.subTotal,
           discount: orderData.receipt.discount,
@@ -201,19 +214,159 @@ export default function FormModal({
     }));
   };
 
-  const handleRemoveItem = (index: number) => {
-    const newItems = formData.items.filter((_, i) => i !== index);
-    const { subtotal, total } = calculateTotals(
-      newItems,
-      formData.discount,
-      formData.delivery_fee
-    );
-    setFormData((prev) => ({
-      ...prev,
-      items: newItems,
-      subtotal,
-      total,
-    }));
+  const handleRemoveItem = (item: FormOrderItem) => {
+    if (item.isEnabled) {
+      // If the item is newly added and not saved yet, just remove it from the form state
+      setFormData((prev) => ({
+        ...prev,
+        items: prev.items.filter((i) => i.id !== item.id),
+      }));
+      return;
+    }
+    setShowDeleteModal(true);
+    setSelectedItem(item);
+    console.log("Selected item for deletion:", item);
+  };
+
+  const handleDeleteOrderItem = async () => {
+    if (!selectedItem) return;
+    if (!selectedItem.product_id || !selectedItem.orderId) {
+      toast.error(t("orders.messages.failedToDeleteItem"));
+      return;
+    }
+    try {
+      setIsDeleting(true);
+      const response = await orderService.removeItemFromOrder(
+        selectedItem.orderId,
+        selectedItem.id,
+        reason
+      );
+      console.log("Delete item response:", response);
+      toast.success(t("orders.messages.itemDeleted"));
+
+      // Refresh order details
+      if (orderId) {
+        const refreshedOrder = await orderService.fetchDetails(orderId);
+        const responseData = refreshedOrder as unknown as Record<
+          string,
+          unknown
+        >;
+        const orderData =
+          (responseData?.order as Order) ||
+          (refreshedOrder as unknown as Order);
+
+        // Update form data with refreshed order
+        setFormData((prev) => ({
+          ...prev,
+          items: orderData.items.map((item: any) => ({
+            id: item.id.toString(),
+            product_id: item.product?.id?.toString() || "",
+            product_name: item.product?.name || "Package",
+            quantity: parseInt(item.quantity) || 1,
+            unit_price: item.unitPrice,
+            total_price: item.itemCost,
+            isEnabled: false,
+            orderId: orderData.orderId,
+          })),
+          subtotal: orderData.receipt.subTotal,
+          discount: orderData.receipt.discount,
+          delivery_fee: orderData.receipt.deliveryCharge,
+          total: orderData.receipt.grandTotal,
+        }));
+      }
+    } catch (error) {
+      console.error("Error deleting order item:", error);
+      toast.error(t("orders.messages.failedToDeleteItem"));
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteModal(false);
+      setSelectedItem(null);
+      setReason("");
+    }
+  };
+
+  const handleConfirmQuantityUpdate = async () => {
+    if (!quantityUpdateData || !reason.trim()) {
+      toast.error("Please provide a reason for the quantity change");
+      return;
+    }
+
+    const item = formData.items[quantityUpdateData.index];
+    if (!item.orderId || !item.id) {
+      toast.error("Invalid item data");
+      return;
+    }
+
+    try {
+      setIsUpdatingQuantity(true);
+      await orderService.updateItemQuantity(
+        item.orderId,
+        item.id,
+        quantityUpdateData.newQuantity,
+        reason
+      );
+
+      toast.success("Item quantity updated successfully");
+
+      // Update local state
+      const newItems = [...formData.items];
+      newItems[quantityUpdateData.index].quantity =
+        quantityUpdateData.newQuantity;
+      newItems[quantityUpdateData.index].total_price =
+        quantityUpdateData.newQuantity *
+        newItems[quantityUpdateData.index].unit_price;
+
+      const { subtotal, total } = calculateTotals(
+        newItems,
+        formData.discount,
+        formData.delivery_fee
+      );
+
+      setFormData((prev) => ({
+        ...prev,
+        items: newItems,
+        subtotal,
+        total,
+      }));
+
+      // Refresh order details to get updated data
+      if (orderId) {
+        const refreshedOrder = await orderService.fetchDetails(orderId);
+        const responseData = refreshedOrder as unknown as Record<
+          string,
+          unknown
+        >;
+        const orderData =
+          (responseData?.order as Order) ||
+          (refreshedOrder as unknown as Order);
+
+        setFormData((prev) => ({
+          ...prev,
+          items: orderData.items.map((item: any) => ({
+            id: item.id.toString(),
+            product_id: item.product?.id?.toString() || "",
+            product_name: item.product?.name || "Package",
+            quantity: parseInt(item.quantity) || 1,
+            unit_price: item.unitPrice,
+            total_price: item.itemCost,
+            isEnabled: false,
+            orderId: orderData.orderId,
+          })),
+          subtotal: orderData.receipt.subTotal,
+          discount: orderData.receipt.discount,
+          delivery_fee: orderData.receipt.deliveryCharge,
+          total: orderData.receipt.grandTotal,
+        }));
+      }
+    } catch (error) {
+      console.error("Error updating quantity:", error);
+      toast.error("Failed to update item quantity");
+    } finally {
+      setIsUpdatingQuantity(false);
+      setShowQuantityUpdateModal(false);
+      setQuantityUpdateData(null);
+      setReason("");
+    }
   };
 
   const handleItemChange = (
@@ -221,6 +374,19 @@ export default function FormModal({
     field: keyof FormOrderItem,
     value: string | number
   ) => {
+    const item = formData.items[index];
+
+    // If changing quantity on an existing item (not newly added), show reason modal
+    if (field === "quantity" && !item.isEnabled && value !== item.quantity) {
+      setQuantityUpdateData({
+        index,
+        newQuantity: Number(value),
+        oldQuantity: item.quantity,
+      });
+      setShowQuantityUpdateModal(true);
+      return;
+    }
+
     const newItems = [...formData.items];
     newItems[index] = { ...newItems[index], [field]: value };
 
@@ -282,7 +448,64 @@ export default function FormModal({
     setIsSubmitting(true);
     try {
       if (isEditing && orderId) {
-        await orderService.updateItem(orderId, formData);
+        // Check if there are new items to add
+        const newItems = formData.items.filter((item) => item.isEnabled);
+
+        if (newItems.length > 0) {
+          // Add new items one by one
+          for (const item of newItems) {
+            if (!item.product_id) {
+              toast.error(`Please select a product for all items`);
+              setIsSubmitting(false);
+              return;
+            }
+
+            await orderService.addItemToOrder(orderId, {
+              itemType: "product",
+              productId: item.product_id,
+              skuId: item.product_id, // You may need to track SKU separately
+              quantity: item.quantity,
+              reason: "Added via admin panel",
+            });
+          }
+
+          toast.success("New items added successfully");
+
+          // Refresh the order
+          const refreshedOrder = await orderService.fetchDetails(orderId);
+          const responseData = refreshedOrder as unknown as Record<
+            string,
+            unknown
+          >;
+          const orderData =
+            (responseData?.order as Order) ||
+            (refreshedOrder as unknown as Order);
+
+          setFormData((prev) => ({
+            ...prev,
+            items: orderData.items.map((item: any) => ({
+              id: item.id.toString(),
+              product_id: item.product?.id?.toString() || "",
+              product_name: item.product?.name || "Package",
+              quantity: parseInt(item.quantity) || 1,
+              unit_price: item.unitPrice,
+              total_price: item.itemCost,
+              isEnabled: false,
+              orderId: orderData.orderId,
+            })),
+            subtotal: orderData.receipt.subTotal,
+            discount: orderData.receipt.discount,
+            delivery_fee: orderData.receipt.deliveryCharge,
+            total: orderData.receipt.grandTotal,
+          }));
+        }
+
+        // Update other order details if needed
+        await orderService.updateItem(orderId, {
+          status: formData.status,
+          notes: formData.notes,
+        });
+
         toast.success(t("orders.messages.orderUpdated"));
       } else {
         await orderService.storeItem(formData);
@@ -310,11 +533,12 @@ export default function FormModal({
       title={
         isEditing ? t("orders.form.editOrder") : t("orders.form.createNewOrder")
       }
-      onSubmit={handleSubmit}
-      isSubmitting={isSubmitting || isLoading}
-      submitButtonText={
-        isEditing ? t("orders.form.updateOrder") : t("orders.form.createOrder")
-      }
+      showSubmitButton={false}
+      // onSubmit={handleSubmit}
+      // isSubmitting={isSubmitting || isLoading}
+      // submitButtonText={
+      //   isEditing ? t("orders.form.updateOrder") : t("orders.form.createOrder")
+      // }
       size="4xl"
     >
       {isLoading ? (
@@ -508,17 +732,15 @@ export default function FormModal({
                   </div>
 
                   <div className="col-span-1 flex justify-end">
-                    {!isEditing && (
-                      <Button
-                        type="button"
-                        onClick={() => handleRemoveItem(index)}
-                        size="icon"
-                        variant="ghost"
-                        className="text-destructive"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    )}
+                    <Button
+                      type="button"
+                      onClick={() => handleRemoveItem(item)}
+                      size="icon"
+                      variant="ghost"
+                      className="text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
               ))}
@@ -580,137 +802,112 @@ export default function FormModal({
               </div>
             </div>
           </div>
+        </div>
+      )}
 
-          {/* Order Details */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="payment_method">
-                {t("orders.form.paymentMethod")}
-              </Label>
-              <Select
-                value={formData.payment_method}
-                onValueChange={(value: "cash" | "online" | "card") =>
-                  setFormData({ ...formData, payment_method: value })
-                }
-                disabled={isEditing}
-              >
-                <SelectTrigger>
-                  <SelectValue
-                    placeholder={t("orders.form.selectPaymentMethod")}
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="cash">
-                    {t("orders.paymentMethod.cash")}
-                  </SelectItem>
-                  <SelectItem value="online">
-                    {t("orders.paymentMethod.online")}
-                  </SelectItem>
-                  <SelectItem value="card">
-                    {t("orders.paymentMethod.card")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+      <DeleteModal
+        open={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        title={t("orders.deleteDialog.title")}
+        description={t("orders.deleteDialog.description", {
+          name: selectedItem?.product_name || "",
+        })}
+        onConfirm={handleDeleteOrderItem}
+        isDeleting={isDeleting}
+      >
+        <div className="space-y-2">
+          <Label htmlFor="reason">{t("orders.form.deletionReason")} *</Label>
+          <Textarea
+            id="reason"
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            placeholder={t("orders.form.deletionReasonPlaceholder")}
+            rows={3}
+            required
+          />
+        </div>
+      </DeleteModal>
+
+      <BaseModal
+        open={showQuantityUpdateModal}
+        onOpenChange={() => {
+          setShowQuantityUpdateModal(false);
+          setQuantityUpdateData(null);
+          setReason("");
+        }}
+        title="Update Item Quantity"
+        onSubmit={handleConfirmQuantityUpdate}
+        isSubmitting={isUpdatingQuantity}
+        submitButtonText="Update Quantity"
+      >
+        <div className="space-y-4">
+          <div className="bg-muted p-4 rounded-lg space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">Current Quantity:</span>
+              <span className="text-lg font-semibold">
+                {quantityUpdateData?.oldQuantity}
+              </span>
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="payment_status">
-                {t("orders.form.paymentStatus")}
-              </Label>
-              <Select
-                value={formData.payment_status}
-                onValueChange={(
-                  value: "pending" | "paid" | "failed" | "refunded"
-                ) => setFormData({ ...formData, payment_status: value })}
-                disabled={isEditing}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="pending">
-                    {t("orders.paymentStatus.pending")}
-                  </SelectItem>
-                  <SelectItem value="paid">
-                    {t("orders.paymentStatus.paid")}
-                  </SelectItem>
-                  <SelectItem value="failed">
-                    {t("orders.paymentStatus.failed")}
-                  </SelectItem>
-                  <SelectItem value="refunded">
-                    {t("orders.paymentStatus.refunded")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="status">{t("orders.form.orderStatus")}</Label>
-              <Select
-                value={formData.status}
-                onValueChange={(value: Order["status"]) =>
-                  setFormData({ ...formData, status: value })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="pending">
-                    {t("orders.status.pending")}
-                  </SelectItem>
-                  <SelectItem value="confirmed">
-                    {t("orders.status.confirmed")}
-                  </SelectItem>
-                  <SelectItem value="processing">
-                    {t("orders.status.processing")}
-                  </SelectItem>
-                  <SelectItem value="in-transit">
-                    {t("orders.status.inTransit")}
-                  </SelectItem>
-                  <SelectItem value="delivered">
-                    {t("orders.status.delivered")}
-                  </SelectItem>
-                  <SelectItem value="cancelled">
-                    {t("orders.status.cancelled")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="delivery_agent_id">
-                {t("orders.form.deliveryAgent")}
-              </Label>
-              <Input
-                id="delivery_agent_id"
-                value={formData.delivery_agent_id}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    delivery_agent_id: e.target.value,
-                  })
-                }
-                placeholder={t("orders.form.selectAgent")}
-              />
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">New Quantity:</span>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={() => {
+                    if (
+                      quantityUpdateData &&
+                      quantityUpdateData.newQuantity > 1
+                    ) {
+                      setQuantityUpdateData({
+                        ...quantityUpdateData,
+                        newQuantity: quantityUpdateData.newQuantity - 1,
+                      });
+                    }
+                  }}
+                  disabled={quantityUpdateData?.newQuantity === 1}
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <span className="text-lg font-bold min-w-[3rem] text-center">
+                  {quantityUpdateData?.newQuantity}
+                </span>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={() => {
+                    if (quantityUpdateData) {
+                      setQuantityUpdateData({
+                        ...quantityUpdateData,
+                        newQuantity: quantityUpdateData.newQuantity + 1,
+                      });
+                    }
+                  }}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
-
-          {/* Notes */}
           <div className="space-y-2">
-            <Label htmlFor="notes">{t("orders.form.notes")}</Label>
+            <Label htmlFor="update-reason">
+              Reason for quantity change <span className="text-red-500">*</span>
+            </Label>
             <Textarea
-              id="notes"
-              value={formData.notes}
-              onChange={(e) =>
-                setFormData({ ...formData, notes: e.target.value })
-              }
-              placeholder={t("orders.form.notesPlaceholder")}
+              id="update-reason"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder="e.g., Customer increased quantity via phone"
               rows={3}
+              required
             />
           </div>
         </div>
-      )}
+      </BaseModal>
     </BaseModal>
   );
 }

@@ -102,7 +102,9 @@
     "notes": "Order Notes",
     "notesPlaceholder": "Add any special instructions or notes",
     "updateOrder": "Update Order",
-    "createOrder": "Create Order"
+    "createOrder": "Create Order",
+    "deletionReasonPlaceholder": "Enter reason for deleting this item",
+    "deletionReason": "Reason for Deletion"
   },
   "updateStatus": {
     "title": "Update Order Status",
@@ -136,6 +138,7 @@
   },
   "messages": {
     "fillRequiredFields": "Please fill in all required fields",
+    "itemDeleted": "Item deleted successfully",
     "addAtLeastOneItem": "Please add at least one item to the order",
     "orderCreated": "Order created successfully",
     "orderUpdated": "Order updated successfully",
@@ -156,7 +159,8 @@
     "failedToFetchFiltered": "Failed to fetch filtered orders",
     "filtersApplied": "Filters applied successfully",
     "filtersCleared": "Filters cleared",
-    "markedAsPaid": "Order marked as paid successfully"
+    "markedAsPaid": "Order marked as paid successfully",
+    "failedToDeleteItem": "Failed to delete order item"
   },
   "delete": {
     "title": "Delete Order",
@@ -331,5 +335,9 @@
         }
       }
     }
+  },
+  "deleteDialog": {
+    "title": "Delete Item",
+    "description": "Are you sure you want to delete the item \"{{name}}\"? This action cannot be undone."
   }
 }

@@ -174,7 +174,7 @@ const orderService: OrderService = {
     reason: string
   ) => {
     try {
-      const response = await apiClient.patch(
+      const response = await apiClient.put(
         apiRoutes.orders.updateItemQuantity(orderId, itemId),
         {
           quantity,
