@@ -22,11 +22,11 @@ import { DeleteModal } from "@/components/modals";
 import noProductImage from "@/assets/images/no_product_image.png";
 import { useSidebarStore } from "@/stores/sidebarStore";
 import { Pagination } from "@/components/table/Pagination";
-import ShareButton from "@/components/custom/ShareButton";
 import { formatNumberWithCommas } from "@/lib/utils";
 import { withPermission } from "@/hoc/withPermission";
 import permissions from "@/lib/permissions";
 import usePermissions from "@/hooks/use-permissions";
+import { FilterDrawer } from "@/components/custom/FilterDrawer";
 
 const Products = () => {
   const { t } = useTranslation();
@@ -45,6 +45,7 @@ const Products = () => {
   const currentPage = store.pagination?.current_page || 1;
   const perPage = store.pagination?.per_page || 20;
   const { isCollapsed } = useSidebarStore();
+  const [localFilters, setLocalFilters] = useState<Record<string, string>>({});
 
   const handleSkuSelect = (productId: string | number, skuId: number) => {
     setSelectedSkus((prev) => ({
@@ -59,6 +60,10 @@ const Products = () => {
   const isLoading = store.isLoading || false;
   const [hasInitialFetch, setHasInitialFetch] = useState(false);
   const [isFirstRender, setIsFirstRender] = useState(true);
+  const [shouldAutoRefresh, setShouldAutoRefresh] = useState(false);
+
+  // Serialize filters to detect changes
+  const filterValues = Object.values(localFilters).join(",");
 
   const fetchProducts = useCallback(
     async (forceFetch = false) => {
@@ -80,6 +85,17 @@ const Products = () => {
         }
         params.append("page", currentPage.toString());
         params.append("per_page", perPage.toString());
+
+        // Add filter params
+        if (filters) {
+          filters.forEach((filter) => {
+            const filterValue = localFilters[filter.value];
+            if (filterValue) {
+              params.append(filter.value, filterValue);
+            }
+          });
+        }
+
         await productService.fetchLists(params.toString());
         if (!hasInitialFetch) {
           setHasInitialFetch(true);
@@ -98,6 +114,7 @@ const Products = () => {
       products.length,
       perPage,
       currentPage,
+      filterValues,
     ]
   );
 
@@ -134,7 +151,7 @@ const Products = () => {
     if (isFirstRender) return; // Skip on first render
     fetchProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, perPage]);
+  }, [filterValues, currentPage, perPage]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -168,6 +185,83 @@ const Products = () => {
       toast.error("Failed to delete product");
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  const filters = [
+    {
+      label: t("products.filter.badge"),
+      value: "badge",
+      options: [
+        { value: "best_selling", label: "Best Selling" },
+        { value: "new_arrival", label: "New Arrival" },
+        { value: "hot_deal", label: "Hot Deal" },
+        { value: "organic", label: "Organic" },
+        { value: "limited_stock", label: "Limited Stock" },
+        { value: "flash_sale", label: "Flash Sale" },
+        { value: "halal_certified", label: "Halal Certified" },
+      ],
+      placeholder: t("products.filter.selectBadge"),
+    },
+    {
+      label: t("products.filter.isFeatured"),
+      value: "isFeatured",
+      options: [
+        { value: "true", label: "Yes" },
+        { value: "false", label: "No" },
+      ],
+      placeholder: t("products.filter.selectFeatured"),
+    },
+  ];
+
+  // Check if any filters are active
+  const hasActiveFilters = Object.values(localFilters).some(
+    (value) => value && value !== ""
+  );
+
+  // Get filter label by value
+  const getFilterLabel = (filterValue: string, selectedValue: string) => {
+    const filter = filters?.find((f) => f.value === filterValue);
+    const option = filter?.options.find((opt) => opt.value === selectedValue);
+    return {
+      filterLabel: filter?.label || filterValue,
+      optionLabel: option?.label || selectedValue,
+    };
+  };
+
+  // Handle apply filters
+  const handleApplyFilters = (newFilters: Record<string, string>) => {
+    setLocalFilters(newFilters);
+
+    // Auto-generate report if data already exists
+    if (products.length > 0) {
+      setShouldAutoRefresh(true);
+    } else {
+      toast.success("Filters applied successfully");
+    }
+  };
+
+  // Handle reset filters
+  const handleResetFilters = () => {
+    setLocalFilters({});
+
+    // Auto-generate report if data already exists
+    if (products.length > 0) {
+      setShouldAutoRefresh(true);
+    } else {
+      toast.success("Filters reset successfully");
+    }
+  };
+
+  // Remove individual filter
+  const handleRemoveFilter = (filterKey: string) => {
+    const newFilters = { ...localFilters };
+    delete newFilters[filterKey];
+    setLocalFilters(newFilters);
+
+    // Auto-refresh if data exists
+    if (products.length > 0) {
+      setShouldAutoRefresh(true);
     }
   };
 
@@ -205,6 +299,14 @@ const Products = () => {
                   </Button>
                 )}
               </div>
+              {/* Filter Drawer */}
+              <FilterDrawer
+                filters={filters}
+                localFilters={localFilters}
+                onApplyFilters={handleApplyFilters}
+                onResetFilters={handleResetFilters}
+                onRemoveFilter={handleRemoveFilter}
+              />
               <Button
                 variant="outline"
                 onClick={handleRefresh}
@@ -227,6 +329,34 @@ const Products = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Active Filters Display */}
+      {hasActiveFilters && (
+        <div className="flex flex-wrap mb-3 gap-2 items-center w-full">
+          <span className="text-sm text-muted-foreground">
+            {t("reports.filters.activeFilters")}:
+          </span>
+          {Object.entries(localFilters).map(([key, value]) => {
+            if (!value) return null;
+            const { filterLabel, optionLabel } = getFilterLabel(key, value);
+            return (
+              <Badge key={key} variant="secondary" className="gap-1 pr-1">
+                <span className="text-xs">
+                  {filterLabel}: {optionLabel}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-4 w-4 p-0 hover:bg-transparent"
+                  onClick={() => handleRemoveFilter(key)}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </Badge>
+            );
+          })}
+        </div>
+      )}
 
       {/* Products Grid */}
       <div>

@@ -84,6 +84,12 @@
       "halal_certified": "হালাল সার্টিফাইড"
     }
   },
+  "filter": {
+    "badge": "ব্যাজ",
+    "selectBadge": "ব্যাজ নির্বাচন করুন",
+    "isFeatured": "ফিচারড পণ্য",
+    "selectFeatured": "ফিচারড পণ্য নির্বাচন করুন"
+  },
   "view": {
     "productImage": "পণ্যের ছবি",
     "status": "স্ট্যাটাস",

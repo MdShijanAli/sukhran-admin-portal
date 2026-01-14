@@ -18,6 +18,12 @@
     "inactive": "Inactive",
     "featured": "Featured"
   },
+  "filter": {
+    "badge": "Badge",
+    "selectBadge": "Select Badge",
+    "isFeatured": "Featured Product",
+    "selectFeatured": "Select Featured Product"
+  },
   "form": {
     "productInfo": "Product Information",
     "productDetails": "Enter product details",
