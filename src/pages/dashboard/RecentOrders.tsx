@@ -73,7 +73,7 @@ export default function RecentOrders({
       {
         key: "created_at",
         label: t("dashboard.recentOrders.date"),
-        className: "w-[100px]",
+        className: "w-[120px]",
       },
     ];
   }, [t]);

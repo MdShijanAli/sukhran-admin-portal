@@ -61,7 +61,7 @@ export default function RecentTransactions({
       {
         key: "created_at",
         label: t("dashboard.recentTransactions.date"),
-        className: "w-[100px]",
+        className: "w-[120px]",
       },
     ];
   }, [t]);
