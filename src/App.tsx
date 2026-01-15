@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from "react";
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner, toast } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,7 +9,6 @@ import { useAuthStore } from "@/stores/authStore";
 import AppRoutes from "@/routes/index.tsx";
 import "@/i18n/config";
 import authService from "./services/authService";
-import LoadingSpinner from "./components/custom/LoadingSpinner";
 
 const queryClient = new QueryClient();
 
@@ -48,15 +47,7 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Suspense
-            fallback={
-              <div>
-                <LoadingSpinner />
-              </div>
-            }
-          >
-            <AppRoutes />
-          </Suspense>
+          <AppRoutes />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

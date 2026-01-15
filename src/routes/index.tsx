@@ -1,8 +1,9 @@
-import React, { lazy } from "react";
+import React, { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import MainLayout from "@/components/layout/MainLayout";
+import SuspenseWrapper from "@/components/custom/SuspenseWrapper";
 
 // Auth
 const Login = lazy(() => import("@/pages/auth/Login"));
@@ -23,7 +24,9 @@ const ProductViewDetails = lazy(() => import("@/pages/products/ViewDetails"));
 const Packages = lazy(() => import("@/pages/package/Packages"));
 const PackageForm = lazy(() => import("@/pages/package/PackageForm"));
 const PackageDetails = lazy(() => import("@/pages/package/PackageDetails"));
-const PackageSettings = lazy(() => import("@/pages/package/settings/PackageSettings"));
+const PackageSettings = lazy(
+  () => import("@/pages/package/settings/PackageSettings")
+);
 
 // Other Pages
 const Profile = lazy(() => import("@/pages/profile/Profile"));
@@ -37,7 +40,9 @@ const Returns = lazy(() => import("@/pages/Returns"));
 const RoleManagement = lazy(() => import("@/pages/roles/RoleManagement"));
 const Notifications = lazy(() => import("@/pages/notifications/Notifications"));
 const Settings = lazy(() => import("@/pages/settings/Settings"));
-const CoinManagement = lazy(() => import("@/pages/coin-management/CoinManagement"));
+const CoinManagement = lazy(
+  () => import("@/pages/coin-management/CoinManagement")
+);
 const Family = lazy(() => import("@/pages/Family"));
 const Analytics = lazy(() => import("@/pages/Analytics"));
 const Marketing = lazy(() => import("@/pages/Marketing"));
@@ -49,14 +54,28 @@ const Referrals = lazy(() => import("@/pages/referrals/Referrals"));
 const Brands = lazy(() => import("@/pages/brands/Brands"));
 
 // Reports
-const TransactionReport = lazy(() => import("@/pages/reports/reports/TransactionReport"));
-const PackageSalesReport = lazy(() => import("@/pages/reports/reports/PackageSalesReport"));
-const PackageOrdersReport = lazy(() => import("@/pages/reports/reports/PackageOrdersReport"));
-const RegularSalesReport = lazy(() => import("@/pages/reports/reports/RegularSalesReport"));
-const RegularOrdersReport = lazy(() => import("@/pages/reports/reports/RegularOrdersReport"));
-const DonationReport = lazy(() => import("@/pages/reports/reports/DonationReport"));
+const TransactionReport = lazy(
+  () => import("@/pages/reports/reports/TransactionReport")
+);
+const PackageSalesReport = lazy(
+  () => import("@/pages/reports/reports/PackageSalesReport")
+);
+const PackageOrdersReport = lazy(
+  () => import("@/pages/reports/reports/PackageOrdersReport")
+);
+const RegularSalesReport = lazy(
+  () => import("@/pages/reports/reports/RegularSalesReport")
+);
+const RegularOrdersReport = lazy(
+  () => import("@/pages/reports/reports/RegularOrdersReport")
+);
+const DonationReport = lazy(
+  () => import("@/pages/reports/reports/DonationReport")
+);
 const CoinReport = lazy(() => import("@/pages/reports/reports/CoinReport"));
-const ReferralReport = lazy(() => import("@/pages/reports/reports/ReferralsReport"));
+const ReferralReport = lazy(
+  () => import("@/pages/reports/reports/ReferralsReport")
+);
 
 const AppRoutes: React.FC = () => {
   return (
@@ -65,7 +84,9 @@ const AppRoutes: React.FC = () => {
         path="/login"
         element={
           <PublicRoute>
-            <Login />
+            <SuspenseWrapper>
+              <Login />
+            </SuspenseWrapper>
           </PublicRoute>
         }
       />
@@ -73,7 +94,9 @@ const AppRoutes: React.FC = () => {
         path="/forgot-password"
         element={
           <PublicRoute>
-            <ForgotPassword />
+            <SuspenseWrapper>
+              <ForgotPassword />
+            </SuspenseWrapper>
           </PublicRoute>
         }
       />
@@ -89,7 +112,9 @@ const AppRoutes: React.FC = () => {
           path="dashboard"
           element={
             <PrivateRoute>
-              <Dashboard />
+              <SuspenseWrapper>
+                <Dashboard />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -97,7 +122,9 @@ const AppRoutes: React.FC = () => {
           path="users"
           element={
             <PrivateRoute>
-              <Users />
+              <SuspenseWrapper>
+                <Users />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -105,7 +132,9 @@ const AppRoutes: React.FC = () => {
           path="orders"
           element={
             <PrivateRoute>
-              <Orders />
+              <SuspenseWrapper>
+                <Orders />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -113,7 +142,9 @@ const AppRoutes: React.FC = () => {
           path="products"
           element={
             <PrivateRoute>
-              <Products />
+              <SuspenseWrapper>
+                <Products />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -121,7 +152,9 @@ const AppRoutes: React.FC = () => {
           path="brands"
           element={
             <PrivateRoute>
-              <Brands />
+              <SuspenseWrapper>
+                <Brands />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -129,7 +162,9 @@ const AppRoutes: React.FC = () => {
           path="categories"
           element={
             <PrivateRoute>
-              <Categories />
+              <SuspenseWrapper>
+                <Categories />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -137,7 +172,9 @@ const AppRoutes: React.FC = () => {
           path="products/create"
           element={
             <PrivateRoute>
-              <ProductForm />
+              <SuspenseWrapper>
+                <ProductForm />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -145,7 +182,9 @@ const AppRoutes: React.FC = () => {
           path="products/edit/:id"
           element={
             <PrivateRoute>
-              <ProductForm />
+              <SuspenseWrapper>
+                <ProductForm />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -153,7 +192,9 @@ const AppRoutes: React.FC = () => {
           path="products/view/:id"
           element={
             <PrivateRoute>
-              <ProductViewDetails />
+              <SuspenseWrapper>
+                <ProductViewDetails />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -161,7 +202,9 @@ const AppRoutes: React.FC = () => {
           path="packages"
           element={
             <PrivateRoute>
-              <Packages />
+              <SuspenseWrapper>
+                <Packages />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -169,7 +212,9 @@ const AppRoutes: React.FC = () => {
           path="packages/create"
           element={
             <PrivateRoute>
-              <PackageForm />
+              <SuspenseWrapper>
+                <PackageForm />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -177,7 +222,9 @@ const AppRoutes: React.FC = () => {
           path="packages/edit/:id"
           element={
             <PrivateRoute>
-              <PackageForm />
+              <SuspenseWrapper>
+                <PackageForm />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -185,7 +232,9 @@ const AppRoutes: React.FC = () => {
           path="packages/view/:id"
           element={
             <PrivateRoute>
-              <PackageDetails />
+              <SuspenseWrapper>
+                <PackageDetails />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -193,7 +242,9 @@ const AppRoutes: React.FC = () => {
           path="package/settings"
           element={
             <PrivateRoute>
-              <PackageSettings />
+              <SuspenseWrapper>
+                <PackageSettings />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -201,7 +252,9 @@ const AppRoutes: React.FC = () => {
           path="coverage-areas"
           element={
             <PrivateRoute>
-              <CoverageAreas />
+              <SuspenseWrapper>
+                <CoverageAreas />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -210,7 +263,9 @@ const AppRoutes: React.FC = () => {
           path="content-management"
           element={
             <PrivateRoute>
-              <ContentManagement />
+              <SuspenseWrapper>
+                <ContentManagement />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -219,7 +274,9 @@ const AppRoutes: React.FC = () => {
           path="profile"
           element={
             <PrivateRoute>
-              <Profile />
+              <SuspenseWrapper>
+                <Profile />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -227,7 +284,9 @@ const AppRoutes: React.FC = () => {
           path="reports"
           element={
             <PrivateRoute>
-              <Reports />
+              <SuspenseWrapper>
+                <Reports />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -235,7 +294,9 @@ const AppRoutes: React.FC = () => {
           path="delivery"
           element={
             <PrivateRoute>
-              <Delivery />
+              <SuspenseWrapper>
+                <Delivery />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -243,7 +304,9 @@ const AppRoutes: React.FC = () => {
           path="transactions"
           element={
             <PrivateRoute>
-              <Transactions />
+              <SuspenseWrapper>
+                <Transactions />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -251,7 +314,9 @@ const AppRoutes: React.FC = () => {
           path="support"
           element={
             <PrivateRoute>
-              <Support />
+              <SuspenseWrapper>
+                <Support />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -259,7 +324,9 @@ const AppRoutes: React.FC = () => {
           path="support/create-ticket"
           element={
             <PrivateRoute>
-              <CreateSupport />
+              <SuspenseWrapper>
+                <CreateSupport />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -267,7 +334,9 @@ const AppRoutes: React.FC = () => {
           path="coupons"
           element={
             <PrivateRoute>
-              <Coupons />
+              <SuspenseWrapper>
+                <Coupons />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -275,7 +344,9 @@ const AppRoutes: React.FC = () => {
           path="returns"
           element={
             <PrivateRoute>
-              <Returns />
+              <SuspenseWrapper>
+                <Returns />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -283,7 +354,9 @@ const AppRoutes: React.FC = () => {
           path="coin-management"
           element={
             <PrivateRoute>
-              <CoinManagement />
+              <SuspenseWrapper>
+                <CoinManagement />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -291,7 +364,9 @@ const AppRoutes: React.FC = () => {
           path="family"
           element={
             <PrivateRoute>
-              <Family />
+              <SuspenseWrapper>
+                <Family />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -299,7 +374,9 @@ const AppRoutes: React.FC = () => {
           path="analytics"
           element={
             <PrivateRoute>
-              <Analytics />
+              <SuspenseWrapper>
+                <Analytics />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -307,7 +384,9 @@ const AppRoutes: React.FC = () => {
           path="marketing"
           element={
             <PrivateRoute>
-              <Marketing />
+              <SuspenseWrapper>
+                <Marketing />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -315,7 +394,9 @@ const AppRoutes: React.FC = () => {
           path="role-management"
           element={
             <PrivateRoute>
-              <RoleManagement />
+              <SuspenseWrapper>
+                <RoleManagement />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -323,7 +404,9 @@ const AppRoutes: React.FC = () => {
           path="donations"
           element={
             <PrivateRoute>
-              <Donations />
+              <SuspenseWrapper>
+                <Donations />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -331,7 +414,9 @@ const AppRoutes: React.FC = () => {
           path="referrals"
           element={
             <PrivateRoute>
-              <Referrals />
+              <SuspenseWrapper>
+                <Referrals />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -339,7 +424,9 @@ const AppRoutes: React.FC = () => {
           path="notification-settings"
           element={
             <PrivateRoute>
-              <Notifications />
+              <SuspenseWrapper>
+                <Notifications />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -347,7 +434,9 @@ const AppRoutes: React.FC = () => {
           path="settings"
           element={
             <PrivateRoute>
-              <Settings />
+              <SuspenseWrapper>
+                <Settings />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -357,7 +446,9 @@ const AppRoutes: React.FC = () => {
           path="reports/transactions"
           element={
             <PrivateRoute>
-              <TransactionReport />
+              <SuspenseWrapper>
+                <TransactionReport />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -365,7 +456,9 @@ const AppRoutes: React.FC = () => {
           path="reports/donations"
           element={
             <PrivateRoute>
-              <DonationReport />
+              <SuspenseWrapper>
+                <DonationReport />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -373,7 +466,9 @@ const AppRoutes: React.FC = () => {
           path="reports/coins"
           element={
             <PrivateRoute>
-              <CoinReport />
+              <SuspenseWrapper>
+                <CoinReport />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -381,7 +476,9 @@ const AppRoutes: React.FC = () => {
           path="reports/referrals"
           element={
             <PrivateRoute>
-              <ReferralReport />
+              <SuspenseWrapper>
+                <ReferralReport />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -389,7 +486,9 @@ const AppRoutes: React.FC = () => {
           path="reports/package-sales"
           element={
             <PrivateRoute>
-              <PackageSalesReport />
+              <SuspenseWrapper>
+                <PackageSalesReport />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -397,7 +496,9 @@ const AppRoutes: React.FC = () => {
           path="reports/package-orders"
           element={
             <PrivateRoute>
-              <PackageOrdersReport />
+              <SuspenseWrapper>
+                <PackageOrdersReport />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -405,7 +506,9 @@ const AppRoutes: React.FC = () => {
           path="reports/regular-sales"
           element={
             <PrivateRoute>
-              <RegularSalesReport />
+              <SuspenseWrapper>
+                <RegularSalesReport />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
@@ -413,7 +516,9 @@ const AppRoutes: React.FC = () => {
           path="reports/regular-orders"
           element={
             <PrivateRoute>
-              <RegularOrdersReport />
+              <SuspenseWrapper>
+                <RegularOrdersReport />
+              </SuspenseWrapper>
             </PrivateRoute>
           }
         />
