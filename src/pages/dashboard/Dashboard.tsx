@@ -95,6 +95,12 @@ export interface RecentTransactionsData {
   created_at: string;
 }
 
+interface Online {
+  count: number;
+  amount: number;
+  percentage: number;
+}
+
 interface DashboardData {
   core_metrics: CoreMetrics;
   charts: {
@@ -125,6 +131,12 @@ interface DashboardData {
   };
   recent_orders: RecentOrdersData[];
   recent_transactions: RecentTransactionsData[];
+  payment_analytics: {
+    payment_mode_breakdown: {
+      online: Online;
+      cod: Online;
+    };
+  };
 }
 
 export default function Dashboard() {
@@ -181,6 +193,17 @@ export default function Dashboard() {
   const recentTransactions = useMemo<RecentTransactionsData[]>(() => {
     if (!dashboardData?.recent_transactions) return [];
     return dashboardData.recent_transactions;
+  }, [dashboardData]);
+  const paymentAnalyticsStats = useMemo<{
+    online: Online;
+    cod: Online;
+  }>(() => {
+    if (!dashboardData?.payment_analytics?.payment_mode_breakdown)
+      return {
+        online: { count: 0, amount: 0, percentage: 0 },
+        cod: { count: 0, amount: 0, percentage: 0 },
+      };
+    return dashboardData.payment_analytics.payment_mode_breakdown;
   }, [dashboardData]);
 
   const orderStatusDistribution = useMemo<OrderStat[]>(() => {
@@ -368,59 +391,15 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* Alert Cards */}
-      <div className="grid gap-4 md:grid-cols-2">
-        {isLoading ? (
-          <>
-            <AlertCardSkeleton />
-            <AlertCardSkeleton />
-          </>
-        ) : (
-          <>
-            <Card className="border-warning/50 bg-warning/5 shadow-card">
-              <CardHeader className="flex flex-row items-center gap-2">
-                <AlertCircle className="h-5 w-5 text-warning" />
-                <CardTitle className="text-base">
-                  {t("dashboard.pendingDeliveries")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-2xl font-bold">
-                  {dashboardStats.pendingDeliveries.count}
-                </p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {t("dashboard.pendingDeliveriesDescription")}
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-destructive/50 bg-destructive/5 shadow-card">
-              <CardHeader className="flex flex-row items-center gap-2">
-                <AlertCircle className="h-5 w-5 text-destructive" />
-                <CardTitle className="text-base">
-                  {t("dashboard.paymentFailures")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-2xl font-bold">
-                  {dashboardStats.paymentFailures.count}
-                </p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {t("dashboard.paymentFailuresDescription")}
-                </p>
-              </CardContent>
-            </Card>
-          </>
-        )}
-      </div>
-
       <div className="grid grid-cols-4 gap-3">
-        <div className="col-span-3">
+        <div className="col-span-3 border rounded-md p-2">
           <Tabs defaultValue="orders">
             <TabsList>
-              <TabsTrigger value="orders">Recent Orders</TabsTrigger>
+              <TabsTrigger value="orders">
+                {t("dashboard.recentOrders.title")}
+              </TabsTrigger>
               <TabsTrigger value="transactions">
-                Recent Transactions
+                {t("dashboard.recentTransactions.title")}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="orders">
@@ -436,20 +415,32 @@ export default function Dashboard() {
         </div>
         <div>
           <div className="grid gap-4 grid-cols-1">
-            {isLoading
-              ? Array.from({ length: 5 }).map((_, i) => (
-                  <StatCardSkeleton key={i} />
-                ))
-              : dashboardStatsItems.map((stat, index) => (
-                  <StatCard
-                    key={index}
-                    title={stat.title}
-                    value={stat.value}
-                    change={stat.change}
-                    icon={stat.icon}
-                    trend={stat.trend}
-                  />
-                ))}
+            {isLoading ? (
+              Array.from({ length: 3 }).map((_, i) => (
+                <StatCardSkeleton key={i} />
+              ))
+            ) : (
+              <>
+                <StatCard
+                  icon={DollarSign}
+                  title={t("dashboard.onlinePayments")}
+                  value={`৳${paymentAnalyticsStats.online.amount.toLocaleString()}`}
+                  change={paymentAnalyticsStats.online.percentage}
+                  trend={
+                    paymentAnalyticsStats.online.percentage > 0 ? "up" : "down"
+                  }
+                />
+                <StatCard
+                  icon={DollarSign}
+                  title={t("dashboard.codPayments")}
+                  value={`৳${paymentAnalyticsStats.cod.amount.toLocaleString()}`}
+                  change={paymentAnalyticsStats.cod.percentage}
+                  trend={
+                    paymentAnalyticsStats.cod.percentage > 0 ? "up" : "down"
+                  }
+                />
+              </>
+            )}
           </div>
         </div>
       </div>

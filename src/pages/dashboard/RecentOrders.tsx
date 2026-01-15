@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import constData from "@/lib/constData";
 import { StatusVariant } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export default function RecentOrders({
   data,
@@ -12,26 +13,27 @@ export default function RecentOrders({
   data: RecentOrdersData[];
   isLoading?: boolean;
 }) {
+  const { t } = useTranslation();
   const columns = useMemo<Column<RecentOrdersData>[]>(() => {
     return [
       {
         key: "orderId",
-        label: "Order ID",
+        label: t("dashboard.recentOrders.orderId"),
         render: (item) => item.orderId,
       },
       {
         key: "name",
-        label: "Customer Name",
+        label: t("dashboard.recentOrders.customerName"),
         render: (item) => item.customer.name,
       },
       {
         key: "amount",
-        label: "Amount",
+        label: t("dashboard.recentOrders.amount"),
         render: (item) => `৳${item.amount.toFixed(2)}`,
       },
       {
         key: "payment_mode",
-        label: "Payment Method",
+        label: t("dashboard.recentOrders.paymentMethod"),
         render: (item) => (
           <Badge className={StatusVariant(item.payment_mode)}>
             {item.payment_mode.charAt(0).toUpperCase() +
@@ -41,7 +43,7 @@ export default function RecentOrders({
       },
       {
         key: "payment_status",
-        label: "Payment Status",
+        label: t("dashboard.recentOrders.paymentStatus"),
         render: (item) => (
           <Badge className={StatusVariant(item.payment_status)}>
             {item.payment_status.charAt(0).toUpperCase() +
@@ -51,7 +53,7 @@ export default function RecentOrders({
       },
       {
         key: "order_status",
-        label: "Order Status",
+        label: t("dashboard.recentOrders.orderStatus"),
         render: (item) => (
           <Badge className={StatusVariant(item.order_status)}>
             {item.order_status.charAt(0).toUpperCase() +
@@ -61,7 +63,7 @@ export default function RecentOrders({
       },
       {
         key: "type",
-        label: "Type",
+        label: t("dashboard.recentOrders.type"),
         render: (item) => (
           <Badge variant={`${item.type === "Package" ? "primary" : "outline"}`}>
             {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
@@ -70,21 +72,19 @@ export default function RecentOrders({
       },
       {
         key: "created_at",
-        label: "Date",
+        label: t("dashboard.recentOrders.date"),
         className: "w-[100px]",
       },
     ];
-  }, []);
+  }, [t]);
   return (
-    <div className="overflow-x-auto">
+    <div className="h-[400px] overflow-y-auto">
       <BaseTable<RecentOrdersData>
         columns={columns}
         data={data?.slice(0, 10) || []}
         isLoading={isLoading}
         getRowKey={(item) => item.orderId}
-        rowClassName={() =>
-          "hover:bg-primary/5 transition-colors w-[1500px] overflow-x-auto"
-        }
+        rowClassName={() => "hover:bg-primary/5 transition-colors"}
       />
     </div>
   );

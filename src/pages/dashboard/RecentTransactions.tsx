@@ -3,6 +3,7 @@ import { RecentTransactionsData } from "./Dashboard";
 import { useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { StatusVariant } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export default function RecentTransactions({
   data,
@@ -11,26 +12,27 @@ export default function RecentTransactions({
   data: RecentTransactionsData[];
   isLoading?: boolean;
 }) {
+  const { t } = useTranslation();
   const columns = useMemo<Column<RecentTransactionsData>[]>(() => {
     return [
       {
         key: "transaction_id",
-        label: "Transaction ID",
+        label: t("dashboard.recentTransactions.transactionId"),
         render: (item) => item.transaction_id,
       },
       {
         key: "name",
-        label: "Customer Name",
+        label: t("dashboard.recentTransactions.customerName"),
         render: (item) => item.customer.name,
       },
       {
         key: "amount",
-        label: "Amount",
+        label: t("dashboard.recentTransactions.amount"),
         render: (item) => `৳${item.amount.toFixed(2)}`,
       },
       {
         key: "payment_method",
-        label: "Payment Method",
+        label: t("dashboard.recentTransactions.paymentMethod"),
         render: (item) => (
           <Badge className={StatusVariant(item.payment_method)}>
             {item.payment_method.charAt(0).toUpperCase() +
@@ -40,7 +42,7 @@ export default function RecentTransactions({
       },
       {
         key: "status",
-        label: "Status",
+        label: t("dashboard.recentTransactions.status"),
         render: (item) => (
           <Badge className={StatusVariant(item.status)}>
             {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
@@ -49,7 +51,7 @@ export default function RecentTransactions({
       },
       {
         key: "type",
-        label: "Type",
+        label: t("dashboard.recentTransactions.type"),
         render: (item) => (
           <Badge variant={`${item.type === "Regular" ? "primary" : "outline"}`}>
             {item.type.charAt(0).toUpperCase() + item.type.slice(1)}
@@ -58,13 +60,13 @@ export default function RecentTransactions({
       },
       {
         key: "created_at",
-        label: "Date",
+        label: t("dashboard.recentTransactions.date"),
         className: "w-[100px]",
       },
     ];
-  }, []);
+  }, [t]);
   return (
-    <div>
+    <div className="h-[400px] overflow-y-auto">
       <BaseTable
         columns={columns}
         data={data?.slice(0, 10) || []}

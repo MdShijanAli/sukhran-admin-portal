@@ -27,7 +27,8 @@
   "revenueChart": "রাজস্ব চার্ট",
   "average_order": "গড় অর্ডার মূল্য",
   "topProducts": "শীর্ষ পণ্য",
-  "sales": "বিক্রয়",
+  "onlinePayments": "অনলাইন পেমেন্ট",
+  "codPayments": "ক্যাশ অন ডেলিভারি",
   "periods": {
     "today": "আজ",
     "yesterday": "গতকাল",
@@ -82,9 +83,24 @@
     "coinsDistributed": "কয়েন বিতরণ"
   },
   "recentOrders": {
-    "title": "সাম্প্রতিক অর্ডার"
+    "title": "সাম্প্রতিক অর্ডার",
+    "orderId": "অর্ডার আইডি",
+    "customerName": "গ্রাহকের নাম",
+    "amount": "পরিমাণ",
+    "paymentMethod": "পেমেন্ট পদ্ধতি",
+    "paymentStatus": "পেমেন্ট অবস্থা",
+    "orderStatus": "অর্ডার অবস্থা",
+    "type": "ধরন",
+    "date": "তারিখ"
   },
   "recentTransactions": {
-    "title": "সাম্প্রতিক লেনদেন"
+    "title": "সাম্প্রতিক লেনদেন",
+    "transactionId": "লেনদেন আইডি",
+    "customerName": "গ্রাহকের নাম",
+    "amount": "পরিমাণ",
+    "paymentMethod": "পেমেন্ট পদ্ধতি",
+    "status": "অবস্থা",
+    "type": "ধরন",
+    "date": "তারিখ"
   }
 }

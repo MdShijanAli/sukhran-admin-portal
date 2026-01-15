@@ -10,7 +10,8 @@
   "yearly": "Yearly",
   "revenue": "Revenue",
   "orders": "Orders",
-  "sales": "Sales",
+  "onlinePayments": "Online Payments",
+  "codPayments": "Cash on Delivery",
   "product": "Product",
   "package": "Package",
   "noDataFound": "No data found for this date range",
@@ -82,9 +83,24 @@
     "coinsDistributed": "Coins Distributed"
   },
   "recentOrders": {
-    "title": "Recent Orders"
+    "title": "Recent Orders",
+    "orderId": "Order ID",
+    "customerName": "Customer Name",
+    "amount": "Amount",
+    "paymentMethod": "Payment Method",
+    "paymentStatus": "Payment Status",
+    "orderStatus": "Order Status",
+    "type": "Type",
+    "date": "Date"
   },
   "recentTransactions": {
-    "title": "Recent Transactions"
+    "title": "Recent Transactions",
+    "transactionId": "Transaction ID",
+    "customerName": "Customer Name",
+    "amount": "Amount",
+    "paymentMethod": "Payment Method",
+    "status": "Status",
+    "type": "Type",
+    "date": "Date"
   }
 }
