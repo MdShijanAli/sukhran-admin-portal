@@ -318,7 +318,7 @@ export default function Dashboard() {
         <div>
           <h1 className="text-3xl font-bold">{t("dashboard.title")}</h1>
           <p className="text-muted-foreground mt-1">
-            {t("dashboard.subtitle")}
+            Here're the details of your analysis.
           </p>
         </div>
 
