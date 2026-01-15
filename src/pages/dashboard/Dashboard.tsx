@@ -1,14 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  ShoppingCart,
-  DollarSign,
-  Package,
-  AlertCircle,
-  RefreshCcw,
-} from "lucide-react";
+import { ShoppingCart, DollarSign, Package, RefreshCcw } from "lucide-react";
 
-import { dashboardStats } from "@/data/mockData";
 import { useEffect, useState, useMemo } from "react";
 import dashboardService from "@/services/dashboardService";
 import { BaseDatePicker } from "@/components/custom/BaseDatePicker";
@@ -17,14 +9,11 @@ import { Button } from "@/components/ui/button";
 import RevenueChart from "./RevenueChart";
 import TopProductsChart from "./TopProductsChart";
 import StatCard from "@/components/custom/StatCard";
-import {
-  StatCardSkeleton,
-  ChartSkeleton,
-  AlertCardSkeleton,
-} from "@/components/custom/Skeleton";
+import { StatCardSkeleton, ChartSkeleton } from "@/components/custom/Skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RecentOrders from "./RecentOrders";
 import RecentTransactions from "./RecentTransactions";
+import { useSidebarStore } from "@/stores/sidebarStore";
 
 interface CoreMetrics {
   orders: {
@@ -144,6 +133,7 @@ export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(
     null
   );
+  const { isCollapsed } = useSidebarStore();
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -334,12 +324,14 @@ export default function Dashboard() {
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 w-full sm:w-auto">
-          <BaseDatePicker
-            value={dateRange}
-            onChange={setDateRange}
-            className="w-full sm:w-auto"
-          />
+        <div className="grid md:flex grid-cols-3 gap-3  flex-col sm:flex-row sm:items-center sm:gap-2 w-full sm:w-auto">
+          <div className="col-span-2">
+            <BaseDatePicker
+              value={dateRange}
+              onChange={setDateRange}
+              className="w-full"
+            />
+          </div>
           <Button
             onClick={handleRefresh}
             variant="outline"
@@ -353,7 +345,13 @@ export default function Dashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+      <div
+        className={`grid gap-4 sm:grid-cols-2 ${
+          isCollapsed
+            ? "sm:grid-cols-3 lg:grid-cols-5"
+            : "sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5"
+        }`}
+      >
         {isLoading
           ? Array.from({ length: 5 }).map((_, i) => (
               <StatCardSkeleton key={i} />
@@ -391,10 +389,10 @@ export default function Dashboard() {
         )}
       </div>
 
-      <div className="grid grid-cols-4 gap-3">
-        <div className="col-span-3 border rounded-md p-2">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
+        <div className="lg:col-span-3 border rounded-md p-2">
           <Tabs defaultValue="orders">
-            <TabsList>
+            <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="orders">
                 {t("dashboard.recentOrders.title")}
               </TabsTrigger>
@@ -413,10 +411,10 @@ export default function Dashboard() {
             </TabsContent>
           </Tabs>
         </div>
-        <div>
-          <div className="grid gap-4 grid-cols-1">
+        <div className="lg:col-span-1">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1">
             {isLoading ? (
-              Array.from({ length: 3 }).map((_, i) => (
+              Array.from({ length: 2 }).map((_, i) => (
                 <StatCardSkeleton key={i} />
               ))
             ) : (
