@@ -1,727 +1,457 @@
-import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   ShoppingCart,
   DollarSign,
-  Users,
-  TrendingUp,
-  TrendingDown,
   Package,
   AlertCircle,
-  CreditCard,
-  RefreshCw,
-  Clock,
-  CheckCircle,
-  XCircle,
-  Coins,
-  Gift,
-  UserPlus,
+  RefreshCcw,
 } from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
+
+import { dashboardStats } from "@/data/mockData";
+import { useEffect, useState, useMemo } from "react";
 import dashboardService from "@/services/dashboardService";
-import { toast } from "@/hooks/use-toast";
-import { Badge } from "@/components/ui/badge";
+import { BaseDatePicker } from "@/components/custom/BaseDatePicker";
+import { DateRange } from "react-day-picker";
+import { Button } from "@/components/ui/button";
+import RevenueChart from "./RevenueChart";
+import TopProductsChart from "./TopProductsChart";
+import StatCard from "@/components/custom/StatCard";
+import {
+  StatCardSkeleton,
+  ChartSkeleton,
+  AlertCardSkeleton,
+} from "@/components/custom/Skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import RecentOrders from "./RecentOrders";
+import RecentTransactions from "./RecentTransactions";
+
+interface CoreMetrics {
+  orders: {
+    current: number;
+    growth_percentage: number;
+  };
+  revenue: {
+    current: number;
+    growth_percentage: number;
+  };
+  package_orders: {
+    count: number;
+    percentage: number;
+  };
+  regular_orders: {
+    count: number;
+    percentage: number;
+  };
+  average_order_value: {
+    current: number;
+    growth_percentage: number;
+  };
+}
+
+interface ChartDataPoint {
+  name: string;
+  revenue: string;
+  orders: number;
+}
+
+interface TopProducts {
+  id: string;
+  name: string;
+  total_quantity: number;
+  total_revenue: number;
+}
+
+interface OrderStat {
+  count: number;
+  percentage: number;
+}
+
+export interface RecentOrdersData {
+  id: string;
+  orderId: string;
+  type: "Package" | "Product";
+  customer: {
+    name: string;
+    email: string;
+  };
+  amount: number;
+  payment_mode: string;
+  payment_status: string;
+  order_status: string;
+  created_at: string;
+}
+
+export interface RecentTransactionsData {
+  id: number;
+  transaction_id: string;
+  customer: {
+    name: string;
+  };
+  amount: number;
+  payment_method: string;
+  status: string;
+  type: string;
+  created_at: string;
+}
 
 interface DashboardData {
-  core_metrics: any;
-  payment_analytics: any;
-  order_status_distribution: any;
-  charts: any;
-  operational_alerts: any;
-  recent_orders: any[];
-  recent_transactions: any[];
-  additional_metrics: any;
+  core_metrics: CoreMetrics;
+  charts: {
+    monthly_trend: Array<{
+      month: string;
+      revenue: number;
+      orders: number;
+    }>;
+    yearly_comparison: Array<{
+      year: string;
+      revenue: number;
+      orders: number;
+    }>;
+  };
+  top_performers: {
+    top_products: TopProducts[];
+    top_packages: TopProducts[];
+  };
+  order_status_distribution: {
+    returned: OrderStat;
+    pending: OrderStat;
+    delivered: OrderStat;
+    cancelled: OrderStat;
+    shipped: OrderStat;
+    approved: OrderStat;
+    confirmed: OrderStat;
+    out_for_delivery: OrderStat;
+  };
+  recent_orders: RecentOrdersData[];
+  recent_transactions: RecentTransactionsData[];
 }
 
 export default function Dashboard() {
   const { t } = useTranslation();
-  const [period, setPeriod] = useState("today");
-  const [isLoading, setIsLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(
     null
   );
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const fetchDashboardData = async (selectedPeriod: string) => {
+  const statsData = dashboardData?.core_metrics;
+
+  const monthlyRevenueChart = useMemo<ChartDataPoint[]>(() => {
+    if (!dashboardData?.charts?.monthly_trend) return [];
+    return dashboardData.charts.monthly_trend.map((item) => ({
+      name: item.month,
+      revenue: `৳${item.revenue.toLocaleString()}`,
+      orders: item.orders,
+    }));
+  }, [dashboardData]);
+
+  const yearlyRevenueChart = useMemo<ChartDataPoint[]>(() => {
+    if (!dashboardData?.charts?.yearly_comparison) return [];
+    return dashboardData.charts.yearly_comparison.map((item) => ({
+      name: item.year,
+      revenue: `৳${item.revenue.toLocaleString()}`,
+      orders: item.orders,
+    }));
+  }, [dashboardData]);
+  const topPerformingProducts = useMemo<TopProducts[]>(() => {
+    if (!dashboardData?.top_performers?.top_products) return [];
+    return dashboardData.top_performers.top_products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      sales: product.total_quantity,
+      revenue: `৳${product.total_revenue.toLocaleString()}`,
+    }));
+  }, [dashboardData]);
+  const topPerformingPackages = useMemo<TopProducts[]>(() => {
+    if (!dashboardData?.top_performers?.top_packages) return [];
+    return dashboardData.top_performers.top_packages.map((pkg) => ({
+      id: pkg.id,
+      name: pkg.name,
+      sales: pkg.total_quantity,
+      revenue: `৳${pkg.total_revenue.toLocaleString()}`,
+    }));
+  }, [dashboardData]);
+
+  const recentOrders = useMemo<RecentOrdersData[]>(() => {
+    if (!dashboardData?.recent_orders) return [];
+    return dashboardData.recent_orders;
+  }, [dashboardData]);
+  const recentTransactions = useMemo<RecentTransactionsData[]>(() => {
+    if (!dashboardData?.recent_transactions) return [];
+    return dashboardData.recent_transactions;
+  }, [dashboardData]);
+
+  const orderStatusDistribution = useMemo<OrderStat[]>(() => {
+    if (!dashboardData?.order_status_distribution) return [];
+    const statusDist = dashboardData.order_status_distribution;
+    return [
+      { name: "returned", ...statusDist.returned },
+      { name: "pending", ...statusDist.pending },
+      { name: "delivered", ...statusDist.delivered },
+      { name: "cancelled", ...statusDist.cancelled },
+      { name: "shipped", ...statusDist.shipped },
+      { name: "approved", ...statusDist.approved },
+      { name: "confirmed", ...statusDist.confirmed },
+      { name: "outForDelivery", ...statusDist.out_for_delivery },
+    ];
+  }, [dashboardData]);
+
+  console.log("Order Status Distribution:", orderStatusDistribution);
+
+  const fetchDashboardData = async (queryString?: string) => {
     try {
       setIsLoading(true);
-      const response = await dashboardService.getStatistics(selectedPeriod);
-      setDashboardData(response.data);
+      const response = await dashboardService.getStatistics(queryString);
+      if (response && typeof response === "object" && "data" in response) {
+        setDashboardData(response.data as DashboardData);
+      }
     } catch (error) {
-      toast({
-        title: t("dashboard.error"),
-        description: t("dashboard.fetchError"),
-        variant: "destructive",
-      });
+      console.error("Error fetching dashboard data:", error);
+      setDashboardData(null);
     } finally {
       setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  useEffect(() => {
+    if (!dateRange?.from) return;
+
+    const start = dateRange.from.toISOString().split("T")[0];
+    const end = dateRange.to
+      ? dateRange.to.toISOString().split("T")[0]
+      : dateRange.from.toISOString().split("T")[0];
+    const queryString = `period=custom&start_date=${start}&end_date=${end}`;
+    fetchDashboardData(queryString);
+  }, [dateRange]);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await fetchDashboardData();
+    } catch (error) {
+      console.error("Error refreshing dashboard data:", error);
+    } finally {
       setIsRefreshing(false);
     }
   };
 
-  useEffect(() => {
-    fetchDashboardData(period);
-  }, [period]);
+  const dashboardStatsItems = useMemo(
+    () => [
+      {
+        title: t("dashboard.todayOrders"),
+        value: statsData?.orders?.current ?? 0,
+        change: statsData?.orders?.growth_percentage,
+        icon: ShoppingCart,
+        trend:
+          (statsData?.orders?.growth_percentage ?? 0) > 0
+            ? ("up" as const)
+            : ("down" as const),
+        type: "number",
+      },
+      {
+        title: t("dashboard.totalRevenue"),
+        value: `৳${(statsData?.revenue?.current ?? 0).toLocaleString()}`,
+        change: statsData?.revenue?.growth_percentage,
+        icon: DollarSign,
+        trend:
+          (statsData?.revenue?.growth_percentage ?? 0) > 0
+            ? ("up" as const)
+            : ("down" as const),
+      },
+      {
+        title: t("dashboard.packageOrders"),
+        value: statsData?.package_orders?.count ?? 0,
+        change: statsData?.package_orders?.percentage,
+        icon: Package,
+        trend:
+          (statsData?.package_orders?.percentage ?? 0) > 0
+            ? ("up" as const)
+            : ("down" as const),
+        type: "number",
+      },
+      {
+        title: t("dashboard.productOrders"),
+        value: statsData?.regular_orders?.count ?? 0,
+        change: statsData?.regular_orders?.percentage,
+        icon: Package,
+        trend:
+          (statsData?.regular_orders?.percentage ?? 0) > 0
+            ? ("up" as const)
+            : ("down" as const),
+        type: "number",
+      },
+      {
+        title: t("dashboard.average_order"),
+        value: statsData?.average_order_value?.current ?? 0,
+        change: statsData?.average_order_value?.growth_percentage,
+        icon: Package,
+        trend:
+          (statsData?.average_order_value?.growth_percentage ?? 0) > 0
+            ? ("up" as const)
+            : ("down" as const),
 
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    fetchDashboardData(period);
-  };
-
-  const MetricCard = ({
-    title,
-    value,
-    growth,
-    trend,
-    icon: Icon,
-    iconColor,
-    note,
-  }: {
-    title: string;
-    value: string | number;
-    growth?: number;
-    trend?: string;
-    icon: any;
-    iconColor?: string;
-    note?: string;
-  }) => (
-    <Card className="shadow-card hover:shadow-elegant transition-all duration-300">
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">
-          {title}
-        </CardTitle>
-        <Icon className={`h-5 w-5 ${iconColor || "text-primary"}`} />
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-        {growth !== undefined && growth !== 0 && (
-          <div className="flex items-center gap-1 mt-1">
-            {trend === "up" ? (
-              <TrendingUp className="h-4 w-4 text-success" />
-            ) : trend === "down" ? (
-              <TrendingDown className="h-4 w-4 text-destructive" />
-            ) : null}
-            <span
-              className={`text-xs font-medium ${
-                trend === "up"
-                  ? "text-success"
-                  : trend === "down"
-                  ? "text-destructive"
-                  : "text-muted-foreground"
-              }`}
-            >
-              {growth > 0 ? "+" : ""}
-              {growth.toFixed(1)}%
-            </span>
-            <span className="text-xs text-muted-foreground ml-1">
-              {t("dashboard.vsPrevious")}
-            </span>
-          </div>
-        )}
-        {note && <p className="text-xs text-muted-foreground mt-1">{note}</p>}
-      </CardContent>
-    </Card>
+        type: "number",
+      },
+    ],
+    [statsData, t]
   );
 
-  if (isLoading && !dashboardData) {
-    return (
-      <div className="animate-fade-in flex items-center justify-center h-[60vh]">
-        <div className="text-center">
-          <RefreshCw className="h-12 w-12 animate-spin text-primary mx-auto" />
-          <p className="mt-4 text-muted-foreground">{t("dashboard.loading")}</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!dashboardData) return null;
-
-  const {
-    core_metrics,
-    payment_analytics,
-    order_status_distribution,
-    charts,
-    operational_alerts,
-    recent_orders,
-    recent_transactions,
-    additional_metrics,
-  } = dashboardData;
-
   return (
-    <div className="animate-fade-in space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="space-y-6 animate-fade-in">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold">{t("dashboard.title")}</h1>
           <p className="text-muted-foreground mt-1">
             {t("dashboard.subtitle")}
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <Select value={period} onValueChange={setPeriod}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="today">
-                {t("dashboard.periods.today")}
-              </SelectItem>
-              <SelectItem value="yesterday">
-                {t("dashboard.periods.yesterday")}
-              </SelectItem>
-              <SelectItem value="last_7_days">
-                {t("dashboard.periods.last7Days")}
-              </SelectItem>
-              <SelectItem value="last_30_days">
-                {t("dashboard.periods.last30Days")}
-              </SelectItem>
-              <SelectItem value="this_month">
-                {t("dashboard.periods.thisMonth")}
-              </SelectItem>
-              <SelectItem value="last_month">
-                {t("dashboard.periods.lastMonth")}
-              </SelectItem>
-              <SelectItem value="this_year">
-                {t("dashboard.periods.thisYear")}
-              </SelectItem>
-            </SelectContent>
-          </Select>
+
+        <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 w-full sm:w-auto">
+          <BaseDatePicker
+            value={dateRange}
+            onChange={setDateRange}
+            className="w-full sm:w-auto"
+          />
           <Button
-            variant="outline"
-            size="icon"
             onClick={handleRefresh}
-            disabled={isRefreshing}
+            variant="outline"
+            className="w-full sm:w-auto"
           >
-            <RefreshCw
+            <RefreshCcw
               className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
             />
           </Button>
         </div>
       </div>
 
-      {/* Core Metrics */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <MetricCard
-          title={t("dashboard.metrics.revenue")}
-          value={`৳${core_metrics.revenue.current.toLocaleString()}`}
-          growth={core_metrics.revenue.growth_percentage}
-          trend={core_metrics.revenue.trend}
-          icon={DollarSign}
-          iconColor="text-green-600"
-          note={core_metrics.revenue.note}
-        />
-        <MetricCard
-          title={t("dashboard.metrics.orders")}
-          value={core_metrics.orders.current}
-          growth={core_metrics.orders.growth_percentage}
-          trend={core_metrics.orders.trend}
-          icon={ShoppingCart}
-          iconColor="text-blue-600"
-        />
-        <MetricCard
-          title={t("dashboard.metrics.averageOrderValue")}
-          value={`৳${core_metrics.average_order_value.current.toLocaleString()}`}
-          growth={core_metrics.average_order_value.growth_percentage}
-          trend={core_metrics.average_order_value.trend}
-          icon={TrendingUp}
-          iconColor="text-purple-600"
-        />
-        <MetricCard
-          title={t("dashboard.metrics.newCustomers")}
-          value={additional_metrics.customers.new_registrations}
-          icon={UserPlus}
-          iconColor="text-orange-600"
-        />
-      </div>
-
-      {/* Order Type Breakdown */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Package className="h-5 w-5" />
-              {t("dashboard.orderTypes.title")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 rounded-lg bg-blue-50 dark:bg-blue-950">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">
-                    {t("dashboard.orderTypes.package")}
-                  </p>
-                  <p className="text-2xl font-bold">
-                    {core_metrics.package_orders.count}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm text-muted-foreground">
-                    ৳{core_metrics.package_orders.revenue.toLocaleString()}
-                  </p>
-                  <Badge variant="secondary">
-                    {core_metrics.package_orders.percentage.toFixed(1)}%
-                  </Badge>
-                </div>
-              </div>
-              <div className="flex items-center justify-between p-4 rounded-lg bg-green-50 dark:bg-green-950">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">
-                    {t("dashboard.orderTypes.regular")}
-                  </p>
-                  <p className="text-2xl font-bold">
-                    {core_metrics.regular_orders.count}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm text-muted-foreground">
-                    ৳{core_metrics.regular_orders.revenue.toLocaleString()}
-                  </p>
-                  <Badge variant="secondary">
-                    {core_metrics.regular_orders.percentage.toFixed(1)}%
-                  </Badge>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Payment Status */}
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CreditCard className="h-5 w-5" />
-              {t("dashboard.paymentStatus.title")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-success" />
-                  <span className="text-sm">
-                    {t("dashboard.paymentStatus.paid")}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <p className="font-semibold">
-                    {payment_analytics.payment_status.paid.count}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    ৳
-                    {payment_analytics.payment_status.paid.amount.toLocaleString()}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-warning" />
-                  <span className="text-sm">
-                    {t("dashboard.paymentStatus.pending")}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <p className="font-semibold">
-                    {payment_analytics.payment_status.pending.count}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    ৳
-                    {payment_analytics.payment_status.pending.amount.toLocaleString()}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <XCircle className="h-4 w-4 text-destructive" />
-                  <span className="text-sm">
-                    {t("dashboard.paymentStatus.failed")}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <p className="font-semibold">
-                    {payment_analytics.payment_status.failed.count}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    ৳
-                    {payment_analytics.payment_status.failed.amount.toLocaleString()}
-                  </p>
-                </div>
-              </div>
-              <div className="pt-3 border-t">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">
-                    {t("dashboard.paymentStatus.successRate")}
-                  </span>
-                  <Badge
-                    variant={
-                      payment_analytics.payment_status.success_rate > 50
-                        ? "default"
-                        : "destructive"
-                    }
-                  >
-                    {payment_analytics.payment_status.success_rate.toFixed(1)}%
-                  </Badge>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      {/* Stats Grid */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        {isLoading
+          ? Array.from({ length: 5 }).map((_, i) => (
+              <StatCardSkeleton key={i} />
+            ))
+          : dashboardStatsItems.map((stat, index) => (
+              <StatCard
+                key={index}
+                title={stat.title}
+                value={stat.value}
+                change={stat.change}
+                icon={stat.icon}
+                trend={stat.trend}
+              />
+            ))}
       </div>
 
       {/* Charts */}
       <div className="grid gap-4 md:grid-cols-2">
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle>{t("dashboard.charts.monthlyTrend")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={charts.monthly_trend}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                <XAxis dataKey="month" className="text-xs" />
-                <YAxis className="text-xs" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
-                  }}
-                />
-                <Legend />
-                <Bar
-                  dataKey="revenue"
-                  fill="hsl(var(--primary))"
-                  radius={[8, 8, 0, 0]}
-                  name={t("dashboard.charts.revenue")}
-                />
-                <Bar
-                  dataKey="orders"
-                  fill="hsl(var(--success))"
-                  radius={[8, 8, 0, 0]}
-                  name={t("dashboard.charts.orders")}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle>{t("dashboard.charts.yearlyComparison")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart
-                data={charts.yearly_comparison.filter(
-                  (item: any) => item.revenue > 0 || item.orders > 0
-                )}
-              >
-                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                <XAxis dataKey="year" className="text-xs" />
-                <YAxis className="text-xs" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
-                  }}
-                />
-                <Legend />
-                <Bar
-                  dataKey="revenue"
-                  fill="hsl(var(--primary))"
-                  radius={[8, 8, 0, 0]}
-                  name={t("dashboard.charts.revenue")}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        {isLoading ? (
+          <>
+            <ChartSkeleton />
+            <ChartSkeleton />
+          </>
+        ) : (
+          <>
+            <RevenueChart
+              monthlyRevenueChart={monthlyRevenueChart}
+              yearlyRevenueChart={yearlyRevenueChart}
+            />
+            <TopProductsChart
+              productData={topPerformingProducts}
+              packageData={topPerformingPackages}
+            />
+          </>
+        )}
       </div>
 
-      {/* Operational Alerts */}
-      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-5">
-        <Card className="border-warning/50 bg-warning/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <AlertCircle className="h-8 w-8 text-warning" />
-              <div className="text-right">
-                <p className="text-2xl font-bold">
-                  {operational_alerts.pending_approvals}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t("dashboard.alerts.pendingApprovals")}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-destructive/50 bg-destructive/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <XCircle className="h-8 w-8 text-destructive" />
-              <div className="text-right">
-                <p className="text-2xl font-bold">
-                  {operational_alerts.failed_payments}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t("dashboard.alerts.failedPayments")}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-orange-500/50 bg-orange-50 dark:bg-orange-950">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <AlertCircle className="h-8 w-8 text-orange-600" />
-              <div className="text-right">
-                <p className="text-2xl font-bold">
-                  {operational_alerts.delivery_sync_failures}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t("dashboard.alerts.deliverySyncFailures")}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-blue-500/50 bg-blue-50 dark:bg-blue-950">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <DollarSign className="h-8 w-8 text-blue-600" />
-              <div className="text-right">
-                <p className="text-2xl font-bold">
-                  {operational_alerts.pending_refunds}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t("dashboard.alerts.pendingRefunds")}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-purple-500/50 bg-purple-50 dark:bg-purple-950">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <Coins className="h-8 w-8 text-purple-600" />
-              <div className="text-right">
-                <p className="text-2xl font-bold">
-                  {operational_alerts.low_coin_balance_users}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {t("dashboard.alerts.lowCoinBalance")}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Additional Metrics */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Gift className="h-5 w-5" />
-              {t("dashboard.additional.donations")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {t("dashboard.additional.count")}
-                </span>
-                <span className="font-semibold">
-                  {additional_metrics.donations.count}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {t("dashboard.additional.amount")}
-                </span>
-                <span className="font-semibold">
-                  ৳{additional_metrics.donations.total_amount.toLocaleString()}
-                </span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Coins className="h-5 w-5" />
-              {t("dashboard.additional.coins")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {t("dashboard.additional.earned")}
-                </span>
-                <span className="font-semibold text-success">
-                  +{additional_metrics.coins.earned.toLocaleString()}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {t("dashboard.additional.spent")}
-                </span>
-                <span className="font-semibold text-destructive">
-                  -{additional_metrics.coins.spent.toLocaleString()}
-                </span>
-              </div>
-              <div className="flex justify-between pt-2 border-t">
-                <span className="text-sm font-medium">
-                  {t("dashboard.additional.net")}
-                </span>
-                <span className="font-bold">
-                  {additional_metrics.coins.net.toLocaleString()}
-                </span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="h-5 w-5" />
-              {t("dashboard.additional.referrals")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {t("dashboard.additional.total")}
-                </span>
-                <span className="font-semibold">
-                  {additional_metrics.referrals.total}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {t("dashboard.additional.credited")}
-                </span>
-                <span className="font-semibold">
-                  {additional_metrics.referrals.credited}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  {t("dashboard.additional.coinsDistributed")}
-                </span>
-                <span className="font-semibold">
-                  {additional_metrics.referrals.coins_distributed.toLocaleString()}
-                </span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Recent Activity */}
+      {/* Alert Cards */}
       <div className="grid gap-4 md:grid-cols-2">
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle>{t("dashboard.recentOrders.title")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {recent_orders.slice(0, 5).map((order: any) => (
-                <div
-                  key={order.id}
-                  className="flex items-center justify-between p-3 rounded-lg border"
-                >
-                  <div className="flex-1">
-                    <p className="font-medium text-sm">{order.orderId}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {order.customer.name}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-sm">
-                      ৳{order.amount.toLocaleString()}
-                    </p>
-                    <Badge
-                      variant={
-                        order.order_status === "Pending"
-                          ? "secondary"
-                          : order.order_status === "Cancelled"
-                          ? "destructive"
-                          : "default"
-                      }
-                      className="text-xs"
-                    >
-                      {order.order_status}
-                    </Badge>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        {isLoading ? (
+          <>
+            <AlertCardSkeleton />
+            <AlertCardSkeleton />
+          </>
+        ) : (
+          <>
+            <Card className="border-warning/50 bg-warning/5 shadow-card">
+              <CardHeader className="flex flex-row items-center gap-2">
+                <AlertCircle className="h-5 w-5 text-warning" />
+                <CardTitle className="text-base">
+                  {t("dashboard.pendingDeliveries")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-2xl font-bold">
+                  {dashboardStats.pendingDeliveries.count}
+                </p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {t("dashboard.pendingDeliveriesDescription")}
+                </p>
+              </CardContent>
+            </Card>
 
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle>{t("dashboard.recentTransactions.title")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {recent_transactions.slice(0, 5).map((txn: any) => (
-                <div
-                  key={txn.id}
-                  className="flex items-center justify-between p-3 rounded-lg border"
-                >
-                  <div className="flex-1">
-                    <p className="font-medium text-sm">{txn.transaction_id}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {txn.customer.name}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-sm">
-                      ৳{txn.amount.toLocaleString()}
-                    </p>
-                    <Badge
-                      variant={
-                        txn.status === "Success"
-                          ? "default"
-                          : txn.status === "Pending"
-                          ? "secondary"
-                          : "destructive"
-                      }
-                      className="text-xs"
-                    >
-                      {txn.status}
-                    </Badge>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+            <Card className="border-destructive/50 bg-destructive/5 shadow-card">
+              <CardHeader className="flex flex-row items-center gap-2">
+                <AlertCircle className="h-5 w-5 text-destructive" />
+                <CardTitle className="text-base">
+                  {t("dashboard.paymentFailures")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-2xl font-bold">
+                  {dashboardStats.paymentFailures.count}
+                </p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {t("dashboard.paymentFailuresDescription")}
+                </p>
+              </CardContent>
+            </Card>
+          </>
+        )}
+      </div>
+
+      <div className="grid grid-cols-4 gap-3">
+        <div className="col-span-3">
+          <Tabs defaultValue="orders">
+            <TabsList>
+              <TabsTrigger value="orders">Recent Orders</TabsTrigger>
+              <TabsTrigger value="transactions">
+                Recent Transactions
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="orders">
+              <RecentOrders data={recentOrders} isLoading={isLoading} />
+            </TabsContent>
+            <TabsContent value="transactions">
+              <RecentTransactions
+                data={recentTransactions}
+                isLoading={isLoading}
+              />
+            </TabsContent>
+          </Tabs>
+        </div>
+        <div>
+          <div className="grid gap-4 grid-cols-1">
+            {isLoading
+              ? Array.from({ length: 5 }).map((_, i) => (
+                  <StatCardSkeleton key={i} />
+                ))
+              : dashboardStatsItems.map((stat, index) => (
+                  <StatCard
+                    key={index}
+                    title={stat.title}
+                    value={stat.value}
+                    change={stat.change}
+                    icon={stat.icon}
+                    trend={stat.trend}
+                  />
+                ))}
+          </div>
+        </div>
       </div>
     </div>
   );

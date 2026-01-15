@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import constData from "./constData";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -54,4 +55,36 @@ export const formatCurrency = (
 ): string => {
   const numAmount = typeof amount === "string" ? parseFloat(amount) : amount;
   return `${currency}${formatNumberWithCommas(numAmount)}`;
+};
+
+export const StatusVariant = (status: string) => {
+  switch (status) {
+    case constData.paymentStatuses.PENDING:
+    case constData.transactionStatuses.PENDING:
+      return "bg-yellow-500/10 text-yellow-600 border-yellow-500/20";
+    case constData.paymentStatuses.PAID:
+    case constData.orderStatuses.APPROVED:
+    case constData.orderStatuses.SHIPPED:
+    case constData.orderStatuses.DELIVERED:
+    case constData.transactionStatuses.SUCCESS:
+      return "bg-green-500/10 text-green-600 border-green-500/20";
+    case constData.paymentStatuses.FAILED:
+      return "bg-red-500/10 text-red-600 border-red-500/20";
+    case constData.paymentStatuses.REFUNDED:
+    case constData.transactionStatuses.REFUNDED:
+    case constData.orderStatuses.RETURNED:
+      return "bg-yellow-500/10 text-yellow-600 border-yellow-500/20";
+    case constData.paymentStatuses.CANCELLED:
+    case constData.orderStatuses.CANCELLED:
+    case constData.orderStatuses.CANCELLED_AT_DELIVERY:
+      return "bg-red-500/10 text-red-600 border-red-500/20";
+    case constData.paymentModes.COD:
+    case constData.orderStatuses.CONFIRMED:
+      return "border-transparent bg-purple-700 text-white hover:bg-purple-700/80";
+    case constData.paymentModes.ONLINE:
+    case constData.paymentModes.ONLINE_PAYMENT:
+      return "border-transparent bg-green-700 text-white hover:bg-green-700/80";
+    default:
+      return "bg-yellow-500/10 text-yellow-600 border-yellow-500/20";
+  }
 };

@@ -9,6 +9,7 @@ interface StatCardProps {
   change?: number;
   icon: LucideIcon;
   trend?: "up" | "down";
+  type?: "number" | "string";
 }
 
 const StatCard: FC<StatCardProps> = ({
@@ -17,6 +18,7 @@ const StatCard: FC<StatCardProps> = ({
   change,
   icon: Icon,
   trend,
+  type,
 }) => {
   const { t } = useTranslation();
 
@@ -30,7 +32,9 @@ const StatCard: FC<StatCardProps> = ({
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">
-          {typeof value === "number" ? value.toFixed(2) : value}
+          {type === "number" && typeof value === "number"
+            ? value.toFixed(2)
+            : value}
         </div>
         {change !== undefined && (
           <div className="flex items-center gap-1 mt-1">
