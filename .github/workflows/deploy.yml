@@ -3,7 +3,7 @@ name: Deploy React Vite App to cPanel
 on:
   push:
     branches:
-      - deploy
+      - prod
 
 jobs:
   deploy:
