@@ -304,7 +304,7 @@ export default function Sidebar() {
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-40 h-screen bg-primary border-r border-primary/20",
+        "fixed left-0 top-0 z-40 h-screen bg-black border-r border-black/20",
         isCollapsed ? "w-18" : "w-64"
       )}
       style={{
