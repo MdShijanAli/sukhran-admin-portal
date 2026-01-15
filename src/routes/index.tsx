@@ -1,51 +1,62 @@
-import React from "react";
+import React, { lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import MainLayout from "@/components/layout/MainLayout";
 
-import Login from "@/pages/auth/Login";
-import ForgotPassword from "@/pages/auth/ForgotPassword";
-import Dashboard from "@/pages/dashboard/Dashboard";
-import Users from "@/pages/users/Users";
-import Orders from "@/pages/orders/Orders";
-import NotFound from "@/pages/NotFound";
-import Products from "@/pages/products/Products";
-import ProductForm from "@/pages/products/form/ProductForm";
-import Packages from "@/pages/package/Packages";
-import PackageForm from "@/pages/package/PackageForm";
-import PackageDetails from "@/pages/package/PackageDetails";
-import Profile from "@/pages/profile/Profile";
-import Reports from "@/pages/reports/Reports";
-import Delivery from "@/pages/delivery/Delivery";
-import Transactions from "@/pages/transactions/Transactions";
-import Support from "@/pages/supports/Support";
-import Coupons from "@/pages/coupon/Coupons";
-import Returns from "@/pages/Returns";
-import RoleManagement from "@/pages/roles/RoleManagement";
-import Notifications from "@/pages/notifications/Notifications";
-import Settings from "@/pages/settings/Settings";
-import CoinManagement from "@/pages/coin-management/CoinManagement";
-import Family from "@/pages/Family";
-import Analytics from "@/pages/Analytics";
-import Marketing from "@/pages/Marketing";
-import Categories from "@/pages/categories/Categories";
-import ProductViewDetails from "@/pages/products/ViewDetails";
-import CoverageAreas from "@/pages/coverage-area/CoverageAreas";
-import ContentManagement from "@/pages/ContentManagement";
-import PackageSettings from "@/pages/package/settings/PackageSettings";
-import Donations from "@/pages/donations";
-import CreateSupport from "@/pages/supports/CreateSupport";
-import Referrals from "@/pages/referrals/Referrals";
-import Brands from "@/pages/brands/Brands";
-import TransactionReport from "@/pages/reports/reports/TransactionReport";
-import PackageSalesReport from "@/pages/reports/reports/PackageSalesReport";
-import PackageOrdersReport from "@/pages/reports/reports/PackageOrdersReport";
-import RegularSalesReport from "@/pages/reports/reports/RegularSalesReport";
-import RegularOrdersReport from "@/pages/reports/reports/RegularOrdersReport";
-import DonationReport from "@/pages/reports/reports/DonationReport";
-import CoinReport from "@/pages/reports/reports/CoinReport";
-import ReferralReport from "@/pages/reports/reports/ReferralsReport";
+// Auth
+const Login = lazy(() => import("@/pages/auth/Login"));
+const ForgotPassword = lazy(() => import("@/pages/auth/ForgotPassword"));
+
+// Main Pages
+const Dashboard = lazy(() => import("@/pages/dashboard/Dashboard"));
+const Users = lazy(() => import("@/pages/users/Users"));
+const Orders = lazy(() => import("@/pages/orders/Orders"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
+
+// Products
+const Products = lazy(() => import("@/pages/products/Products"));
+const ProductForm = lazy(() => import("@/pages/products/form/ProductForm"));
+const ProductViewDetails = lazy(() => import("@/pages/products/ViewDetails"));
+
+// Packages
+const Packages = lazy(() => import("@/pages/package/Packages"));
+const PackageForm = lazy(() => import("@/pages/package/PackageForm"));
+const PackageDetails = lazy(() => import("@/pages/package/PackageDetails"));
+const PackageSettings = lazy(() => import("@/pages/package/settings/PackageSettings"));
+
+// Other Pages
+const Profile = lazy(() => import("@/pages/profile/Profile"));
+const Reports = lazy(() => import("@/pages/reports/Reports"));
+const Delivery = lazy(() => import("@/pages/delivery/Delivery"));
+const Transactions = lazy(() => import("@/pages/transactions/Transactions"));
+const Support = lazy(() => import("@/pages/supports/Support"));
+const CreateSupport = lazy(() => import("@/pages/supports/CreateSupport"));
+const Coupons = lazy(() => import("@/pages/coupon/Coupons"));
+const Returns = lazy(() => import("@/pages/Returns"));
+const RoleManagement = lazy(() => import("@/pages/roles/RoleManagement"));
+const Notifications = lazy(() => import("@/pages/notifications/Notifications"));
+const Settings = lazy(() => import("@/pages/settings/Settings"));
+const CoinManagement = lazy(() => import("@/pages/coin-management/CoinManagement"));
+const Family = lazy(() => import("@/pages/Family"));
+const Analytics = lazy(() => import("@/pages/Analytics"));
+const Marketing = lazy(() => import("@/pages/Marketing"));
+const Categories = lazy(() => import("@/pages/categories/Categories"));
+const CoverageAreas = lazy(() => import("@/pages/coverage-area/CoverageAreas"));
+const ContentManagement = lazy(() => import("@/pages/ContentManagement"));
+const Donations = lazy(() => import("@/pages/donations"));
+const Referrals = lazy(() => import("@/pages/referrals/Referrals"));
+const Brands = lazy(() => import("@/pages/brands/Brands"));
+
+// Reports
+const TransactionReport = lazy(() => import("@/pages/reports/reports/TransactionReport"));
+const PackageSalesReport = lazy(() => import("@/pages/reports/reports/PackageSalesReport"));
+const PackageOrdersReport = lazy(() => import("@/pages/reports/reports/PackageOrdersReport"));
+const RegularSalesReport = lazy(() => import("@/pages/reports/reports/RegularSalesReport"));
+const RegularOrdersReport = lazy(() => import("@/pages/reports/reports/RegularOrdersReport"));
+const DonationReport = lazy(() => import("@/pages/reports/reports/DonationReport"));
+const CoinReport = lazy(() => import("@/pages/reports/reports/CoinReport"));
+const ReferralReport = lazy(() => import("@/pages/reports/reports/ReferralsReport"));
 
 const AppRoutes: React.FC = () => {
   return (
