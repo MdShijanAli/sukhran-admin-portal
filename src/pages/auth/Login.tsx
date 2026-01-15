@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,7 +9,6 @@ import { EyeIcon, EyeOff, Lock, Mail } from "lucide-react";
 import authService from "@/services/authService";
 
 export default function Login() {
-  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -59,11 +57,7 @@ export default function Login() {
           {/* Logo */}
           <div className="flex justify-center mb-8">
             <img
-              src={
-                i18n.language === "en"
-                  ? "/images/Skr-eng.png"
-                  : "/images/Skr-bng.png"
-              }
+              src="/images/Skr-eng.png"
               alt="Shukran logo"
               className="w-40 h-auto object-contain"
             />
@@ -89,8 +83,10 @@ export default function Login() {
       <div className="flex w-full lg:w-1/2 items-center justify-center p-8">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold">{t("auth.welcome")}</h2>
-            <p className="mt-2 text-muted-foreground">{t("auth.subtitle")}</p>
+            <h2 className="text-3xl font-bold">Welcome Back</h2>
+            <p className="mt-2 text-muted-foreground">
+              Sign in to your account
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="grid gap-3">
@@ -111,7 +107,7 @@ export default function Login() {
             </div>
 
             <div className="space-y-1">
-              <Label htmlFor="password">{t("auth.password")}</Label>
+              <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
                 <Input
@@ -147,7 +143,7 @@ export default function Login() {
                   }
                 />
                 <Label htmlFor="remember" className="text-sm cursor-pointer">
-                  {t("auth.rememberMe")}
+                  Remember me
                 </Label>
               </div>
               <button
@@ -155,7 +151,7 @@ export default function Login() {
                 onClick={() => navigate("/forgot-password")}
                 className="text-sm text-primary hover:underline"
               >
-                {t("auth.forgotPassword")}
+                Forgot password?
               </button>
             </div>
 
@@ -164,7 +160,7 @@ export default function Login() {
               className="w-full space-y-2"
               disabled={loading}
             >
-              {loading ? t("common.loading") : t("auth.loginButton")}
+              {loading ? "Loading..." : "Sign In"}
             </Button>
           </form>
         </div>

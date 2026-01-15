@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +10,6 @@ import authService from "@/services/authService";
 type Step = "request" | "reset";
 
 export default function ForgotPassword() {
-  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   // Step management
@@ -146,11 +144,7 @@ export default function ForgotPassword() {
           {/* Logo */}
           <div className="flex justify-center mb-8">
             <img
-              src={
-                i18n.language === "en"
-                  ? "/images/Skr-eng.png"
-                  : "/images/Skr-bng.png"
-              }
+              src="/images/Skr-eng.png"
               alt="Shukran logo"
               className="w-40 h-auto object-contain"
             />

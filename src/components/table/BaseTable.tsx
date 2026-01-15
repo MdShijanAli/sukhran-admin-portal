@@ -159,7 +159,7 @@ export function BaseTable<T>({
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="rounded-md border">
+      <div className="rounded-md border min-w-max">
         <Table>
           <TableHeader>
             <TableRow>

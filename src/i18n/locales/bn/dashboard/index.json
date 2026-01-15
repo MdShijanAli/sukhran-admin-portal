@@ -5,6 +5,30 @@
   "error": "ত্রুটি",
   "fetchError": "ড্যাশবোর্ড ডেটা আনতে ব্যর্থ। আবার চেষ্টা করুন।",
   "vsPrevious": "পূর্ববর্তী সময়ের তুলনায়",
+  "vsLastDay": "গত দিনের তুলনায়",
+  "monthly": "মাসিক",
+  "yearly": "বার্ষিক",
+  "revenue": "রাজস্ব",
+  "orders": "অর্ডার",
+  "sales": "বিক্রয়",
+  "product": "পণ্য",
+  "package": "প্যাকেজ",
+  "noDataFound": "এই তারিখ পরিসীমার জন্য কোন ডেটা পাওয়া যায়নি",
+  "pendingDeliveries": "পেন্ডিং ডেলিভারি",
+  "pendingDeliveriesDescription": "ডেলিভারি অ্যাসাইনমেন্টের জন্য অপেক্ষমাণ অর্ডার",
+  "paymentFailures": "পেমেন্ট ব্যর্থতা",
+  "paymentFailuresDescription": "মনোযোগের প্রয়োজন এমন ব্যর্থ লেনদেন",
+  "todayOrders": "আজকের অর্ডার",
+  "totalRevenue": "মোট রাজস্ব",
+  "activeSubscriptions": "সক্রিয় সাবস্ক্রিপশন",
+  "newUsers": "নতুন ব্যবহারকারী",
+  "packageOrders": "প্যাকেজ অর্ডার",
+  "productOrders": "পণ্য অর্ডার",
+  "revenueChart": "রাজস্ব চার্ট",
+  "average_order": "গড় অর্ডার মূল্য",
+  "topProducts": "শীর্ষ পণ্য",
+  "onlinePayments": "অনলাইন পেমেন্ট",
+  "codPayments": "ক্যাশ অন ডেলিভারি",
   "periods": {
     "today": "আজ",
     "yesterday": "গতকাল",
@@ -59,9 +83,24 @@
     "coinsDistributed": "কয়েন বিতরণ"
   },
   "recentOrders": {
-    "title": "সাম্প্রতিক অর্ডার"
+    "title": "সাম্প্রতিক অর্ডার",
+    "orderId": "অর্ডার আইডি",
+    "customerName": "গ্রাহকের নাম",
+    "amount": "পরিমাণ",
+    "paymentMethod": "পেমেন্ট পদ্ধতি",
+    "paymentStatus": "পেমেন্ট অবস্থা",
+    "orderStatus": "অর্ডার অবস্থা",
+    "type": "ধরন",
+    "date": "তারিখ"
   },
   "recentTransactions": {
-    "title": "সাম্প্রতিক লেনদেন"
+    "title": "সাম্প্রতিক লেনদেন",
+    "transactionId": "লেনদেন আইডি",
+    "customerName": "গ্রাহকের নাম",
+    "amount": "পরিমাণ",
+    "paymentMethod": "পেমেন্ট পদ্ধতি",
+    "status": "অবস্থা",
+    "type": "ধরন",
+    "date": "তারিখ"
   }
 }

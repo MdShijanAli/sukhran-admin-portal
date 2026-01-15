@@ -11,18 +11,25 @@ const badgeVariants = cva(
         default:
           "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
         primary:
-          "border-transparent bg-blue-700 text-primary-foreground hover:bg-blue/80",
+          "border-transparent bg-blue-700 text-white hover:bg-blue-700/80",
         secondary:
           "border-transparent bg-secondary border-primary text-secondary-foreground hover:bg-secondary/80",
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        pending: "bg-warning/10 text-warning border-warning/20",
-        approved: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-        shipped: "bg-primary/10 text-primary border-primary/20",
-        delivered: "bg-success/10 text-success border-success/20",
-        cancelled: "bg-destructive/10 text-destructive border-destructive/20",
-        returned: "bg-destructive/10 text-destructive border-destructive/20",
+        pending: "bg-yellow-500/10 text-yellow-600 border-yellow-500/20",
+        approved: "bg-blue-500/10 text-blue-600 border-blue-500/20",
+        shipped: "bg-indigo-500/10 text-indigo-600 border-indigo-500/20",
+        delivered: "bg-green-500/10 text-green-600 border-green-500/20",
+        cancelled: "bg-red-500/10 text-red-600 border-red-500/20",
+        returned: "bg-orange-500/10 text-orange-600 border-orange-500/20",
         outline: "text-foreground",
+        cod: "border-transparent bg-purple-700 text-white hover:bg-purple-700/80",
+        online:
+          "border-transparent bg-green-700 text-white hover:bg-green-700/80",
+        paid: "bg-green-500/10 text-green-600 border-green-500/20",
+        failed: "bg-red-500/10 text-red-600 border-red-500/20",
+        refunded: "bg-yellow-500/10 text-yellow-600 border-yellow-500/20",
+        cancelled_at_delivery: "bg-red-500/10 text-red-600 border-red-500/20",
       },
     },
     defaultVariants: {
