@@ -238,7 +238,7 @@ export default function Dashboard() {
     const end = dateRange.to
       ? dateRange.to.toISOString().split("T")[0]
       : dateRange.from.toISOString().split("T")[0];
-    const queryString = `period=custom&start_date=${start}&end_date=${end}`;
+    const queryString = `start_date=${start}&end_date=${end}`;
     fetchDashboardData(queryString);
   }, [dateRange]);
 
@@ -300,15 +300,13 @@ export default function Dashboard() {
       },
       {
         title: t("dashboard.average_order"),
-        value: statsData?.average_order_value?.current ?? 0,
+        value: `৳${statsData?.average_order_value?.current.toLocaleString()}`,
         change: statsData?.average_order_value?.growth_percentage,
         icon: Package,
         trend:
           (statsData?.average_order_value?.growth_percentage ?? 0) > 0
             ? ("up" as const)
             : ("down" as const),
-
-        type: "number",
       },
     ],
     [statsData, t]
