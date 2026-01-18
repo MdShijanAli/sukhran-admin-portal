@@ -27,7 +27,10 @@
     "account": "Account",
     "order": "Order",
     "return": "Return",
-    "other": "Other"
+    "other": "Other",
+    "selectStatus": "Select Status",
+    "selectCategory": "Select Category",
+    "selectPriority": "Select Priority"
   },
   "tickets": {
     "title": "Support Tickets",

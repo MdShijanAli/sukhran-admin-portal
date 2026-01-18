@@ -8,7 +8,6 @@ import { SupportTicket, useSupportStore } from "@/stores/supportStore";
 import supportService from "@/services/supportService";
 import { formatDate } from "@/lib/utils";
 import { useState } from "react";
-import FilterModal from "@/components/modals/FilterModal";
 import constData from "@/lib/constData";
 import { ActionItem, DropdownMenuActions } from "@/components/table";
 import getSerialNumber from "@/lib/getSerialNumber";
@@ -37,9 +36,6 @@ export default function TicketsTab({
   const { t } = useTranslation();
   const store = useSupportStore();
   const { hasPermission } = usePermissions();
-
-  const [showFilterModal, setShowFilterModal] = useState(false);
-  const [filterData, setFilterData] = useState<Record<string, string>>({});
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, any> = {
@@ -234,11 +230,10 @@ export default function TicketsTab({
     },
   ];
 
-  // Filter configurations
-  const ticketFilterConfigs = [
+  const filterItemes = [
     {
-      key: "status",
       label: t("support.filter.status"),
+      value: "status",
       options: [
         { label: t("support.filter.allStatuses"), value: "all" },
         {
@@ -258,11 +253,11 @@ export default function TicketsTab({
           value: constData.ticketStatuses.CLOSED,
         },
       ],
-      defaultValue: "all",
+      placeholder: t("support.filter.selectStatus"),
     },
     {
-      key: "priority",
       label: t("support.filter.priority"),
+      value: "priority",
       options: [
         { label: t("support.filter.allPriorities"), value: "all" },
         { label: t("support.filter.high"), value: constData.priorities.HIGH },
@@ -276,10 +271,10 @@ export default function TicketsTab({
           value: constData.priorities.URGENT,
         },
       ],
-      defaultValue: "all",
+      placeholder: t("support.filter.selectPriority"),
     },
     {
-      key: "category",
+      value: "category",
       label: t("support.filter.category"),
       options: [
         { label: t("support.filter.allCategories"), value: "all" },
@@ -312,7 +307,7 @@ export default function TicketsTab({
           value: constData.ticketCategories.OTHER,
         },
       ],
-      defaultValue: "all",
+      placeholder: t("support.filter.selectCategory"),
     },
   ];
 
@@ -321,12 +316,6 @@ export default function TicketsTab({
       <BaseTableList<SupportTicket>
         title=""
         description=""
-        toolbarActions={
-          <Button variant="outline" onClick={() => setShowFilterModal(true)}>
-            <Filter className="mr-2 h-4 w-4" />
-            {t("filter")}
-          </Button>
-        }
         searchPlaceholder="Search by ticket number, customer, subject..."
         enableSearch={true}
         columns={columns}
@@ -334,20 +323,7 @@ export default function TicketsTab({
         store={store}
         getRowKey={(ticket) => ticket.id}
         onRefresh={onRefresh}
-      />
-
-      {/* Filter Modal */}
-      <FilterModal<SupportTicket>
-        open={showFilterModal}
-        onClose={() => setShowFilterModal(false)}
-        title={t("filter")}
-        filters={ticketFilterConfigs}
-        currentFilters={filterData}
-        onApplyFilters={(filters) => setFilterData(filters)}
-        service={supportService}
-        store={store}
-        submitButtonText={t("users.filter.apply")}
-        clearButtonText={t("users.filter.clear")}
+        filters={filterItemes}
       />
     </div>
   );
