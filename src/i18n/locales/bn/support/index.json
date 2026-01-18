@@ -75,10 +75,10 @@
     },
     "filter": {
       "status": "সকল অবস্থা",
-      "category": "সকল বিভাগ",,
+      "category": "সকল বিভাগ",
       "allStatuses": "সকল অবস্থা",
       "allCategories": "সকল বিভাগ",
-      "allPriorities": "সকল অগ্রাধিকার"
+      "allPriorities": "সকল অগ্রাধিকার",
       "priority": "সকল অগ্রাধিকার"
     }
   },
