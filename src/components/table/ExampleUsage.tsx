@@ -184,7 +184,7 @@ export default function DeliveryExample() {
   return (
     <div className="">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">
+        <h1 className="text-3xl font-bold tracking-wide">
           {t("nav.delivery")}
         </h1>
         <p className="text-muted-foreground">Manage and track all deliveries</p>

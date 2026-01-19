@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RecentOrders from "./RecentOrders";
 import RecentTransactions from "./RecentTransactions";
 import { useSidebarStore } from "@/stores/sidebarStore";
+import { formatDate } from "@/lib/utils";
 
 interface CoreMetrics {
   orders: {
@@ -38,22 +39,48 @@ interface CoreMetrics {
   };
 }
 
-interface ChartDataPoint {
+export interface ChartDataPoint {
   name: string;
   revenue: string;
   orders: number;
+  avg_orders?: string;
 }
 
-interface TopProducts {
+export interface TopProducts {
   id: string;
   name: string;
-  total_quantity: number;
-  total_revenue: number;
+  total_quantity?: number;
+  total_revenue?: number;
+  sales?: number;
+  revenue?: string;
+  average_order_value?: string;
+  total_orders?: number;
 }
 
 interface OrderStat {
   count: number;
   percentage: number;
+}
+
+export interface WeeklyTrendData extends ChartDataPoint {
+  week: string;
+  week_range: string;
+  week_start: string;
+  week_end: string;
+  average_order_value?: number;
+}
+
+export interface DailyTrendData extends ChartDataPoint {
+  date: string;
+  day: string;
+  day_name: string;
+  average_order_value?: number;
+}
+
+export interface HourlyTrendData extends ChartDataPoint {
+  hour: string;
+  timestamp: string;
+  average_order_value?: number;
 }
 
 export interface RecentOrdersData {
@@ -97,12 +124,17 @@ interface DashboardData {
       month: string;
       revenue: number;
       orders: number;
+      average_order_value: number;
     }>;
     yearly_comparison: Array<{
       year: string;
       revenue: number;
       orders: number;
+      average_order_value: number;
     }>;
+    weekly_trend: WeeklyTrendData[];
+    daily_trend: DailyTrendData[];
+    hourly_trend: HourlyTrendData[];
   };
   top_performers: {
     top_products: TopProducts[];
@@ -131,7 +163,7 @@ interface DashboardData {
 export default function Dashboard() {
   const { t } = useTranslation();
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(
-    null
+    null,
   );
   const { isCollapsed } = useSidebarStore();
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
@@ -146,6 +178,7 @@ export default function Dashboard() {
       name: item.month,
       revenue: `৳${item.revenue.toLocaleString()}`,
       orders: item.orders,
+      avg_orders: `৳${item.average_order_value.toFixed(2).toLocaleString()}`,
     }));
   }, [dashboardData]);
 
@@ -155,6 +188,35 @@ export default function Dashboard() {
       name: item.year,
       revenue: `৳${item.revenue.toLocaleString()}`,
       orders: item.orders,
+      avg_orders: `৳${item.average_order_value.toFixed(2).toLocaleString()}`,
+    }));
+  }, [dashboardData]);
+  const weeklyRevenueChart = useMemo<ChartDataPoint[]>(() => {
+    if (!dashboardData?.charts?.weekly_trend) return [];
+    return dashboardData.charts.weekly_trend.map((item) => ({
+      name: item.week_range,
+      revenue: `৳${item.revenue?.toLocaleString()}`,
+      orders: item.orders,
+      avg_orders: `৳${item.average_order_value?.toFixed(2).toLocaleString()}`,
+    }));
+  }, [dashboardData]);
+  const dailyRevenueChart = useMemo<ChartDataPoint[]>(() => {
+    if (!dashboardData?.charts?.daily_trend) return [];
+    return dashboardData.charts.daily_trend.map((item) => ({
+      name: item.date,
+      revenue: `৳${item.revenue?.toLocaleString()}`,
+      orders: item.orders,
+      avg_orders: `৳${item.average_order_value?.toFixed(2).toLocaleString()}`,
+    }));
+  }, [dashboardData]);
+  const hourlyRevenueChart = useMemo<ChartDataPoint[]>(() => {
+    if (!dashboardData?.charts?.hourly_trend) return [];
+    return dashboardData.charts.hourly_trend.map((item) => ({
+      name: item.hour,
+      revenue: `৳${item.revenue?.toLocaleString()}`,
+      orders: item.orders,
+      avg_orders: `৳${item.average_order_value?.toFixed(2).toLocaleString()}`,
+      timestamp: formatDate(item.timestamp),
     }));
   }, [dashboardData]);
   const topPerformingProducts = useMemo<TopProducts[]>(() => {
@@ -163,7 +225,7 @@ export default function Dashboard() {
       id: product.id,
       name: product.name,
       sales: product.total_quantity,
-      revenue: `৳${product.total_revenue.toLocaleString()}`,
+      revenue: `৳${product.total_revenue?.toLocaleString()}`,
     }));
   }, [dashboardData]);
   const topPerformingPackages = useMemo<TopProducts[]>(() => {
@@ -171,8 +233,9 @@ export default function Dashboard() {
     return dashboardData.top_performers.top_packages.map((pkg) => ({
       id: pkg.id,
       name: pkg.name,
-      sales: pkg.total_quantity,
-      revenue: `৳${pkg.total_revenue.toLocaleString()}`,
+      sales: pkg.total_orders,
+      revenue: `৳${pkg.total_revenue?.toLocaleString()}`,
+      average_order_value: `৳${pkg.average_order_value?.toLocaleString()}`,
     }));
   }, [dashboardData]);
 
@@ -195,23 +258,6 @@ export default function Dashboard() {
       };
     return dashboardData.payment_analytics.payment_mode_breakdown;
   }, [dashboardData]);
-
-  const orderStatusDistribution = useMemo<OrderStat[]>(() => {
-    if (!dashboardData?.order_status_distribution) return [];
-    const statusDist = dashboardData.order_status_distribution;
-    return [
-      { name: "returned", ...statusDist.returned },
-      { name: "pending", ...statusDist.pending },
-      { name: "delivered", ...statusDist.delivered },
-      { name: "cancelled", ...statusDist.cancelled },
-      { name: "shipped", ...statusDist.shipped },
-      { name: "approved", ...statusDist.approved },
-      { name: "confirmed", ...statusDist.confirmed },
-      { name: "outForDelivery", ...statusDist.out_for_delivery },
-    ];
-  }, [dashboardData]);
-
-  console.log("Order Status Distribution:", orderStatusDistribution);
 
   const fetchDashboardData = async (queryString?: string) => {
     try {
@@ -256,7 +302,7 @@ export default function Dashboard() {
   const dashboardStatsItems = useMemo(
     () => [
       {
-        title: t("dashboard.todayOrders"),
+        title: t("dashboard.totalOrders"),
         value: statsData?.orders?.current ?? 0,
         change: statsData?.orders?.growth_percentage,
         icon: ShoppingCart,
@@ -309,14 +355,16 @@ export default function Dashboard() {
             : ("down" as const),
       },
     ],
-    [statsData, t]
+    [statsData, t],
   );
 
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">{t("dashboard.title")}</h1>
+          <h1 className="text-3xl font-bold tracking-wide">
+            {t("dashboard.title")}
+          </h1>
           <p className="text-muted-foreground mt-1">
             Here're the details of your analysis.
           </p>
@@ -378,6 +426,9 @@ export default function Dashboard() {
             <RevenueChart
               monthlyRevenueChart={monthlyRevenueChart}
               yearlyRevenueChart={yearlyRevenueChart}
+              weeklyRevenueChart={weeklyRevenueChart}
+              dailyRevenueChart={dailyRevenueChart}
+              hourlyRevenueChart={hourlyRevenueChart}
             />
             <TopProductsChart
               productData={topPerformingProducts}

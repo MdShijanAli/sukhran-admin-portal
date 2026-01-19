@@ -17,24 +17,18 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-
-interface TopPerformerData {
-  id: string;
-  name: string;
-  sales: number;
-  revenue: string;
-}
+import { TopProducts } from "./Dashboard";
 
 interface TopProductsChartProps {
-  productData: TopPerformerData[];
-  packageData: TopPerformerData[];
+  productData: TopProducts[];
+  packageData: TopProducts[];
 }
 
 const TopProductsChart = memo(
   ({ productData, packageData }: TopProductsChartProps) => {
     const { t } = useTranslation();
     const [chartType, setChartType] = useState<"product" | "package">(
-      "product"
+      "product",
     );
 
     const currentData = chartType === "product" ? productData : packageData;
@@ -59,49 +53,65 @@ const TopProductsChart = memo(
             </SelectContent>
           </Select>
         </CardHeader>
-        <CardContent>
+        <CardContent className="">
           {!hasData ? (
             <div className="flex items-center justify-center h-[300px] text-muted-foreground">
               {t("dashboard.noDataFound")}
             </div>
           ) : (
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={currentData}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                <XAxis
-                  dataKey="name"
-                  className="text-xs"
-                  angle={-45}
-                  textAnchor="end"
-                  height={100}
-                />
-                <YAxis className="text-xs" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
-                  }}
-                />
-                <Bar
-                  dataKey="sales"
-                  fill="hsl(var(--primary))"
-                  radius={[8, 8, 0, 0]}
-                  name={t("dashboard.sales")}
-                />
-                <Bar
-                  dataKey="revenue"
-                  fill="green"
-                  radius={[8, 8, 0, 0]}
-                  name={t("dashboard.revenue")}
-                />
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="rounded-lg bg-muted/30 p-4 border border-border">
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart
+                  data={currentData}
+                  margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
+                >
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="hsl(var(--border))"
+                  />
+                  <XAxis
+                    dataKey="name"
+                    angle={-45}
+                    textAnchor="end"
+                    height={100}
+                    stroke="hsl(var(--muted-foreground))"
+                    fontSize={12}
+                  />
+                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--popover))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "6px",
+                      boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                    }}
+                  />
+                  <Bar
+                    dataKey="sales"
+                    fill="#3b82f6"
+                    radius={[8, 8, 0, 0]}
+                    name={t("dashboard.sales")}
+                  />
+                  <Bar
+                    dataKey="revenue"
+                    fill="#10b981"
+                    radius={[8, 8, 0, 0]}
+                    name={t("dashboard.revenue")}
+                  />
+                  <Bar
+                    dataKey="average_order_value"
+                    fill="#f59e0b"
+                    radius={[8, 8, 0, 0]}
+                    name={t("dashboard.averageOrderValue")}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           )}
         </CardContent>
       </Card>
     );
-  }
+  },
 );
 
 TopProductsChart.displayName = "TopProductsChart";

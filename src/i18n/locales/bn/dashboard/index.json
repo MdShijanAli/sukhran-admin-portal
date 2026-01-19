@@ -29,6 +29,10 @@
   "topProducts": "শীর্ষ পণ্য",
   "onlinePayments": "অনলাইন পেমেন্ট",
   "codPayments": "ক্যাশ অন ডেলিভারি",
+  "averageOrderValue": "গড় অর্ডার মূল্য",
+  "totalOrders": "মোট অর্ডার",
+  "daily": "দৈনিক",
+  "weekly": "সাপ্তাহিক",
   "periods": {
     "today": "আজ",
     "yesterday": "গতকাল",
