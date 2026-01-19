@@ -369,7 +369,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                   </Label>
                   <Badge
                     className={`${getPaymentStatusColor(
-                      order.paymentStatus
+                      order.paymentStatus,
                     )} mt-1`}
                   >
                     {t(`orders.paymentStatus.${order.paymentStatus}`)}

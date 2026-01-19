@@ -292,6 +292,7 @@ export default function Dashboard() {
     setIsRefreshing(true);
     try {
       await fetchDashboardData();
+      setDateRange(undefined);
     } catch (error) {
       console.error("Error refreshing dashboard data:", error);
     } finally {
