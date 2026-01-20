@@ -4,30 +4,23 @@ on:
     branches:
       - prod
 jobs:
-  FTP-Deploy-Action:
-    name: FTP-Deploy-Action
+  deploy:
+    name: Deploy to cPanel
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.1.0
-        with:
-          fetch-depth: 2
+      - uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18"
 
-      - name: Build
+      - name: Install and Build
         run: |
           npm install
           npm run build
 
       - name: Deploy via FTP
-        uses: sebastianpopp/ftp-action@releases/v2
-        with:
-          host: ${{ secrets.FTP_SERVER }}
-          user: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          localDir: "dist"
-          remoteDir: "/public_html"
-          options: "--verbose --transfer-all --no-perms --parallel=4"
+        run: |
+          sudo apt-get install -y lftp
+          lftp -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} -e "set ssl:verify-certificate no; mirror -R --verbose --delete --parallel=4 ./dist /public_html; quit" ${{ secrets.FTP_SERVER }}
