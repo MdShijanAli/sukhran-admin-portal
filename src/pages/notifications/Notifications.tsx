@@ -181,7 +181,7 @@ const Notifications = () => {
   ];
 
   const headerActions = [
-    ...(hasPermission(permissions.notification.test)
+    ...(hasPermission(permissions.notification.test) && import.meta.env.DEV
       ? [
           {
             label: t("notifications.buttons.test"),

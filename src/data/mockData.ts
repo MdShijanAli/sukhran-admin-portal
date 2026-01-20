@@ -1,14 +1,5 @@
 // Mock data for the admin panel
 
-export const dashboardStats = {
-  todayOrders: { count: 247, change: 12.5 },
-  revenue: { amount: 45678, change: 8.3 },
-  activeSubscriptions: { count: 1432, cancelled: 23 },
-  newUsers: { count: 89, change: 15.2 },
-  pendingDeliveries: { count: 45 },
-  paymentFailures: { count: 8, change: -20 },
-};
-
 export const revenueData = [
   { name: "Mon", revenue: 4000, subscriptions: 2400 },
   { name: "Tue", revenue: 3000, subscriptions: 1398 },

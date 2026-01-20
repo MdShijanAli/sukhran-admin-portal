@@ -1,4 +1,5 @@
 import { createStore } from "./createStore";
+import i18n from "@/i18n/config";
 
 interface ThemeState {
   theme: "light" | "dark";
@@ -23,6 +24,7 @@ export const useThemeStore = createStore<ThemeState>(
       set({ theme });
     },
     setLanguage: (language) => {
+      i18n.changeLanguage(language);
       set({ language });
     },
   }),

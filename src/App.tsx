@@ -8,18 +8,33 @@ import { useThemeStore } from "@/stores/themeStore";
 import { useAuthStore } from "@/stores/authStore";
 import AppRoutes from "@/routes/index.tsx";
 import "@/i18n/config";
+import { loadLanguageResources } from "@/i18n/config";
 import authService from "./services/authService";
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  const { theme, setTheme } = useThemeStore();
+  const { theme, setTheme, language } = useThemeStore();
   const { isAuthenticated, access_token } = useAuthStore();
 
   useEffect(() => {
     // Initialize theme on mount
     setTheme(theme);
   }, [theme]);
+
+  // Load language resources when authenticated and language changes
+  useEffect(() => {
+    const loadLanguage = async () => {
+      if (isAuthenticated) {
+        try {
+          await loadLanguageResources(language || "en");
+        } catch (error) {
+          console.error("Failed to load language resources:", error);
+        }
+      }
+    };
+    loadLanguage();
+  }, [isAuthenticated, language]);
 
   useEffect(() => {
     const fetchProfile = async () => {

@@ -5,6 +5,34 @@
   "error": "Error",
   "fetchError": "Failed to fetch dashboard data. Please try again.",
   "vsPrevious": "vs previous period",
+  "vsLastDay": "vs last day",
+  "monthly": "Monthly",
+  "yearly": "Yearly",
+  "revenue": "Revenue",
+  "orders": "Orders",
+  "onlinePayments": "Online Payments",
+  "codPayments": "Cash on Delivery",
+  "product": "Product",
+  "package": "Package",
+  "noDataFound": "No data found for this date range",
+  "pendingDeliveries": "Pending Deliveries",
+  "pendingDeliveriesDescription": "Orders waiting for delivery assignment",
+  "paymentFailures": "Payment Failures",
+  "paymentFailuresDescription": "Failed transactions requiring attention",
+  "todayOrders": "Today's Orders",
+  "totalRevenue": "Total Revenue",
+  "activeSubscriptions": "Active Subscriptions",
+  "newUsers": "New Users",
+  "packageOrders": "Package Orders",
+  "productOrders": "Product Orders",
+  "sales": "Sales",
+  "revenueChart": "Revenue Chart",
+  "average_order": "Average Order Value",
+  "topProducts": "Top Products",
+  "weekly": "Weekly",
+  "averageOrderValue": "Average Order Value",
+  "totalOrders": "Total Orders",
+  "daily": "Daily",
   "periods": {
     "today": "Today",
     "yesterday": "Yesterday",
@@ -59,9 +87,24 @@
     "coinsDistributed": "Coins Distributed"
   },
   "recentOrders": {
-    "title": "Recent Orders"
+    "title": "Recent Orders",
+    "orderId": "Order ID",
+    "customerName": "Customer Name",
+    "amount": "Amount",
+    "paymentMethod": "Payment Method",
+    "paymentStatus": "Payment Status",
+    "orderStatus": "Order Status",
+    "type": "Type",
+    "date": "Date"
   },
   "recentTransactions": {
-    "title": "Recent Transactions"
+    "title": "Recent Transactions",
+    "transactionId": "Transaction ID",
+    "customerName": "Customer Name",
+    "amount": "Amount",
+    "paymentMethod": "Payment Method",
+    "status": "Status",
+    "type": "Type",
+    "date": "Date"
   }
 }

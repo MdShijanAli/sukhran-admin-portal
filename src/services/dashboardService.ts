@@ -2,10 +2,12 @@ import apiClient from "@/api/apiClient";
 import { apiRoutes } from "@/api/apiRoutes";
 
 const dashboardService = {
-  getStatistics: async (period: string = "today") => {
+  getStatistics: async (queryString?: string) => {
     try {
       const response = await apiClient.get(
-        `${apiRoutes.dashboard.statistics}?period=${period}`
+        `${apiRoutes.dashboard.statistics}${
+          queryString ? `?${queryString}` : ""
+        }`
       );
       return response.data;
     } catch (error) {

@@ -7,8 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Checkbox } from "@/components/ui/checkbox";
+import { TableSkeleton } from "./TableSkeleton";
 
 export interface Column<T> {
   key: string;
@@ -83,42 +83,11 @@ export function BaseTable<T>({
 
   if (isLoading) {
     return (
-      <div className="w-full overflow-x-auto">
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {enableCheckbox && (
-                  <TableHead className="w-[50px]">
-                    <Skeleton className="h-4 w-4" />
-                  </TableHead>
-                )}
-                {columns.map((column) => (
-                  <TableHead key={column.key} className={column.className}>
-                    {column.label}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {Array.from({ length: 5 }).map((_, index) => (
-                <TableRow key={index}>
-                  {enableCheckbox && (
-                    <TableCell>
-                      <Skeleton className="h-4 w-4" />
-                    </TableCell>
-                  )}
-                  {columns.map((column) => (
-                    <TableCell key={column.key}>
-                      <Skeleton className="h-4 my-5 w-full" />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
+      <TableSkeleton
+        columns={columns}
+        enableCheckbox={enableCheckbox}
+        rows={5}
+      />
     );
   }
 
@@ -159,7 +128,7 @@ export function BaseTable<T>({
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="rounded-md border">
+      <div className="rounded-md border min-w-max">
         <Table>
           <TableHeader>
             <TableRow>

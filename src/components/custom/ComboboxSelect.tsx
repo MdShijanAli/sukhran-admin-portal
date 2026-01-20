@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Check, ChevronsUpDown, RefreshCw } from "lucide-react";
+import { Check, ChevronsUpDown, RefreshCw, X } from "lucide-react";
 import { ApiService } from "@/services/createApiService";
 import { StoreWithData } from "../table/BaseTableList";
 import { toast } from "sonner";
@@ -17,13 +17,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 interface ComboboxSelectProps<T> {
   // Static options (use this OR service/store)
   options?: T[];
-  value: string | number;
-  onValueChange: (value: string | number) => void;
-  onSelect?: (item: T) => void;
+  value: string | number | (string | number)[];
+  onValueChange: (value: string | number | (string | number)[]) => void;
+  onSelect?: (item: T | T[]) => void;
   placeholder?: string;
   searchPlaceholder?: string;
   emptyText?: string;
@@ -33,7 +34,7 @@ interface ComboboxSelectProps<T> {
   getOptionValue: (option: T) => string | number;
   getOptionLabel: (option: T) => string;
   renderOption?: (option: T) => React.ReactNode;
-  renderTrigger?: (selected: T | undefined) => React.ReactNode;
+  renderTrigger?: (selected: T | T[] | undefined) => React.ReactNode;
   icon?: React.ReactNode;
   // Service integration (alternative to static options)
   service?: ApiService<T>;
@@ -45,6 +46,10 @@ interface ComboboxSelectProps<T> {
   additionalParams?: Record<string, string>;
   // Enable search with API
   enableApiSearch?: boolean;
+  // Multi-select mode
+  multiple?: boolean;
+  maxSelections?: number;
+  showSelectedCount?: boolean;
 }
 
 export function ComboboxSelect<T>({
@@ -69,6 +74,9 @@ export function ComboboxSelect<T>({
   storeDataKey = "data",
   additionalParams = {},
   enableApiSearch = true,
+  multiple = false,
+  maxSelections,
+  showSelectedCount = true,
 }: ComboboxSelectProps<T>) {
   const [open, setOpen] = useState(false);
   const [internalLoading, setInternalLoading] = useState(false);
@@ -91,7 +99,7 @@ export function ComboboxSelect<T>({
   const fetchData = async (search?: string) => {
     if (!service || !store) {
       console.warn(
-        "ComboboxSelect: service and store required for API fetching"
+        "ComboboxSelect: service and store required for API fetching",
       );
       return;
     }
@@ -156,17 +164,78 @@ export function ComboboxSelect<T>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
-  const selectedOption = options.find((option) => {
-    return getOptionValue(option) === value;
+  // Normalize value to array for easier handling
+  const valueArray = Array.isArray(value) ? value : value ? [value] : [];
+
+  const selectedOptions = options.filter((option) => {
+    const optionValue = getOptionValue(option);
+    return valueArray.includes(optionValue);
   });
 
   const handleSelect = (option: T) => {
     const optionValue = getOptionValue(option);
-    onValueChange(optionValue);
-    if (onSelect) {
-      onSelect(option);
+
+    if (multiple) {
+      const isSelected = valueArray.includes(optionValue);
+
+      if (isSelected) {
+        // Remove from selection
+        const newValue = valueArray.filter((v) => v !== optionValue);
+        onValueChange(newValue);
+        if (onSelect) {
+          const newSelectedOptions = options.filter((opt) =>
+            newValue.includes(getOptionValue(opt)),
+          );
+          onSelect(newSelectedOptions);
+        }
+      } else {
+        // Add to selection (check max limit)
+        if (maxSelections && valueArray.length >= maxSelections) {
+          toast.error(`You can only select up to ${maxSelections} items`);
+          return;
+        }
+        const newValue = [...valueArray, optionValue];
+        onValueChange(newValue);
+        if (onSelect) {
+          const newSelectedOptions = options.filter((opt) =>
+            newValue.includes(getOptionValue(opt)),
+          );
+          onSelect(newSelectedOptions);
+        }
+      }
+    } else {
+      // Single select
+      onValueChange(optionValue);
+      if (onSelect) {
+        onSelect(option);
+      }
+      setOpen(false);
     }
-    setOpen(false);
+  };
+
+  const handleRemoveItem = (
+    optionValue: string | number,
+    e: React.MouseEvent,
+  ) => {
+    e.stopPropagation();
+    if (multiple) {
+      const newValue = valueArray.filter((v) => v !== optionValue);
+      onValueChange(newValue);
+      if (onSelect) {
+        const newSelectedOptions = options.filter((opt) =>
+          newValue.includes(getOptionValue(opt)),
+        );
+        onSelect(newSelectedOptions);
+      }
+    }
+  };
+
+  const handleClearAll = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onValueChange(multiple ? [] : "");
+    if (onSelect) {
+      onSelect(multiple ? [] : ({} as T));
+    }
   };
 
   return (
@@ -178,23 +247,63 @@ export function ComboboxSelect<T>({
           aria-expanded={open}
           disabled={disabled || isLoading}
           className={cn(
-            "w-full justify-between",
-            !value && "text-muted-foreground",
-            className
+            "w-full justify-between min-h-10 h-auto",
+            !valueArray.length && "text-muted-foreground",
+            className,
           )}
         >
-          {renderTrigger && selectedOption
-            ? renderTrigger(selectedOption)
-            : selectedOption
-            ? getOptionLabel(selectedOption)
-            : placeholder}
-          {icon || (
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          )}
+          <div className="flex-1 flex items-center gap-1 flex-wrap">
+            {renderTrigger && selectedOptions.length > 0 ? (
+              renderTrigger(multiple ? selectedOptions : selectedOptions[0])
+            ) : selectedOptions.length > 0 ? (
+              multiple ? (
+                <div className="flex items-center gap-1 flex-wrap">
+                  {showSelectedCount && selectedOptions.length > 2 ? (
+                    <Badge variant="secondary" className="rounded-sm">
+                      {selectedOptions.length} selected
+                    </Badge>
+                  ) : (
+                    selectedOptions.map((option) => (
+                      <Badge
+                        key={getOptionValue(option)}
+                        variant="secondary"
+                        className="rounded-sm gap-1"
+                      >
+                        {getOptionLabel(option)}
+                        <X
+                          className="h-3 w-3 cursor-pointer hover:text-destructive"
+                          onClick={(e) =>
+                            handleRemoveItem(getOptionValue(option), e)
+                          }
+                        />
+                      </Badge>
+                    ))
+                  )}
+                </div>
+              ) : (
+                getOptionLabel(selectedOptions[0])
+              )
+            ) : (
+              placeholder
+            )}
+          </div>
+          <div className="flex items-center gap-1 ml-2">
+            {valueArray.length > 0 && (
+              <X
+                className="h-4 w-4 shrink-0 opacity-50 hover:opacity-100 cursor-pointer"
+                onClick={handleClearAll}
+              />
+            )}
+            {icon || <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />}
+          </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0" align="start">
-        <Command>
+      <PopoverContent
+        className="w-full p-0"
+        align="start"
+        style={{ maxHeight: "400px" }}
+      >
+        <Command shouldFilter={!enableApiSearch}>
           <div className="relative">
             <CommandInput
               placeholder={searchPlaceholder}
@@ -218,30 +327,44 @@ export function ComboboxSelect<T>({
                 <RefreshCw
                   className={cn(
                     "h-4 w-4 text-muted-foreground",
-                    isLoading && "animate-spin"
+                    isLoading && "animate-spin",
                   )}
                 />
               </button>
             )}
           </div>
           <CommandEmpty>{isLoading ? "Loading..." : emptyText}</CommandEmpty>
-          <CommandGroup className="max-h-64 overflow-y-auto">
+          <CommandGroup className="max-h-[300px] overflow-y-auto">
+            {multiple && valueArray.length > 0 && (
+              <div className="px-2 py-1.5 text-xs text-muted-foreground border-b">
+                {valueArray.length} selected
+                {maxSelections && ` (max: ${maxSelections})`}
+              </div>
+            )}
             {options.map((option, index) => {
               const optionValue = getOptionValue(option);
-              const isSelected = value === optionValue;
+              const isSelected = valueArray.includes(optionValue);
 
               return (
                 <CommandItem
                   key={`${optionValue}-${index}`}
                   value={getOptionLabel(option)}
                   onSelect={() => handleSelect(option)}
+                  className={cn(multiple && "cursor-pointer")}
                 >
-                  <Check
+                  <div
                     className={cn(
-                      "mr-2 h-4 w-4",
-                      isSelected ? "opacity-100" : "opacity-0"
+                      "mr-2 flex h-4 w-4 items-center justify-center border border-primary",
+                      multiple ? "rounded" : "rounded-full",
+                      isSelected
+                        ? "bg-primary text-primary-foreground"
+                        : "opacity-50",
                     )}
-                  />
+                  >
+                    <Check
+                      className={cn("h-3 w-3", !isSelected && "opacity-0")}
+                    />
+                  </div>
                   {renderOption ? renderOption(option) : getOptionLabel(option)}
                 </CommandItem>
               );
