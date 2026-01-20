@@ -26,8 +26,8 @@ interface BannerFormData {
   title: string;
   link_type: "none" | "product" | "package" | "url";
   url: string;
-  package_id: string;
-  product_id: string;
+  package_id: string[];
+  product_id: string[];
   display_order: number;
   is_active: boolean;
   image: File | null;
@@ -54,8 +54,8 @@ export default function FormModal({
     title: "",
     link_type: "none",
     url: "",
-    package_id: "",
-    product_id: "",
+    package_id: [],
+    product_id: [],
     display_order: 1,
     is_active: true,
     image: null,
@@ -68,8 +68,8 @@ export default function FormModal({
         title: editData.title,
         link_type: editData.link_type,
         url: editData.url || "",
-        package_id: editData.package_id || "",
-        product_id: editData.product_id || "",
+        package_id: editData.package_id ? [editData.package_id] : [],
+        product_id: editData.product_id ? [editData.product_id] : [],
         display_order: editData.display_order,
         is_active: editData.is_active,
         image: null,
@@ -81,8 +81,8 @@ export default function FormModal({
         title: "",
         link_type: "none",
         url: "",
-        package_id: "",
-        product_id: "",
+        package_id: [],
+        product_id: [],
         display_order: 1,
         is_active: true,
         image: null,
@@ -93,7 +93,7 @@ export default function FormModal({
 
   const updateField = <K extends keyof BannerFormData>(
     field: K,
-    value: BannerFormData[K]
+    value: BannerFormData[K],
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -156,12 +156,12 @@ export default function FormModal({
       }
     }
 
-    if (formData.link_type === "package" && !formData.package_id) {
+    if (formData.link_type === "package" && !formData.package_id.length) {
       toast.error(t("banners.messages.packageRequired"));
       return;
     }
 
-    if (formData.link_type === "product" && !formData.product_id) {
+    if (formData.link_type === "product" && !formData.product_id.length) {
       toast.error(t("banners.messages.productRequired"));
       return;
     }
@@ -188,12 +188,16 @@ export default function FormModal({
         submitData.append("url", formData.url);
       }
 
-      if (formData.link_type === "package" && formData.package_id) {
-        submitData.append("package_id", formData.package_id);
+      if (formData.link_type === "package" && formData.package_id.length) {
+        formData.package_id.forEach((id, index) => {
+          submitData.append(`package_ids[${index}]`, id);
+        });
       }
 
-      if (formData.link_type === "product" && formData.product_id) {
-        submitData.append("product_id", formData.product_id);
+      if (formData.link_type === "product" && formData.product_id.length) {
+        formData.product_id.forEach((id, index) => {
+          submitData.append(`product_ids[${index}]`, id);
+        });
       }
 
       console.log("Submitting data:", {
@@ -212,7 +216,7 @@ export default function FormModal({
       toast.success(
         isEditing
           ? t("banners.messages.bannerUpdated")
-          : t("banners.messages.bannerCreated")
+          : t("banners.messages.bannerCreated"),
       );
       onClose();
     } catch (error) {
@@ -220,7 +224,7 @@ export default function FormModal({
       toast.error(
         isEditing
           ? t("banners.messages.failedToUpdate")
-          : t("banners.messages.failedToCreate")
+          : t("banners.messages.failedToCreate"),
       );
     } finally {
       setIsSubmitting(false);
@@ -428,8 +432,12 @@ export default function FormModal({
               storeDataKey="packages"
               enableApiSearch={true}
               value={formData.package_id}
+              multiple={true}
               onValueChange={(value) =>
-                updateField("package_id", value.toString())
+                updateField(
+                  "package_id",
+                  Array.isArray(value) ? value : [value],
+                )
               }
               placeholder={t("banners.form.packagePlaceholder")}
               searchPlaceholder="Search packages..."
@@ -466,8 +474,12 @@ export default function FormModal({
               enableApiSearch={true}
               value={formData.product_id}
               onValueChange={(value) =>
-                updateField("product_id", value.toString())
+                updateField(
+                  "product_id",
+                  Array.isArray(value) ? value : [value],
+                )
               }
+              multiple={true}
               placeholder={t("banners.form.productPlaceholder")}
               searchPlaceholder="Search products..."
               emptyText="No products found"

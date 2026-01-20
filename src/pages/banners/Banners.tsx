@@ -12,13 +12,13 @@ import { ActionItem, DropdownMenuActions } from "@/components/table";
 import { Eye, Edit, Trash2, Plus, Image as ImageIcon } from "lucide-react";
 import getSerialNumber from "@/lib/getSerialNumber";
 import { toast } from "sonner";
-import FormModal from "../modal/FormModal";
-import ViewModal from "../modal/ViewModal";
 import DeleteModal from "@/components/modals/DeleteModal";
 import usePermissions from "@/hooks/use-permissions";
 import permissions from "@/lib/permissions";
+import FormModal from "./modal/FormModal";
+import ViewModal from "./modal/ViewModal";
 
-function BannersTab() {
+function Banners() {
   const { t } = useTranslation();
   const store = useBannerStore();
   const { hasPermission } = usePermissions();
@@ -84,7 +84,7 @@ function BannersTab() {
         setTogglingBannerId(null);
       }
     },
-    [t]
+    [t],
   );
 
   // Define actions for dropdown menu - memoized
@@ -109,7 +109,7 @@ function BannersTab() {
         show: hasPermission(permissions.banners.delete),
       },
     ],
-    [t, handleViewDetails, handleEdit, handleDelete]
+    [t, handleViewDetails, handleEdit, handleDelete],
   );
 
   // Calculate stats from store data
@@ -235,7 +235,7 @@ function BannersTab() {
         ),
       },
     ],
-    [togglingBannerId, bannerActions, handleStatusToggle]
+    [togglingBannerId, bannerActions, handleStatusToggle],
   );
 
   const summaryLists = [
@@ -314,4 +314,4 @@ function BannersTab() {
   );
 }
 
-export default BannersTab;
+export default Banners;
