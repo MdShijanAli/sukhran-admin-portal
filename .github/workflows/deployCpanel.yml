@@ -30,4 +30,4 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           localDir: "dist"
           remoteDir: "/public_html"
-          options: "--transfer-all --no-perms"
+          options: "--verbose --transfer-all --no-perms --parallel=4"
