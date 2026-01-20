@@ -3,7 +3,7 @@ name: Build & Push React
 on:
   push:
     branches:
-      - main
+      - projecct_setup_nov_03
 
 jobs:
   build:
