@@ -12,25 +12,22 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
       - name: Build
         run: |
           npm install
           npm run build
 
-      - name: FTP-Deploy-Action
-        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      - name: Deploy via FTP
+        uses: sebastianpopp/ftp-action@releases/v2
         with:
-          server: d2c.shukran.store
-          username: ftp_shukran@d2c.shukran.store
-          password: n~W9;YR7LmxYTnRz
-          port: 21
-          local-dir: ./dist/
-          server-dir: /home/d2cshukran/public_html/
-          dangerous-clean-slate: false
-          log-level: verbose
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/.vscode/**
-            **/.env
+          host: ${{ secrets.FTP_SERVER }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          localDir: "dist"
+          remoteDir: "/public_html"
+          options: "--transfer-all --no-perms"
