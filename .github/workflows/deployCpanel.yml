@@ -20,14 +20,14 @@ jobs:
       - name: FTP-Deploy-Action
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
-          server: ftp.d2c.shukran.store
+          server: d2c.shukran.store
           username: ftp_shukran@d2c.shukran.store
           password: n~W9;YR7LmxYTnRz
-          protocol: ftps
           port: 21
           local-dir: ./dist/
-          server-dir: ./public_html/
+          server-dir: /home/d2cshukran/public_html/
           dangerous-clean-slate: false
+          log-level: verbose
           exclude: |
             **/.git*
             **/.git*/**
