@@ -52,7 +52,7 @@ export default function FormModal({
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [formData, setFormData] = useState<BannerFormData>({
     title: "",
-    link_type: "none",
+    link_type: "product",
     url: "",
     package_id: [],
     product_id: [],
@@ -79,7 +79,7 @@ export default function FormModal({
       setIsEditing(false);
       setFormData({
         title: "",
-        link_type: "none",
+        link_type: "product",
         url: "",
         package_id: [],
         product_id: [],
@@ -359,17 +359,17 @@ export default function FormModal({
                 />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="none">
+                {/* <SelectItem value="none">
                   {t("banners.linkTypes.none")}
                 </SelectItem>
                 <SelectItem value="url">
                   {t("banners.linkTypes.url")}
+                </SelectItem> */}
+                <SelectItem value="product">
+                  {t("banners.linkTypes.product")}
                 </SelectItem>
                 <SelectItem value="package">
                   {t("banners.linkTypes.package")}
-                </SelectItem>
-                <SelectItem value="product">
-                  {t("banners.linkTypes.product")}
                 </SelectItem>
               </SelectContent>
             </Select>
@@ -429,6 +429,7 @@ export default function FormModal({
             <ComboboxSelect
               service={packageService}
               store={packageStore}
+              additionalParams={{ packageType: "admin" }}
               storeDataKey="packages"
               enableApiSearch={true}
               value={formData.package_id}
