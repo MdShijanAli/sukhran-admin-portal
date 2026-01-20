@@ -19,10 +19,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Playfair Display"', "serif"],
+        display: ['"Karmella"', "serif"],
         body: ["Inter", '"Helvetica Neue"', "sans-serif"],
         sans: ["Inter", '"Helvetica Neue"', "sans-serif"],
-        serif: ['"Playfair Display"', "serif"],
+        serif: ['"Karmella"', "serif"],
       },
       colors: {
         border: "hsl(var(--border))",

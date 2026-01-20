@@ -11,5 +11,5 @@ export type {
 export { DropdownMenuActions } from "./DropdownMenuActions";
 export type { ActionItem } from "./DropdownMenuActions";
 
-export { TableSkeleton } from "./TableSkelaton";
+export { TableSkeleton } from "./TableSkeleton";
 export { Pagination } from "./Pagination";

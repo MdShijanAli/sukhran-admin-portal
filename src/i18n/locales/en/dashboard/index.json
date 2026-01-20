@@ -29,6 +29,10 @@
   "revenueChart": "Revenue Chart",
   "average_order": "Average Order Value",
   "topProducts": "Top Products",
+  "weekly": "Weekly",
+  "averageOrderValue": "Average Order Value",
+  "totalOrders": "Total Orders",
+  "daily": "Daily",
   "periods": {
     "today": "Today",
     "yesterday": "Yesterday",

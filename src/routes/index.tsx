@@ -25,10 +25,11 @@ const Packages = lazy(() => import("@/pages/package/Packages"));
 const PackageForm = lazy(() => import("@/pages/package/PackageForm"));
 const PackageDetails = lazy(() => import("@/pages/package/PackageDetails"));
 const PackageSettings = lazy(
-  () => import("@/pages/package/settings/PackageSettings")
+  () => import("@/pages/package/settings/PackageSettings"),
 );
 
 // Other Pages
+const Banners = lazy(() => import("@/pages/banners/Banners"));
 const Profile = lazy(() => import("@/pages/profile/Profile"));
 const Reports = lazy(() => import("@/pages/reports/Reports"));
 const Delivery = lazy(() => import("@/pages/delivery/Delivery"));
@@ -41,7 +42,7 @@ const RoleManagement = lazy(() => import("@/pages/roles/RoleManagement"));
 const Notifications = lazy(() => import("@/pages/notifications/Notifications"));
 const Settings = lazy(() => import("@/pages/settings/Settings"));
 const CoinManagement = lazy(
-  () => import("@/pages/coin-management/CoinManagement")
+  () => import("@/pages/coin-management/CoinManagement"),
 );
 const Family = lazy(() => import("@/pages/Family"));
 const Analytics = lazy(() => import("@/pages/Analytics"));
@@ -55,26 +56,26 @@ const Brands = lazy(() => import("@/pages/brands/Brands"));
 
 // Reports
 const TransactionReport = lazy(
-  () => import("@/pages/reports/reports/TransactionReport")
+  () => import("@/pages/reports/reports/TransactionReport"),
 );
 const PackageSalesReport = lazy(
-  () => import("@/pages/reports/reports/PackageSalesReport")
+  () => import("@/pages/reports/reports/PackageSalesReport"),
 );
 const PackageOrdersReport = lazy(
-  () => import("@/pages/reports/reports/PackageOrdersReport")
+  () => import("@/pages/reports/reports/PackageOrdersReport"),
 );
 const RegularSalesReport = lazy(
-  () => import("@/pages/reports/reports/RegularSalesReport")
+  () => import("@/pages/reports/reports/RegularSalesReport"),
 );
 const RegularOrdersReport = lazy(
-  () => import("@/pages/reports/reports/RegularOrdersReport")
+  () => import("@/pages/reports/reports/RegularOrdersReport"),
 );
 const DonationReport = lazy(
-  () => import("@/pages/reports/reports/DonationReport")
+  () => import("@/pages/reports/reports/DonationReport"),
 );
 const CoinReport = lazy(() => import("@/pages/reports/reports/CoinReport"));
 const ReferralReport = lazy(
-  () => import("@/pages/reports/reports/ReferralsReport")
+  () => import("@/pages/reports/reports/ReferralsReport"),
 );
 
 const AppRoutes: React.FC = () => {
@@ -134,6 +135,16 @@ const AppRoutes: React.FC = () => {
             <PrivateRoute>
               <SuspenseWrapper>
                 <Orders />
+              </SuspenseWrapper>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="banners"
+          element={
+            <PrivateRoute>
+              <SuspenseWrapper>
+                <Banners />
               </SuspenseWrapper>
             </PrivateRoute>
           }

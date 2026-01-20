@@ -22,6 +22,7 @@ import {
   ChevronUp,
   Search,
   X,
+  ImageIcon,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useSidebarStore } from "@/stores/sidebarStore";
@@ -51,6 +52,12 @@ const menuItems = [
     label: "nav.brands",
     path: "/brands",
     permission: permissions.brands.view,
+  },
+  {
+    icon: ImageIcon,
+    label: "nav.banners",
+    path: "/banners",
+    permission: permissions.banners.view,
   },
   {
     icon: FileText,
@@ -214,7 +221,7 @@ export default function Sidebar() {
     setExpandedItems((prev) =>
       prev.includes(path)
         ? prev.filter((item) => item !== path)
-        : [...prev, path]
+        : [...prev, path],
     );
   };
 
@@ -225,7 +232,7 @@ export default function Sidebar() {
         // For items with subItems, check if user has permission for at least one subItem
         if (item.subItems && item.subItems.length > 0) {
           return item.subItems.some((subItem) =>
-            hasPermission(subItem.permission)
+            hasPermission(subItem.permission),
           );
         }
         // For regular items, check the item's permission
@@ -239,7 +246,7 @@ export default function Sidebar() {
         // For items with subItems, check if user has permission for at least one subItem
         if (item.subItems && item.subItems.length > 0) {
           return item.subItems.some((subItem) =>
-            hasPermission(subItem.permission)
+            hasPermission(subItem.permission),
           );
         }
         // For regular items, check the item's permission
@@ -253,7 +260,7 @@ export default function Sidebar() {
         const subItemMatches = item.subItems?.some(
           (subItem) =>
             t(subItem.label).toLowerCase().includes(query) &&
-            hasPermission(subItem.permission)
+            hasPermission(subItem.permission),
         );
 
         return labelMatches || subItemMatches;
@@ -267,7 +274,7 @@ export default function Sidebar() {
               (subItem) =>
                 hasPermission(subItem.permission) &&
                 (t(item.label).toLowerCase().includes(query) ||
-                  t(subItem.label).toLowerCase().includes(query))
+                  t(subItem.label).toLowerCase().includes(query)),
             ),
           };
         }
@@ -282,7 +289,7 @@ export default function Sidebar() {
       filteredMenuItems.forEach((item) => {
         if (item.subItems && item.subItems.length > 0) {
           const hasMatchingSubItem = item.subItems.some((subItem) =>
-            t(subItem.label).toLowerCase().includes(searchQuery.toLowerCase())
+            t(subItem.label).toLowerCase().includes(searchQuery.toLowerCase()),
           );
           if (hasMatchingSubItem && !expandedItems.includes(item.path)) {
             itemsToExpand.push(item.path);
@@ -299,7 +306,7 @@ export default function Sidebar() {
     <aside
       className={cn(
         "fixed left-0 top-0 z-40 h-screen bg-black border-r border-black/20",
-        isCollapsed ? "w-18" : "w-64"
+        isCollapsed ? "w-18" : "w-64",
       )}
       style={{
         transition: "width 0.7s ease-in-out",
@@ -407,7 +414,7 @@ export default function Sidebar() {
                                 className={cn(
                                   "w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-300 ease-in-out",
                                   "hover:bg-white/10",
-                                  "text-white"
+                                  "text-white",
                                 )}
                               >
                                 <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out text-white" />
@@ -421,7 +428,7 @@ export default function Sidebar() {
                                 <ul className="py-1">
                                   {item.subItems
                                     ?.filter((subItem) =>
-                                      hasPermission(subItem.permission)
+                                      hasPermission(subItem.permission),
                                     )
                                     .map((subItem) => (
                                       <li key={subItem.path}>
@@ -433,7 +440,7 @@ export default function Sidebar() {
                                               "hover:bg-accent",
                                               isActive
                                                 ? "bg-accent font-medium"
-                                                : ""
+                                                : "",
                                             )
                                           }
                                         >
@@ -452,7 +459,7 @@ export default function Sidebar() {
                             className={cn(
                               "w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-300 ease-in-out",
                               "hover:bg-white/10 hover:text-white",
-                              "text-white/90"
+                              "text-white/90",
                             )}
                           >
                             <item.icon className="h-5 w-5 flex-shrink-0 transition-transform duration-300 ease-in-out" />
@@ -474,13 +481,13 @@ export default function Sidebar() {
                               "overflow-hidden transition-all duration-500 ease-in-out",
                               isExpanded
                                 ? "max-h-96 opacity-100"
-                                : "max-h-0 opacity-0"
+                                : "max-h-0 opacity-0",
                             )}
                           >
                             <ul className="mt-1 space-y-1 ml-4 pl-4 border-l-2 border-white/20">
                               {item.subItems
                                 ?.filter((subItem) =>
-                                  hasPermission(subItem.permission)
+                                  hasPermission(subItem.permission),
                                 )
                                 .map((subItem) => (
                                   <li key={subItem.path}>
@@ -492,7 +499,7 @@ export default function Sidebar() {
                                           "hover:bg-white/10 hover:text-white",
                                           isActive
                                             ? "bg-white/20 text-white font-medium"
-                                            : "text-white/80"
+                                            : "text-white/80",
                                         )
                                       }
                                     >
@@ -517,7 +524,7 @@ export default function Sidebar() {
                             "hover:bg-white/10 hover:text-white",
                             isActive
                               ? "bg-white/20 text-white font-medium"
-                              : "text-white/90"
+                              : "text-white/90",
                           )
                         }
                       >

@@ -219,7 +219,7 @@ export default function PackageBatchDetailsModal({
         showSubmitButton={false}
         onOpenChange={handleModalClose}
         title={t("orders.packageOrders.batchDetails")}
-        size="4xl"
+        size="6xl"
       >
         {loading && !details ? (
           <div className="space-y-4">

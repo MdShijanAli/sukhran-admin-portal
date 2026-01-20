@@ -1,16 +1,43 @@
 {
   "title": "সহায়তা টিকিট",
   "subtitle": "গ্রাহক সহায়তা টিকিট পরিচালনা করুন",
-  "addTicket": "নতুন টিকিট",
   "tabs": {
     "tickets": "সকল টিকিট",
     "statistics": "পরিসংখ্যান"
+  },
+  "addTicket": "নতুন টিকিট",
+  "filter": {
+    "priority": "অগ্রাধিকার নির্বাচন করুন",
+    "category": "বিভাগ নির্বাচন করুন",
+    "status": "অবস্থা নির্বাচন করুন",
+    "allPriorities": "সকল অগ্রাধিকার",
+    "allCategories": "সকল বিভাগ",
+    "allStatuses": "সকল অবস্থা",
+    "low": "নিম্ন",
+    "medium": "মাঝারি",
+    "high": "উচ্চ",
+    "urgent": "জরুরি",
+    "open": "খোলা",
+    "inProgress": "চলমান",
+    "resolved": "সমাধান হয়েছে",
+    "closed": "বন্ধ",
+    "delivery": "ডেলিভারি",
+    "payment": "পেমেন্ট",
+    "product": "পণ্য",
+    "account": "অ্যাকাউন্ট",
+    "order": "অর্ডার",
+    "return": "রিটার্ন",
+    "other": "অন্যান্য",
+    "selectStatus": "অবস্থা নির্বাচন করুন",
+    "selectCategory": "বিভাগ নির্বাচন করুন",
+    "selectPriority": "অগ্রাধিকার নির্বাচন করুন"
   },
   "tickets": {
     "title": "সহায়তা টিকিট",
     "subtitle": "সকল সহায়তা টিকিট দেখুন এবং পরিচালনা করুন",
     "noTickets": "কোন টিকিট পাওয়া যায়নি",
     "columns": {
+      "sl": "ক্র.নং",
       "ticketNumber": "টিকিট নং",
       "customer": "গ্রাহক",
       "subject": "বিষয়",
@@ -49,6 +76,9 @@
     "filter": {
       "status": "সকল অবস্থা",
       "category": "সকল বিভাগ",
+      "allStatuses": "সকল অবস্থা",
+      "allCategories": "সকল বিভাগ",
+      "allPriorities": "সকল অগ্রাধিকার",
       "priority": "সকল অগ্রাধিকার"
     }
   },
