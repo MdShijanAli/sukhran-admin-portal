@@ -111,7 +111,8 @@ function Packages() {
       perPage,
       currentPage,
       filterValues,
-    ]
+      localFilters,
+    ],
   );
 
   // Fetch on mount and when dependencies change
@@ -212,7 +213,7 @@ function Packages() {
 
   // Check if any filters are active
   const hasActiveFilters = Object.values(localFilters).some(
-    (value) => value !== undefined && value !== null && value !== ""
+    (value) => value !== undefined && value !== null && value !== "",
   );
 
   // Get filter label by value
@@ -567,7 +568,7 @@ function Packages() {
         onClose={() => setShowDelete(false)}
         title={t("packages.delete.title")}
         description={`${t("deleteConfirm")} "${selectedPackage?.name}"? ${t(
-          "deleteAftermath"
+          "deleteAftermath",
         )}`}
         onConfirm={confirmDelete}
         isDeleting={isDeleting}

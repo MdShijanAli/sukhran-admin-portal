@@ -252,7 +252,7 @@ export default function ProductForm() {
 
   const updateField = (
     field: keyof ProductFormData,
-    value: string | boolean | File
+    value: string | boolean | File,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -325,14 +325,14 @@ export default function ProductForm() {
     }
 
     toast.success(
-      t("products.messages.skuDuplicated") || "SKU duplicated successfully"
+      t("products.messages.skuDuplicated") || "SKU duplicated successfully",
     );
   };
 
   const updateSku = (
     index: number,
     field: keyof ProductSku,
-    value: string | number | File
+    value: string | number | File,
   ) => {
     const newSkus = [...skus];
     newSkus[index] = { ...newSkus[index], [field]: value };
@@ -341,7 +341,7 @@ export default function ProductForm() {
 
   const handleSkuImageChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -362,7 +362,7 @@ export default function ProductForm() {
     newSkus[index] = { ...newSkus[index], imgUrl: undefined };
     setSkus(newSkus);
     const fileInput = document.getElementById(
-      `skuImg-${index}`
+      `skuImg-${index}`,
     ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = "";
@@ -390,7 +390,7 @@ export default function ProductForm() {
         sku.unitName &&
         sku.unitSize &&
         sku.currentPrice > 0 &&
-        sku.stockQuantity > 0
+        sku.stockQuantity > 0,
     );
 
     if (!hasValidSku) {
@@ -448,7 +448,6 @@ export default function ProductForm() {
         await productService.storeItem(formDataToSubmit);
         toast.success(t("products.messages.productCreated"));
       }
-      await productService.fetchLists();
       navigate("/products");
     } catch (error) {
       console.error("Error submitting product:", error);
@@ -549,8 +548,8 @@ export default function ProductForm() {
                           isLoadingSubCategories
                             ? t("loading")
                             : subCategories.length === 0
-                            ? t("noData")
-                            : t("products.form.selectSubCategory")
+                              ? t("noData")
+                              : t("products.form.selectSubCategory")
                         }
                       />
                     </SelectTrigger>
@@ -826,7 +825,7 @@ export default function ProductForm() {
                             updateSku(
                               index,
                               "currentPrice",
-                              Number(e.target.value)
+                              Number(e.target.value),
                             )
                           }
                           required
@@ -848,7 +847,7 @@ export default function ProductForm() {
                             updateSku(
                               index,
                               "originalPrice",
-                              Number(e.target.value)
+                              Number(e.target.value),
                             )
                           }
                         />
@@ -870,7 +869,7 @@ export default function ProductForm() {
                             updateSku(
                               index,
                               "stockQuantity",
-                              Number(e.target.value)
+                              Number(e.target.value),
                             )
                           }
                           required
@@ -1013,8 +1012,8 @@ export default function ProductForm() {
               {isSubmitting
                 ? t("loading")
                 : isEditMode
-                ? t("products.form.updateProduct")
-                : t("products.form.createProduct")}
+                  ? t("products.form.updateProduct")
+                  : t("products.form.createProduct")}
             </Button>
           </div>
         </form>

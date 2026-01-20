@@ -42,12 +42,6 @@ const menuItems = [
     permission: permissions.dashboard.view,
   },
   {
-    icon: Package,
-    label: "nav.products",
-    path: "/products",
-    permission: permissions.products.view,
-  },
-  {
     icon: FileText,
     label: "nav.brands",
     path: "/brands",
@@ -64,6 +58,12 @@ const menuItems = [
     label: "nav.categories",
     path: "/categories",
     permission: permissions.categories.view,
+  },
+  {
+    icon: Package,
+    label: "nav.products",
+    path: "/products",
+    permission: permissions.products.view,
   },
   {
     icon: Gift,

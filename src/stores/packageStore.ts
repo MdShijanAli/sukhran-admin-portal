@@ -64,11 +64,20 @@ export const usePackageStore = createStore<PackageState>(
     },
 
     updateItem: (id: number | string, data: unknown) => {
+      console.log("Updating package with ID:", id, "and data:", data);
       const pkg = (data as { data?: Partial<Package> })?.data || data;
+      console.log("Parsed package data:", pkg);
       set((state) => ({
-        packages: state.packages.map((p) =>
-          p.id === id ? { ...p, ...(pkg as Partial<Package>) } : p
-        ),
+        packages: state.packages.map((p) => {
+          console.log("Checking package with ID:", p.id);
+          console.log("Comparing with ID:", id);
+          // Convert both to numbers for comparison
+          if (Number(p.id) === Number(id)) {
+            console.log("Found matching package:", p);
+            return { ...p, ...(pkg as Partial<Package>) };
+          }
+          return p;
+        }),
         isLoading: false,
         error: null,
       }));
@@ -94,5 +103,5 @@ export const usePackageStore = createStore<PackageState>(
       set({ error, isLoading: false });
     },
   }),
-  "package-storage"
+  "package-storage",
 );

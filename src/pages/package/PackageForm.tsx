@@ -158,7 +158,7 @@ export default function PackageForm() {
             productId: item.product?.id?.toString() || "",
             skuId: item.sku?.id?.toString() || "",
             quantity: item.quantity?.toString() || "1",
-          }))
+          })),
         );
       }
     } catch (error) {
@@ -171,7 +171,7 @@ export default function PackageForm() {
 
   const updateField = (
     field: keyof PackageFormData,
-    value: string | boolean | File
+    value: string | boolean | File,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -230,7 +230,7 @@ export default function PackageForm() {
   const updateItem = (
     index: number,
     field: keyof PackageItem,
-    value: string
+    value: string,
   ) => {
     const newItems = [...items];
     newItems[index] = { ...newItems[index], [field]: value };
@@ -280,7 +280,7 @@ export default function PackageForm() {
         item.productId &&
         item.skuId &&
         item.quantity &&
-        parseFloat(item.quantity) > 0
+        parseFloat(item.quantity) > 0,
     );
 
     if (!hasValidItem) {
@@ -328,12 +328,12 @@ export default function PackageForm() {
         toast.success(t("packages.messages.packageCreated"));
       }
 
-      await packageService.fetchLists(); // Refresh package list
+      // await packageService.fetchLists(); // Refresh package list
       navigate("/packages");
     } catch (error: any) {
       console.error("Error saving package:", error);
       toast.error(
-        error?.response?.data?.message || t("packages.messages.failedToSave")
+        error?.response?.data?.message || t("packages.messages.failedToSave"),
       );
     } finally {
       setIsSubmitting(false);
@@ -494,7 +494,7 @@ export default function PackageForm() {
                     const selectedProduct = getProductById(item.productId);
                     const availableSkus = getSkusForProduct(item.productId);
                     const selectedSku = availableSkus.find(
-                      (s) => s.id?.toString() === item.skuId
+                      (s) => s.id?.toString() === item.skuId,
                     );
 
                     return (
@@ -541,7 +541,7 @@ export default function PackageForm() {
                                 <SelectTrigger>
                                   <SelectValue
                                     placeholder={t(
-                                      "packages.form.selectProduct"
+                                      "packages.form.selectProduct",
                                     )}
                                   />
                                 </SelectTrigger>
@@ -549,7 +549,7 @@ export default function PackageForm() {
                                   <div className="flex items-center border-b px-3 pb-2">
                                     <Input
                                       placeholder={t(
-                                        "packages.form.searchProducts"
+                                        "packages.form.searchProducts",
                                       )}
                                       value={productSearchQuery}
                                       onChange={(e) =>

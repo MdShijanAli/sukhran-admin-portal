@@ -127,7 +127,9 @@ export const useProductStore = createStore<ProductState>(
       const product = (data as { data?: Partial<Product> })?.data || data;
       set((state) => ({
         products: state.products.map((prod) =>
-          prod.id === id ? { ...prod, ...(product as Partial<Product>) } : prod
+          Number(prod.id) === Number(id)
+            ? { ...prod, ...(product as Partial<Product>) }
+            : prod,
         ),
         isLoading: false,
         error: null,
@@ -154,5 +156,5 @@ export const useProductStore = createStore<ProductState>(
       set({ error, isLoading: false });
     },
   }),
-  "product-storage"
+  "product-storage",
 );
