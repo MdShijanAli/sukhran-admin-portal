@@ -157,7 +157,8 @@ All colors MUST be HSL.
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Karmella', serif;
     font-style: normal;
-    @apply font-bold;
+    font-weight: 500;
+    letter-spacing: 0.1rem;
   }
 
   /* Custom thin scrollbar for the entire website */

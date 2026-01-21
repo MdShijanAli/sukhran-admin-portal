@@ -18,7 +18,7 @@ import {
   ActionItem,
   DropdownMenuActions,
 } from "@/components/table";
-import { formatNumberWithCommas } from "@/lib/utils";
+import { formatNumberWithCommas, StatusVariant } from "@/lib/utils";
 import { Order, useOrderStore } from "@/stores/orderStore";
 import orderService from "@/services/orderService";
 import { toast } from "sonner";
@@ -35,6 +35,8 @@ import PackageOrdersTab from "./tabs/PackageOrdersTab";
 import getSerialNumber from "@/lib/getSerialNumber";
 import Settings from "./tabs/Settings";
 import ModificaitonHistoryModal from "./modal/ModificaitonHisotryModal";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 function Orders() {
   const { t } = useTranslation();
@@ -46,12 +48,15 @@ function Orders() {
   const [showDetails, setShowDetails] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isPaiding, setIsPaiding] = useState(false);
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
   const [showUpdateStatusModal, setShowUpdateStatusModal] = useState(false);
+  const [showMarkAsPaidModal, setShowMarkAsPaidModal] = useState(false);
   const [showUpdateDeliveryTimeModal, setShowUpdateDeliveryTimeModal] =
     useState(false);
   const [showModificationHistoryModal, setShowModificationHistoryModal] =
     useState(false);
+  const [markAsPaidNote, setMarkAsPaidNote] = useState("");
 
   const handleSetRefresh = useCallback((refreshFn: () => void) => {
     setRefreshTable(() => refreshFn);
@@ -104,17 +109,32 @@ function Orders() {
   };
 
   const handleMarkAsPaid = async (order: Order) => {
+    if (!markAsPaidNote.trim()) {
+      toast.error(t("orders.messages.notesRequired"));
+      return;
+    }
+
+    setIsPaiding(true);
     try {
       await orderService.markCODOrderAsPaid(order.id, {
         payment_status: "paid",
-        notes: "Cash received from customer",
+        notes: markAsPaidNote,
       });
       toast.success(t("orders.messages.markedAsPaid"));
-      // refreshTable?.();
+      refreshTable?.();
+      setMarkAsPaidNote("");
     } catch (error) {
       console.error("Error marking order as paid:", error);
       toast.error(t("orders.messages.failedToMarkAsPaid"));
+    } finally {
+      setIsPaiding(false);
+      setShowMarkAsPaidModal(false);
     }
+  };
+
+  const handleMarkAsPaidOrder = async (order: Order) => {
+    setSelectedOrder(order);
+    setShowMarkAsPaidModal(true);
   };
 
   // Define actions for dropdown menu
@@ -167,7 +187,7 @@ function Orders() {
     {
       label: t("orders.actions.markAsPaid"),
       icon: CheckCircle,
-      onClick: handleMarkAsPaid,
+      onClick: handleMarkAsPaidOrder,
       show:
         !import.meta.env.PROD &&
         hasPermission(permissions.orders.edit) &&
@@ -221,7 +241,7 @@ function Orders() {
         <span className="font-medium">
           ৳
           {formatNumberWithCommas(
-            order.grandTotal || order.receipt?.grandTotal || 0
+            order.grandTotal || order.receipt?.grandTotal || 0,
           )}
         </span>
       ),
@@ -231,7 +251,7 @@ function Orders() {
       label: t("orders.columns.payment"),
       render: (order) => (
         <div className="w-[120px] text-center">
-          <Badge variant="outline">
+          <Badge className={StatusVariant(order.paymentMode)}>
             {t(`orders.paymentMethod.${order.paymentMode}`)}
           </Badge>
         </div>
@@ -270,8 +290,8 @@ function Orders() {
               order.paymentStatus === "paid"
                 ? "border-success/20 text-success"
                 : order.paymentStatus === "failed"
-                ? "border-destructive/20 text-destructive"
-                : "border-warning/20 text-warning"
+                  ? "border-destructive/20 text-destructive"
+                  : "border-warning/20 text-warning"
             }
           >
             {t(`orders.paymentStatus.${order.paymentStatus}`)}
@@ -329,7 +349,7 @@ function Orders() {
     {
       title: t("orders.totalRevenue"),
       value: `৳${formatNumberWithCommas(
-        parseFloat(store.statistics.total_revenue || "0")
+        parseFloat(store.statistics.total_revenue || "0"),
       )}`,
       icon: Package,
       color: "text-blue-600",
@@ -459,6 +479,41 @@ function Orders() {
         onConfirm={handleDeleteOrder}
         isDeleting={isDeleting}
       />
+
+      {/* Mark As Paid Modal */}
+      <DeleteModal
+        open={showMarkAsPaidModal}
+        onClose={() => {
+          setShowMarkAsPaidModal(false);
+          setMarkAsPaidNote("");
+        }}
+        title={t("orders.actions.markAsPaid")}
+        description={`${t("orders.actions.markAsPaidMessage")} ${
+          selectedOrder?.orderId
+        }? ${t("orders.delete.cannotUndo")}`}
+        onConfirm={() => handleMarkAsPaid(selectedOrder!)}
+        submitButtonText={t("orders.actions.receivePayment")}
+        submitButtonVariant="default"
+        isDeleting={isPaiding}
+      >
+        <div className="space-y-2 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
+          <Label htmlFor="markAsPaidNote" className="text-sm font-medium">
+            {t("orders.form.notes")} <span className="text-destructive">*</span>
+          </Label>
+          <Textarea
+            id="markAsPaidNote"
+            value={markAsPaidNote}
+            onChange={(e) => setMarkAsPaidNote(e.target.value)}
+            placeholder={t("orders.form.notesPlaceholder")}
+            rows={3}
+            className="bg-white dark:bg-background"
+            required
+          />
+          <p className="text-xs text-muted-foreground">
+            {t("orders.form.notesHelperText")}
+          </p>
+        </div>
+      </DeleteModal>
 
       <UpdateOrderStatusModal
         open={showUpdateStatusModal}

@@ -80,7 +80,7 @@ export default function DeliveryExample() {
 
   const handleStatusChange = (
     deliveryId: string,
-    newStatus: Delivery["status"]
+    newStatus: Delivery["status"],
   ) => {
     setDeliveries(
       deliveries.map((d) => {
@@ -92,7 +92,7 @@ export default function DeliveryExample() {
           return updated;
         }
         return d;
-      })
+      }),
     );
   };
 
@@ -184,9 +184,7 @@ export default function DeliveryExample() {
   return (
     <div className="">
       <div>
-        <h1 className="text-3xl font-bold tracking-wide">
-          {t("nav.delivery")}
-        </h1>
+        <h1 className="text-3xl font-bold ">{t("nav.delivery")}</h1>
         <p className="text-muted-foreground">Manage and track all deliveries</p>
       </div>
 

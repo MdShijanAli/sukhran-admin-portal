@@ -113,7 +113,7 @@ export default function PackageDetails() {
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold tracking-wide">
+          <h1 className="text-3xl font-bold ">
             {t("packages.view.packageDetails")}
           </h1>
           <p className="text-muted-foreground mt-1">

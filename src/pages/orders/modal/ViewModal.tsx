@@ -72,7 +72,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
       title={t("orders.view.orderDetails")}
       showSubmitButton={false}
       closeButtonText={t("close")}
-      size="2xl"
+      size="3xl"
     >
       {isLoading ? (
         <div className="flex items-center justify-center py-8">
@@ -119,7 +119,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
               </div>
               <div className="p-3 space-y-2.5">
                 <div>
-                  <Label className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                  <Label className="text-[10px] text-muted-foreground uppercase ">
                     {t("name")}
                   </Label>
                   <p className="text-sm font-medium mt-0.5">
@@ -127,7 +127,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                   </p>
                 </div>
                 <div>
-                  <Label className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                  <Label className="text-[10px] text-muted-foreground uppercase ">
                     {t("phone")}
                   </Label>
                   <p className="text-sm font-medium mt-0.5">
@@ -136,7 +136,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                 </div>
                 {order.customer.email && (
                   <div>
-                    <Label className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                    <Label className="text-[10px] text-muted-foreground uppercase ">
                       {t("email")}
                     </Label>
                     <p className="text-sm font-medium mt-0.5">
@@ -157,7 +157,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
               </div>
               <div className="p-3 space-y-2.5">
                 <div>
-                  <Label className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                  <Label className="text-[10px] text-muted-foreground uppercase ">
                     {t("orders.form.deliveryAddress")}
                   </Label>
                   <p className="text-sm font-medium mt-0.5">
@@ -179,7 +179,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                 </div>
                 {order.address.type && (
                   <div>
-                    <Label className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                    <Label className="text-[10px] text-muted-foreground uppercase ">
                       Address Type
                     </Label>
                     <p className="text-sm font-medium mt-0.5 capitalize">
@@ -201,7 +201,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
               <div className="p-3">
                 <div className="flex items-center gap-4">
                   <div className="flex-1">
-                    <Label className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                    <Label className="text-[10px] text-muted-foreground uppercase ">
                       From
                     </Label>
                     <p className="text-sm font-medium mt-0.5">
@@ -210,7 +210,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                     </p>
                   </div>
                   <div className="flex-1">
-                    <Label className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                    <Label className="text-[10px] text-muted-foreground uppercase ">
                       To
                     </Label>
                     <p className="text-sm font-medium mt-0.5">
@@ -262,7 +262,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                     </div>
                     <div className="flex items-center gap-6 text-sm">
                       <div className="text-right">
-                        <Label className="text-[10px] text-muted-foreground uppercase tracking-widestblock">
+                        <Label className="text-[10px] text-muted-foreground uppercase block">
                           {t("orders.view.quantity")}
                         </Label>
                         <p className="font-medium text-sm mt-0.5">
@@ -270,7 +270,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                         </p>
                       </div>
                       <div className="text-right">
-                        <Label className="text-[10px] text-muted-foreground uppercase tracking-widestblock">
+                        <Label className="text-[10px] text-muted-foreground uppercase block">
                           {t("orders.view.price")}
                         </Label>
                         <p className="font-medium text-sm mt-0.5">
@@ -278,7 +278,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                         </p>
                       </div>
                       <div className="text-right min-w-[80px]">
-                        <Label className="text-[10px] text-muted-foreground uppercase tracking-widestblock">
+                        <Label className="text-[10px] text-muted-foreground uppercase block">
                           {t("orders.view.total")}
                         </Label>
                         <p className="font-semibold text-sm mt-0.5">
@@ -301,6 +301,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
               </h4>
             </div>
             <div className="p-3 space-y-2">
+              {/* Subtotal */}
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">
                   {t("orders.form.subtotal")}
@@ -309,33 +310,111 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                   ৳{formatNumberWithCommas(order.receipt.subTotal)}
                 </span>
               </div>
+
+              {/* General Discount */}
               {order.receipt.discount > 0 && (
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">
                     {t("orders.form.discount")}
                   </span>
-                  <span className="font-medium text-destructive">
+                  <span className="font-medium text-green-600">
                     -৳{formatNumberWithCommas(order.receipt.discount)}
                   </span>
                 </div>
               )}
+
+              {/* Coupon Discount */}
+              {order.receipt.couponDiscount > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    Coupon Discount
+                    {order.receipt.couponCode && (
+                      <span className="ml-1.5 text-xs font-medium text-primary">
+                        ({order.receipt.couponCode})
+                      </span>
+                    )}
+                  </span>
+                  <span className="font-medium text-green-600">
+                    -৳{formatNumberWithCommas(order.receipt.couponDiscount)}
+                  </span>
+                </div>
+              )}
+
+              {/* Coin Discount */}
+              {order.receipt.coinDiscount > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    Coin Discount
+                    {order.receipt.coinsUsed > 0 && (
+                      <span className="ml-1.5 text-xs font-medium text-amber-600">
+                        ({order.receipt.coinsUsed} coins)
+                      </span>
+                    )}
+                  </span>
+                  <span className="font-medium text-green-600">
+                    -৳{formatNumberWithCommas(order.receipt.coinDiscount)}
+                  </span>
+                </div>
+              )}
+
+              {/* Delivery Fee */}
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">
                   {t("orders.form.deliveryFee")}
                 </span>
                 <span className="font-medium">
-                  ৳{formatNumberWithCommas(order.receipt.deliveryCharge)}
+                  {order.receipt.deliveryCharge > 0 ? (
+                    <>৳{formatNumberWithCommas(order.receipt.deliveryCharge)}</>
+                  ) : (
+                    <span className="text-green-600 font-semibold">FREE</span>
+                  )}
                 </span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">
-                  VAT ({order.receipt.vatPercentage}%)
-                </span>
-                <span className="font-medium">
-                  ৳{formatNumberWithCommas(order.receipt.vat)}
-                </span>
-              </div>
+
+              {/* VAT */}
+              {order.receipt.vat > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    VAT ({order.receipt.vatPercentage}%)
+                  </span>
+                  <span className="font-medium">
+                    ৳{formatNumberWithCommas(order.receipt.vat)}
+                  </span>
+                </div>
+              )}
+
+              {/* Donation Amount */}
+              {order.receipt.donationAmount > 0 && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">
+                    Donation
+                    {order.receipt.donationChannelName && (
+                      <span className="ml-1.5 text-xs font-medium text-blue-600">
+                        ({order.receipt.donationChannelName})
+                      </span>
+                    )}
+                  </span>
+                  <span className="font-medium text-blue-600">
+                    ৳{formatNumberWithCommas(order.receipt.donationAmount)}
+                  </span>
+                </div>
+              )}
+
               <Separator className="my-2" />
+
+              {/* Total Savings */}
+              {order.receipt.totalSavings > 0 && (
+                <div className="flex justify-between text-sm bg-green-50 dark:bg-green-950/20 -mx-3 px-3 py-2 border-y border-green-200 dark:border-green-900">
+                  <span className="font-medium text-green-700 dark:text-green-300">
+                    Total Savings 🎉
+                  </span>
+                  <span className="font-semibold text-green-700 dark:text-green-300">
+                    ৳{formatNumberWithCommas(order.receipt.totalSavings)}
+                  </span>
+                </div>
+              )}
+
+              {/* Grand Total */}
               <div className="flex justify-between pt-1">
                 <span className="text-sm font-semibold">
                   {t("orders.form.total")}
@@ -344,6 +423,31 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                   ৳{formatNumberWithCommas(order.receipt.grandTotal)}
                 </span>
               </div>
+
+              {/* Coins Earned */}
+              {order.receipt.coinsEarned > 0 && (
+                <div className="flex justify-between pt-2 border-t">
+                  <span className="text-xs text-muted-foreground flex items-center gap-1">
+                    <span className="text-amber-500">🪙</span>
+                    Coins Earned
+                  </span>
+                  <span className="text-sm font-semibold text-amber-600">
+                    +{order.receipt.coinsEarned} coins
+                  </span>
+                </div>
+              )}
+
+              {/* Referral Code Used */}
+              {order.receipt.referralCode && (
+                <div className="flex justify-between pt-1">
+                  <span className="text-xs text-muted-foreground">
+                    Referral Code
+                  </span>
+                  <span className="text-xs font-medium text-purple-600">
+                    {order.receipt.referralCode}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -356,7 +460,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
               </div>
               <div className="p-3 space-y-2.5">
                 <div>
-                  <Label className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                  <Label className="text-[10px] text-muted-foreground uppercase ">
                     {t("orders.form.paymentMethod")}
                   </Label>
                   <p className="text-sm font-medium capitalize mt-0.5">
@@ -364,7 +468,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                   </p>
                 </div>
                 <div className="flex justify-between items-center">
-                  <Label className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                  <Label className="text-[10px] text-muted-foreground uppercase ">
                     Payment Status
                   </Label>
                   <Badge
@@ -387,7 +491,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                 </div>
                 <div className="p-3 space-y-2.5">
                   <div className="flex justify-between items-center">
-                    <Label className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                    <Label className="text-[10px] text-muted-foreground uppercase ">
                       Status
                     </Label>
                     <Badge
@@ -400,7 +504,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                     </Badge>
                   </div>
                   <div>
-                    <Label className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                    <Label className="text-[10px] text-muted-foreground uppercase ">
                       Attempts
                     </Label>
                     <p className="text-sm font-medium mt-0.5">
@@ -410,7 +514,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                   {order.deliverySync.failed &&
                     order.deliverySync.lastError && (
                       <div>
-                        <Label className="text-[10px] text-destructive uppercase tracking-wide">
+                        <Label className="text-[10px] text-destructive uppercase ">
                           Last Error
                         </Label>
                         <p className="text-xs text-destructive mt-0.5">

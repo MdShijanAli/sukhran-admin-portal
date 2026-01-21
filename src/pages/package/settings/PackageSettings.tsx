@@ -47,7 +47,7 @@ function PackageSettings() {
   // Dialog states
   const [showFormModal, setShowFormModal] = useState(false);
   const [editingOption, setEditingOption] = useState<ScheduleOption | null>(
-    null
+    null,
   );
   const [defaultOptionType, setDefaultOptionType] = useState<
     "schedule_months" | "frequency_per_month" | "delivery_time"
@@ -62,10 +62,10 @@ function PackageSettings() {
   // Update local state when settings change
   useEffect(() => {
     const minAmountSetting = settings.find(
-      (s) => s.key === "custom_package_min_amount"
+      (s) => s.key === "custom_package_min_amount",
     );
     const enabledSetting = settings.find(
-      (s) => s.key === "custom_package_enabled"
+      (s) => s.key === "custom_package_enabled",
     );
 
     if (minAmountSetting) {
@@ -93,10 +93,10 @@ function PackageSettings() {
       setIsSavingSettings(true);
 
       const minAmountSetting = settings.find(
-        (s) => s.key === "custom_package_min_amount"
+        (s) => s.key === "custom_package_min_amount",
       );
       const enabledSetting = settings.find(
-        (s) => s.key === "custom_package_enabled"
+        (s) => s.key === "custom_package_enabled",
       );
 
       const promises = [];
@@ -108,8 +108,8 @@ function PackageSettings() {
         promises.push(
           packageSettingsService.updateSetting(
             minAmountSetting.id,
-            customPackageMinAmount
-          )
+            customPackageMinAmount,
+          ),
         );
       }
 
@@ -120,8 +120,8 @@ function PackageSettings() {
         promises.push(
           packageSettingsService.updateSetting(
             enabledSetting.id,
-            customPackageEnabled.toString()
-          )
+            customPackageEnabled.toString(),
+          ),
         );
       }
 
@@ -154,7 +154,7 @@ function PackageSettings() {
       if (selectedOptions.length === 0) return;
       await packageSettingsService.bulkToggleSchedule(
         selectedOptions,
-        isActive
+        isActive,
       );
       toast.success(t("packageSettings.messages.statusUpdated"));
       setSelectedOptions([]);
@@ -170,7 +170,7 @@ function PackageSettings() {
     try {
       const result = await packageSettingsService.enablePackageSettings(
         settings[1].id,
-        checked
+        checked,
       );
       toast.success(t("packageSettings.messages.statusUpdated"));
     } catch (error) {
@@ -200,7 +200,7 @@ function PackageSettings() {
   };
 
   const openAddDialog = (
-    optionType: "schedule_months" | "frequency_per_month" | "delivery_time"
+    optionType: "schedule_months" | "frequency_per_month" | "delivery_time",
   ) => {
     setDefaultOptionType(optionType);
     setEditingOption(null);
@@ -215,7 +215,7 @@ function PackageSettings() {
   const renderScheduleSection = (
     title: string,
     options: ScheduleOption[],
-    icon: React.ReactNode
+    icon: React.ReactNode,
   ) => {
     return (
       <Card>
@@ -265,7 +265,7 @@ function PackageSettings() {
                           setSelectedOptions([...selectedOptions, option.id!]);
                         } else {
                           setSelectedOptions(
-                            selectedOptions.filter((id) => id !== option.id)
+                            selectedOptions.filter((id) => id !== option.id),
                           );
                         }
                       }}
@@ -293,7 +293,7 @@ function PackageSettings() {
                   </div>
                   <div className="flex items-center gap-2">
                     {hasPermission(
-                      permissions.package_schedule_options.edit
+                      permissions.package_schedule_options.edit,
                     ) && (
                       <Switch
                         checked={option.isActive}
@@ -302,7 +302,7 @@ function PackageSettings() {
                     )}
 
                     {hasPermission(
-                      permissions.package_schedule_options.edit
+                      permissions.package_schedule_options.edit,
                     ) && (
                       <Button
                         size="icon"
@@ -313,7 +313,7 @@ function PackageSettings() {
                       </Button>
                     )}
                     {hasPermission(
-                      permissions.package_schedule_options.delete
+                      permissions.package_schedule_options.delete,
                     ) && (
                       <Button
                         size="icon"
@@ -338,9 +338,7 @@ function PackageSettings() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-wide">
-            {t("packageSettings.title")}
-          </h1>
+          <h1 className="text-3xl font-bold ">{t("packageSettings.title")}</h1>
           <p className="text-muted-foreground mt-1">
             {t("packageSettings.subtitle")}
           </p>
@@ -478,17 +476,17 @@ function PackageSettings() {
               {renderScheduleSection(
                 t("packageSettings.scheduleMonths"),
                 scheduleOptions.schedule_months,
-                <Calendar className="h-5 w-5" />
+                <Calendar className="h-5 w-5" />,
               )}
               {renderScheduleSection(
                 t("packageSettings.frequencyPerMonth"),
                 scheduleOptions.frequency_per_month,
-                <RotateCcw className="h-5 w-5" />
+                <RotateCcw className="h-5 w-5" />,
               )}
               {renderScheduleSection(
                 t("packageSettings.deliveryTime"),
                 scheduleOptions.delivery_time,
-                <Clock className="h-5 w-5" />
+                <Clock className="h-5 w-5" />,
               )}
             </>
           )}

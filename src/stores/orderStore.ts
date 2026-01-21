@@ -44,6 +44,19 @@ export interface Receipt {
   vat: number;
   vatPercentage: number;
   grandTotal: number;
+  coinsUsed: number;
+  coinsUsedValue: number;
+  coinsEarned: number;
+  coinDiscount: number;
+  couponCode: string | null;
+  couponDiscount: number;
+  promoDiscount: number;
+  couponId: string | null;
+  donationAmount: number;
+  donationChannelId: string | null;
+  donationChannelName: string | null;
+  referralCode: string | null;
+  totalSavings: number;
 }
 
 export interface DeliverySync {
@@ -244,7 +257,7 @@ export const useOrderStore = createStore<OrderState>(
       const order = (data as { data?: Partial<Order> })?.data || data;
       set((state) => ({
         orders: state.orders.map((o) =>
-          o.id === id ? { ...o, ...(order as Partial<Order>) } : o
+          o.id === id ? { ...o, ...(order as Partial<Order>) } : o,
         ),
         isLoading: false,
         error: null,
@@ -271,5 +284,5 @@ export const useOrderStore = createStore<OrderState>(
       set({ error, isLoading: false });
     },
   }),
-  "order-storage"
+  "order-storage",
 );

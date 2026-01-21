@@ -119,7 +119,7 @@ const Products = () => {
       perPage,
       currentPage,
       filterValues,
-    ]
+    ],
   );
 
   // Fetch on mount and when dependencies change
@@ -220,7 +220,7 @@ const Products = () => {
 
   // Check if any filters are active
   const hasActiveFilters = Object.values(localFilters).some(
-    (value) => value !== undefined && value !== null && value !== ""
+    (value) => value !== undefined && value !== null && value !== "",
   );
 
   // Get filter label by value
@@ -275,9 +275,7 @@ const Products = () => {
       <Card className="mb-3">
         <CardContent className="p-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-wide">
-              {t("products.title")}
-            </h1>
+            <h1 className="text-3xl font-bold ">{t("products.title")}</h1>
             <p className="text-muted-foreground mt-1">
               {t("products.subtitle")}
             </p>
@@ -514,7 +512,7 @@ const Products = () => {
                             <p className="text-base font-bold text-primary">
                               ৳
                               {formatNumberWithCommas(
-                                (displaySku as any).pricing?.currentPrice || 0
+                                (displaySku as any).pricing?.currentPrice || 0,
                               )}
                               <span className="text-[10px] ml-1">
                                 ({displaySku.stockQuantity} qty)
@@ -526,7 +524,7 @@ const Products = () => {
                                 <p className="text-[10px] text-muted-foreground line-through">
                                   ৳
                                   {formatNumberWithCommas(
-                                    (displaySku as any).pricing.originalPrice
+                                    (displaySku as any).pricing.originalPrice,
                                   )}
                                 </p>
                               )}
@@ -623,7 +621,7 @@ const Products = () => {
         onClose={() => setShowDelete(false)}
         title={t("products.delete.title")}
         description={`${t("deleteConfirm")} "${selectedProduct?.name}"? ${t(
-          "deleteAftermath"
+          "deleteAftermath",
         )}`}
         onConfirm={confirmDelete}
         isDeleting={isDeleting}

@@ -116,7 +116,7 @@ const Reports = () => {
   const filteredReports = reports.filter(
     (report) =>
       report.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      report.description.toLowerCase().includes(searchQuery.toLowerCase())
+      report.description.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const handleNavigateToReport = (route: string) => {
@@ -128,9 +128,7 @@ const Reports = () => {
       {/* Header */}
       <div className="flex flex-col gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-wide">
-            {t("reports.title")}
-          </h1>
+          <h1 className="text-3xl font-bold ">{t("reports.title")}</h1>
           <p className="text-muted-foreground mt-1">{t("reports.subtitle")}</p>
         </div>
 

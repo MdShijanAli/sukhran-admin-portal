@@ -383,7 +383,7 @@ export default function PackageForm() {
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex-1">
-              <h1 className="text-3xl font-bold tracking-wide">
+              <h1 className="text-3xl font-bold ">
                 {isEditMode
                   ? t("packages.form.editPackage")
                   : t("packages.form.createNewPackage")}

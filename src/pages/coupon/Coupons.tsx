@@ -118,8 +118,8 @@ const Coupons = () => {
   };
 
   const getUsagePercentage = (coupon: Coupon) => {
-    const total = parseInt(coupon.usage.limit_total);
-    const used = parseInt(coupon.usage.count);
+    const total = Number(coupon.usage.limit_total);
+    const used = Number(coupon.usage.count);
     return total > 0 ? ((used / total) * 100).toFixed(0) : "0";
   };
 
@@ -239,7 +239,7 @@ const Coupons = () => {
         <div className="space-y-1">
           <div className="flex items-center justify-between text-xs">
             <span>
-              {coupon.usage.count} / {coupon.usage.limit_total}
+              {Number(coupon.usage.count)} / {Number(coupon.usage.limit_total)}
             </span>
             <span className="text-muted-foreground">
               {getUsagePercentage(coupon)}%
@@ -347,11 +347,13 @@ const Coupons = () => {
         open={dialogMode !== null}
         onClose={() => {
           setDialogMode(null);
-          if (refreshTable) refreshTable();
         }}
         editData={
           dialogMode === "edit" ? selectedCoupon || undefined : undefined
         }
+        onRefresh={() => {
+          if (refreshTable) refreshTable();
+        }}
       />
 
       <ViewModal

@@ -26,7 +26,7 @@ export const formatDDMMYYY = (dateString: string) => {
 
 export const formatNumberWithCommas = (
   number: number | string = 0,
-  options: { minDigit?: number; maxDigit?: number } = {}
+  options: { minDigit?: number; maxDigit?: number } = {},
 ): string => {
   let value = number;
 
@@ -51,7 +51,7 @@ export const unFormatNumberWithCommas = (value: string | number): number => {
 
 export const formatCurrency = (
   amount: number | string,
-  currency: string = "৳"
+  currency: string = "৳",
 ): string => {
   const numAmount = typeof amount === "string" ? parseFloat(amount) : amount;
   return `${currency}${formatNumberWithCommas(numAmount)}`;
@@ -79,9 +79,11 @@ export const StatusVariant = (status: string) => {
     case constData.orderStatuses.CANCELLED_AT_DELIVERY:
       return "bg-red-500/10 text-red-600 border-red-500/20";
     case constData.paymentModes.COD:
+    case constData.paymentModes.cod:
     case constData.orderStatuses.CONFIRMED:
       return "border-transparent bg-purple-700 text-white hover:bg-purple-700/80";
     case constData.paymentModes.ONLINE:
+    case constData.paymentModes.online:
     case constData.paymentModes.ONLINE_PAYMENT:
       return "border-transparent bg-green-700 text-white hover:bg-green-700/80";
     default:

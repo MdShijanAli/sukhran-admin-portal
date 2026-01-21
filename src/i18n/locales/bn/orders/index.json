@@ -65,7 +65,9 @@
     "edit": "সম্পাদনা",
     "pauseOrder": "অর্ডার বন্ধ করুন",
     "setDeliveryDate": "ডেলিভারির তারিখ নির্ধারণ করুন",
-    "modificationHistory": "পরিবর্তন ইতিহাস"
+    "modificationHistory": "পরিবর্তন ইতিহাস",
+    "markAsPaidMessage": "আপনি কি নিশ্চিত যে আপনি অর্ডার",
+    "receivePayment": "পেমেন্ট গ্রহণ করুন"
   },
   "form": {
     "createNewOrder": "নতুন অর্ডার তৈরি করুন",
@@ -105,7 +107,8 @@
     "updateOrder": "অর্ডার আপডেট করুন",
     "createOrder": "অর্ডার তৈরি করুন",
     "deletionReasonPlaceholder": "এই আইটেম মুছে ফেলার কারণ লিখুন",
-    "deletionReason": "মুছে ফেলার কারণ"
+    "deletionReason": "মুছে ফেলার কারণ",
+    "notesHelperText": "অনুগ্রহ করে পেমেন্ট গ্রহণ সম্পর্কে বিস্তারিত প্রদান করুন"
   },
   "updateStatus": {
     "title": "অর্ডার স্ট্যাটাস আপডেট করুন",

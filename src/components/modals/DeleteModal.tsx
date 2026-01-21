@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { BaseModal } from "./BaseModal";
 import { useTranslation } from "react-i18next";
 
@@ -10,6 +10,14 @@ export interface DeleteModalProps {
   onConfirm: () => void;
   isDeleting?: boolean;
   children?: ReactNode;
+  submitButtonText?: string;
+  submitButtonVariant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
 }
 
 export default function DeleteModal({
@@ -20,6 +28,8 @@ export default function DeleteModal({
   onConfirm,
   isDeleting = false,
   children,
+  submitButtonText,
+  submitButtonVariant = "destructive",
 }: DeleteModalProps) {
   const { t } = useTranslation();
   return (
@@ -29,8 +39,8 @@ export default function DeleteModal({
       title={title}
       onSubmit={onConfirm}
       isSubmitting={isDeleting}
-      submitButtonText={t("delete")}
-      submitButtonVariant="destructive"
+      submitButtonText={submitButtonText || t("delete")}
+      submitButtonVariant={submitButtonVariant || "destructive"}
       closeButtonText={t("cancel")}
       size="md"
     >

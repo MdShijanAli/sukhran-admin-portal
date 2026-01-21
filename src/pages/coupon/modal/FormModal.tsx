@@ -21,12 +21,14 @@ interface CouponFormModalProps {
   open: boolean;
   onClose: () => void;
   editData?: Coupon;
+  onRefresh?: () => void;
 }
 
 export default function FormModal({
   open,
   onClose,
   editData,
+  onRefresh,
 }: CouponFormModalProps) {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -81,7 +83,7 @@ export default function FormModal({
 
   const updateField = (
     field: keyof CouponFormData,
-    value: string | number | boolean
+    value: string | number | boolean,
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -159,15 +161,18 @@ export default function FormModal({
       toast.success(
         isEditing
           ? t("coupon.messages.couponUpdated")
-          : t("coupon.messages.couponCreated")
+          : t("coupon.messages.couponCreated"),
       );
+
+      const resultData = result as { status?: number; success?: boolean };
+      if (resultData.status === 200 || resultData.success === true) {
+        onRefresh?.();
+      }
       onClose();
     } catch (error) {
       console.error("Error submitting coupon:", error);
       toast.error(
-        isEditing
-          ? t("coupon.messages.failedToUpdate")
-          : t("coupon.messages.failedToCreate")
+        error.response.data.error_message || t("coupon.messages.submitError"),
       );
     } finally {
       setIsSubmitting(false);
@@ -376,7 +381,7 @@ export default function FormModal({
               onChange={(e) =>
                 updateField(
                   "usage_limit_per_user",
-                  parseInt(e.target.value) || 0
+                  parseInt(e.target.value) || 0,
                 )
               }
               placeholder="1"

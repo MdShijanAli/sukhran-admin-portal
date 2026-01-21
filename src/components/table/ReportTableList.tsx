@@ -38,7 +38,7 @@ const formatColumnName = (key: string): string => {
 
 // Helper to generate columns from data
 const generateColumns = <T extends Record<string, unknown>>(
-  data: T[]
+  data: T[],
 ): Column<T>[] => {
   if (!data || data.length === 0) return [];
 
@@ -143,7 +143,7 @@ export function ReportTableList({
 
   // Check if any filters are active
   const hasActiveFilters = Object.values(localFilters).some(
-    (value) => value && value !== ""
+    (value) => value && value !== "",
   );
 
   // Get filter label by value
@@ -329,7 +329,7 @@ export function ReportTableList({
         <CardHeader>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 className="text-2xl font-bold tracking-wide">{title}</h2>
+              <h2 className="text-2xl font-bold ">{title}</h2>
               {description && (
                 <p className="text-sm text-muted-foreground mt-1">
                   {description}

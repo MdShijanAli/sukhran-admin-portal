@@ -52,6 +52,8 @@ const constData = {
   paymentModes: {
     COD: "Cod",
     ONLINE: "Online",
+    online: "online",
+    cod: "cod",
     ONLINE_PAYMENT: "Online Payment",
   },
 
