@@ -62,7 +62,7 @@ export default function Login() {
               className="w-40 h-auto object-contain"
             />
           </div>
-          <h1 className="text-5xl font-bold mb-6">Admin Panel</h1>
+          <h1 className="text-5xl  mb-6">Admin Panel</h1>
           <p className="text-xl opacity-90">
             Manage your business with powerful analytics and comprehensive tools
           </p>
@@ -83,7 +83,7 @@ export default function Login() {
       <div className="flex w-full lg:w-1/2 items-center justify-center p-8">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold">Welcome Back</h2>
+            <h2 className="text-3xl ">Welcome Back</h2>
             <p className="mt-2 text-muted-foreground">
               Sign in to your account
             </p>

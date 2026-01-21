@@ -73,7 +73,7 @@ export default function StatisticsTab() {
                 <p className="text-sm font-medium text-blue-700 dark:text-blue-300 mb-1">
                   {t("support.statistics.newTickets")}
                 </p>
-                <p className="text-3xl font-bold text-blue-900 dark:text-blue-100">
+                <p className="text-3xl  text-blue-900 dark:text-blue-100">
                   {statistics.today.new_tickets}
                 </p>
               </div>
@@ -89,7 +89,7 @@ export default function StatisticsTab() {
                 <p className="text-sm font-medium text-amber-700 dark:text-amber-300 mb-1">
                   {t("support.statistics.inProgress")}
                 </p>
-                <p className="text-3xl font-bold text-amber-900 dark:text-amber-100">
+                <p className="text-3xl  text-amber-900 dark:text-amber-100">
                   {statistics.today.in_progress}
                 </p>
               </div>
@@ -105,7 +105,7 @@ export default function StatisticsTab() {
                 <p className="text-sm font-medium text-green-700 dark:text-green-300 mb-1">
                   {t("support.statistics.resolved")}
                 </p>
-                <p className="text-3xl font-bold text-green-900 dark:text-green-100">
+                <p className="text-3xl  text-green-900 dark:text-green-100">
                   {statistics.today.resolved}
                 </p>
               </div>
@@ -133,9 +133,7 @@ export default function StatisticsTab() {
                 <p className="text-xs text-muted-foreground">
                   {t("support.statistics.open")}
                 </p>
-                <p className="text-2xl font-bold">
-                  {statistics.current_status.open}
-                </p>
+                <p className="text-2xl ">{statistics.current_status.open}</p>
               </div>
             </div>
           </Card>
@@ -149,7 +147,7 @@ export default function StatisticsTab() {
                 <p className="text-xs text-muted-foreground">
                   {t("support.statistics.inProgress")}
                 </p>
-                <p className="text-2xl font-bold">
+                <p className="text-2xl ">
                   {statistics.current_status.in_progress}
                 </p>
               </div>
@@ -165,7 +163,7 @@ export default function StatisticsTab() {
                 <p className="text-xs text-muted-foreground">
                   {t("support.statistics.resolved")}
                 </p>
-                <p className="text-2xl font-bold">
+                <p className="text-2xl ">
                   {statistics.current_status.resolved}
                 </p>
               </div>
@@ -181,9 +179,7 @@ export default function StatisticsTab() {
                 <p className="text-xs text-muted-foreground">
                   {t("support.statistics.closed")}
                 </p>
-                <p className="text-2xl font-bold">
-                  {statistics.current_status.closed}
-                </p>
+                <p className="text-2xl ">{statistics.current_status.closed}</p>
               </div>
             </div>
           </Card>
@@ -197,7 +193,7 @@ export default function StatisticsTab() {
                 <p className="text-xs text-muted-foreground">
                   {t("support.statistics.totalActive")}
                 </p>
-                <p className="text-2xl font-bold">
+                <p className="text-2xl ">
                   {statistics.current_status.total_active}
                 </p>
               </div>
@@ -297,8 +293,8 @@ export default function StatisticsTab() {
                       ticket.status === "open"
                         ? "default"
                         : ticket.status === "resolved"
-                        ? "default"
-                        : "secondary"
+                          ? "default"
+                          : "secondary"
                     }
                   >
                     {t(`support.tickets.status.${ticket.status}`)}
@@ -308,8 +304,8 @@ export default function StatisticsTab() {
                       ticket.priority === "urgent"
                         ? "destructive"
                         : ticket.priority === "high"
-                        ? "default"
-                        : "secondary"
+                          ? "default"
+                          : "secondary"
                     }
                   >
                     {t(`support.tickets.priority.${ticket.priority}`)}
@@ -331,7 +327,7 @@ export default function StatisticsTab() {
             <p className="text-sm text-muted-foreground mb-1">
               {t("support.statistics.avgResolutionTime")}
             </p>
-            <p className="text-3xl font-bold">
+            <p className="text-3xl ">
               {statistics.metrics.avg_resolution_time_hours.toFixed(1)}{" "}
               <span className="text-lg font-normal text-muted-foreground">
                 {t("support.statistics.hours")}

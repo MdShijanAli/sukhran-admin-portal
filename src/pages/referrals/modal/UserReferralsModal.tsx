@@ -33,7 +33,7 @@ export default function UserReferralsModal({
 }: UserReferralsModalProps) {
   const { t } = useTranslation();
   const [userReferrals, setUserReferrals] = useState<UserReferrals | null>(
-    null
+    null,
   );
   const [isLoading, setIsLoading] = useState(false);
 
@@ -96,9 +96,7 @@ export default function UserReferralsModal({
                 <User className="w-8 h-8 text-primary" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold mb-1">
-                  {userReferrals.user.name}
-                </h3>
+                <h3 className="text-xl  mb-1">{userReferrals.user.name}</h3>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
                   <div className="flex items-center gap-1">
                     <Mail className="w-3 h-3" />
@@ -129,7 +127,7 @@ export default function UserReferralsModal({
                   <Users className="w-4 h-4 text-primary" />
                   <p className="text-xs text-muted-foreground">Total</p>
                 </div>
-                <p className="text-2xl font-bold">
+                <p className="text-2xl ">
                   {userReferrals.statistics.total_referred}
                 </p>
               </div>
@@ -142,7 +140,7 @@ export default function UserReferralsModal({
                     {t("referrals.userReferrals.statistics.pendingRewards")}
                   </p>
                 </div>
-                <p className="text-xl font-bold text-yellow-700 dark:text-yellow-400">
+                <p className="text-xl  text-yellow-700 dark:text-yellow-400">
                   {userReferrals.statistics.pending_rewards.count}
                 </p>
                 <p className="text-xs text-muted-foreground">
@@ -158,7 +156,7 @@ export default function UserReferralsModal({
                     {t("referrals.userReferrals.statistics.lockedRewards")}
                   </p>
                 </div>
-                <p className="text-xl font-bold text-orange-700 dark:text-orange-400">
+                <p className="text-xl  text-orange-700 dark:text-orange-400">
                   {userReferrals.statistics.locked_rewards.count}
                 </p>
                 <p className="text-xs text-muted-foreground">
@@ -174,7 +172,7 @@ export default function UserReferralsModal({
                     {t("referrals.userReferrals.statistics.creditedRewards")}
                   </p>
                 </div>
-                <p className="text-xl font-bold text-green-700 dark:text-green-400">
+                <p className="text-xl  text-green-700 dark:text-green-400">
                   {userReferrals.statistics.credited_rewards.count}
                 </p>
                 <p className="text-xs text-muted-foreground">
@@ -190,7 +188,7 @@ export default function UserReferralsModal({
                     {t("referrals.userReferrals.statistics.totalCoinsEarned")}
                   </p>
                 </div>
-                <p className="text-2xl font-bold text-amber-700 dark:text-amber-400">
+                <p className="text-2xl  text-amber-700 dark:text-amber-400">
                   {userReferrals.statistics.total_coins_earned}
                 </p>
                 <p className="text-xs text-muted-foreground">coins</p>
@@ -226,7 +224,7 @@ export default function UserReferralsModal({
                               Registered:{" "}
                               {formatDate(
                                 referral.referred_user.registered_at ||
-                                  referral.created_at
+                                  referral.created_at,
                               )}
                             </span>
                           </div>
@@ -241,7 +239,7 @@ export default function UserReferralsModal({
                       <div className="text-right flex-shrink-0">
                         <div className="flex items-center gap-1 justify-end">
                           <Coins className="w-4 h-4 text-amber-600" />
-                          <span className="font-bold text-amber-600">
+                          <span className=" text-amber-600">
                             {referral.coins_amount}
                           </span>
                         </div>

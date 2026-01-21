@@ -93,7 +93,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
               <p className="text-xs text-muted-foreground mb-1">
                 {t("referrals.statistics.totalReferrals")}
               </p>
-              <p className="text-2xl font-bold">
+              <p className="text-2xl ">
                 {statistics?.overview?.total_referrals}
               </p>
             </div>
@@ -110,9 +110,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
               <p className="text-xs text-muted-foreground mb-1">
                 {t("referrals.statistics.pending")}
               </p>
-              <p className="text-2xl font-bold">
-                {statistics?.overview?.pending}
-              </p>
+              <p className="text-2xl ">{statistics?.overview?.pending}</p>
             </div>
             <div className="w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
               <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
@@ -127,9 +125,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
               <p className="text-xs text-muted-foreground mb-1">
                 {t("referrals.statistics.locked")}
               </p>
-              <p className="text-2xl font-bold">
-                {statistics?.overview?.locked}
-              </p>
+              <p className="text-2xl ">{statistics?.overview?.locked}</p>
             </div>
             <div className="w-12 h-12 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
               <Lock className="w-6 h-6 text-orange-600 dark:text-orange-400" />
@@ -144,9 +140,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
               <p className="text-xs text-muted-foreground mb-1">
                 {t("referrals.statistics.credited")}
               </p>
-              <p className="text-2xl font-bold">
-                {statistics?.overview?.credited}
-              </p>
+              <p className="text-2xl ">{statistics?.overview?.credited}</p>
             </div>
             <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
               <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
@@ -161,9 +155,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
               <p className="text-xs text-muted-foreground mb-1">
                 {t("referrals.statistics.cancelled")}
               </p>
-              <p className="text-2xl font-bold">
-                {statistics?.overview?.cancelled}
-              </p>
+              <p className="text-2xl ">{statistics?.overview?.cancelled}</p>
             </div>
             <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
               <XCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
@@ -188,7 +180,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                 <p className="text-xs text-muted-foreground">
                   {t("referrals.statistics.totalDistributed")}
                 </p>
-                <p className="text-2xl font-bold text-amber-700 dark:text-amber-400">
+                <p className="text-2xl  text-amber-700 dark:text-amber-400">
                   {statistics?.coins?.total_distributed}
                 </p>
                 <p className="text-xs text-muted-foreground">coins</p>
@@ -205,7 +197,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                 <p className="text-xs text-muted-foreground">
                   {t("referrals.statistics.pendingCoins")}
                 </p>
-                <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-400">
+                <p className="text-2xl  text-yellow-700 dark:text-yellow-400">
                   {statistics?.coins?.pending_coins}
                 </p>
                 <p className="text-xs text-muted-foreground">coins</p>
@@ -222,7 +214,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                 <p className="text-xs text-muted-foreground">
                   {t("referrals.statistics.lockedCoins")}
                 </p>
-                <p className="text-2xl font-bold text-orange-700 dark:text-orange-400">
+                <p className="text-2xl  text-orange-700 dark:text-orange-400">
                   {statistics?.coins?.locked_coins}
                 </p>
                 <p className="text-xs text-muted-foreground">coins</p>
@@ -250,15 +242,13 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                 <span className="text-xs text-muted-foreground">
                   {t("referrals.statistics.newReferrals")}
                 </span>
-                <span className="font-bold">
-                  {statistics?.today?.new_referrals}
-                </span>
+                <span className="">{statistics?.today?.new_referrals}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-xs text-muted-foreground">
                   {t("referrals.statistics.coinsCredited")}
                 </span>
-                <span className="font-bold text-amber-600">
+                <span className=" text-amber-600">
                   {statistics?.today?.coins_credited}
                 </span>
               </div>
@@ -276,15 +266,13 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                 <span className="text-xs text-muted-foreground">
                   {t("referrals.statistics.newReferrals")}
                 </span>
-                <span className="font-bold">
-                  {statistics?.this_week?.new_referrals}
-                </span>
+                <span className="">{statistics?.this_week?.new_referrals}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-xs text-muted-foreground">
                   {t("referrals.statistics.coinsCredited")}
                 </span>
-                <span className="font-bold text-amber-600">
+                <span className=" text-amber-600">
                   {statistics?.this_week?.coins_credited}
                 </span>
               </div>
@@ -302,7 +290,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                 <span className="text-xs text-muted-foreground">
                   {t("referrals.statistics.newReferrals")}
                 </span>
-                <span className="font-bold">
+                <span className="">
                   {statistics?.this_month?.new_referrals}
                 </span>
               </div>
@@ -310,7 +298,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
                 <span className="text-xs text-muted-foreground">
                   {t("referrals.statistics.coinsCredited")}
                 </span>
-                <span className="font-bold text-amber-600">
+                <span className=" text-amber-600">
                   {statistics?.this_month?.coins_credited}
                 </span>
               </div>
@@ -347,7 +335,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
               <p className="text-xs text-muted-foreground mb-1">
                 {t("referrals.statistics.coinsPerReferral")}
               </p>
-              <p className="text-xl font-bold text-amber-600">
+              <p className="text-xl  text-amber-600">
                 {statistics?.settings?.coins_per_referral}
               </p>
             </div>
@@ -357,7 +345,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
               <p className="text-xs text-muted-foreground mb-1">
                 {t("referrals.statistics.minOrderAmount")}
               </p>
-              <p className="text-xl font-bold text-green-600">
+              <p className="text-xl  text-green-600">
                 {formatCurrency(statistics?.settings?.min_order_amount)}
               </p>
             </div>

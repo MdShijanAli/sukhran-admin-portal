@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Heart,
   UtensilsCrossed,
@@ -24,12 +24,18 @@ import {
   Tag,
   ExternalLink,
   BarChart3,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
   TableBody,
@@ -37,7 +43,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -45,7 +51,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -55,109 +61,161 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+} from "@/components/ui/alert-dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { useToast } from '@/hooks/use-toast';
-import { useContentStore, ContentItem, ContentType, ContentStatus } from '@/stores/contentStore';
-import { RichTextEditor } from '@/components/content/RichTextEditor';
-import { ImageUpload } from '@/components/content/ImageUpload';
-import { ContentAnalytics } from '@/components/content/ContentAnalytics';
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/use-toast";
+import {
+  useContentStore,
+  ContentItem,
+  ContentType,
+  ContentStatus,
+} from "@/stores/contentStore";
+import { RichTextEditor } from "@/components/content/RichTextEditor";
+import { ImageUpload } from "@/components/content/ImageUpload";
+import { ContentAnalytics } from "@/components/content/ContentAnalytics";
 
 const contentCategories = [
-  { id: 'health-tips', label: 'Health Tips & Recipes', types: ['health-tip', 'recipe'], icon: Heart },
-  { id: 'banners', label: 'Banners & Promos', types: ['banner', 'promo'], icon: Image },
-  { id: 'legal', label: 'Terms & Privacy', types: ['terms', 'privacy'], icon: Shield },
-  { id: 'nutrition', label: 'Nutrition & Meal Plans', types: ['nutrition-guide', 'meal-plan'], icon: BookOpen },
-  { id: 'notifications', label: 'Emergency & Announcements', types: ['emergency', 'announcement'], icon: Bell },
+  {
+    id: "health-tips",
+    label: "Health Tips & Recipes",
+    types: ["health-tip", "recipe"],
+    icon: Heart,
+  },
+  {
+    id: "banners",
+    label: "Banners & Promos",
+    types: ["banner", "promo"],
+    icon: Image,
+  },
+  {
+    id: "legal",
+    label: "Terms & Privacy",
+    types: ["terms", "privacy"],
+    icon: Shield,
+  },
+  {
+    id: "nutrition",
+    label: "Nutrition & Meal Plans",
+    types: ["nutrition-guide", "meal-plan"],
+    icon: BookOpen,
+  },
+  {
+    id: "notifications",
+    label: "Emergency & Announcements",
+    types: ["emergency", "announcement"],
+    icon: Bell,
+  },
 ];
 
 const contentTypeLabels: Record<ContentType, string> = {
-  'health-tip': 'Health Tip',
-  'recipe': 'Recipe',
-  'banner': 'Banner',
-  'promo': 'Promotional',
-  'terms': 'Terms of Service',
-  'privacy': 'Privacy Policy',
-  'nutrition-guide': 'Nutrition Guide',
-  'meal-plan': 'Meal Plan',
-  'emergency': 'Emergency',
-  'announcement': 'Announcement',
+  "health-tip": "Health Tip",
+  recipe: "Recipe",
+  banner: "Banner",
+  promo: "Promotional",
+  terms: "Terms of Service",
+  privacy: "Privacy Policy",
+  "nutrition-guide": "Nutrition Guide",
+  "meal-plan": "Meal Plan",
+  emergency: "Emergency",
+  announcement: "Announcement",
 };
 
 const getStatusBadgeVariant = (status: ContentStatus) => {
   switch (status) {
-    case 'published': return 'default';
-    case 'scheduled': return 'secondary';
-    case 'draft': return 'outline';
-    case 'archived': return 'destructive';
-    default: return 'outline';
+    case "published":
+      return "default";
+    case "scheduled":
+      return "secondary";
+    case "draft":
+      return "outline";
+    case "archived":
+      return "destructive";
+    default:
+      return "outline";
   }
 };
 
 const getPriorityBadgeVariant = (priority?: string) => {
   switch (priority) {
-    case 'urgent': return 'destructive';
-    case 'high': return 'destructive';
-    case 'medium': return 'secondary';
-    case 'low': return 'outline';
-    default: return 'outline';
+    case "urgent":
+      return "destructive";
+    case "high":
+      return "destructive";
+    case "medium":
+      return "secondary";
+    case "low":
+      return "outline";
+    default:
+      return "outline";
   }
 };
 
 export default function ContentManagement() {
   const { t } = useTranslation();
   const { toast } = useToast();
-  const { contents, addContent, updateContent, deleteContent, publishContent, archiveContent, duplicateContent, getAnalytics } = useContentStore();
-  
-  const [activeTab, setActiveTab] = useState('health-tips');
-  const [searchQuery, setSearchQuery] = useState('');
+  const {
+    contents,
+    addContent,
+    updateContent,
+    deleteContent,
+    publishContent,
+    archiveContent,
+    duplicateContent,
+    getAnalytics,
+  } = useContentStore();
+
+  const [activeTab, setActiveTab] = useState("health-tips");
+  const [searchQuery, setSearchQuery] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
-  const [selectedContent, setSelectedContent] = useState<ContentItem | null>(null);
+  const [selectedContent, setSelectedContent] = useState<ContentItem | null>(
+    null,
+  );
   const [isEditing, setIsEditing] = useState(false);
   const [isScheduling, setIsScheduling] = useState(false);
-  
+
   const [formData, setFormData] = useState({
-    type: '' as ContentType,
-    title: '',
-    content: '',
-    image: '',
-    priority: 'medium' as 'low' | 'medium' | 'high' | 'urgent',
-    tags: '',
-    linkUrl: '',
-    scheduleDate: '',
-    expiryDate: '',
+    type: "" as ContentType,
+    title: "",
+    content: "",
+    image: "",
+    priority: "medium" as "low" | "medium" | "high" | "urgent",
+    tags: "",
+    linkUrl: "",
+    scheduleDate: "",
+    expiryDate: "",
   });
 
-  const currentCategory = contentCategories.find(c => c.id === activeTab);
-  const filteredContents = contents.filter(item => {
+  const currentCategory = contentCategories.find((c) => c.id === activeTab);
+  const filteredContents = contents.filter((item) => {
     const matchesCategory = currentCategory?.types.includes(item.type);
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    const matchesSearch =
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.content.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   const resetForm = () => {
     setFormData({
-      type: currentCategory?.types[0] as ContentType || 'health-tip',
-      title: '',
-      content: '',
-      image: '',
-      priority: 'medium',
-      tags: '',
-      linkUrl: '',
-      scheduleDate: '',
-      expiryDate: '',
+      type: (currentCategory?.types[0] as ContentType) || "health-tip",
+      title: "",
+      content: "",
+      image: "",
+      priority: "medium",
+      tags: "",
+      linkUrl: "",
+      scheduleDate: "",
+      expiryDate: "",
     });
     setIsScheduling(false);
   };
@@ -166,9 +224,9 @@ export default function ContentManagement() {
     setIsEditing(false);
     setSelectedContent(null);
     resetForm();
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      type: currentCategory?.types[0] as ContentType || 'health-tip',
+      type: (currentCategory?.types[0] as ContentType) || "health-tip",
     }));
     setIsDialogOpen(true);
   };
@@ -180,12 +238,12 @@ export default function ContentManagement() {
       type: content.type,
       title: content.title,
       content: content.content,
-      image: content.image || '',
-      priority: content.priority || 'medium',
-      tags: content.tags?.join(', ') || '',
-      linkUrl: content.linkUrl || '',
-      scheduleDate: content.scheduleDate || '',
-      expiryDate: content.expiryDate || '',
+      image: content.image || "",
+      priority: content.priority || "medium",
+      tags: content.tags?.join(", ") || "",
+      linkUrl: content.linkUrl || "",
+      scheduleDate: content.scheduleDate || "",
+      expiryDate: content.expiryDate || "",
     });
     setIsScheduling(!!content.scheduleDate);
     setIsDialogOpen(true);
@@ -210,8 +268,8 @@ export default function ContentManagement() {
     if (selectedContent) {
       deleteContent(selectedContent.id);
       toast({
-        title: 'Content Deleted',
-        description: 'The content has been successfully deleted.',
+        title: "Content Deleted",
+        description: "The content has been successfully deleted.",
       });
     }
     setIsDeleteDialogOpen(false);
@@ -221,9 +279,9 @@ export default function ContentManagement() {
   const handleSave = () => {
     if (!formData.title || !formData.content) {
       toast({
-        title: 'Validation Error',
-        description: 'Please fill in all required fields.',
-        variant: 'destructive',
+        title: "Validation Error",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
       });
       return;
     }
@@ -234,25 +292,27 @@ export default function ContentManagement() {
       content: formData.content,
       image: formData.image || undefined,
       priority: formData.priority,
-      tags: formData.tags ? formData.tags.split(',').map(t => t.trim()) : undefined,
+      tags: formData.tags
+        ? formData.tags.split(",").map((t) => t.trim())
+        : undefined,
       linkUrl: formData.linkUrl || undefined,
       scheduleDate: isScheduling ? formData.scheduleDate : undefined,
       expiryDate: formData.expiryDate || undefined,
-      status: (isScheduling ? 'scheduled' : 'draft') as ContentStatus,
-      author: 'Admin User',
+      status: (isScheduling ? "scheduled" : "draft") as ContentStatus,
+      author: "Admin User",
     };
 
     if (isEditing && selectedContent) {
       updateContent(selectedContent.id, contentData);
       toast({
-        title: 'Content Updated',
-        description: 'The content has been successfully updated.',
+        title: "Content Updated",
+        description: "The content has been successfully updated.",
       });
     } else {
       addContent(contentData);
       toast({
-        title: 'Content Created',
-        description: 'The content has been successfully created.',
+        title: "Content Created",
+        description: "The content has been successfully created.",
       });
     }
 
@@ -263,40 +323,45 @@ export default function ContentManagement() {
   const handlePublish = (content: ContentItem) => {
     publishContent(content.id);
     toast({
-      title: 'Content Published',
-      description: 'The content is now live.',
+      title: "Content Published",
+      description: "The content is now live.",
     });
   };
 
   const handleArchive = (content: ContentItem) => {
     archiveContent(content.id);
     toast({
-      title: 'Content Archived',
-      description: 'The content has been archived.',
+      title: "Content Archived",
+      description: "The content has been archived.",
     });
   };
 
   const handleDuplicate = (content: ContentItem) => {
     duplicateContent(content.id);
     toast({
-      title: 'Content Duplicated',
-      description: 'A copy has been created as a draft.',
+      title: "Content Duplicated",
+      description: "A copy has been created as a draft.",
     });
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">{t('nav.content')}</h1>
+        <h1 className="text-3xl  text-foreground">{t("nav.content")}</h1>
         <p className="text-muted-foreground mt-1">
-          Manage all app content including health tips, banners, legal documents, and notifications
+          Manage all app content including health tips, banners, legal
+          documents, and notifications
         </p>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-5">
           {contentCategories.map((category) => (
-            <TabsTrigger key={category.id} value={category.id} className="flex items-center gap-2">
+            <TabsTrigger
+              key={category.id}
+              value={category.id}
+              className="flex items-center gap-2"
+            >
               <category.icon className="h-4 w-4" />
               <span className="hidden md:inline">{category.label}</span>
             </TabsTrigger>
@@ -304,7 +369,11 @@ export default function ContentManagement() {
         </TabsList>
 
         {contentCategories.map((category) => (
-          <TabsContent key={category.id} value={category.id} className="space-y-4">
+          <TabsContent
+            key={category.id}
+            value={category.id}
+            className="space-y-4"
+          >
             <Card>
               <CardHeader>
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -341,7 +410,9 @@ export default function ContentManagement() {
                       <TableHead>Title</TableHead>
                       <TableHead>Type</TableHead>
                       <TableHead>Status</TableHead>
-                      {category.id === 'notifications' && <TableHead>Priority</TableHead>}
+                      {category.id === "notifications" && (
+                        <TableHead>Priority</TableHead>
+                      )}
                       <TableHead>Author</TableHead>
                       <TableHead>Updated</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
@@ -350,7 +421,10 @@ export default function ContentManagement() {
                   <TableBody>
                     {filteredContents.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                        <TableCell
+                          colSpan={7}
+                          className="text-center py-8 text-muted-foreground"
+                        >
                           No content found. Create your first content.
                         </TableCell>
                       </TableRow>
@@ -371,7 +445,11 @@ export default function ContentManagement() {
                                 {content.tags && content.tags.length > 0 && (
                                   <div className="flex gap-1 mt-1">
                                     {content.tags.slice(0, 2).map((tag) => (
-                                      <Badge key={tag} variant="outline" className="text-xs">
+                                      <Badge
+                                        key={tag}
+                                        variant="outline"
+                                        className="text-xs"
+                                      >
                                         {tag}
                                       </Badge>
                                     ))}
@@ -386,20 +464,27 @@ export default function ContentManagement() {
                             </Badge>
                           </TableCell>
                           <TableCell>
-                            <Badge variant={getStatusBadgeVariant(content.status)}>
+                            <Badge
+                              variant={getStatusBadgeVariant(content.status)}
+                            >
                               {content.status}
                             </Badge>
-                            {content.scheduleDate && content.status === 'scheduled' && (
-                              <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                                <Clock className="h-3 w-3" />
-                                {content.scheduleDate}
-                              </p>
-                            )}
+                            {content.scheduleDate &&
+                              content.status === "scheduled" && (
+                                <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                                  <Clock className="h-3 w-3" />
+                                  {content.scheduleDate}
+                                </p>
+                              )}
                           </TableCell>
-                          {category.id === 'notifications' && (
+                          {category.id === "notifications" && (
                             <TableCell>
                               {content.priority && (
-                                <Badge variant={getPriorityBadgeVariant(content.priority)}>
+                                <Badge
+                                  variant={getPriorityBadgeVariant(
+                                    content.priority,
+                                  )}
+                                >
                                   {content.priority}
                                 </Badge>
                               )}
@@ -446,7 +531,7 @@ export default function ContentManagement() {
                               >
                                 <Copy className="h-4 w-4" />
                               </Button>
-                              {content.status !== 'published' && (
+                              {content.status !== "published" && (
                                 <Button
                                   variant="ghost"
                                   size="icon"
@@ -457,7 +542,7 @@ export default function ContentManagement() {
                                   <Send className="h-4 w-4" />
                                 </Button>
                               )}
-                              {content.status === 'published' && (
+                              {content.status === "published" && (
                                 <Button
                                   variant="ghost"
                                   size="icon"
@@ -494,10 +579,11 @@ export default function ContentManagement() {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {isEditing ? 'Edit Content' : 'Create New Content'}
+              {isEditing ? "Edit Content" : "Create New Content"}
             </DialogTitle>
             <DialogDescription>
-              Fill in the details below to {isEditing ? 'update' : 'create'} your content.
+              Fill in the details below to {isEditing ? "update" : "create"}{" "}
+              your content.
             </DialogDescription>
           </DialogHeader>
 
@@ -507,7 +593,9 @@ export default function ContentManagement() {
                 <Label>Content Type</Label>
                 <Select
                   value={formData.type}
-                  onValueChange={(value) => setFormData({ ...formData, type: value as ContentType })}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, type: value as ContentType })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select type" />
@@ -522,12 +610,14 @@ export default function ContentManagement() {
                 </Select>
               </div>
 
-              {(activeTab === 'notifications') && (
+              {activeTab === "notifications" && (
                 <div className="space-y-2">
                   <Label>Priority</Label>
                   <Select
                     value={formData.priority}
-                    onValueChange={(value) => setFormData({ ...formData, priority: value as any })}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, priority: value as any })
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select priority" />
@@ -547,7 +637,9 @@ export default function ContentManagement() {
               <Label>Title *</Label>
               <Input
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
                 placeholder="Enter content title"
               />
             </div>
@@ -556,25 +648,29 @@ export default function ContentManagement() {
               <Label>Content *</Label>
               <RichTextEditor
                 value={formData.content}
-                onChange={(value) => setFormData({ ...formData, content: value })}
+                onChange={(value) =>
+                  setFormData({ ...formData, content: value })
+                }
                 placeholder="Enter content body"
               />
             </div>
 
-            {(activeTab !== 'legal') && (
+            {activeTab !== "legal" && (
               <ImageUpload
                 value={formData.image}
                 onChange={(value) => setFormData({ ...formData, image: value })}
               />
             )}
 
-            {(activeTab === 'banners') && (
+            {activeTab === "banners" && (
               <>
                 <div className="space-y-2">
                   <Label>Link URL</Label>
                   <Input
                     value={formData.linkUrl}
-                    onChange={(e) => setFormData({ ...formData, linkUrl: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, linkUrl: e.target.value })
+                    }
                     placeholder="Enter destination URL"
                   />
                 </div>
@@ -583,18 +679,22 @@ export default function ContentManagement() {
                   <Input
                     type="date"
                     value={formData.expiryDate}
-                    onChange={(e) => setFormData({ ...formData, expiryDate: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, expiryDate: e.target.value })
+                    }
                   />
                 </div>
               </>
             )}
 
-            {(activeTab === 'health-tips' || activeTab === 'nutrition') && (
+            {(activeTab === "health-tips" || activeTab === "nutrition") && (
               <div className="space-y-2">
                 <Label>Tags (comma separated)</Label>
                 <Input
                   value={formData.tags}
-                  onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, tags: e.target.value })
+                  }
                   placeholder="health, nutrition, tips"
                 />
               </div>
@@ -612,7 +712,9 @@ export default function ContentManagement() {
                 <Input
                   type="datetime-local"
                   value={formData.scheduleDate}
-                  onChange={(e) => setFormData({ ...formData, scheduleDate: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, scheduleDate: e.target.value })
+                  }
                   className="w-auto"
                 />
               )}
@@ -624,7 +726,7 @@ export default function ContentManagement() {
               Cancel
             </Button>
             <Button onClick={handleSave}>
-              {isEditing ? 'Update' : 'Create'} Content
+              {isEditing ? "Update" : "Create"} Content
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -653,13 +755,15 @@ export default function ContentManagement() {
                   {contentTypeLabels[selectedContent.type]}
                 </Badge>
                 {selectedContent.priority && (
-                  <Badge variant={getPriorityBadgeVariant(selectedContent.priority)}>
+                  <Badge
+                    variant={getPriorityBadgeVariant(selectedContent.priority)}
+                  >
                     {selectedContent.priority}
                   </Badge>
                 )}
               </div>
-              <h2 className="text-2xl font-bold">{selectedContent.title}</h2>
-              <div 
+              <h2 className="text-2xl ">{selectedContent.title}</h2>
+              <div
                 className="prose prose-sm max-w-none dark:prose-invert text-muted-foreground"
                 dangerouslySetInnerHTML={{ __html: selectedContent.content }}
               />
@@ -676,7 +780,11 @@ export default function ContentManagement() {
               {selectedContent.linkUrl && (
                 <div className="flex items-center gap-2 text-primary">
                   <ExternalLink className="h-4 w-4" />
-                  <a href={selectedContent.linkUrl} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={selectedContent.linkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     {selectedContent.linkUrl}
                   </a>
                 </div>
@@ -685,8 +793,12 @@ export default function ContentManagement() {
                 <p>Author: {selectedContent.author}</p>
                 <p>Created: {selectedContent.createdAt}</p>
                 <p>Last Updated: {selectedContent.updatedAt}</p>
-                {selectedContent.publishDate && <p>Published: {selectedContent.publishDate}</p>}
-                {selectedContent.expiryDate && <p>Expires: {selectedContent.expiryDate}</p>}
+                {selectedContent.publishDate && (
+                  <p>Published: {selectedContent.publishDate}</p>
+                )}
+                {selectedContent.expiryDate && (
+                  <p>Expires: {selectedContent.expiryDate}</p>
+                )}
               </div>
             </div>
           )}
@@ -694,17 +806,24 @@ export default function ContentManagement() {
       </Dialog>
 
       {/* Delete Confirmation Dialog */}
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Content</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{selectedContent?.title}"? This action cannot be undone.
+              Are you sure you want to delete "{selectedContent?.title}"? This
+              action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

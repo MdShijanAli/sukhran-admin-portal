@@ -83,7 +83,7 @@ export default function AllTransactions({
       label: t("coinManagement.transactions.columns.amount"),
       render: (transaction) => (
         <span
-          className={`font-bold ${
+          className={` ${
             transaction.type === "earned" ? "text-green-600" : "text-red-600"
           }`}
         >

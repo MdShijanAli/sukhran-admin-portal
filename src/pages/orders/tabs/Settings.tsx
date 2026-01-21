@@ -150,7 +150,7 @@ const Settings = () => {
     <div className="animate-fade-in space-y-3">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold ">{t("orders.settings.title")}</h2>
+          <h2 className="text-3xl  ">{t("orders.settings.title")}</h2>
           <p className="text-muted-foreground mt-1">
             {t("orders.settings.subtitle")}
           </p>

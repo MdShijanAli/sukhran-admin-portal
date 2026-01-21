@@ -419,7 +419,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                 <span className="text-sm font-semibold">
                   {t("orders.form.total")}
                 </span>
-                <span className="text-base font-bold text-primary">
+                <span className="text-base  text-primary">
                   ৳{formatNumberWithCommas(order.receipt.grandTotal)}
                 </span>
               </div>

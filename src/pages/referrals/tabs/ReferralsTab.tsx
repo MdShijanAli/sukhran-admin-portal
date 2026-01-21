@@ -42,7 +42,7 @@ export default function ReferralsTab({
         </Badge>
       );
     },
-    [t]
+    [t],
   );
 
   const handleViewDetails = (referral: Referral) => {
@@ -67,7 +67,7 @@ export default function ReferralsTab({
         onClick: (referral) => handleViewUserReferrals(referral.referrer.id),
       },
     ],
-    [t]
+    [t],
   );
 
   const columns = useMemo<Column<Referral>[]>(
@@ -136,7 +136,7 @@ export default function ReferralsTab({
         label: t("referrals.referrals.columns.coins"),
         render: (referral) => (
           <div className="text-center">
-            <p className="font-bold text-amber-600">{referral.coins_amount}</p>
+            <p className=" text-amber-600">{referral.coins_amount}</p>
           </div>
         ),
         className: "text-center",
@@ -189,7 +189,7 @@ export default function ReferralsTab({
         ),
       },
     ],
-    [t, referralActions]
+    [t, referralActions],
   );
 
   return (

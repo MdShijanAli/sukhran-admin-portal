@@ -50,7 +50,7 @@ export default function ViewChannelModal({
               className="w-24 h-24 object-cover rounded-lg border-2 border-border"
             />
             <div className="flex-1">
-              <h3 className="text-xl font-bold mb-2">{channel.name}</h3>
+              <h3 className="text-xl  mb-2">{channel.name}</h3>
               <p className="text-sm text-muted-foreground mb-3">
                 {channel.description}
               </p>
@@ -91,7 +91,7 @@ export default function ViewChannelModal({
                 <p className="text-xs text-muted-foreground mb-1">
                   {t("donations.channels.columns.target")}
                 </p>
-                <p className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                <p className="text-lg  text-blue-600 dark:text-blue-400">
                   {formatCurrency(channel.targetAmount)}
                 </p>
               </div>
@@ -99,7 +99,7 @@ export default function ViewChannelModal({
                 <p className="text-xs text-muted-foreground mb-1">
                   {t("donations.channels.columns.collected")}
                 </p>
-                <p className="text-lg font-bold text-green-600 dark:text-green-400">
+                <p className="text-lg  text-green-600 dark:text-green-400">
                   {formatCurrency(channel.collectedAmount)}
                 </p>
               </div>
@@ -107,7 +107,7 @@ export default function ViewChannelModal({
                 <p className="text-xs text-muted-foreground mb-1">
                   {t("donations.channels.columns.remaining")}
                 </p>
-                <p className="text-lg font-bold text-orange-600 dark:text-orange-400">
+                <p className="text-lg  text-orange-600 dark:text-orange-400">
                   {formatCurrency(channel.remainingAmount)}
                 </p>
               </div>
@@ -119,7 +119,7 @@ export default function ViewChannelModal({
                 <span className="text-sm font-medium">
                   {t("donations.channels.columns.progress")}
                 </span>
-                <span className="text-sm font-bold text-primary">
+                <span className="text-sm  text-primary">
                   {channel.progress}%
                 </span>
               </div>
@@ -128,12 +128,12 @@ export default function ViewChannelModal({
                 {channel.progress < 25
                   ? "Just getting started!"
                   : channel.progress < 50
-                  ? "Making progress!"
-                  : channel.progress < 75
-                  ? "More than halfway there!"
-                  : channel.progress < 100
-                  ? "Almost there!"
-                  : "Goal achieved! 🎉"}
+                    ? "Making progress!"
+                    : channel.progress < 75
+                      ? "More than halfway there!"
+                      : channel.progress < 100
+                        ? "Almost there!"
+                        : "Goal achieved! 🎉"}
               </p>
             </div>
           </div>
@@ -152,7 +152,7 @@ export default function ViewChannelModal({
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Total Donations</p>
-                <p className="text-lg font-bold">{channel.totalDonations}</p>
+                <p className="text-lg ">{channel.totalDonations}</p>
               </div>
             </div>
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
@@ -161,7 +161,7 @@ export default function ViewChannelModal({
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Completion</p>
-                <p className="text-lg font-bold">{channel.progress}%</p>
+                <p className="text-lg ">{channel.progress}%</p>
               </div>
             </div>
           </div>

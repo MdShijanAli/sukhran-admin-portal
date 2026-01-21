@@ -64,7 +64,7 @@ export default function RefundModal({
 
   const updateField = <K extends keyof RefundFormData>(
     field: K,
-    value: RefundFormData[K]
+    value: RefundFormData[K],
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -154,7 +154,7 @@ export default function RefundModal({
         }
         await transactionService.refundCODTransaction(
           transactionId,
-          submitData
+          submitData,
         );
       }
 
@@ -172,7 +172,7 @@ export default function RefundModal({
     } catch (error) {
       console.error("Error processing refund:", error);
       toast.error(
-        error.response?.data?.message || t("transactions.refund.failed")
+        error.response?.data?.message || t("transactions.refund.failed"),
       );
     } finally {
       setIsSubmitting(false);
@@ -392,7 +392,7 @@ export default function RefundModal({
               <span className="text-muted-foreground">
                 {t("transactions.refund.refundAmount")}:
               </span>
-              <span className="font-bold text-primary">
+              <span className=" text-primary">
                 {formData.amount || "0"} BDT
               </span>
             </div>

@@ -81,7 +81,7 @@ export default function CoinStatistics({
             <Coins className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl ">
               {formatNumberWithCommas(overview.total_coins_in_circulation)}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -98,7 +98,7 @@ export default function CoinStatistics({
             <Lock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl ">
               {formatNumberWithCommas(overview.total_locked_coins)}
             </div>
           </CardContent>
@@ -112,7 +112,7 @@ export default function CoinStatistics({
             <Unlock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl ">
               {formatNumberWithCommas(overview.total_available_coins)}
             </div>
           </CardContent>
@@ -126,7 +126,7 @@ export default function CoinStatistics({
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl ">
               {formatNumberWithCommas(overview.users_with_coins, {
                 minDigit: 0,
               })}
@@ -176,7 +176,7 @@ export default function CoinStatistics({
                 <span className="text-sm font-medium">
                   {t("coinManagement.statistics.net")}
                 </span>
-                <span className="font-bold">
+                <span className="">
                   {formatNumberWithCommas(period.data.net)}
                 </span>
               </div>
@@ -203,7 +203,7 @@ export default function CoinStatistics({
                   className="flex items-center justify-between p-3 border rounded-lg"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary font-bold">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary ">
                       {index + 1}
                     </div>
                     <div>
@@ -214,7 +214,7 @@ export default function CoinStatistics({
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="flex items-center gap-1 font-bold text-primary">
+                    <div className="flex items-center gap-1  text-primary">
                       <Coins className="h-4 w-4" />
                       {formatNumberWithCommas(holder.total_coins)}
                     </div>
@@ -265,7 +265,7 @@ export default function CoinStatistics({
                     </p>
                   </div>
                   <div
-                    className={`font-bold ${
+                    className={` ${
                       transaction.type === "earned"
                         ? "text-green-600"
                         : "text-red-600"

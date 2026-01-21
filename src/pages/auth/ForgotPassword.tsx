@@ -44,7 +44,7 @@ export default function ForgotPassword() {
           : null;
       toast.error(
         apiError?.response?.data?.error_message ||
-          "Failed to send verification code"
+          "Failed to send verification code",
       );
     } finally {
       setLoading(false);
@@ -91,7 +91,7 @@ export default function ForgotPassword() {
           ? (error as { response?: { data?: { error_message?: string } } })
           : null;
       toast.error(
-        apiError?.response?.data?.error_message || "Failed to reset password"
+        apiError?.response?.data?.error_message || "Failed to reset password",
       );
     } finally {
       setLoading(false);
@@ -122,7 +122,7 @@ export default function ForgotPassword() {
   // Handle OTP input keydown
   const handleOtpKeyDown = (
     index: number,
-    e: React.KeyboardEvent<HTMLInputElement>
+    e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       const prevInput = document.getElementById(`otp-${index - 1}`);
@@ -149,7 +149,7 @@ export default function ForgotPassword() {
               className="w-40 h-auto object-contain"
             />
           </div>
-          <h1 className="text-5xl font-bold mb-6">Password Recovery</h1>
+          <h1 className="text-5xl  mb-6">Password Recovery</h1>
           <p className="text-xl opacity-90">
             Reset your password securely in just a few simple steps
           </p>
@@ -183,7 +183,7 @@ export default function ForgotPassword() {
           {currentStep === "request" && (
             <>
               <div className="text-center">
-                <h2 className="text-3xl font-bold">Forgot Password?</h2>
+                <h2 className="text-3xl ">Forgot Password?</h2>
                 <p className="mt-2 text-muted-foreground">
                   Enter your mobile number to receive a verification code
                 </p>
@@ -217,7 +217,7 @@ export default function ForgotPassword() {
           {currentStep === "reset" && (
             <>
               <div className="text-center">
-                <h2 className="text-3xl font-bold">Reset Your Password</h2>
+                <h2 className="text-3xl ">Reset Your Password</h2>
                 <p className="mt-2 text-muted-foreground">
                   We sent a 6-digit code to <strong>{mobile}</strong>
                 </p>
@@ -310,12 +310,11 @@ export default function ForgotPassword() {
                   onClick={async () => {
                     setResending(true);
                     try {
-                      const response = await authService.forgotPasswordOtpSent(
-                        mobile
-                      );
+                      const response =
+                        await authService.forgotPasswordOtpSent(mobile);
                       toast.success(
                         response.message ||
-                          "Verification code resent successfully!"
+                          "Verification code resent successfully!",
                       );
                     } catch (error: unknown) {
                       const apiError =
@@ -328,7 +327,7 @@ export default function ForgotPassword() {
                           : null;
                       toast.error(
                         apiError?.response?.data?.error_message ||
-                          "Failed to resend code"
+                          "Failed to resend code",
                       );
                     } finally {
                       setResending(false);

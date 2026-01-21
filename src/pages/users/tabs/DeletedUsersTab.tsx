@@ -255,7 +255,7 @@ const DeletedUsersTab = () => {
           <div>
             <label className="text-sm font-medium">
               {t("users.delete.typeToConfirm")}{" "}
-              <span className="font-bold text-destructive">
+              <span className=" text-destructive">
                 {t("users.delete.confirmationText")}
               </span>{" "}
               {t("users.delete.toConfirm")}

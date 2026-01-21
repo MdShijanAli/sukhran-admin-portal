@@ -28,6 +28,8 @@
   "sales": "Sales",
   "revenueChart": "Revenue Chart",
   "average_order": "Average Order Value",
+  "donationAmount": "Donation Amount",
+  "donations": "Donations",
   "topProducts": "Top Products",
   "weekly": "Weekly",
   "averageOrderValue": "Average Order Value",
@@ -106,5 +108,10 @@
     "status": "Status",
     "type": "Type",
     "date": "Date"
+  },
+  "payment": {
+    "orders": "orders",
+    "revenue": "Revenue",
+    "donations": "Donations"
   }
 }

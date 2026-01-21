@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -249,7 +249,7 @@ function Packages() {
       <Card className="mb-3">
         <CardContent className="p-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold ">{t("packages.title")}</h1>
+            <CardTitle>{t("packages.title")}</CardTitle>
             <p className="text-muted-foreground mt-1">
               {t("packages.subtitle")}
             </p>
@@ -470,13 +470,13 @@ function Packages() {
                             </Badge>
                           )}
                           {pkg.coinsReward > 0 && (
-                            <span className="text-sm font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                            <span className="text-sm  text-amber-600 dark:text-amber-400 flex items-center gap-1">
                               <Coins className="h-4 w-4" />
                               {pkg.coinsReward}
                             </span>
                           )}
                         </div>
-                        <p className="text-xl font-bold text-green-600">
+                        <p className="text-xl  text-green-600">
                           ৳
                           {pricing.currentPrice
                             ? formatNumberWithCommas(pricing.currentPrice)

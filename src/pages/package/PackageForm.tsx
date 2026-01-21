@@ -383,7 +383,7 @@ export default function PackageForm() {
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex-1">
-              <h1 className="text-3xl font-bold ">
+              <h1 className="text-3xl  ">
                 {isEditMode
                   ? t("packages.form.editPackage")
                   : t("packages.form.createNewPackage")}
@@ -752,7 +752,7 @@ export default function PackageForm() {
                       {fixedPriceNum > 0 && (
                         <div className="flex justify-between text-sm">
                           <span>{t("packages.form.fixedPrice")}</span>
-                          <span className="font-bold text-primary">
+                          <span className=" text-primary">
                             ৳{fixedPriceNum.toFixed(2)}
                           </span>
                         </div>
@@ -763,7 +763,7 @@ export default function PackageForm() {
                             {t("packages.form.afterDiscount")} (
                             {discountPercentNum}%):
                           </span>
-                          <span className="font-bold text-green-600">
+                          <span className=" text-green-600">
                             ৳{priceAfterDiscount.toFixed(2)}
                           </span>
                         </div>
@@ -771,7 +771,7 @@ export default function PackageForm() {
                       {!discountPercentNum && fixedPriceNum > 0 && (
                         <div className="flex justify-between text-sm">
                           <span>{t("packages.form.finalPrice")}</span>
-                          <span className="font-bold text-green-600">
+                          <span className=" text-green-600">
                             ৳{priceAfterDiscount.toFixed(2)}
                           </span>
                         </div>
@@ -779,7 +779,7 @@ export default function PackageForm() {
                       {!fixedPriceNum && discountPercentNum > 0 && (
                         <div className="flex justify-between text-sm">
                           <span>{t("packages.form.discountedPrice")}</span>
-                          <span className="font-bold text-green-600">
+                          <span className=" text-green-600">
                             ৳{priceAfterDiscount.toFixed(2)}
                           </span>
                         </div>

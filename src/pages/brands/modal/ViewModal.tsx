@@ -63,7 +63,7 @@ export default function ViewModal({
             <div className="flex-1 space-y-2">
               <div className="flex items-center gap-2">
                 <Package className="h-5 w-5 text-muted-foreground" />
-                <h3 className="text-2xl font-bold">{brand?.title}</h3>
+                <h3 className="text-2xl ">{brand?.title}</h3>
               </div>
               <Badge variant={brand?.is_active ? "default" : "secondary"}>
                 {brand?.is_active

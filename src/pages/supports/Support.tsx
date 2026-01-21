@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import { SupportTicket } from "@/stores/supportStore";
@@ -37,16 +37,16 @@ function Support() {
 
   // State for selected items
   const [selectedTicket, setSelectedTicket] = useState<SupportTicket | null>(
-    null
+    null,
   );
   const [ticketToDelete, setTicketToDelete] = useState<SupportTicket | null>(
-    null
+    null,
   );
 
   // State for actions
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshTickets, setRefreshTickets] = useState<(() => void) | null>(
-    null
+    null,
   );
 
   // Handlers
@@ -116,7 +116,7 @@ function Support() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold">{t("support.title")}</h1>
+          <CardTitle>{t("support.title")}</CardTitle>
           <p className="text-muted-foreground mt-1">{t("support.subtitle")}</p>
         </div>
         {hasPermission(permissions.support.create) && (

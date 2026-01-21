@@ -1,14 +1,21 @@
-import { Order } from '@/stores/orderStore';
+import { Order } from "@/stores/orderStore";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { Package, User, Phone, Calendar, CreditCard, Truck } from 'lucide-react';
+} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import {
+  Package,
+  User,
+  Phone,
+  Calendar,
+  CreditCard,
+  Truck,
+} from "lucide-react";
 
 interface OrderDetailsDialogProps {
   order: Order | null;
@@ -25,16 +32,16 @@ export default function OrderDetailsDialog({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending':
-        return 'bg-warning/10 text-warning border-warning/20';
-      case 'processing':
-        return 'bg-primary/10 text-primary border-primary/20';
-      case 'delivered':
-        return 'bg-success/10 text-success border-success/20';
-      case 'cancelled':
-        return 'bg-destructive/10 text-destructive border-destructive/20';
+      case "pending":
+        return "bg-warning/10 text-warning border-warning/20";
+      case "processing":
+        return "bg-primary/10 text-primary border-primary/20";
+      case "delivered":
+        return "bg-success/10 text-success border-success/20";
+      case "cancelled":
+        return "bg-destructive/10 text-destructive border-destructive/20";
       default:
-        return 'bg-muted text-muted-foreground';
+        return "bg-muted text-muted-foreground";
     }
   };
 
@@ -44,7 +51,9 @@ export default function OrderDetailsDialog({
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle>Order Details</DialogTitle>
-            <Badge className={getStatusColor(order.status)}>{order.status}</Badge>
+            <Badge className={getStatusColor(order.status)}>
+              {order.status}
+            </Badge>
           </div>
           <DialogDescription>Order ID: {order.id}</DialogDescription>
         </DialogHeader>
@@ -71,12 +80,12 @@ export default function OrderDetailsDialog({
                 <span>Order Date</span>
               </div>
               <p className="font-medium">
-                {new Date(order.orderDate).toLocaleString('en-US', {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
+                {new Date(order.orderDate).toLocaleString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
                 })}
               </p>
             </div>
@@ -118,7 +127,7 @@ export default function OrderDetailsDialog({
 
           <Separator />
 
-          <div className="flex items-center justify-between text-lg font-bold">
+          <div className="flex items-center justify-between text-lg ">
             <span>Total Amount</span>
             <span className="gradient-primary bg-clip-text text-transparent">
               ৳{order.total}

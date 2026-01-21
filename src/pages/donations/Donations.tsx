@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Plus, FileText, View } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card } from "@/components/ui/card";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import DonationChannelsTab from "./tabs/DonationChannelsTab";
 import DonationsTab from "./tabs/DonationsTab";
 import ChannelFormModal from "./modal/ChannelFormModal";
@@ -37,7 +37,7 @@ function Donations() {
   const [selectedChannel, setSelectedChannel] =
     useState<DonationChannel | null>(null);
   const [selectedDonation, setSelectedDonation] = useState<Donation | null>(
-    null
+    null,
   );
   const [channelToDelete, setChannelToDelete] =
     useState<DonationChannel | null>(null);
@@ -45,10 +45,10 @@ function Donations() {
   // State for actions
   const [isDeleting, setIsDeleting] = useState(false);
   const [refreshChannels, setRefreshChannels] = useState<(() => void) | null>(
-    null
+    null,
   );
   const [refreshDonations, setRefreshDonations] = useState<(() => void) | null>(
-    null
+    null,
   );
 
   // Handlers for donation channels
@@ -133,10 +133,8 @@ function Donations() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold">{t("donations.title")}</h1>
-          <p className="text-muted-foreground mt-1">
-            {t("donations.subtitle")}
-          </p>
+          <CardTitle>{t("donations.title")}</CardTitle>
+          <CardDescription>{t("donations.subtitle")}</CardDescription>
         </div>
         {hasPermission(permissions.donations.create) && (
           <Button onClick={handleCreateChannel}>

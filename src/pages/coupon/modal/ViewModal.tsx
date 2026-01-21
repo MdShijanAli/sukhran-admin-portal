@@ -123,7 +123,7 @@ export default function ViewModal({
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
-                <h3 className="text-2xl font-bold">{coupon?.code}</h3>
+                <h3 className="text-2xl ">{coupon?.code}</h3>
                 {getStatusBadge()}
               </div>
               <p className="text-lg text-muted-foreground">{coupon?.name}</p>
@@ -134,7 +134,7 @@ export default function ViewModal({
               )}
             </div>
             <div className="text-right">
-              <p className="text-3xl font-bold text-primary">
+              <p className="text-3xl  text-primary">
                 {coupon?.discount.formatted}
               </p>
             </div>
@@ -249,7 +249,7 @@ export default function ViewModal({
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <p className="text-2xl font-bold">
+                  <p className="text-2xl ">
                     {coupon?.usage.count} / {coupon?.usage.limit_total}
                   </p>
                 </div>
@@ -268,9 +268,7 @@ export default function ViewModal({
               <p className="text-sm text-muted-foreground mb-1">
                 {t("coupon.view.limitPerUser")}
               </p>
-              <p className="text-2xl font-bold">
-                {coupon?.usage.limit_per_user}
-              </p>
+              <p className="text-2xl ">{coupon?.usage.limit_per_user}</p>
               <p className="text-xs text-muted-foreground mt-2">
                 {t("coupon.view.limitPerUserHelp")}
               </p>
@@ -287,7 +285,7 @@ export default function ViewModal({
             {t("coupon.view.totalDiscountGiven")}
           </h4>
           <div className="rounded-lg border bg-card p-4">
-            <p className="text-3xl font-bold text-primary">
+            <p className="text-3xl  text-primary">
               ৳{coupon?.usage.total_discount_given.toFixed(2)}
             </p>
             <p className="text-sm text-muted-foreground mt-1">

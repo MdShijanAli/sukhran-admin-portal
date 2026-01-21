@@ -64,7 +64,7 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
               className="w-20 h-20 rounded-full object-cover object-top border-4 border-white shadow-md"
             />
             <div className="flex-1 min-w-0">
-              <h3 className="text-xl font-bold mb-1 truncate">
+              <h3 className="text-xl  mb-1 truncate">
                 {user.firstName} {user.lastName}
               </h3>
               {user.preferredName && (

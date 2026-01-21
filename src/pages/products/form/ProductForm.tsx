@@ -474,7 +474,7 @@ export default function ProductForm() {
         <form onSubmit={handleSubmit} className="mb-5">
           <Card>
             <CardHeader>
-              <CardTitle className="flex justify-between items-center">
+              <p className="text-sm flex justify-between items-center">
                 {isEditMode
                   ? t("products.form.editProduct")
                   : t("products.form.productInfo")}
@@ -482,7 +482,7 @@ export default function ProductForm() {
                   <Undo2 />
                   {t("products.backToProducts")}
                 </Button>
-              </CardTitle>
+              </p>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">

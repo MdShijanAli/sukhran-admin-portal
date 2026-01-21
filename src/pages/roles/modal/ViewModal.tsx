@@ -90,9 +90,7 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
                   {t("roles.view.permissions")}
                 </span>
               </div>
-              <p className="text-2xl font-bold">
-                {role.permissions_count || 0}
-              </p>
+              <p className="text-2xl ">{role.permissions_count || 0}</p>
             </div>
 
             <div className="p-3 bg-card border rounded-lg">
@@ -102,7 +100,7 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
                   {t("roles.view.assignedUsers")}
                 </span>
               </div>
-              <p className="text-2xl font-bold">{role.users_count || 0}</p>
+              <p className="text-2xl ">{role.users_count || 0}</p>
             </div>
 
             <div className="p-3 bg-card border rounded-lg">
@@ -144,7 +142,7 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
                       acc[permission.module].push(permission);
                       return acc;
                     },
-                    {} as Record<string, typeof role.permissions>
+                    {} as Record<string, typeof role.permissions>,
                   );
 
                   return (
@@ -178,7 +176,7 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
                               ))}
                             </div>
                           </div>
-                        )
+                        ),
                       )}
                     </>
                   );

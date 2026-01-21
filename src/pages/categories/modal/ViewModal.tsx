@@ -149,7 +149,7 @@ export default function ViewModal({
           )}
           <div className="flex-1 space-y-2">
             <div>
-              <h3 className="text-2xl font-bold">{category?.name}</h3>
+              <h3 className="text-2xl ">{category?.name}</h3>
               {category?.slug && (
                 <p className="text-sm text-muted-foreground">
                   {t("categories.view.slug")}: {category?.slug}
@@ -188,9 +188,7 @@ export default function ViewModal({
                 {t("categories.view.subCategories")}
               </span>
             </div>
-            <p className="text-2xl font-bold">
-              {category?.sub_categories?.length || 0}
-            </p>
+            <p className="text-2xl ">{category?.sub_categories?.length || 0}</p>
           </div>
 
           <div className="rounded-lg border bg-card p-4">
@@ -198,9 +196,7 @@ export default function ViewModal({
               <Package className="h-4 w-4" />
               <span className="text-sm">{t("categories.view.products")}</span>
             </div>
-            <p className="text-2xl font-bold">
-              {category?.products_count || 0}
-            </p>
+            <p className="text-2xl ">{category?.products_count || 0}</p>
           </div>
 
           <div className="rounded-lg border bg-card p-4">
@@ -209,9 +205,7 @@ export default function ViewModal({
                 {t("categories.view.displayOrder")}
               </span>
             </div>
-            <p className="text-2xl font-bold">
-              {category?.displayOrder || "-"}
-            </p>
+            <p className="text-2xl ">{category?.displayOrder || "-"}</p>
           </div>
         </div>
 
@@ -343,7 +337,7 @@ export default function ViewModal({
         onClose={() => setShowDeleteSubCategory(false)}
         title={t("categories.delete.subCategoryTitle")}
         description={`${t("deleteConfirm")} "${selectedSubCategory?.name}"? ${t(
-          "deleteAftermath"
+          "deleteAftermath",
         )}`}
         onConfirm={confirmDeleteSubCategory}
         isDeleting={isDeleting}

@@ -67,7 +67,9 @@ const Marketing = () => {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isPreviewDialogOpen, setIsPreviewDialogOpen] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
+    null,
+  );
   const [activeTab, setActiveTab] = useState<"email" | "sms">("email");
 
   // Mock data
@@ -78,7 +80,8 @@ const Marketing = () => {
       type: "email",
       category: "welcome",
       subject: "Welcome to our store, {{name}}!",
-      content: "Dear {{name}},\n\nThank you for joining us! We're excited to have you on board.\n\nYour account has been successfully created.\n\nBest regards,\nThe Team",
+      content:
+        "Dear {{name}},\n\nThank you for joining us! We're excited to have you on board.\n\nYour account has been successfully created.\n\nBest regards,\nThe Team",
       variables: ["name"],
       createdAt: "2024-01-15",
       updatedAt: "2024-01-15",
@@ -90,7 +93,8 @@ const Marketing = () => {
       type: "email",
       category: "birthday",
       subject: "Happy Birthday {{name}}! 🎉",
-      content: "Happy Birthday {{name}}!\n\nTo celebrate your special day, here's a {{discount}}% discount code: {{code}}\n\nValid until {{expiry_date}}\n\nEnjoy your day!\n\nBest wishes,\nThe Team",
+      content:
+        "Happy Birthday {{name}}!\n\nTo celebrate your special day, here's a {{discount}}% discount code: {{code}}\n\nValid until {{expiry_date}}\n\nEnjoy your day!\n\nBest wishes,\nThe Team",
       variables: ["name", "discount", "code", "expiry_date"],
       createdAt: "2024-01-10",
       updatedAt: "2024-01-20",
@@ -101,7 +105,8 @@ const Marketing = () => {
       name: "Promotion SMS",
       type: "sms",
       category: "promotion",
-      content: "Hi {{name}}! {{promotion_text}}. Use code: {{code}}. Valid till {{expiry_date}}. Shop now!",
+      content:
+        "Hi {{name}}! {{promotion_text}}. Use code: {{code}}. Valid till {{expiry_date}}. Shop now!",
       variables: ["name", "promotion_text", "code", "expiry_date"],
       createdAt: "2024-02-01",
       updatedAt: "2024-02-01",
@@ -112,7 +117,8 @@ const Marketing = () => {
       name: "Order Confirmation SMS",
       type: "sms",
       category: "order",
-      content: "Hi {{name}}, your order #{{order_id}} has been confirmed. Total: {{amount}}. Track: {{tracking_url}}",
+      content:
+        "Hi {{name}}, your order #{{order_id}} has been confirmed. Total: {{amount}}. Track: {{tracking_url}}",
       variables: ["name", "order_id", "amount", "tracking_url"],
       createdAt: "2024-02-05",
       updatedAt: "2024-02-05",
@@ -160,7 +166,7 @@ const Marketing = () => {
     (template) =>
       template.type === activeTab &&
       (template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        template.category.toLowerCase().includes(searchQuery.toLowerCase()))
+        template.category.toLowerCase().includes(searchQuery.toLowerCase())),
   );
 
   const stats = {
@@ -171,8 +177,10 @@ const Marketing = () => {
   };
 
   const handleCreateTemplate = () => {
-    const finalCategory = isCustomCategory ? customCategoryInput : formData.category;
-    
+    const finalCategory = isCustomCategory
+      ? customCategoryInput
+      : formData.category;
+
     if (!finalCategory) {
       toast({
         title: "Error",
@@ -202,9 +210,11 @@ const Marketing = () => {
 
   const handleEditTemplate = () => {
     if (!selectedTemplate) return;
-    
-    const finalCategory = isCustomCategory ? customCategoryInput : formData.category;
-    
+
+    const finalCategory = isCustomCategory
+      ? customCategoryInput
+      : formData.category;
+
     if (!finalCategory) {
       toast({
         title: "Error",
@@ -225,8 +235,8 @@ const Marketing = () => {
               variables,
               updatedAt: new Date().toISOString().split("T")[0],
             }
-          : t
-      )
+          : t,
+      ),
     );
     setIsEditDialogOpen(false);
     setSelectedTemplate(null);
@@ -305,7 +315,9 @@ const Marketing = () => {
 
   const openEditDialog = (template: Template) => {
     setSelectedTemplate(template);
-    const isExistingCategory = categories.some(cat => cat.value === template.category);
+    const isExistingCategory = categories.some(
+      (cat) => cat.value === template.category,
+    );
     setIsCustomCategory(!isExistingCategory);
     setCustomCategoryInput(!isExistingCategory ? template.category : "");
     setFormData({
@@ -327,21 +339,23 @@ const Marketing = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">{t("nav.marketing") || "Marketing"}</h1>
-        <p className="text-muted-foreground">
+        <CardTitle>{t("nav.marketing") || "Marketing"}</CardTitle>
+        <CardDescription>
           Manage SMS and email templates for various occasions
-        </p>
+        </CardDescription>
       </div>
 
       {/* Statistics */}
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Email Templates</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Email Templates
+            </CardTitle>
             <Mail className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalEmail}</div>
+            <div className="text-2xl ">{stats.totalEmail}</div>
           </CardContent>
         </Card>
         <Card>
@@ -350,7 +364,7 @@ const Marketing = () => {
             <MessageSquare className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalSMS}</div>
+            <div className="text-2xl ">{stats.totalSMS}</div>
           </CardContent>
         </Card>
         <Card>
@@ -358,7 +372,7 @@ const Marketing = () => {
             <CardTitle className="text-sm font-medium">Active</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.active}</div>
+            <div className="text-2xl ">{stats.active}</div>
           </CardContent>
         </Card>
         <Card>
@@ -366,7 +380,7 @@ const Marketing = () => {
             <CardTitle className="text-sm font-medium">Draft</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.draft}</div>
+            <div className="text-2xl ">{stats.draft}</div>
           </CardContent>
         </Card>
       </div>
@@ -380,7 +394,10 @@ const Marketing = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "email" | "sms")}>
+          <Tabs
+            value={activeTab}
+            onValueChange={(v) => setActiveTab(v as "email" | "sms")}
+          >
             <div className="flex items-center justify-between mb-4">
               <TabsList>
                 <TabsTrigger value="email">
@@ -426,7 +443,9 @@ const Marketing = () => {
                   <TableBody>
                     {filteredTemplates.map((template) => (
                       <TableRow key={template.id}>
-                        <TableCell className="font-medium">{template.name}</TableCell>
+                        <TableCell className="font-medium">
+                          {template.name}
+                        </TableCell>
                         <TableCell>
                           <Badge variant="outline">{template.category}</Badge>
                         </TableCell>
@@ -436,7 +455,11 @@ const Marketing = () => {
                         <TableCell>
                           <div className="flex gap-1 flex-wrap">
                             {template.variables.slice(0, 3).map((v) => (
-                              <Badge key={v} variant="secondary" className="text-xs">
+                              <Badge
+                                key={v}
+                                variant="secondary"
+                                className="text-xs"
+                              >
                                 {v}
                               </Badge>
                             ))}
@@ -449,7 +472,11 @@ const Marketing = () => {
                         </TableCell>
                         <TableCell>
                           <Badge
-                            variant={template.status === "active" ? "default" : "secondary"}
+                            variant={
+                              template.status === "active"
+                                ? "default"
+                                : "secondary"
+                            }
                           >
                             {template.status}
                           </Badge>
@@ -511,7 +538,9 @@ const Marketing = () => {
                   <TableBody>
                     {filteredTemplates.map((template) => (
                       <TableRow key={template.id}>
-                        <TableCell className="font-medium">{template.name}</TableCell>
+                        <TableCell className="font-medium">
+                          {template.name}
+                        </TableCell>
                         <TableCell>
                           <Badge variant="outline">{template.category}</Badge>
                         </TableCell>
@@ -521,7 +550,11 @@ const Marketing = () => {
                         <TableCell>
                           <div className="flex gap-1 flex-wrap">
                             {template.variables.slice(0, 3).map((v) => (
-                              <Badge key={v} variant="secondary" className="text-xs">
+                              <Badge
+                                key={v}
+                                variant="secondary"
+                                className="text-xs"
+                              >
                                 {v}
                               </Badge>
                             ))}
@@ -534,7 +567,11 @@ const Marketing = () => {
                         </TableCell>
                         <TableCell>
                           <Badge
-                            variant={template.status === "active" ? "default" : "secondary"}
+                            variant={
+                              template.status === "active"
+                                ? "default"
+                                : "secondary"
+                            }
                           >
                             {template.status}
                           </Badge>
@@ -598,7 +635,9 @@ const Marketing = () => {
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   placeholder="e.g., Welcome Email"
                 />
               </div>
@@ -617,7 +656,9 @@ const Marketing = () => {
                         {cat.label}
                       </SelectItem>
                     ))}
-                    <SelectItem value="custom">+ Add Custom Category</SelectItem>
+                    <SelectItem value="custom">
+                      + Add Custom Category
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 {isCustomCategory && (
@@ -637,7 +678,9 @@ const Marketing = () => {
                 <Input
                   id="subject"
                   value={formData.subject}
-                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, subject: e.target.value })
+                  }
                   placeholder="e.g., Welcome to {{name}}!"
                 />
               </div>
@@ -648,7 +691,9 @@ const Marketing = () => {
               <Textarea
                 id="content"
                 value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, content: e.target.value })
+                }
                 placeholder={
                   formData.type === "email"
                     ? "Dear {{name}},\n\nYour content here..."
@@ -698,7 +743,10 @@ const Marketing = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsCreateDialogOpen(false)}
+            >
               Cancel
             </Button>
             <Button onClick={handleCreateTemplate}>Create Template</Button>
@@ -722,7 +770,9 @@ const Marketing = () => {
                 <Input
                   id="edit-name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -740,7 +790,9 @@ const Marketing = () => {
                         {cat.label}
                       </SelectItem>
                     ))}
-                    <SelectItem value="custom">+ Add Custom Category</SelectItem>
+                    <SelectItem value="custom">
+                      + Add Custom Category
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 {isCustomCategory && (
@@ -760,7 +812,9 @@ const Marketing = () => {
                 <Input
                   id="edit-subject"
                   value={formData.subject}
-                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, subject: e.target.value })
+                  }
                 />
               </div>
             )}
@@ -770,7 +824,9 @@ const Marketing = () => {
               <Textarea
                 id="edit-content"
                 value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, content: e.target.value })
+                }
                 rows={8}
               />
               <p className="text-sm text-muted-foreground">
@@ -815,7 +871,10 @@ const Marketing = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditDialogOpen(false)}
+            >
               Cancel
             </Button>
             <Button onClick={handleEditTemplate}>Update Template</Button>
@@ -841,7 +900,9 @@ const Marketing = () => {
               {selectedTemplate.type === "email" && (
                 <div className="space-y-2">
                   <Label>Subject</Label>
-                  <div className="p-3 bg-muted rounded-md">{selectedTemplate.subject}</div>
+                  <div className="p-3 bg-muted rounded-md">
+                    {selectedTemplate.subject}
+                  </div>
                 </div>
               )}
               <div className="space-y-2">

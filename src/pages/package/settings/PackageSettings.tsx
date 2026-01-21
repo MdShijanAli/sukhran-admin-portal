@@ -338,7 +338,7 @@ function PackageSettings() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold ">{t("packageSettings.title")}</h1>
+          <h1 className="text-3xl  ">{t("packageSettings.title")}</h1>
           <p className="text-muted-foreground mt-1">
             {t("packageSettings.subtitle")}
           </p>
@@ -467,9 +467,7 @@ function PackageSettings() {
       {/* Schedule Options */}
       {hasPermission(permissions.package_schedule_options.view) && (
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold">
-            {t("packageSettings.scheduleOptions")}
-          </h2>
+          <h2 className="text-2xl ">{t("packageSettings.scheduleOptions")}</h2>
 
           {scheduleOptions && (
             <>

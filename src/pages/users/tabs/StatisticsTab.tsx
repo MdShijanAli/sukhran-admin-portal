@@ -96,7 +96,7 @@ const StatisticsTab = () => {
                 <p className="text-sm text-muted-foreground">
                   {t("users.statistics.totalUsers")}
                 </p>
-                <p className="text-2xl font-bold text-primary">
+                <p className="text-2xl  text-primary">
                   {statistics.total_users.toLocaleString()}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -116,7 +116,7 @@ const StatisticsTab = () => {
                 <p className="text-sm text-muted-foreground">
                   {t("users.statistics.activeUsers")}
                 </p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-2xl  text-green-600">
                   {statistics.active_users.toLocaleString()}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -141,7 +141,7 @@ const StatisticsTab = () => {
                 <p className="text-sm text-muted-foreground">
                   {t("users.statistics.inactiveUsers")}
                 </p>
-                <p className="text-2xl font-bold text-orange-600">
+                <p className="text-2xl  text-orange-600">
                   {statistics.inactive_users.toLocaleString()}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -166,7 +166,7 @@ const StatisticsTab = () => {
                 <p className="text-sm text-muted-foreground">
                   {t("users.statistics.deletedUsers")}
                 </p>
-                <p className="text-2xl font-bold text-red-600">
+                <p className="text-2xl  text-red-600">
                   {statistics.deleted_users.toLocaleString()}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -194,7 +194,7 @@ const StatisticsTab = () => {
                 <p className="text-sm text-muted-foreground mb-1">
                   {t("users.statistics.verified")}
                 </p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-2xl  text-green-600">
                   {statistics.verified_users.toLocaleString()}
                 </p>
               </div>
@@ -202,7 +202,7 @@ const StatisticsTab = () => {
                 <p className="text-sm text-muted-foreground mb-1">
                   {t("users.statistics.unverified")}
                 </p>
-                <p className="text-2xl font-bold text-orange-600">
+                <p className="text-2xl  text-orange-600">
                   {statistics.unverified_users.toLocaleString()}
                 </p>
               </div>
@@ -247,7 +247,7 @@ const StatisticsTab = () => {
                   </p>
                 </div>
               </div>
-              <p className="text-xl font-bold text-green-600">
+              <p className="text-xl  text-green-600">
                 {statistics.active_users.toLocaleString()}
               </p>
             </div>
@@ -266,7 +266,7 @@ const StatisticsTab = () => {
                   </p>
                 </div>
               </div>
-              <p className="text-xl font-bold text-orange-600">
+              <p className="text-xl  text-orange-600">
                 {statistics.inactive_users.toLocaleString()}
               </p>
             </div>
@@ -285,7 +285,7 @@ const StatisticsTab = () => {
                   </p>
                 </div>
               </div>
-              <p className="text-xl font-bold text-red-600">
+              <p className="text-xl  text-red-600">
                 {statistics.deleted_users.toLocaleString()}
               </p>
             </div>
@@ -327,7 +327,7 @@ const StatisticsTab = () => {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-primary">
+                    <p className="text-2xl  text-primary">
                       {userCount.toLocaleString()}
                     </p>
                     <p className="text-xs text-muted-foreground">

@@ -91,7 +91,7 @@ const CoinReportTab = () => {
               <p className="text-sm text-muted-foreground mb-1">
                 {t("donations.coinReport.overview.totalCoins")}
               </p>
-              <p className="text-2xl font-bold text-amber-600">
+              <p className="text-2xl  text-amber-600">
                 {formatCurrency(coinReport.overview.total_coin_donations)}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
@@ -112,7 +112,7 @@ const CoinReportTab = () => {
               <p className="text-sm text-muted-foreground mb-1">
                 {t("donations.coinReport.overview.fulfilled")}
               </p>
-              <p className="text-2xl font-bold text-green-600">
+              <p className="text-2xl  text-green-600">
                 {formatCurrency(coinReport.overview.total_fulfilled)}
               </p>
               <p className="text-xs text-muted-foreground mt-1">Completed</p>
@@ -130,7 +130,7 @@ const CoinReportTab = () => {
               <p className="text-sm text-muted-foreground mb-1">
                 {t("donations.coinReport.overview.companyOwes")}
               </p>
-              <p className="text-2xl font-bold text-orange-600">
+              <p className="text-2xl  text-orange-600">
                 {formatCurrency(coinReport.overview.company_owes)}
               </p>
               <p className="text-xs text-muted-foreground mt-1">Pending</p>
@@ -153,7 +153,7 @@ const CoinReportTab = () => {
               <p className="text-sm text-muted-foreground">
                 {t("donations.coinReport.overview.unfulfilled")}
               </p>
-              <p className="text-xl font-bold text-red-600">
+              <p className="text-xl  text-red-600">
                 {formatCurrency(coinReport.overview.total_unfulfilled)}
               </p>
             </div>
@@ -169,7 +169,7 @@ const CoinReportTab = () => {
               <p className="text-sm text-muted-foreground">
                 Average Coin Donation
               </p>
-              <p className="text-xl font-bold text-purple-600">
+              <p className="text-xl  text-purple-600">
                 {formatCurrency(coinReport.overview.average_coin_donation)}
               </p>
             </div>
@@ -214,7 +214,7 @@ const CoinReportTab = () => {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-xl font-bold text-amber-600">
+                    <p className="text-xl  text-amber-600">
                       {formatCurrency(channel.statistics.total_coin_donations)}
                     </p>
                     <p className="text-xs text-muted-foreground">
@@ -230,7 +230,7 @@ const CoinReportTab = () => {
                     <p className="text-xs text-muted-foreground">
                       {t("donations.coinReport.overview.fulfilled")}
                     </p>
-                    <p className="text-sm font-bold text-green-600">
+                    <p className="text-sm  text-green-600">
                       {formatCurrency(channel.fulfillment.fulfilled_amount)}
                     </p>
                   </div>
@@ -238,7 +238,7 @@ const CoinReportTab = () => {
                     <p className="text-xs text-muted-foreground">
                       {t("donations.coinReport.overview.unfulfilled")}
                     </p>
-                    <p className="text-sm font-bold text-orange-600">
+                    <p className="text-sm  text-orange-600">
                       {formatCurrency(channel.fulfillment.unfulfilled_amount)}
                     </p>
                   </div>
@@ -246,7 +246,7 @@ const CoinReportTab = () => {
                     <p className="text-xs text-muted-foreground">
                       {t("donations.coinReport.overview.companyOwes")}
                     </p>
-                    <p className="text-sm font-bold text-red-600">
+                    <p className="text-sm  text-red-600">
                       {formatCurrency(channel.fulfillment.company_owes)}
                     </p>
                   </div>
@@ -258,7 +258,7 @@ const CoinReportTab = () => {
                     <span className="text-sm font-medium">
                       {t("donations.coinReport.byChannel.progress")}
                     </span>
-                    <span className="text-sm font-bold text-primary">
+                    <span className="text-sm  text-primary">
                       {fulfillmentPercentage}%
                     </span>
                   </div>
@@ -292,7 +292,7 @@ const CoinReportTab = () => {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-bold text-amber-600">
+                    <p className="text-lg  text-amber-600">
                       {formatCurrency(donation.value)}
                     </p>
                     <Badge variant="secondary" className="text-xs">
@@ -323,7 +323,7 @@ const CoinReportTab = () => {
                 key={`${donor.userId}-${index}`}
                 className="flex items-center gap-3 p-3 border rounded-lg hover:bg-accent transition-colors"
               >
-                <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center font-bold text-amber-600">
+                <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center  text-amber-600">
                   #{index + 1}
                 </div>
                 <div className="flex-1">
@@ -339,7 +339,7 @@ const CoinReportTab = () => {
                     </span>
                   </div>
                 </div>
-                <p className="text-lg font-bold text-primary">
+                <p className="text-lg  text-primary">
                   {formatCurrency(donor.total_value)}
                 </p>
               </div>
@@ -368,7 +368,7 @@ const CoinReportTab = () => {
             <p className="text-xs text-muted-foreground mb-1">
               Amount to Fulfill
             </p>
-            <p className="text-2xl font-bold text-orange-600">
+            <p className="text-2xl  text-orange-600">
               {formatCurrency(coinReport.overview.total_unfulfilled)}
             </p>
           </div>

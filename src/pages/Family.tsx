@@ -220,10 +220,10 @@ export default function Family() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [selectedAccount, setSelectedAccount] = useState<FamilyAccount | null>(
-    null
+    null,
   );
   const [selectedMember, setSelectedMember] = useState<FamilyMember | null>(
-    null
+    null,
   );
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [isEditMemberDialogOpen, setIsEditMemberDialogOpen] = useState(false);
@@ -249,15 +249,15 @@ export default function Family() {
   const totalFamilyAccounts = familyAccounts.length;
   const totalMembers = familyAccounts.reduce(
     (sum, acc) => sum + acc.memberCount,
-    0
+    0,
   );
   const activeMembers = familyAccounts.reduce(
     (sum, acc) => sum + acc.members.filter((m) => m.status === "active").length,
-    0
+    0,
   );
   const totalRevenue = familyAccounts.reduce(
     (sum, acc) => sum + acc.totalSpent,
-    0
+    0,
   );
 
   const handleViewAccount = (account: FamilyAccount) => {
@@ -306,11 +306,11 @@ export default function Family() {
     const updatedAccounts = familyAccounts.map((account) => {
       if (account.id === selectedAccount.id) {
         const memberExists = account.members.some(
-          (m) => m.id === editingMember.id
+          (m) => m.id === editingMember.id,
         );
         const updatedMembers = memberExists
           ? account.members.map((m) =>
-              m.id === editingMember.id ? editingMember : m
+              m.id === editingMember.id ? editingMember : m,
             )
           : [...account.members, { ...editingMember, id: `M${Date.now()}` }];
 
@@ -340,7 +340,7 @@ export default function Family() {
     const updatedAccounts = familyAccounts.map((account) => {
       if (account.id === selectedAccount.id) {
         const updatedMembers = account.members.filter(
-          (m) => m.id !== selectedMember.id
+          (m) => m.id !== selectedMember.id,
         );
         return {
           ...account,
@@ -372,10 +372,8 @@ export default function Family() {
     <div className="">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold">{t("nav.family")}</h1>
-        <p className="text-muted-foreground">
-          Manage family accounts and members
-        </p>
+        <CardTitle>{t("nav.family")}</CardTitle>
+        <CardDescription>Manage family accounts and members</CardDescription>
       </div>
 
       {/* Statistics */}
@@ -388,7 +386,7 @@ export default function Family() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalFamilyAccounts}</div>
+            <div className="text-2xl ">{totalFamilyAccounts}</div>
           </CardContent>
         </Card>
         <Card>
@@ -397,7 +395,7 @@ export default function Family() {
             <UserPlus className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalMembers}</div>
+            <div className="text-2xl ">{totalMembers}</div>
           </CardContent>
         </Card>
         <Card>
@@ -408,7 +406,7 @@ export default function Family() {
             <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{activeMembers}</div>
+            <div className="text-2xl ">{activeMembers}</div>
           </CardContent>
         </Card>
         <Card>
@@ -417,7 +415,7 @@ export default function Family() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${totalRevenue.toFixed(2)}</div>
+            <div className="text-2xl ">${totalRevenue.toFixed(2)}</div>
           </CardContent>
         </Card>
       </div>

@@ -1,8 +1,8 @@
-import { Package } from '@/stores/packageStore';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Package as PackageIcon, Calendar, Gift, Users } from 'lucide-react';
+import { Package } from "@/stores/packageStore";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Package as PackageIcon, Calendar, Gift, Users } from "lucide-react";
 
 interface PackagePreviewProps {
   package: Package;
@@ -29,7 +29,7 @@ export default function PackagePreview({ package: pkg }: PackagePreviewProps) {
               <span className="capitalize">{pkg.type} Package</span>
             </div>
           </div>
-          <Badge variant={pkg.status === 'active' ? 'default' : 'secondary'}>
+          <Badge variant={pkg.status === "active" ? "default" : "secondary"}>
             {pkg.status}
           </Badge>
         </div>
@@ -70,7 +70,7 @@ export default function PackagePreview({ package: pkg }: PackagePreviewProps) {
         <div className="space-y-3 pt-4 border-t">
           <div className="flex items-center justify-between">
             <span className="text-lg font-medium">Price</span>
-            <span className="text-3xl font-bold gradient-primary bg-clip-text text-transparent">
+            <span className="text-3xl  gradient-primary bg-clip-text text-transparent">
               ৳{pkg.price}
             </span>
           </div>
@@ -79,7 +79,9 @@ export default function PackagePreview({ package: pkg }: PackagePreviewProps) {
               <Gift className="h-4 w-4" />
               Redeem Coins
             </span>
-            <span className="font-medium text-primary">{pkg.redeemCoins} coins</span>
+            <span className="font-medium text-primary">
+              {pkg.redeemCoins} coins
+            </span>
           </div>
         </div>
 

@@ -87,7 +87,7 @@ export default function ViewModal({
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-2xl font-bold">{area?.name}</h3>
+              <h3 className="text-2xl ">{area?.name}</h3>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <p>{area?.city}</p>
                 {area?.custom_route_id && (
@@ -119,7 +119,7 @@ export default function ViewModal({
                 {t("coverage_area.view.addresses")}
               </span>
             </div>
-            <p className="text-2xl font-bold">{area?.addresses_count || 0}</p>
+            <p className="text-2xl ">{area?.addresses_count || 0}</p>
           </div>
 
           <div className="rounded-lg border bg-card p-4">
@@ -129,7 +129,7 @@ export default function ViewModal({
                 {t("coverage_area.view.coverageRadius")}
               </span>
             </div>
-            <p className="text-2xl font-bold">{area?.radius_km} km</p>
+            <p className="text-2xl ">{area?.radius_km} km</p>
           </div>
         </div>
 

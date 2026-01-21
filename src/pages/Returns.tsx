@@ -144,7 +144,7 @@ const Returns = () => {
 
   const handleOpenDialog = (
     returnItem: Return,
-    action: "approve" | "reject" | "refund"
+    action: "approve" | "reject" | "refund",
   ) => {
     setSelectedReturn(returnItem);
     setActionType(action);
@@ -173,7 +173,7 @@ const Returns = () => {
           return { ...r, ...updates };
         }
         return r;
-      })
+      }),
     );
 
     toast({
@@ -204,7 +204,7 @@ const Returns = () => {
   return (
     <div className="">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Returns & Refunds</h1>
+        <h1 className="text-3xl ">Returns & Refunds</h1>
       </div>
 
       <div className="grid gap-4 md:grid-cols-5">
@@ -214,7 +214,7 @@ const Returns = () => {
             <RotateCcw className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
+            <div className="text-2xl ">{stats.total}</div>
           </CardContent>
         </Card>
         <Card>
@@ -223,7 +223,7 @@ const Returns = () => {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.pending}</div>
+            <div className="text-2xl ">{stats.pending}</div>
           </CardContent>
         </Card>
         <Card>
@@ -232,7 +232,7 @@ const Returns = () => {
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.approved}</div>
+            <div className="text-2xl ">{stats.approved}</div>
           </CardContent>
         </Card>
         <Card>
@@ -241,7 +241,7 @@ const Returns = () => {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.refunded}</div>
+            <div className="text-2xl ">{stats.refunded}</div>
           </CardContent>
         </Card>
         <Card>
@@ -252,9 +252,7 @@ const Returns = () => {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              ${stats.totalAmount.toFixed(2)}
-            </div>
+            <div className="text-2xl ">${stats.totalAmount.toFixed(2)}</div>
           </CardContent>
         </Card>
       </div>

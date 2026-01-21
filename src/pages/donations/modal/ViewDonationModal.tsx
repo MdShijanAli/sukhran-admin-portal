@@ -108,7 +108,7 @@ export default function ViewDonationModal({
                 <p className="text-sm text-muted-foreground mb-1">
                   {t("donations.donations.view.amount")}
                 </p>
-                <p className="text-3xl font-bold text-primary">
+                <p className="text-3xl  text-primary">
                   {formatCurrency(donation.amount)}
                 </p>
               </div>
@@ -243,7 +243,7 @@ export default function ViewDonationModal({
                     <p className="text-xs text-muted-foreground mb-1">
                       Order ID
                     </p>
-                    <p className="font-mono text-sm font-bold text-blue-600">
+                    <p className="font-mono text-sm  text-blue-600">
                       {donation.order.orderId}
                     </p>
                   </div>
@@ -260,7 +260,7 @@ export default function ViewDonationModal({
                       <p className="text-xs text-muted-foreground mb-1">
                         Grand Total
                       </p>
-                      <p className="font-bold text-sm">
+                      <p className=" text-sm">
                         {formatCurrency(donation.order.grandTotal)}
                       </p>
                     </div>

@@ -10,6 +10,8 @@ interface StatCardProps {
   icon: LucideIcon;
   trend?: "up" | "down";
   type?: "number" | "string";
+  superText?: string;
+  description?: React.ReactNode;
 }
 
 const StatCard: FC<StatCardProps> = ({
@@ -19,6 +21,8 @@ const StatCard: FC<StatCardProps> = ({
   icon: Icon,
   trend,
   type,
+  superText,
+  description,
 }) => {
   const { t } = useTranslation();
 
@@ -29,11 +33,19 @@ const StatCard: FC<StatCardProps> = ({
         <Icon className="h-5 w-5 text-primary" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">
+        <div className="text-2xl font-semibold">
           {type === "number" && typeof value === "number"
             ? value.toFixed(2)
-            : value}
+            : value}{" "}
+          {superText && (
+            <span className="text-xs text-muted-foreground mt-1">
+              ({superText})
+            </span>
+          )}
         </div>
+
+        {description && <div className="mt-2">{description}</div>}
+
         {change !== undefined && (
           <div className="flex items-center gap-1 mt-1">
             {trend === "up" ? (

@@ -144,7 +144,7 @@ export function RichTextEditor({
         className={cn(
           "h-[600px] max-h-[600px] overflow-y-auto p-4 focus:outline-none ",
           "prose prose-sm max-w-none dark:prose-invert",
-          "[&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-2",
+          "[&_h1]:text-2xl [&_h1]: [&_h1]:mb-2",
           "[&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mb-2",
           "[&_h3]:text-lg [&_h3]:font-medium [&_h3]:mb-2",
           "[&_ul]:list-disc [&_ul]:pl-6",

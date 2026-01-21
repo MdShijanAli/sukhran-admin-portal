@@ -34,7 +34,7 @@ export default function DonationsTab({ onViewDetails }: DonationsTabProps) {
         </Badge>
       );
     },
-    [t]
+    [t],
   );
 
   const getPaymentMethodBadge = useMemo(
@@ -50,7 +50,7 @@ export default function DonationsTab({ onViewDetails }: DonationsTabProps) {
         </Badge>
       );
     },
-    [t]
+    [t],
   );
 
   const handleViewDetails = (donation: Donation) => {
@@ -109,7 +109,7 @@ export default function DonationsTab({ onViewDetails }: DonationsTabProps) {
       key: "amount",
       label: t("donations.donations.columns.amount"),
       render: (donation) => (
-        <p className="font-bold">{formatCurrency(donation.amount)}</p>
+        <p className="">{formatCurrency(donation.amount)}</p>
       ),
     },
     {

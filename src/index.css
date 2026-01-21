@@ -222,7 +222,7 @@ All colors MUST be HSL.
   /* Heading Text */
   .text-heading {
     font-family: 'Karmella', serif;
-    @apply text-3xl md:text-5xl font-bold;
+    @apply text-3xl md:text-5xl font-semibold;
   }
 
   /* Button Interaction Pattern */

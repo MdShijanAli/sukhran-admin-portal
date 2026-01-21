@@ -32,6 +32,8 @@
   "averageOrderValue": "গড় অর্ডার মূল্য",
   "totalOrders": "মোট অর্ডার",
   "daily": "দৈনিক",
+  "donationAmount": "দান পরিমাণ",
+  "donations": "দান",
   "weekly": "সাপ্তাহিক",
   "periods": {
     "today": "আজ",
@@ -106,5 +108,10 @@
     "status": "অবস্থা",
     "type": "ধরন",
     "date": "তারিখ"
+  },
+  "payment": {
+    "orders": "অর্ডার",
+    "revenue": "রাজস্ব",
+    "donations": "দান"
   }
 }

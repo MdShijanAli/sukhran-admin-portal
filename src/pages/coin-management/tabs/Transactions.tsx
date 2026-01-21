@@ -79,7 +79,7 @@ export default function UserBalances({
       render: (holder) => (
         <div className="flex items-center gap-1 w-[110px]">
           <Coins className="h-4 w-4 text-amber-600" />
-          <span className="font-bold text-primary">
+          <span className=" text-primary">
             {formatNumberWithCommas(holder.total_coins)}
           </span>
         </div>

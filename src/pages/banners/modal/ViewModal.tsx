@@ -79,7 +79,7 @@ export default function ViewModal({
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-2xl font-bold">{banner?.title}</h3>
+              <h3 className="text-2xl ">{banner?.title}</h3>
               <div className="flex items-center gap-2 mt-1">
                 <span className="text-sm text-muted-foreground">
                   {t("banners.columns.displayOrder")}: {banner?.display_order}
@@ -204,7 +204,7 @@ export default function ViewModal({
                                   </p>
                                   <div className="flex items-center gap-3 flex-wrap">
                                     <div>
-                                      <span className="text-lg font-bold text-primary">
+                                      <span className="text-lg  text-primary">
                                         ৳{pkg.pricing?.currentPrice}
                                       </span>
                                       {pkg.pricing?.totalItemsPrice !==

@@ -61,7 +61,7 @@ interface TransactionStatistics {
 const StatisticsTab = ({ dateRange }) => {
   const { t } = useTranslation();
   const [statistics, setStatistics] = useState<TransactionStatistics | null>(
-    null
+    null,
   );
   const [isLoading, setIsLoading] = useState(false);
 
@@ -80,7 +80,7 @@ const StatisticsTab = ({ dateRange }) => {
         queryParams.append("end_date", format(dateRange.to, "yyyy-MM-dd"));
       }
       const response = await transactionService.statistics(
-        queryParams.toString()
+        queryParams.toString(),
       );
       console.log("Statistics response:", response);
       setStatistics(response.statistics as TransactionStatistics);
@@ -138,7 +138,7 @@ const StatisticsTab = ({ dateRange }) => {
               <p className="text-sm text-muted-foreground mb-1">
                 {t("transactions.statistics.totalTransactions")}
               </p>
-              <p className="text-2xl font-bold text-primary">
+              <p className="text-2xl  text-primary">
                 {statistics.totals.transactions}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
@@ -158,7 +158,7 @@ const StatisticsTab = ({ dateRange }) => {
               <p className="text-sm text-muted-foreground mb-1">
                 {t("transactions.statistics.totalAmount")}
               </p>
-              <p className="text-2xl font-bold text-green-600">
+              <p className="text-2xl  text-green-600">
                 {formatCurrency(statistics.totals.amount)}
               </p>
               <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
@@ -179,7 +179,7 @@ const StatisticsTab = ({ dateRange }) => {
               <p className="text-sm text-muted-foreground mb-1">
                 {t("transactions.statistics.totalRefunds")}
               </p>
-              <p className="text-2xl font-bold text-red-600">
+              <p className="text-2xl  text-red-600">
                 {statistics.totals.refunds}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
@@ -199,7 +199,7 @@ const StatisticsTab = ({ dateRange }) => {
               <p className="text-sm text-muted-foreground mb-1">
                 {t("transactions.statistics.netRevenue")}
               </p>
-              <p className="text-2xl font-bold text-blue-600">
+              <p className="text-2xl  text-blue-600">
                 {formatCurrency(statistics.totals.netRevenue)}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
@@ -219,10 +219,10 @@ const StatisticsTab = ({ dateRange }) => {
               <p className="text-sm text-muted-foreground mb-1">
                 {t("transactions.statistics.avgTransaction")}
               </p>
-              <p className="text-2xl font-bold text-purple-600">
+              <p className="text-2xl  text-purple-600">
                 {statistics.totals.transactions > 0
                   ? formatCurrency(
-                      statistics.totals.amount / statistics.totals.transactions
+                      statistics.totals.amount / statistics.totals.transactions,
                     )
                   : formatCurrency(0)}
               </p>
@@ -258,9 +258,7 @@ const StatisticsTab = ({ dateRange }) => {
                 </div>
               </div>
               <div>
-                <p className="text-2xl font-bold">
-                  {formatCurrency(data.amount)}
-                </p>
+                <p className="text-2xl ">{formatCurrency(data.amount)}</p>
                 <p className="text-sm mt-1">
                   {data.count} {t("transactions.statistics.transactions")}
                 </p>
@@ -292,14 +290,14 @@ const StatisticsTab = ({ dateRange }) => {
                     data.successRate >= 80
                       ? "bg-green-100 text-green-700 dark:bg-green-950"
                       : data.successRate >= 50
-                      ? "bg-orange-100 text-orange-700 dark:bg-orange-950"
-                      : "bg-red-100 text-red-700 dark:bg-red-950"
+                        ? "bg-orange-100 text-orange-700 dark:bg-orange-950"
+                        : "bg-red-100 text-red-700 dark:bg-red-950"
                   }
                 >
                   {data.successRate}% {t("transactions.statistics.successRate")}
                 </Badge>
               </div>
-              <p className="text-2xl font-bold text-primary mb-2">
+              <p className="text-2xl  text-primary mb-2">
                 {formatCurrency(data.amount)}
               </p>
               <div className="flex items-center justify-between">
@@ -322,7 +320,7 @@ const StatisticsTab = ({ dateRange }) => {
         <div className="space-y-3">
           {statistics.daily_breakdown.map((day) => {
             const maxAmount = Math.max(
-              ...statistics.daily_breakdown.map((d) => d.amount)
+              ...statistics.daily_breakdown.map((d) => d.amount),
             );
             const widthPercentage =
               maxAmount > 0 ? (day.amount / maxAmount) * 100 : 0;
@@ -336,7 +334,7 @@ const StatisticsTab = ({ dateRange }) => {
                       {day.transactions}{" "}
                       {t("transactions.statistics.transactions")}
                     </Badge>
-                    <span className="font-bold text-primary">
+                    <span className=" text-primary">
                       {formatCurrency(day.amount)}
                     </span>
                   </div>
@@ -347,7 +345,7 @@ const StatisticsTab = ({ dateRange }) => {
                     style={{ width: `${widthPercentage}%` }}
                   >
                     {widthPercentage > 20 && (
-                      <span className="text-xs font-bold text-white">
+                      <span className="text-xs  text-white">
                         {formatCurrency(day.amount)}
                       </span>
                     )}
@@ -377,7 +375,7 @@ const StatisticsTab = ({ dateRange }) => {
                   {t("transactions.statistics.totalRefundsVsTransactions")}
                 </p>
               </div>
-              <p className="text-2xl font-bold text-red-600">
+              <p className="text-2xl  text-red-600">
                 {statistics.totals.transactions > 0
                   ? (
                       (statistics.totals.refunds /
@@ -397,10 +395,11 @@ const StatisticsTab = ({ dateRange }) => {
                   {t("transactions.statistics.perRefund")}
                 </p>
               </div>
-              <p className="text-2xl font-bold text-orange-600">
+              <p className="text-2xl  text-orange-600">
                 {statistics.totals.refunds > 0
                   ? formatCurrency(
-                      statistics.totals.refundAmount / statistics.totals.refunds
+                      statistics.totals.refundAmount /
+                        statistics.totals.refunds,
                     )
                   : formatCurrency(0)}
               </p>
@@ -424,7 +423,7 @@ const StatisticsTab = ({ dateRange }) => {
                   {t("transactions.statistics.refundsVsRevenue")}
                 </p>
               </div>
-              <p className="text-2xl font-bold text-green-600">
+              <p className="text-2xl  text-green-600">
                 {statistics.totals.amount > 0
                   ? (
                       (statistics.totals.refundAmount /
@@ -444,7 +443,7 @@ const StatisticsTab = ({ dateRange }) => {
                   {t("transactions.statistics.afterAllDeductions")}
                 </p>
               </div>
-              <p className="text-2xl font-bold text-blue-600">
+              <p className="text-2xl  text-blue-600">
                 {statistics.totals.amount > 0
                   ? (
                       (statistics.totals.netRevenue /

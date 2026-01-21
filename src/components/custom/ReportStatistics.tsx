@@ -235,7 +235,7 @@ const ReportStatistics = ({ data }: ReportStatisticsProps) => {
               <p className="text-xs font-medium text-muted-foreground mb-1">
                 {formatLabel(key, t)}
               </p>
-              <p className="text-2xl font-bold">{formatValue(key, value)}</p>
+              <p className="text-2xl ">{formatValue(key, value)}</p>
             </div>
             <div className="ml-2">
               <Icon className="h-5 w-5 text-muted-foreground" />
@@ -301,13 +301,13 @@ const ReportStatistics = ({ data }: ReportStatisticsProps) => {
       {/* Payment Section */}
       {renderSection(
         t("reports.statistics.paymentStatistics"),
-        categories.payment
+        categories.payment,
       )}
 
       {/* Financial Section */}
       {renderSection(
         t("reports.statistics.financialSummary"),
-        categories.financial
+        categories.financial,
       )}
 
       {/* Items Section */}
@@ -317,7 +317,7 @@ const ReportStatistics = ({ data }: ReportStatisticsProps) => {
       {categories.other.length > 0 &&
         renderSection(
           t("reports.statistics.additionalMetrics"),
-          categories.other
+          categories.other,
         )}
     </div>
   );

@@ -12,7 +12,7 @@ export default function ComingSoon() {
           <Rocket className="h-16 w-16 text-primary mx-auto relative animate-bounce" />
         </div>
 
-        <h2 className="text-3xl font-bold mt-8 mb-3 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+        <h2 className="text-3xl  mt-8 mb-3 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
           Coming Soon!
         </h2>
 

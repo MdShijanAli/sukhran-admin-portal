@@ -87,8 +87,8 @@ export default function SendCoinModal({
       toast.error(
         t(
           error.response.data.error_message ||
-            "coinManagement.messages.coinsSentError"
-        )
+            "coinManagement.messages.coinsSentError",
+        ),
       );
     } finally {
       setIsSubmitting(false);
@@ -159,10 +159,10 @@ export default function SendCoinModal({
                     <div className="text-right">
                       <p className="text-xs text-muted-foreground">
                         {t(
-                          "coinManagement.userBalances.columns.currentBalance"
+                          "coinManagement.userBalances.columns.currentBalance",
                         )}
                       </p>
-                      <p className="font-bold text-amber-600">
+                      <p className=" text-amber-600">
                         {formatNumberWithCommas(selectedUser.total_coins)}
                       </p>
                     </div>
@@ -186,7 +186,7 @@ export default function SendCoinModal({
               <SelectTrigger>
                 <SelectValue
                   placeholder={t(
-                    "coinManagement.sendCoin.selectUserPlaceholder"
+                    "coinManagement.sendCoin.selectUserPlaceholder",
                   )}
                 />
               </SelectTrigger>

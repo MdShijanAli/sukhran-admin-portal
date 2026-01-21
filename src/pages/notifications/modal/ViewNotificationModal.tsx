@@ -62,8 +62,8 @@ export default function ViewNotificationModal({
                 notification.status === "sent"
                   ? "default"
                   : notification.status === "pending"
-                  ? "secondary"
-                  : "destructive"
+                    ? "secondary"
+                    : "destructive"
               }
               className="capitalize shrink-0"
             >
@@ -167,7 +167,7 @@ export default function ViewNotificationModal({
                 <Send className="h-4 w-4" />
                 <span className="text-xs">{t("notifications.view.sent")}</span>
               </div>
-              <p className="text-2xl font-bold text-foreground">
+              <p className="text-2xl  text-foreground">
                 {notification.sent_count || 0}
               </p>
             </div>
@@ -179,7 +179,7 @@ export default function ViewNotificationModal({
                   {t("notifications.view.success")}
                 </span>
               </div>
-              <p className="text-2xl font-bold text-green-600">
+              <p className="text-2xl  text-green-600">
                 {notification.success_count || 0}
               </p>
             </div>
@@ -191,7 +191,7 @@ export default function ViewNotificationModal({
                   {t("notifications.view.failed")}
                 </span>
               </div>
-              <p className="text-2xl font-bold text-red-600">
+              <p className="text-2xl  text-red-600">
                 {notification.failed_count || 0}
               </p>
             </div>
@@ -203,7 +203,7 @@ export default function ViewNotificationModal({
                   {t("notifications.view.successRate")}
                 </span>
               </div>
-              <p className="text-2xl font-bold text-blue-600">
+              <p className="text-2xl  text-blue-600">
                 {notification.success_rate || "0%"}
               </p>
             </div>
@@ -226,7 +226,7 @@ export default function ViewNotificationModal({
                 </span>
                 <p className="font-medium">
                   {new Date(
-                    notification.sent_at || notification.created_at
+                    notification.sent_at || notification.created_at,
                   ).toLocaleString()}
                 </p>
               </div>

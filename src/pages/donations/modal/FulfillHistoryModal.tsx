@@ -66,7 +66,7 @@ const FulfillHistoryModal = ({
 }: FulfillHistoryModalProps) => {
   const { t } = useTranslation();
   const [historyData, setHistoryData] = useState<FulfillmentHistoryData | null>(
-    null
+    null,
   );
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -78,7 +78,7 @@ const FulfillHistoryModal = ({
       try {
         const response = await donationService.getFulfillmentHistory(
           channelId,
-          `page=${currentPage}`
+          `page=${currentPage}`,
         );
         const responseData = response as FulfillmentHistoryData;
         // console.log("Fulfillment History Data:", data);
@@ -126,7 +126,7 @@ const FulfillHistoryModal = ({
                   <p className="text-xs font-medium text-green-700 dark:text-green-300 mb-1">
                     {t("donations.fulfillHistory.totalFulfilled")}
                   </p>
-                  <p className="text-2xl font-bold text-green-900 dark:text-green-100">
+                  <p className="text-2xl  text-green-900 dark:text-green-100">
                     {formatCurrency(historyData?.summary?.total_fulfilled)}
                   </p>
                 </div>
@@ -143,7 +143,7 @@ const FulfillHistoryModal = ({
                   <p className="text-xs font-medium text-blue-700 dark:text-blue-300 mb-1">
                     {t("donations.fulfillHistory.totalDonations")}
                   </p>
-                  <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">
+                  <p className="text-2xl  text-blue-900 dark:text-blue-100">
                     {formatCurrency(historyData?.summary?.total_coin_donations)}
                   </p>
                 </div>
@@ -160,7 +160,7 @@ const FulfillHistoryModal = ({
                   <p className="text-xs font-medium text-orange-700 dark:text-orange-300 mb-1">
                     {t("donations.fulfillHistory.unfulfilled")}
                   </p>
-                  <p className="text-2xl font-bold text-orange-900 dark:text-orange-100">
+                  <p className="text-2xl  text-orange-900 dark:text-orange-100">
                     {formatCurrency(historyData?.summary?.unfulfilled)}
                   </p>
                 </div>
@@ -200,7 +200,7 @@ const FulfillHistoryModal = ({
                             <DollarSign className="w-6 h-6 text-primary" />
                           </div>
                           <div>
-                            <p className="text-2xl font-bold text-primary">
+                            <p className="text-2xl  text-primary">
                               {formatCurrency(record.amount)}
                             </p>
                             <p className="text-xs text-muted-foreground">
@@ -294,7 +294,7 @@ const FulfillHistoryModal = ({
               <div className="flex items-center gap-1">
                 {Array.from(
                   { length: historyData.meta.last_page },
-                  (_, i) => i + 1
+                  (_, i) => i + 1,
                 ).map((page) => (
                   <Button
                     key={page}

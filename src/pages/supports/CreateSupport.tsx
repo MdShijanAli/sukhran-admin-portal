@@ -12,7 +12,13 @@ import {
   Eye,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -125,7 +131,7 @@ export default function CreateSupport() {
     setIsLoadingOrders(true);
     try {
       const response = await supportService.getOrdersList(
-        newUser.mobile || newUser.email
+        newUser.mobile || newUser.email,
       );
       const data = response as any;
       console.log("Orders data:", data.data.orders);
@@ -175,7 +181,7 @@ export default function CreateSupport() {
   const removeFile = (index: number) => {
     setAttachments((prev) => prev.filter((_, i) => i !== index));
     const fileInput = document.getElementById(
-      "attachments"
+      "attachments",
     ) as HTMLInputElement;
     if (fileInput && attachments.length === 1) {
       fileInput.value = "";
@@ -234,7 +240,7 @@ export default function CreateSupport() {
     } catch (error) {
       console.error("Error creating ticket:", error);
       toast.error(
-        error.response.data.message || t("support.messages.failedToCreate")
+        error.response.data.message || t("support.messages.failedToCreate"),
       );
     } finally {
       setIsSubmitting(false);
@@ -254,10 +260,8 @@ export default function CreateSupport() {
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-            <h1 className="text-3xl font-bold">{t("support.create.title")}</h1>
-            <p className="text-muted-foreground mt-1">
-              {t("support.create.subtitle")}
-            </p>
+            <CardTitle>{t("support.create.title")}</CardTitle>
+            <CardDescription>{t("support.create.subtitle")}</CardDescription>
           </div>
         </div>
       </div>
@@ -287,7 +291,7 @@ export default function CreateSupport() {
                       onSelect={handleUserSelect}
                       placeholder={t("support.create.searchCustomer")}
                       searchPlaceholder={t(
-                        "support.create.searchCustomerPlaceholder"
+                        "support.create.searchCustomerPlaceholder",
                       )}
                       emptyText={t("support.create.noCustomerFound")}
                       isLoading={isLoadingUsers}
@@ -322,7 +326,7 @@ export default function CreateSupport() {
                           className="w-16 h-16 rounded-full object-cover object-top border-2 border-white shadow-md"
                         />
                       ) : (
-                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xl font-bold shadow-md">
+                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xl  shadow-md">
                           {selectedUser.firstName?.[0]?.toUpperCase()}
                           {selectedUser.lastName?.[0]?.toUpperCase()}
                         </div>
@@ -379,7 +383,7 @@ export default function CreateSupport() {
                       onSelect={handleOrderSelect}
                       placeholder={t("support.create.searchOrder")}
                       searchPlaceholder={t(
-                        "support.create.searchOrderPlaceholder"
+                        "support.create.searchOrderPlaceholder",
                       )}
                       emptyText={t("support.create.noOrderFound")}
                       isLoading={isLoadingOrders}
@@ -413,9 +417,7 @@ export default function CreateSupport() {
                         <p className="text-muted-foreground">
                           {t("support.create.orderTotal")}
                         </p>
-                        <p className="font-bold text-lg">
-                          ৳{selectedOrder.grandTotal}
-                        </p>
+                        <p className=" text-lg">৳{selectedOrder.grandTotal}</p>
                       </div>
                       <div className="flex justify-end">
                         <Button

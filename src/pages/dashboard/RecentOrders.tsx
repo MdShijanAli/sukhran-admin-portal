@@ -29,7 +29,7 @@ export default function RecentOrders({
       {
         key: "amount",
         label: t("dashboard.recentOrders.amount"),
-        render: (item) => `৳${item.amount.toFixed(2)}`,
+        render: (item) => `৳${item.amount?.toFixed(2)}`,
       },
       {
         key: "payment_mode",

@@ -104,7 +104,7 @@ export default function ViewTicketModal({
 
   const getBadge = (
     type: "status" | "priority",
-    value: string
+    value: string,
   ): JSX.Element => {
     if (type === "status") {
       const config: Record<string, { variant: any; className: string }> = {
@@ -174,7 +174,7 @@ export default function ViewTicketModal({
                 <p className="text-sm font-medium text-muted-foreground">
                   {t("support.view.ticketNumber")}
                 </p>
-                <p className="text-3xl font-mono font-bold text-primary">
+                <p className="text-3xl font-mono  text-primary">
                   {ticket.ticketNumber}
                 </p>
               </div>
@@ -198,7 +198,7 @@ export default function ViewTicketModal({
               </div>
               <div className="space-y-3">
                 <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-lg">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white  text-lg">
                     {customer.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1">
@@ -365,7 +365,7 @@ export default function ViewTicketModal({
                 <p className="text-xs text-muted-foreground mb-1">
                   {t("support.view.orderNumber")}
                 </p>
-                <p className="font-mono text-lg font-bold text-amber-600">
+                <p className="font-mono text-lg  text-amber-600">
                   {order.orderNumber}
                 </p>
               </div>

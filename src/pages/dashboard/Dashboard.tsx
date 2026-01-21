@@ -113,7 +113,9 @@ export interface RecentTransactionsData {
 
 interface Online {
   count: number;
-  amount: number;
+  revenue: number;
+  customer_payments: number;
+  donations: number;
   percentage: number;
 }
 
@@ -158,6 +160,12 @@ interface DashboardData {
       cod: Online;
     };
   };
+  additional_metrics: {
+    donations: {
+      count: number;
+      total_amount: number;
+    };
+  };
 }
 
 export default function Dashboard() {
@@ -171,14 +179,15 @@ export default function Dashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const statsData = dashboardData?.core_metrics;
+  const donation = dashboardData?.additional_metrics?.donations;
 
   const monthlyRevenueChart = useMemo<ChartDataPoint[]>(() => {
     if (!dashboardData?.charts?.monthly_trend) return [];
     return dashboardData.charts.monthly_trend.map((item) => ({
       name: item.month,
-      revenue: `৳${item.revenue.toLocaleString()}`,
+      revenue: `৳${item.revenue?.toLocaleString()}`,
       orders: item.orders,
-      avg_orders: `৳${item.average_order_value.toFixed(2).toLocaleString()}`,
+      avg_orders: `৳${item.average_order_value?.toFixed(2)?.toLocaleString()}`,
     }));
   }, [dashboardData]);
 
@@ -186,9 +195,9 @@ export default function Dashboard() {
     if (!dashboardData?.charts?.yearly_comparison) return [];
     return dashboardData.charts.yearly_comparison.map((item) => ({
       name: item.year,
-      revenue: `৳${item.revenue.toLocaleString()}`,
+      revenue: `৳${item.revenue?.toLocaleString()}`,
       orders: item.orders,
-      avg_orders: `৳${item.average_order_value.toFixed(2).toLocaleString()}`,
+      avg_orders: `৳${item.average_order_value?.toFixed(2)?.toLocaleString()}`,
     }));
   }, [dashboardData]);
   const weeklyRevenueChart = useMemo<ChartDataPoint[]>(() => {
@@ -197,7 +206,7 @@ export default function Dashboard() {
       name: item.week_range,
       revenue: `৳${item.revenue?.toLocaleString()}`,
       orders: item.orders,
-      avg_orders: `৳${item.average_order_value?.toFixed(2).toLocaleString()}`,
+      avg_orders: `৳${item.average_order_value?.toFixed(2)?.toLocaleString()}`,
     }));
   }, [dashboardData]);
   const dailyRevenueChart = useMemo<ChartDataPoint[]>(() => {
@@ -206,7 +215,7 @@ export default function Dashboard() {
       name: item.date,
       revenue: `৳${item.revenue?.toLocaleString()}`,
       orders: item.orders,
-      avg_orders: `৳${item.average_order_value?.toFixed(2).toLocaleString()}`,
+      avg_orders: `৳${item.average_order_value?.toFixed(2)?.toLocaleString()}`,
     }));
   }, [dashboardData]);
   const hourlyRevenueChart = useMemo<ChartDataPoint[]>(() => {
@@ -215,7 +224,7 @@ export default function Dashboard() {
       name: item.hour,
       revenue: `৳${item.revenue?.toLocaleString()}`,
       orders: item.orders,
-      avg_orders: `৳${item.average_order_value?.toFixed(2).toLocaleString()}`,
+      avg_orders: `৳${item.average_order_value?.toFixed(2)?.toLocaleString()}`,
       timestamp: formatDate(item.timestamp),
     }));
   }, [dashboardData]);
@@ -253,8 +262,20 @@ export default function Dashboard() {
   }>(() => {
     if (!dashboardData?.payment_analytics?.payment_mode_breakdown)
       return {
-        online: { count: 0, amount: 0, percentage: 0 },
-        cod: { count: 0, amount: 0, percentage: 0 },
+        online: {
+          count: 0,
+          revenue: 0,
+          customer_payments: 0,
+          donations: 0,
+          percentage: 0,
+        },
+        cod: {
+          count: 0,
+          revenue: 0,
+          customer_payments: 0,
+          donations: 0,
+          percentage: 0,
+        },
       };
     return dashboardData.payment_analytics.payment_mode_breakdown;
   }, [dashboardData]);
@@ -315,7 +336,7 @@ export default function Dashboard() {
       },
       {
         title: t("dashboard.totalRevenue"),
-        value: `৳${(statsData?.revenue?.current ?? 0).toLocaleString()}`,
+        value: `৳${(statsData?.revenue?.current ?? 0)?.toLocaleString()}`,
         change: statsData?.revenue?.growth_percentage,
         icon: DollarSign,
         trend:
@@ -347,7 +368,7 @@ export default function Dashboard() {
       },
       {
         title: t("dashboard.average_order"),
-        value: `৳${statsData?.average_order_value?.current.toLocaleString()}`,
+        value: `৳${statsData?.average_order_value?.current?.toLocaleString()}`,
         change: statsData?.average_order_value?.growth_percentage,
         icon: Package,
         trend:
@@ -363,9 +384,9 @@ export default function Dashboard() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold ">{t("dashboard.title")}</h1>
+          <h1 className="text-3xl">{t("dashboard.title")}</h1>
           <p className="text-muted-foreground mt-1">
-            Here're the details of your analysis.
+            {t("dashboard.subtitle")}
           </p>
         </div>
 
@@ -462,7 +483,7 @@ export default function Dashboard() {
         <div className="lg:col-span-1">
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1">
             {isLoading ? (
-              Array.from({ length: 2 }).map((_, i) => (
+              Array.from({ length: 3 }).map((_, i) => (
                 <StatCardSkeleton key={i} />
               ))
             ) : (
@@ -470,7 +491,20 @@ export default function Dashboard() {
                 <StatCard
                   icon={DollarSign}
                   title={t("dashboard.onlinePayments")}
-                  value={`৳${paymentAnalyticsStats.online.amount.toLocaleString()}`}
+                  value={`৳${paymentAnalyticsStats.online.customer_payments?.toLocaleString()}`}
+                  superText={`${paymentAnalyticsStats.online.count} ${t("dashboard.payment.orders")}`}
+                  description={
+                    <div className="text-xs text-muted-foreground mt-1 space-y-0.5">
+                      <div>
+                        {t("dashboard.payment.revenue")}: ৳
+                        {paymentAnalyticsStats.online.revenue?.toLocaleString()}
+                      </div>
+                      <div>
+                        {t("dashboard.payment.donations")}: ৳
+                        {paymentAnalyticsStats.online.donations?.toLocaleString()}
+                      </div>
+                    </div>
+                  }
                   change={paymentAnalyticsStats.online.percentage}
                   trend={
                     paymentAnalyticsStats.online.percentage > 0 ? "up" : "down"
@@ -479,11 +513,30 @@ export default function Dashboard() {
                 <StatCard
                   icon={DollarSign}
                   title={t("dashboard.codPayments")}
-                  value={`৳${paymentAnalyticsStats.cod.amount.toLocaleString()}`}
+                  value={`৳${paymentAnalyticsStats.cod.customer_payments?.toLocaleString()}`}
+                  superText={`${paymentAnalyticsStats.cod.count} ${t("dashboard.payment.orders")}`}
+                  description={
+                    <div className="text-xs text-muted-foreground mt-1 space-y-0.5">
+                      <div>
+                        {t("dashboard.payment.revenue")}: ৳
+                        {paymentAnalyticsStats.cod.revenue?.toLocaleString()}
+                      </div>
+                      <div>
+                        {t("dashboard.payment.donations")}: ৳
+                        {paymentAnalyticsStats.cod.donations?.toLocaleString()}
+                      </div>
+                    </div>
+                  }
                   change={paymentAnalyticsStats.cod.percentage}
                   trend={
                     paymentAnalyticsStats.cod.percentage > 0 ? "up" : "down"
                   }
+                />
+                <StatCard
+                  icon={DollarSign}
+                  title={t("dashboard.donationAmount")}
+                  value={`৳${donation?.total_amount?.toLocaleString()}`}
+                  superText={`${donation?.count} ${t("dashboard.donations")}`}
                 />
               </>
             )}

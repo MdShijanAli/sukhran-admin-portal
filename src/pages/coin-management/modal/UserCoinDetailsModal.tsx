@@ -58,13 +58,14 @@ export default function UserCoinDetailsModal({
       } catch (err: unknown) {
         const error = err as { response?: { data?: { message?: string } } };
         setError(
-          error.response?.data?.message || t("coinManagement.userDetails.error")
+          error.response?.data?.message ||
+            t("coinManagement.userDetails.error"),
         );
       } finally {
         setLoading(false);
       }
     },
-    [userId, t]
+    [userId, t],
   );
 
   useEffect(() => {
@@ -155,7 +156,7 @@ export default function UserCoinDetailsModal({
                     <p className="text-sm text-muted-foreground">
                       {t("coinManagement.userDetails.totalCoins")}
                     </p>
-                    <p className="text-2xl font-bold text-amber-600">
+                    <p className="text-2xl  text-amber-600">
                       {formatNumberWithCommas(details.balance.total_coins)}
                     </p>
                   </div>
@@ -164,7 +165,7 @@ export default function UserCoinDetailsModal({
                     <p className="text-sm text-muted-foreground">
                       {t("coinManagement.userDetails.lockedCoins")}
                     </p>
-                    <p className="text-2xl font-bold text-red-600">
+                    <p className="text-2xl  text-red-600">
                       {formatNumberWithCommas(details.balance.locked_coins)}
                     </p>
                   </div>
@@ -173,7 +174,7 @@ export default function UserCoinDetailsModal({
                     <p className="text-sm text-muted-foreground">
                       {t("coinManagement.userDetails.availableCoins")}
                     </p>
-                    <p className="text-2xl font-bold text-green-600">
+                    <p className="text-2xl  text-green-600">
                       {formatNumberWithCommas(details.balance.available_coins)}
                     </p>
                   </div>
@@ -199,7 +200,7 @@ export default function UserCoinDetailsModal({
                       <p className="text-lg font-semibold text-green-600">
                         +
                         {formatNumberWithCommas(
-                          details.statistics.total_earned
+                          details.statistics.total_earned,
                         )}
                       </p>
                     </div>
@@ -303,13 +304,13 @@ export default function UserCoinDetailsModal({
                                 }
                               >
                                 {t(
-                                  `coinManagement.transactions.types.${transaction.type}`
+                                  `coinManagement.transactions.types.${transaction.type}`,
                                 )}
                               </Badge>
                             </TableCell>
                             <TableCell className="text-right">
                               <span
-                                className={`font-bold ${
+                                className={` ${
                                   transaction.type === "earned"
                                     ? "text-green-600"
                                     : "text-red-600"
@@ -327,12 +328,12 @@ export default function UserCoinDetailsModal({
                             </TableCell>
                             <TableCell className="text-right font-medium">
                               {formatNumberWithCommas(
-                                transaction.balance_after
+                                transaction.balance_after,
                               )}
                             </TableCell>
                             <TableCell className="text-sm">
                               {new Date(
-                                transaction.created_at
+                                transaction.created_at,
                               ).toLocaleString()}
                             </TableCell>
                           </TableRow>

@@ -77,7 +77,7 @@ const StatisticsTab = () => {
                 <p className="text-sm text-muted-foreground mb-1">
                   {t("donations.statistics.totalDonations")}
                 </p>
-                <p className="text-2xl font-bold text-primary">
+                <p className="text-2xl  text-primary">
                   {formatCurrency(statistics.overview.totalDonations)}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -98,7 +98,7 @@ const StatisticsTab = () => {
                 <p className="text-sm text-muted-foreground mb-1">
                   {t("donations.statistics.totalDonors")}
                 </p>
-                <p className="text-2xl font-bold text-blue-600">
+                <p className="text-2xl  text-blue-600">
                   {statistics.overview.totalDonors}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -118,7 +118,7 @@ const StatisticsTab = () => {
                 <p className="text-sm text-muted-foreground mb-1">
                   {t("donations.statistics.cashDonations")}
                 </p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-2xl  text-green-600">
                   {formatCurrency(statistics.overview.totalCashDonations)}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -138,7 +138,7 @@ const StatisticsTab = () => {
                 <p className="text-sm text-muted-foreground mb-1">
                   {t("donations.statistics.coinDonations")}
                 </p>
-                <p className="text-2xl font-bold text-amber-600">
+                <p className="text-2xl  text-amber-600">
                   {formatCurrency(statistics.overview.totalCoinDonations)}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -164,7 +164,7 @@ const StatisticsTab = () => {
               <p className="text-sm text-muted-foreground">
                 {t("donations.statistics.pendingDonations")}
               </p>
-              <p className="text-xl font-bold text-orange-600">
+              <p className="text-xl  text-orange-600">
                 {formatCurrency(statistics.overview.pendingDonations)}
               </p>
             </div>
@@ -180,7 +180,7 @@ const StatisticsTab = () => {
               <p className="text-sm text-muted-foreground">
                 {t("donations.statistics.averageDonation")}
               </p>
-              <p className="text-xl font-bold text-purple-600">
+              <p className="text-xl  text-purple-600">
                 {formatCurrency(statistics.overview.averageDonation)}
               </p>
             </div>
@@ -196,7 +196,7 @@ const StatisticsTab = () => {
               <p className="text-sm text-muted-foreground">
                 {t("donations.statistics.failedDonations")}
               </p>
-              <p className="text-xl font-bold text-red-600">
+              <p className="text-xl  text-red-600">
                 {formatCurrency(statistics.overview.failedDonations)}
               </p>
             </div>
@@ -218,9 +218,9 @@ const StatisticsTab = () => {
                 <p className="text-xs text-muted-foreground mb-1">
                   {t("donations.statistics.totalCoins")}
                 </p>
-                <p className="text-lg font-bold text-amber-600">
+                <p className="text-lg  text-amber-600">
                   {formatCurrency(
-                    statistics.coinFulfillment.totalCoinDonations
+                    statistics.coinFulfillment.totalCoinDonations,
                   )}
                 </p>
               </div>
@@ -228,7 +228,7 @@ const StatisticsTab = () => {
                 <p className="text-xs text-muted-foreground mb-1">
                   {t("donations.statistics.fulfilled")}
                 </p>
-                <p className="text-lg font-bold text-green-600">
+                <p className="text-lg  text-green-600">
                   {formatCurrency(statistics.coinFulfillment.totalFulfilled)}
                 </p>
               </div>
@@ -238,7 +238,7 @@ const StatisticsTab = () => {
                 <span className="text-sm font-medium">
                   {t("donations.statistics.fulfillmentProgress")}
                 </span>
-                <span className="text-sm font-bold text-primary">
+                <span className="text-sm  text-primary">
                   {statistics.coinFulfillment.fulfillmentPercentage}%
                 </span>
               </div>
@@ -251,7 +251,7 @@ const StatisticsTab = () => {
               <p className="text-xs text-muted-foreground mb-1">
                 {t("donations.statistics.companyOwes")}
               </p>
-              <p className="text-xl font-bold text-orange-600">
+              <p className="text-xl  text-orange-600">
                 {formatCurrency(statistics.coinFulfillment.companyOwes)}
               </p>
             </div>
@@ -279,7 +279,7 @@ const StatisticsTab = () => {
                   </p>
                 </div>
               </div>
-              <p className="text-xl font-bold text-blue-600">
+              <p className="text-xl  text-blue-600">
                 {formatCurrency(statistics.timeBased.today)}
               </p>
             </div>
@@ -298,7 +298,7 @@ const StatisticsTab = () => {
                   </p>
                 </div>
               </div>
-              <p className="text-xl font-bold text-green-600">
+              <p className="text-xl  text-green-600">
                 {formatCurrency(statistics.timeBased.thisWeek)}
               </p>
             </div>
@@ -317,7 +317,7 @@ const StatisticsTab = () => {
                   </p>
                 </div>
               </div>
-              <p className="text-xl font-bold text-purple-600">
+              <p className="text-xl  text-purple-600">
                 {formatCurrency(statistics.timeBased.thisMonth)}
               </p>
             </div>
@@ -345,7 +345,7 @@ const StatisticsTab = () => {
                   {data.count} {t("donations.statistics.donations")}
                 </Badge>
               </div>
-              <p className="text-2xl font-bold text-primary">
+              <p className="text-2xl  text-primary">
                 {formatCurrency(data.total)}
               </p>
             </div>
@@ -381,7 +381,7 @@ const StatisticsTab = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-xl font-bold text-primary">
+                  <p className="text-xl  text-primary">
                     {formatCurrency(channel.totalDonations)}
                   </p>
                   <p className="text-xs text-muted-foreground">
@@ -395,7 +395,7 @@ const StatisticsTab = () => {
                   <p className="text-xs text-muted-foreground">
                     {t("donations.statistics.cash")}
                   </p>
-                  <p className="text-sm font-bold text-green-600">
+                  <p className="text-sm  text-green-600">
                     {formatCurrency(channel.cashDonations)}
                   </p>
                 </div>
@@ -403,7 +403,7 @@ const StatisticsTab = () => {
                   <p className="text-xs text-muted-foreground">
                     {t("donations.statistics.coins")}
                   </p>
-                  <p className="text-sm font-bold text-amber-600">
+                  <p className="text-sm  text-amber-600">
                     {formatCurrency(channel.coinDonations)}
                   </p>
                 </div>
@@ -411,7 +411,7 @@ const StatisticsTab = () => {
                   <p className="text-xs text-muted-foreground">
                     {t("donations.statistics.unfulfilled")}
                   </p>
-                  <p className="text-sm font-bold text-orange-600">
+                  <p className="text-sm  text-orange-600">
                     {formatCurrency(channel.unfulfilledCoins)}
                   </p>
                 </div>
@@ -436,7 +436,7 @@ const StatisticsTab = () => {
                 key={`${donor.userId}-${index}`}
                 className="flex items-center gap-3 p-3 border rounded-lg hover:bg-accent transition-colors"
               >
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center  text-primary">
                   #{index + 1}
                 </div>
                 <div className="flex-1">
@@ -456,7 +456,7 @@ const StatisticsTab = () => {
                     </span>
                   </div>
                 </div>
-                <p className="text-lg font-bold text-primary">
+                <p className="text-lg  text-primary">
                   {formatCurrency(donor.totalDonations)}
                 </p>
               </div>
@@ -483,7 +483,7 @@ const StatisticsTab = () => {
                       {donation.channel}
                     </p>
                   </div>
-                  <p className="text-lg font-bold text-primary">
+                  <p className="text-lg  text-primary">
                     {formatCurrency(donation.amount)}
                   </p>
                 </div>
@@ -514,7 +514,7 @@ const StatisticsTab = () => {
         <div className="space-y-3">
           {statistics.dailyTrend.map((trend) => {
             const maxTotal = Math.max(
-              ...statistics.dailyTrend.map((t) => t.total)
+              ...statistics.dailyTrend.map((t) => t.total),
             );
             const widthPercentage = (trend.total / maxTotal) * 100;
 
@@ -534,7 +534,7 @@ const StatisticsTab = () => {
                     <Badge variant="secondary">
                       {trend.count} {t("donations.statistics.donations")}
                     </Badge>
-                    <span className="font-bold text-primary">
+                    <span className=" text-primary">
                       {formatCurrency(trend.total)}
                     </span>
                   </div>
@@ -545,7 +545,7 @@ const StatisticsTab = () => {
                     style={{ width: `${widthPercentage}%` }}
                   >
                     {widthPercentage > 20 && (
-                      <span className="text-xs font-bold text-white">
+                      <span className="text-xs  text-white">
                         {formatCurrency(trend.total)}
                       </span>
                     )}

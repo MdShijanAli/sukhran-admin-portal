@@ -248,7 +248,7 @@ export function BaseTableList<T>({
       perPage,
       dateRange,
       filterValues,
-    ]
+    ],
   );
 
   // Fetch data function with query params
@@ -314,7 +314,7 @@ export function BaseTableList<T>({
         console.error("Failed to fetch data:", error);
         if (setError) {
           setError(
-            error instanceof Error ? error.message : "Failed to fetch data"
+            error instanceof Error ? error.message : "Failed to fetch data",
           );
         }
       } finally {
@@ -332,7 +332,7 @@ export function BaseTableList<T>({
       hasInitialFetch,
       isFirstRender,
       buildQueryString,
-    ]
+    ],
   );
 
   // Fetch on mount and when dependencies change
@@ -406,7 +406,7 @@ export function BaseTableList<T>({
       toast.error(
         error instanceof Error
           ? error.message
-          : t("exportFailed") || "Export failed"
+          : t("exportFailed") || "Export failed",
       );
     } finally {
       setIsExporting(false);
@@ -415,7 +415,7 @@ export function BaseTableList<T>({
 
   // Check if any filters are active
   const hasActiveFilters = Object.values(localFilters).some(
-    (value) => value && value !== ""
+    (value) => value && value !== "",
   );
 
   // Get filter label by value
@@ -477,7 +477,7 @@ export function BaseTableList<T>({
                 <stat.icon className={`h-4 w-4 ${stat.color}`} />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold ml-3">
+                <div className="text-2xl  ml-3">
                   {isLoading || summaryLoading ? (
                     <Skeleton className="h-5 w-16" />
                   ) : (

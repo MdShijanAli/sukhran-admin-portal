@@ -96,7 +96,7 @@ export default function ViewReferralModal({
                 <p className="text-xs text-muted-foreground mb-1">
                   {t("referrals.referrals.view.coinsAmount")}
                 </p>
-                <p className="text-3xl font-bold text-amber-600">
+                <p className="text-3xl  text-amber-600">
                   {referral.coins_amount}
                 </p>
                 <p className="text-xs text-muted-foreground">coins</p>
@@ -224,7 +224,7 @@ export default function ViewReferralModal({
                     <span className="text-xs text-muted-foreground">
                       {t("referrals.referrals.view.grandTotal")}
                     </span>
-                    <span className="font-bold text-green-600">
+                    <span className=" text-green-600">
                       {formatCurrency(referral.first_order.grandTotal)}
                     </span>
                   </div>
@@ -260,7 +260,7 @@ export default function ViewReferralModal({
                     <span className="text-xs text-muted-foreground">
                       {t("referrals.referrals.view.amount")}
                     </span>
-                    <span className="font-bold text-amber-600">
+                    <span className=" text-amber-600">
                       {referral.coin_transaction.amount} coins
                     </span>
                   </div>
@@ -268,7 +268,7 @@ export default function ViewReferralModal({
                     <span className="text-xs text-muted-foreground">
                       {t("referrals.referrals.view.balanceAfter")}
                     </span>
-                    <span className="font-bold text-green-600">
+                    <span className=" text-green-600">
                       {referral.coin_transaction.balanceAfter} coins
                     </span>
                   </div>

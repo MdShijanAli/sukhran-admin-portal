@@ -155,10 +155,8 @@ export default function Analytics() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold">{t("nav.analytics")}</h1>
-          <p className="text-muted-foreground">
-            Track your business performance and insights
-          </p>
+          <CardTitle>{t("nav.analytics")}</CardTitle>
+          <CardDescription>{t("analytics.subtitle")}</CardDescription>
         </div>
         <div className="flex gap-2">
           <Select value={dateRange} onValueChange={setDateRange}>
@@ -192,7 +190,7 @@ export default function Analytics() {
               <metric.icon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{metric.value}</div>
+              <div className="text-2xl ">{metric.value}</div>
               <div className="flex items-center gap-1 text-xs text-muted-foreground">
                 {metric.trend === "up" ? (
                   <ArrowUpRight className="h-3 w-3 text-green-500" />

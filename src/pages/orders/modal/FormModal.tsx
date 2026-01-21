@@ -194,7 +194,7 @@ export default function FormModal({
   const calculateTotals = (
     items: FormOrderItem[],
     discount: number,
-    deliveryFee: number
+    deliveryFee: number,
   ) => {
     const subtotal = items.reduce((sum, item) => sum + item.total_price, 0);
     const total = subtotal - discount + deliveryFee;
@@ -251,7 +251,7 @@ export default function FormModal({
       const response = await orderService.removeItemFromOrder(
         selectedItem.orderId,
         selectedItem.id,
-        deleteReason
+        deleteReason,
       );
       console.log("Delete item response:", response);
       toast.success(t("orders.messages.itemDeleted"));
@@ -315,7 +315,7 @@ export default function FormModal({
         item.orderId,
         item.id,
         quantityUpdateData.newQuantity,
-        reason
+        reason,
       );
 
       toast.success("Item quantity updated successfully");
@@ -422,7 +422,7 @@ export default function FormModal({
   const handleItemChange = (
     index: number,
     field: keyof FormOrderItem,
-    value: string | number
+    value: string | number,
   ) => {
     const item = formData.items[index];
 
@@ -449,7 +449,7 @@ export default function FormModal({
     const { subtotal, total } = calculateTotals(
       newItems,
       formData.discount,
-      formData.delivery_fee
+      formData.delivery_fee,
     );
     setFormData((prev) => ({
       ...prev,
@@ -464,7 +464,7 @@ export default function FormModal({
     const { total } = calculateTotals(
       formData.items,
       discount,
-      formData.delivery_fee
+      formData.delivery_fee,
     );
     setFormData((prev) => ({ ...prev, discount, total }));
   };
@@ -474,7 +474,7 @@ export default function FormModal({
     const { total } = calculateTotals(
       formData.items,
       formData.discount,
-      deliveryFee
+      deliveryFee,
     );
     setFormData((prev) => ({ ...prev, delivery_fee: deliveryFee, total }));
   };
@@ -569,7 +569,7 @@ export default function FormModal({
       toast.error(
         isEditing
           ? t("orders.messages.failedToUpdate")
-          : t("orders.messages.failedToCreate")
+          : t("orders.messages.failedToCreate"),
       );
     } finally {
       setIsSubmitting(false);
@@ -723,7 +723,7 @@ export default function FormModal({
                           handleItemChange(
                             index,
                             "product_name",
-                            e.target.value
+                            e.target.value,
                           )
                         }
                         placeholder={t("orders.form.selectProduct")}
@@ -744,7 +744,7 @@ export default function FormModal({
                         handleItemChange(
                           index,
                           "quantity",
-                          parseInt(e.target.value) || 0
+                          parseInt(e.target.value) || 0,
                         )
                       }
                     />
@@ -763,7 +763,7 @@ export default function FormModal({
                         handleItemChange(
                           index,
                           "unit_price",
-                          parseFloat(e.target.value) || 0
+                          parseFloat(e.target.value) || 0,
                         )
                       }
                       disabled={isEditing}
@@ -846,7 +846,7 @@ export default function FormModal({
                 <span className="text-lg font-semibold">
                   {t("orders.form.total")}
                 </span>
-                <span className="text-2xl font-bold">
+                <span className="text-2xl ">
                   ৳{formatNumberWithCommas(formData.total)}
                 </span>
               </div>

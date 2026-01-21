@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RotateCcw, BarChart3, Users, History } from "lucide-react";
@@ -59,7 +59,7 @@ function CoinManagement() {
       <Card>
         <CardContent className="p-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold ">{t("coinManagement.title")}</h1>
+            <CardTitle>{t("coinManagement.title")}</CardTitle>
             <p className="text-muted-foreground mt-1">
               {t("coinManagement.subtitle")}
             </p>

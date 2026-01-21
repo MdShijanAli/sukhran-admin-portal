@@ -192,10 +192,10 @@ const ModificationHistoryModal = ({
               <span className="font-medium text-sm">
                 {t("orders.modificationHistory.totalPrice")}:
               </span>{" "}
-              <span className="text-lg font-bold text-primary">
+              <span className="text-lg  text-primary">
                 ৳
                 {(Number(details.quantity) * Number(details.unitPrice)).toFixed(
-                  2
+                  2,
                 )}
               </span>
             </div>
@@ -229,10 +229,10 @@ const ModificationHistoryModal = ({
               <span className="font-medium text-sm">
                 {t("orders.modificationHistory.removedValue")}:
               </span>{" "}
-              <span className="text-lg font-bold text-destructive">
+              <span className="text-lg  text-destructive">
                 -৳
                 {(Number(details.quantity) * Number(details.unitPrice)).toFixed(
-                  2
+                  2,
                 )}
               </span>
             </div>
@@ -312,7 +312,7 @@ const ModificationHistoryModal = ({
                         </h4>
                         <Badge
                           variant={getModificationBadgeVariant(
-                            modification.type
+                            modification.type,
                           )}
                           className="text-xs"
                         >
@@ -324,7 +324,7 @@ const ModificationHistoryModal = ({
                           new Date(modification.modifiedAt),
                           {
                             addSuffix: true,
-                          }
+                          },
                         )}
                       </span>
                     </div>
@@ -362,7 +362,7 @@ const ModificationHistoryModal = ({
                               year: "numeric",
                               hour: "2-digit",
                               minute: "2-digit",
-                            }
+                            },
                           )}
                         </span>
                       </div>

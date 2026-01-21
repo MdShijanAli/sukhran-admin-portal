@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -275,7 +275,7 @@ const Products = () => {
       <Card className="mb-3">
         <CardContent className="p-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold ">{t("products.title")}</h1>
+            <CardTitle>{t("products.title")}</CardTitle>
             <p className="text-muted-foreground mt-1">
               {t("products.subtitle")}
             </p>
@@ -509,7 +509,7 @@ const Products = () => {
                       {displaySku && (
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-base font-bold text-primary">
+                            <p className="text-base  text-primary">
                               ৳
                               {formatNumberWithCommas(
                                 (displaySku as any).pricing?.currentPrice || 0,

@@ -10,6 +10,7 @@ import { Referral } from "@/lib/types";
 import usePermissions from "@/hooks/use-permissions";
 import permissions from "@/lib/permissions";
 import { withPermission } from "@/hoc/withPermission";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 
 function Referrals() {
   const { t } = useTranslation();
@@ -21,13 +22,13 @@ function Referrals() {
 
   // State for selected items
   const [selectedReferral, setSelectedReferral] = useState<Referral | null>(
-    null
+    null,
   );
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
   // State for actions
   const [refreshReferrals, setRefreshReferrals] = useState<(() => void) | null>(
-    null
+    null,
   );
   const [refreshStatistics, setRefreshStatistics] = useState<
     (() => void) | null
@@ -61,10 +62,8 @@ function Referrals() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold">{t("referrals.title")}</h1>
-          <p className="text-muted-foreground mt-1">
-            {t("referrals.subtitle")}
-          </p>
+          <CardTitle>{t("referrals.title")}</CardTitle>
+          <CardDescription>{t("referrals.subtitle")}</CardDescription>
         </div>
       </div>
 

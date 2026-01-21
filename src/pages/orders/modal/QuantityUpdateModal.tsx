@@ -68,7 +68,7 @@ export default function QuantityUpdateModal({
               >
                 <Minus className="h-4 w-4" />
               </Button>
-              <span className="text-lg font-bold min-w-[3rem] text-center">
+              <span className="text-lg  min-w-[3rem] text-center">
                 {newQuantity}
               </span>
               <Button

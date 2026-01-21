@@ -113,9 +113,7 @@ export default function PackageDetails() {
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold ">
-            {t("packages.view.packageDetails")}
-          </h1>
+          <h1 className="text-3xl  ">{t("packages.view.packageDetails")}</h1>
           <p className="text-muted-foreground mt-1">
             {t("packages.view.viewCompleteInfo")}
           </p>
@@ -279,7 +277,7 @@ export default function PackageDetails() {
                         <p className="text-sm text-muted-foreground">
                           ৳{item.price} × {item.quantity}
                         </p>
-                        <p className="text-lg font-bold text-primary mt-1">
+                        <p className="text-lg  text-primary mt-1">
                           ৳{formatNumberWithCommas(item.subtotal)}
                         </p>
                       </div>
@@ -373,7 +371,7 @@ export default function PackageDetails() {
                 <span className="text-base font-medium">
                   {t("packages.view.finalPrice")}
                 </span>
-                <span className="text-2xl font-bold text-primary">
+                <span className="text-2xl  text-primary">
                   ৳{formatNumberWithCommas(finalPrice)}
                 </span>
               </div>
@@ -381,7 +379,7 @@ export default function PackageDetails() {
                 <span className="text-base font-medium flex items-center gap-2">
                   {t("packages.view.coinsReward")}
                 </span>
-                <span className="text-2xl font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                <span className="text-2xl  text-amber-600 dark:text-amber-400 flex items-center gap-1">
                   <Coins className="h-5 w-5" />
                   {packageData.coinsReward}
                 </span>

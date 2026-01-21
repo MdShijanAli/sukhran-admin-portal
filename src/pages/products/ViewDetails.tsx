@@ -160,7 +160,7 @@ const ProductViewDetails = () => {
                 <ArrowLeft className="h-4 w-4" />
               </Button>
               <div>
-                <h1 className="text-2xl font-bold">{product.name}</h1>
+                <h1 className="text-2xl ">{product.name}</h1>
                 <p className="text-sm text-muted-foreground mt-1">
                   {product.slug}
                 </p>
@@ -411,7 +411,7 @@ const ProductViewDetails = () => {
                             <p className="text-xs text-muted-foreground">
                               {t("products.form.currentPrice")}
                             </p>
-                            <p className="text-2xl font-bold text-primary">
+                            <p className="text-2xl  text-primary">
                               ৳
                               {formatNumberWithCommas(sku.pricing.currentPrice)}
                             </p>
@@ -425,7 +425,7 @@ const ProductViewDetails = () => {
                               <p className="text-lg line-through text-muted-foreground">
                                 ৳
                                 {formatNumberWithCommas(
-                                  sku.pricing.originalPrice
+                                  sku.pricing.originalPrice,
                                 )}
                               </p>
                             </div>

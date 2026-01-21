@@ -110,9 +110,7 @@ export default function ViewModal({
           <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-4">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <h3 className="text-xl font-bold">
-                  {transaction.transactionId}
-                </h3>
+                <h3 className="text-xl ">{transaction.transactionId}</h3>
                 <p className="text-sm text-muted-foreground mt-1">
                   {formatDDMMYYY(transaction.created_at)}
                 </p>
@@ -124,7 +122,7 @@ export default function ViewModal({
               <span className="text-sm text-muted-foreground">
                 {t("transactions.view.amount")}
               </span>
-              <span className="text-2xl font-bold text-primary">
+              <span className="text-2xl  text-primary">
                 {transaction.currency}{" "}
                 {formatNumberWithCommas(transaction.amount)}
               </span>
@@ -299,8 +297,8 @@ export default function ViewModal({
                         {transaction.currency}{" "}
                         {formatNumberWithCommas(
                           parseFloat(
-                            transaction.gatewayResponse.store_amount as string
-                          )
+                            transaction.gatewayResponse.store_amount as string,
+                          ),
                         )}
                       </span>
                     </div>
