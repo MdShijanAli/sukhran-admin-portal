@@ -15,6 +15,7 @@ import RecentOrders from "./RecentOrders";
 import RecentTransactions from "./RecentTransactions";
 import { useSidebarStore } from "@/stores/sidebarStore";
 import { formatDate } from "@/lib/utils";
+import { CardDescription, CardTitle } from "@/components/ui/card";
 
 interface CoreMetrics {
   orders: {
@@ -384,10 +385,10 @@ export default function Dashboard() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl">{t("dashboard.title")}</h1>
-          <p className="text-muted-foreground mt-1">
+          <CardTitle>{t("dashboard.title")}</CardTitle>
+          <CardDescription>
             {t("dashboard.subtitle")}
-          </p>
+          </CardDescription>
         </div>
 
         <div className="grid md:flex grid-cols-3 gap-3  flex-col sm:flex-row sm:items-center sm:gap-2 w-full sm:w-auto">
@@ -412,26 +413,25 @@ export default function Dashboard() {
 
       {/* Stats Grid */}
       <div
-        className={`grid gap-4 sm:grid-cols-2 ${
-          isCollapsed
-            ? "sm:grid-cols-3 lg:grid-cols-5"
-            : "sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5"
-        }`}
+        className={`grid gap-4 sm:grid-cols-2 ${isCollapsed
+          ? "sm:grid-cols-3 lg:grid-cols-5"
+          : "sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5"
+          }`}
       >
         {isLoading
           ? Array.from({ length: 5 }).map((_, i) => (
-              <StatCardSkeleton key={i} />
-            ))
+            <StatCardSkeleton key={i} />
+          ))
           : dashboardStatsItems.map((stat, index) => (
-              <StatCard
-                key={index}
-                title={stat.title}
-                value={stat.value}
-                change={stat.change}
-                icon={stat.icon}
-                trend={stat.trend}
-              />
-            ))}
+            <StatCard
+              key={index}
+              title={stat.title}
+              value={stat.value}
+              change={stat.change}
+              icon={stat.icon}
+              trend={stat.trend}
+            />
+          ))}
       </div>
 
       {/* Charts */}

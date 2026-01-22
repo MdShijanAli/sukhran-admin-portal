@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { BaseTable, Column } from "./BaseTable";
 import { ApiService } from "@/services/createApiService";
 import { Download, Loader2, RefreshCw, X } from "lucide-react";
-import { Skeleton } from "../ui/skeleton";
 import { Pagination } from "./Pagination";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
@@ -20,6 +19,7 @@ import { BaseDatePicker } from "@/components/custom/BaseDatePicker";
 import { toast } from "sonner";
 import { FilterConfig, FilterDrawer } from "../custom/FilterDrawer";
 import { Badge } from "../ui/badge";
+import StatCard from "../custom/StatCard";
 
 export interface FilterOption {
   label: string;
@@ -31,12 +31,12 @@ export interface ActionButton {
   icon?: React.ComponentType<{ className?: string }>;
   onClick: () => void;
   variant?:
-    | "default"
-    | "destructive"
-    | "outline"
-    | "secondary"
-    | "ghost"
-    | "link";
+  | "default"
+  | "destructive"
+  | "outline"
+  | "secondary"
+  | "ghost"
+  | "link";
 }
 
 export interface Pagination {
@@ -469,23 +469,13 @@ export function BaseTableList<T>({
       {summaryLists.length > 0 && (
         <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {summaryLists.map((stat) => (
-            <Card key={stat.title}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  {stat.title}
-                </CardTitle>
-                <stat.icon className={`h-4 w-4 ${stat.color}`} />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl  ml-3">
-                  {isLoading || summaryLoading ? (
-                    <Skeleton className="h-5 w-16" />
-                  ) : (
-                    stat.value
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+            <StatCard
+              key={stat.title}
+              title={stat.title}
+              value={stat.value}
+              icon={stat.icon}
+              loading={isLoading || summaryLoading}
+            />
           ))}
         </div>
       )}

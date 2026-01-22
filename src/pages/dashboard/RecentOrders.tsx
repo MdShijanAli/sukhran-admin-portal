@@ -78,7 +78,7 @@ export default function RecentOrders({
     ];
   }, [t]);
   return (
-    <div className="h-[400px] overflow-y-auto">
+    <div className="max-h-[450px] overflow-y-auto">
       <BaseTable<RecentOrdersData>
         columns={columns}
         data={data?.slice(0, 10) || []}

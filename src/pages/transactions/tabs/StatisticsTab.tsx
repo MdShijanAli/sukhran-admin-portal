@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Card } from "@/components/ui/card";
+import { Card, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -117,11 +117,11 @@ const StatisticsTab = ({ dateRange }) => {
       {/* Period Info */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold flex items-center gap-2">
+          <CardTitle className="text-xl flex items-center gap-2">
             <TrendingUp className="w-5 h-5" />
             {t("transactions.statistics.overview")} -{" "}
             <span className="text-primary capitalize">{statistics.period}</span>
-          </h3>
+          </CardTitle>
           <p className="text-sm text-muted-foreground mt-1">
             {formatDate(statistics.date_range.start)} -{" "}
             {formatDate(statistics.date_range.end)}
@@ -239,10 +239,10 @@ const StatisticsTab = ({ dateRange }) => {
 
       {/* Status Breakdown */}
       <Card className="p-3">
-        <h4 className="font-semibold mb-4 flex items-center gap-2">
+        <CardTitle className="text-xl mb-4 flex items-center gap-2">
           <Activity className="w-5 h-5" />
           {t("transactions.statistics.statusBreakdown")}
-        </h4>
+        </CardTitle>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
           {Object.entries(statistics.by_status).map(([status, data]) => (
             <div
@@ -270,10 +270,10 @@ const StatisticsTab = ({ dateRange }) => {
 
       {/* Payment Gateway Breakdown */}
       <Card className="p-3">
-        <h4 className="font-semibold mb-4 flex items-center gap-2">
+        <CardTitle className="text-xl mb-4 flex items-center gap-2">
           <CreditCard className="w-5 h-5" />
           {t("transactions.statistics.paymentGatewayBreakdown")}
-        </h4>
+        </CardTitle>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {Object.entries(statistics.by_gateway).map(([gateway, data]) => (
             <div
@@ -313,10 +313,10 @@ const StatisticsTab = ({ dateRange }) => {
 
       {/* Daily Breakdown */}
       <Card className="p-3">
-        <h4 className="font-semibold mb-4 flex items-center gap-2">
+        <CardTitle className="text-xl mb-4 flex items-center gap-2">
           <Calendar className="w-5 h-5 text-primary" />
           {t("transactions.statistics.dailyBreakdown")}
-        </h4>
+        </CardTitle>
         <div className="space-y-3">
           {statistics.daily_breakdown.map((day) => {
             const maxAmount = Math.max(
@@ -361,10 +361,10 @@ const StatisticsTab = ({ dateRange }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* Refund Analysis */}
         <Card className="p-4">
-          <h4 className="font-semibold mb-4 flex items-center gap-2">
+          <CardTitle className="text-xl mb-4 flex items-center gap-2">
             <ArrowDownRight className="w-5 h-5 text-red-600" />
             {t("transactions.statistics.refundAnalysis")}
-          </h4>
+          </CardTitle>
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-950 rounded-lg">
               <div>
@@ -409,10 +409,10 @@ const StatisticsTab = ({ dateRange }) => {
 
         {/* Revenue Insights */}
         <Card className="p-4">
-          <h4 className="font-semibold mb-4 flex items-center gap-2">
+          <CardTitle className="mb-4 text-xl flex items-center gap-2">
             <ArrowUpRight className="w-5 h-5 text-green-600" />
             {t("transactions.statistics.revenueInsights")}
-          </h4>
+          </CardTitle>
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950 rounded-lg">
               <div>
