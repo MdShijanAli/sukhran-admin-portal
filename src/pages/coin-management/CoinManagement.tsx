@@ -112,12 +112,7 @@ function CoinManagement() {
 
         {/* All Transactions Tab */}
         <TabsContent value="allTransactions">
-          <AllTransactions
-            transactions={transactions}
-            isLoading={isLoading}
-            pagination={pagination}
-            onPageChange={handlePageChange}
-          />
+          <AllTransactions />
         </TabsContent>
       </Tabs>
     </div>
