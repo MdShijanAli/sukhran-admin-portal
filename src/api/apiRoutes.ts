@@ -94,15 +94,15 @@ export const apiRoutes = {
     delete: (id: number | string) => createApiUrl(`admin/packages/${id}`),
     packageSettings: createApiUrl("admin/package-settings"),
     updatePackageSettings: createApiUrl(
-      "admin/package-settings/custom_package_min_amount"
+      "admin/package-settings/custom_package_min_amount",
     ),
     enablePackageSettings: createApiUrl(
-      "admin/package-settings/custom_package_enabled"
+      "admin/package-settings/custom_package_enabled",
     ),
     packageSchedule: createApiUrl("admin/package-schedule-options"),
     setupSchedule: createApiUrl("admin/package-schedule-options/bulk"),
     packageScheduleBulkToggle: createApiUrl(
-      "admin/package-schedule-options/bulk-toggle"
+      "admin/package-schedule-options/bulk-toggle",
     ),
   },
 
@@ -158,10 +158,12 @@ export const apiRoutes = {
     settings: createApiUrl("admin/settings/delivery"),
     minDeliveryDays: createApiUrl("admin/settings/min_delivery_lead_time_days"),
     bulkUpdateSettings: createApiUrl(
-      "admin/settings/min_delivery_lead_time_days"
+      "admin/settings/min_delivery_lead_time_days",
     ),
     modificationHistory: (orderId: number | string) =>
       createApiUrl(`admin/orders/${orderId}/modifications`),
+    markPackageOrderAsPaid: (id: number | string) =>
+      createApiUrl(`admin/orders/package-orders/${id}/payment-status`),
   },
 
   delivery: {
@@ -183,14 +185,14 @@ export const apiRoutes = {
     generalSettings: createApiUrl("admin/settings"),
     subscriptionSettings: createApiUrl("admin/subscription-settings"),
     updateDeliveryFrequencies: createApiUrl(
-      "admin/subscription-settings/delivery_frequencies"
+      "admin/subscription-settings/delivery_frequencies",
     ),
     updatePreferredDeliveryDates: createApiUrl(
-      "admin/subscription-settings/preferred_delivery_dates"
+      "admin/subscription-settings/preferred_delivery_dates",
     ),
     updateSetting: (key: string) => createApiUrl(`admin/settings/${key}`),
     updateDeliveryDate: createApiUrl(
-      "admin/settings/min_delivery_lead_time_days"
+      "admin/settings/min_delivery_lead_time_days",
     ),
   },
 
@@ -323,13 +325,13 @@ export const apiRoutes = {
     exortTransactions: createApiUrl("admin/transactions/export"),
     packageSales: createApiUrl("admin/orders/package-orders/sales-report-data"),
     exportPackageSales: createApiUrl(
-      "admin/orders/package-orders/export-sales"
+      "admin/orders/package-orders/export-sales",
     ),
     packageOrders: createApiUrl(
-      "admin/orders/package-orders/orders-report-data"
+      "admin/orders/package-orders/orders-report-data",
     ),
     exportPackageOrders: createApiUrl(
-      "admin/orders/package-orders/orders-report-data"
+      "admin/orders/package-orders/orders-report-data",
     ),
     regularSales: createApiUrl("admin/orders/sales-report-data"),
     exportRegularSales: createApiUrl("admin/orders/export-sales"),

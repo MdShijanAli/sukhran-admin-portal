@@ -14,7 +14,7 @@ import {
 // Create base API service with all CRUD operations
 const apiService = createApiService<Order>(
   apiRoutes.orders,
-  useOrderStore.getState()
+  useOrderStore.getState(),
 );
 
 interface OrderService extends ApiService<Order> {
@@ -22,7 +22,7 @@ interface OrderService extends ApiService<Order> {
   updateOrderStatus: (
     id: number | string,
     status: string,
-    note?: string
+    note?: string,
   ) => Promise<unknown>;
   addItemToOrder: (
     id: number | string,
@@ -32,18 +32,18 @@ interface OrderService extends ApiService<Order> {
       skuId?: number | string;
       quantity: number;
       reason: string;
-    }
+    },
   ) => Promise<unknown>;
   removeItemFromOrder: (
     orderId: number | string,
     itemId: number | string,
-    reason: string
+    reason: string,
   ) => Promise<unknown>;
   updateItemQuantity: (
     orderId: number | string,
     itemId: number | string,
     quantity: number,
-    reason: string
+    reason: string,
   ) => Promise<unknown>;
   updateDeliveryTime: (
     id: number | string,
@@ -51,31 +51,30 @@ interface OrderService extends ApiService<Order> {
       estimatedDeliveryFrom: string;
       estimatedDeliveryTo: string;
       reason: string;
-    }
+    },
   ) => Promise<unknown>;
-  getModificationHistory: (id: number | string) => Promise<unknown>;
   // Package Order Methods
   fetchPackageOrders: (params?: string) => Promise<unknown>;
   fetchPackageOrderDetails: (batchId: string) => Promise<unknown>;
   setPackageOrderDeliveryDate: (
     orderId: number | string,
-    data: SetDeliveryDatePayload
+    data: SetDeliveryDatePayload,
   ) => Promise<unknown>;
   modifyPackageOrderItems: (
     orderId: number | string,
-    data: ModifyItemsPayload
+    data: ModifyItemsPayload,
   ) => Promise<unknown>;
   pausePackageOrder: (
     orderId: number | string,
-    data: PauseOrderPayload
+    data: PauseOrderPayload,
   ) => Promise<unknown>;
   resumePackageOrder: (
     orderId: number | string,
-    data: ResumeOrderPayload
+    data: ResumeOrderPayload,
   ) => Promise<unknown>;
   cancelPackageOrder: (
     orderId: number | string,
-    data: CancelOrderPayload
+    data: CancelOrderPayload,
   ) => Promise<unknown>;
   markCODOrderAsPaid: (id: number | string, data: unknown) => Promise<unknown>;
   getDeliverySettings: () => Promise<unknown>;
@@ -87,9 +86,13 @@ interface OrderService extends ApiService<Order> {
   }) => Promise<unknown>;
   updateMinDeliveryDays: (value: number) => Promise<unknown>;
   bulkUpdateDeliverySettings: (
-    settings: Array<{ key: string; value: string }>
+    settings: Array<{ key: string; value: string }>,
   ) => Promise<unknown>;
   getModificationHistory: (orderId: number | string) => Promise<unknown>;
+  markPackageOrderAsPaid: (
+    id: number | string,
+    data: unknown,
+  ) => Promise<unknown>;
 }
 
 const orderService: OrderService = {
@@ -110,7 +113,7 @@ const orderService: OrderService = {
   getModificationHistory: async (orderId: number | string) => {
     try {
       const response = await apiClient.get(
-        apiRoutes.orders.modificationHistory(orderId)
+        apiRoutes.orders.modificationHistory(orderId),
       );
       return response.data;
     } catch (error) {
@@ -122,7 +125,7 @@ const orderService: OrderService = {
   updateOrderStatus: async (
     id: number | string,
     status: string,
-    note?: string
+    note?: string,
   ) => {
     try {
       const response = await apiClient.put(apiRoutes.orders.updateStatus(id), {
@@ -144,7 +147,7 @@ const orderService: OrderService = {
       skuId?: number | string;
       quantity: number;
       reason: string;
-    }
+    },
   ) => {
     try {
       const response = await apiClient.post(apiRoutes.orders.addItem(id), data);
@@ -161,14 +164,14 @@ const orderService: OrderService = {
   removeItemFromOrder: async (
     orderId: number | string,
     itemId: number | string,
-    reason: string
+    reason: string,
   ) => {
     try {
       const response = await apiClient.delete(
         apiRoutes.orders.removeItem(orderId, itemId),
         {
           data: { reason },
-        }
+        },
       );
       if (response && response.status === 200) {
         useOrderStore.getState().updateItem(orderId, response.data.order);
@@ -184,7 +187,7 @@ const orderService: OrderService = {
     orderId: number | string,
     itemId: number | string,
     quantity: number,
-    reason: string
+    reason: string,
   ) => {
     try {
       const response = await apiClient.put(
@@ -192,7 +195,7 @@ const orderService: OrderService = {
         {
           quantity,
           reason,
-        }
+        },
       );
       if (response && response.status === 200) {
         useOrderStore.getState().updateItem(orderId, response.data.order);
@@ -210,12 +213,12 @@ const orderService: OrderService = {
       estimatedDeliveryFrom: string;
       estimatedDeliveryTo: string;
       reason: string;
-    }
+    },
   ) => {
     try {
       const response = await apiClient.put(
         apiRoutes.orders.updateDeliveryTime(id),
-        data
+        data,
       );
       if (response && response.status === 200) {
         useOrderStore.getState().updateItem(id, response.data.order);
@@ -223,18 +226,6 @@ const orderService: OrderService = {
       return response.data;
     } catch (error) {
       console.error("Error updating delivery time:", error);
-      throw error;
-    }
-  },
-
-  getModificationHistory: async (id: number | string) => {
-    try {
-      const response = await apiClient.get(
-        apiRoutes.orders.getModifications(id)
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching modification history:", error);
       throw error;
     }
   },
@@ -269,7 +260,7 @@ const orderService: OrderService = {
   fetchPackageOrderDetails: async (batchId: string) => {
     try {
       const response = await apiClient.get(
-        apiRoutes.orders.getSinglePackageOrder(batchId)
+        apiRoutes.orders.getSinglePackageOrder(batchId),
       );
       console.log("Package order details response:", response.data);
 
@@ -285,12 +276,12 @@ const orderService: OrderService = {
 
   setPackageOrderDeliveryDate: async (
     orderId: number | string,
-    data: SetDeliveryDatePayload
+    data: SetDeliveryDatePayload,
   ) => {
     try {
       const response = await apiClient.patch(
         apiRoutes.orders.setDeliveryDate(orderId),
-        data
+        data,
       );
       return response.data;
     } catch (error) {
@@ -301,12 +292,12 @@ const orderService: OrderService = {
 
   modifyPackageOrderItems: async (
     orderId: number | string,
-    data: ModifyItemsPayload
+    data: ModifyItemsPayload,
   ) => {
     try {
       const response = await apiClient.patch(
         apiRoutes.orders.modifyItems(orderId),
-        data
+        data,
       );
       return response.data;
     } catch (error) {
@@ -317,12 +308,12 @@ const orderService: OrderService = {
 
   pausePackageOrder: async (
     orderId: number | string,
-    data: PauseOrderPayload
+    data: PauseOrderPayload,
   ) => {
     try {
       const response = await apiClient.post(
         apiRoutes.orders.pauseOrder(orderId),
-        data
+        data,
       );
       return response.data;
     } catch (error) {
@@ -333,12 +324,12 @@ const orderService: OrderService = {
 
   resumePackageOrder: async (
     orderId: number | string,
-    data: ResumeOrderPayload
+    data: ResumeOrderPayload,
   ) => {
     try {
       const response = await apiClient.post(
         apiRoutes.orders.resumeOrder(orderId),
-        data
+        data,
       );
       return response.data;
     } catch (error) {
@@ -349,12 +340,12 @@ const orderService: OrderService = {
 
   cancelPackageOrder: async (
     orderId: number | string,
-    data: CancelOrderPayload
+    data: CancelOrderPayload,
   ) => {
     try {
       const response = await apiClient.delete(
         apiRoutes.orders.cancelOrder(orderId),
-        { data }
+        { data },
       );
       return response.data;
     } catch (error) {
@@ -367,7 +358,7 @@ const orderService: OrderService = {
     try {
       const response = await apiClient.put(
         apiRoutes.orders.markCODOrderAsPaid(id),
-        data
+        data,
       );
       return response.data;
     } catch (error) {
@@ -415,16 +406,29 @@ const orderService: OrderService = {
   },
 
   bulkUpdateDeliverySettings: async (
-    settings: Array<{ key: string; value: string }>
+    settings: Array<{ key: string; value: string }>,
   ) => {
     try {
       const response = await apiClient.post(
         apiRoutes.orders.bulkUpdateSettings,
-        { settings }
+        { settings },
       );
       return response.data;
     } catch (error) {
       console.error("Error bulk updating delivery settings:", error);
+      throw error;
+    }
+  },
+
+  markPackageOrderAsPaid: async (id: number | string, data: unknown) => {
+    try {
+      const response = await apiClient.put(
+        apiRoutes.orders.markPackageOrderAsPaid(id),
+        data,
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error marking package order as paid:", error);
       throw error;
     }
   },

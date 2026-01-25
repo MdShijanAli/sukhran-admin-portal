@@ -145,6 +145,8 @@
     "itemDeleted": "Item deleted successfully",
     "addAtLeastOneItem": "Please add at least one item to the order",
     "orderCreated": "Order created successfully",
+    "notesRequired": "Please provide notes for marking as paid",
+    "orderMarkedAsPaid": "Order marked as paid successfully",
     "orderUpdated": "Order updated successfully",
     "orderDeleted": "Order deleted successfully",
     "orderCancelled": "Order cancelled successfully",
