@@ -189,7 +189,6 @@ function Orders() {
       icon: CheckCircle,
       onClick: handleMarkAsPaidOrder,
       show:
-        !import.meta.env.PROD &&
         hasPermission(permissions.orders.edit) &&
         order.paymentMode === "cod" &&
         order.paymentStatus !== "paid",
