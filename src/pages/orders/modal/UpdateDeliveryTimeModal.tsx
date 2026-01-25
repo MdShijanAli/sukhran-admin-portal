@@ -45,6 +45,11 @@ export default function UpdateDeliveryTimeModal({
       return;
     }
 
+    if (!reason.trim()) {
+      toast.error(t("orders.messages.reasonRequired"));
+      return;
+    }
+
     // Validate date range
     if (new Date(estimatedDeliveryFrom) > new Date(estimatedDeliveryTo)) {
       toast.error(t("orders.messages.invalidDateRange"));
@@ -115,13 +120,15 @@ export default function UpdateDeliveryTimeModal({
         {/* Reason Textarea */}
         <div className="space-y-2 col-span-2">
           <Label htmlFor="reason">
-            {t("orders.updateDeliveryTime.reason")}
+            {t("orders.updateDeliveryTime.reason")}{" "}
+            <span className="text-red-500">*</span>
           </Label>
           <Textarea
             id="reason"
             placeholder={t("orders.updateDeliveryTime.reasonPlaceholder")}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
+            required
             rows={4}
           />
         </div>

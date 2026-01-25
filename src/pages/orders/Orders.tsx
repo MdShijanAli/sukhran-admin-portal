@@ -150,7 +150,7 @@ function Orders() {
       onClick: handleEdit,
       show:
         hasPermission(permissions.orders.edit) &&
-        (order.status === "pending" || order.status === "approved"),
+        (order.status === "pending" || order.status === "approved" && order.paymentStatus !== "paid"),
     },
     {
       label: t("orders.actions.updateStatus"),
@@ -165,7 +165,7 @@ function Orders() {
       show:
         hasPermission(permissions.orders.edit) &&
         order.status !== "delivered" &&
-        order.status !== "cancelled",
+        order.status !== "cancelled" && order.paymentStatus !== "paid",
       separator: true, // Show separator after this item
     },
     {
@@ -473,9 +473,8 @@ function Orders() {
         open={showDelete}
         onClose={setShowDelete}
         title={t("orders.delete.title")}
-        description={`${t("orders.delete.message")} ${
-          selectedOrder?.orderId
-        }? ${t("orders.delete.cannotUndo")}`}
+        description={`${t("orders.delete.message")} ${selectedOrder?.orderId
+          }? ${t("orders.delete.cannotUndo")}`}
         onConfirm={handleDeleteOrder}
         isDeleting={isDeleting}
       />
@@ -488,9 +487,8 @@ function Orders() {
           setMarkAsPaidNote("");
         }}
         title={t("orders.actions.markAsPaid")}
-        description={`${t("orders.actions.markAsPaidMessage")} ${
-          selectedOrder?.orderId
-        }? ${t("orders.delete.cannotUndo")}`}
+        description={`${t("orders.actions.markAsPaidMessage")} ${selectedOrder?.orderId
+          }? ${t("orders.delete.cannotUndo")}`}
         onConfirm={() => handleMarkAsPaid(selectedOrder!)}
         submitButtonText={t("orders.actions.receivePayment")}
         submitButtonVariant="default"
