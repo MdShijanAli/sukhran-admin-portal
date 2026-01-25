@@ -59,6 +59,7 @@
     "title": "All Coin Transactions",
     "description": "View all coin transactions across users",
     "searchPlaceholder": "Search by user or description...",
+    "noTransactionsFound": "No transactions found",
     "columns": {
       "sl": "SL",
       "id": "ID",

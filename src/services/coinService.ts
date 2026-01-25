@@ -12,25 +12,20 @@ import {
 // Create base API service with all CRUD operations
 const apiService = createApiService<CoinTransaction>(
   apiRoutes.coins,
-  useCoinStore.getState()
+  useCoinStore.getState(),
 );
 
-interface CoinService
-  extends Omit<ApiService<CoinTransaction>, "storeItem" | "updateItem"> {
+interface CoinService extends ApiService<CoinTransaction> {
   fetchStatistics: () => Promise<CoinStatisticsResponse>;
   fetchUserCoinDetails: (
     userId: number | string,
-    params?: string
+    params?: string,
   ) => Promise<UserCoinDetails>;
   sendCoin: (payload: SendCoinPayload) => Promise<unknown>;
-  fetchTransactions: (params?: string) => Promise<unknown>;
 }
 
 const coinService: CoinService = {
-  // Inherit basic operations (fetchLists, fetchDetails, deleteItem)
-  fetchLists: apiService.fetchLists,
-  fetchDetails: apiService.fetchDetails,
-  deleteItem: apiService.deleteItem,
+  ...apiService,
 
   // Fetch coin statistics
   fetchStatistics: async (): Promise<CoinStatisticsResponse> => {
@@ -54,7 +49,7 @@ const coinService: CoinService = {
   // Fetch user coin details with transactions
   fetchUserCoinDetails: async (
     userId: number | string,
-    params?: string
+    params?: string,
   ): Promise<UserCoinDetails> => {
     try {
       const url = params
@@ -92,40 +87,6 @@ const coinService: CoinService = {
     } catch (error) {
       console.error("Error sending coins:", error);
       throw error;
-    }
-  },
-
-  // Fetch all coin transactions with pagination
-  fetchTransactions: async (params?: string): Promise<unknown> => {
-    try {
-      useCoinStore.getState().setLoading(true);
-      const url = params
-        ? `${apiRoutes.coins.getAll}?${params}`
-        : apiRoutes.coins.getAll;
-
-      const response = await apiClient.get(url);
-      console.log("Coin transactions response:", response.data);
-
-      if (response && response.status === 200) {
-        const responseData = response.data;
-        const transactions = responseData.data || [];
-        const pagination = responseData.pagination;
-
-        useCoinStore.getState().setTransactions(transactions);
-
-        if (pagination) {
-          useCoinStore.getState().setPagination(pagination);
-        }
-
-        return responseData;
-      }
-      throw new Error("Failed to fetch coin transactions");
-    } catch (error) {
-      console.error("Error fetching coin transactions:", error);
-      useCoinStore.getState().setError("Failed to fetch coin transactions");
-      throw error;
-    } finally {
-      useCoinStore.getState().setLoading(false);
     }
   },
 };

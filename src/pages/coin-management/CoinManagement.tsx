@@ -18,9 +18,7 @@ function CoinManagement() {
   const { t } = useTranslation();
   const store = useCoinStore();
   const { hasPermission } = usePermissions();
-  const { statistics, transactions, pagination, isLoading } = store;
-
-  const [currentPage, setCurrentPage] = useState(1);
+  const { statistics, isLoading } = store;
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const fetchAllData = useCallback(async () => {
@@ -28,7 +26,6 @@ function CoinManagement() {
       store.setLoading(true);
       await Promise.all([
         coinService.fetchStatistics(),
-        coinService.fetchTransactions(`page=${currentPage}`),
       ]);
     } catch (error) {
       console.error("Failed to fetch coin management data:", error);
@@ -36,7 +33,7 @@ function CoinManagement() {
     } finally {
       store.setLoading(false);
     }
-  }, [currentPage, t]);
+  }, [t]);
 
   useEffect(() => {
     fetchAllData();
@@ -47,10 +44,6 @@ function CoinManagement() {
     await fetchAllData();
     setIsRefreshing(false);
     toast.success(t("refreshSuccess"));
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
   };
 
   return (
