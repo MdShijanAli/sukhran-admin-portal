@@ -220,6 +220,7 @@ export const apiRoutes = {
 
   coins: {
     getAll: createApiUrl("admin/coins/transactions"),
+    getAllUsersCoins: createApiUrl("admin/coins/users"),
     getById: (id: number | string) => createApiUrl(`admin/coins/users/${id}`),
     getStatistics: createApiUrl("admin/coins/statistics"),
     coinStatistics: createApiUrl("admin/coins/statistics"),

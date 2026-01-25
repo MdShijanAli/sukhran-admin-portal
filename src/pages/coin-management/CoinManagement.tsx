@@ -8,7 +8,7 @@ import { RotateCcw, BarChart3, Users, History } from "lucide-react";
 import { useCoinStore } from "@/stores/coinStore";
 import coinService from "@/services/coinService";
 import CoinStatistics from "./tabs/CoinStatistics";
-import UserBalances from "./tabs/Transactions";
+import UserBalances from "./tabs/UserBalances";
 import AllTransactions from "./tabs/AllTransactions";
 import { withPermission } from "@/hoc/withPermission";
 import permissions from "@/lib/permissions";
@@ -96,11 +96,7 @@ function CoinManagement() {
 
         {/* User Balances Tab */}
         <TabsContent value="userBalances">
-          <UserBalances
-            topHolders={statistics?.top_holders || []}
-            isLoading={isLoading}
-            onRefresh={fetchAllData}
-          />
+          <UserBalances />
         </TabsContent>
 
         {/* All Transactions Tab */}

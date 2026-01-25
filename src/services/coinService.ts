@@ -1,12 +1,14 @@
 import { createApiService, ApiService } from "./createApiService";
 import { apiRoutes } from "@/api/apiRoutes";
 import { useCoinStore } from "@/stores/coinStore";
+import { useCoinUserStore } from "@/stores/coinUserStore";
 import apiClient from "@/api/apiClient";
 import {
   CoinTransaction,
   UserCoinDetails,
   CoinStatisticsResponse,
   SendCoinPayload,
+  CoinUser,
 } from "@/lib/types";
 
 // Create base API service with all CRUD operations
@@ -22,6 +24,7 @@ interface CoinService extends ApiService<CoinTransaction> {
     params?: string,
   ) => Promise<UserCoinDetails>;
   sendCoin: (payload: SendCoinPayload) => Promise<unknown>;
+  fetchAllUsersCoins: (params?: string) => Promise<unknown>;
 }
 
 const coinService: CoinService = {
@@ -42,6 +45,26 @@ const coinService: CoinService = {
     } catch (error) {
       console.error("Error fetching coin statistics:", error);
       useCoinStore.getState().setError("Failed to fetch coin statistics");
+      throw error;
+    }
+  },
+
+  // Fetch all users' coins with optional query parameters
+  fetchAllUsersCoins: async (params?: string) => {
+    try {
+      const url = params
+        ? `${apiRoutes.coins.getAllUsersCoins}?${params}`
+        : apiRoutes.coins.getAllUsersCoins;
+      const response = await apiClient.get(url);
+      console.log("All users' coins response:", response.data);
+      if (response && response.status === 200) {
+        useCoinUserStore.getState().setItems(response.data);
+        return response.data;
+      }
+      throw new Error("Failed to fetch all users' coins");
+    } catch (error) {
+      console.error("Error fetching all users' coins:", error);
+      useCoinUserStore.getState().setError("Failed to fetch all users' coins");
       throw error;
     }
   },
@@ -86,6 +109,7 @@ const coinService: CoinService = {
       throw new Error("Failed to send coins");
     } catch (error) {
       console.error("Error sending coins:", error);
+      useCoinStore.getState().setError("Failed to send coins");
       throw error;
     }
   },

@@ -3,11 +3,12 @@ import {
   CoinStatisticsResponse,
   UserCoinDetails,
   PaginationMeta,
+  CoinUser,
 } from "@/lib/types";
 import { createStore } from "./createStore";
 
 interface CoinState {
-  transactions: CoinTransaction[];
+  items: CoinTransaction[];
   statistics: CoinStatisticsResponse | null;
   userCoinDetails: UserCoinDetails | null;
   pagination: PaginationMeta;
@@ -15,7 +16,7 @@ interface CoinState {
   error: string | null;
 
   // Actions
-  setItems: (transactions: CoinTransaction[]) => void;
+  setItems: (transactions: CoinTransaction[] | unknown) => void;
   setStatistics: (statistics: CoinStatisticsResponse) => void;
   setUserCoinDetails: (details: UserCoinDetails) => void;
   setPagination: (pagination: PaginationMeta) => void;
@@ -26,7 +27,7 @@ interface CoinState {
 
 export const useCoinStore = createStore<CoinState>(
   (set, get) => ({
-    transactions: [],
+    items: [],
     statistics: null,
     userCoinDetails: null,
     pagination: {
@@ -56,10 +57,12 @@ export const useCoinStore = createStore<CoinState>(
         : (data as { data?: CoinTransaction[] })?.data || [];
       console.log("Parsed transactions:", transactions);
       set({
-        transactions,
+        items: transactions,
         isLoading: false,
         error: null,
-        pagination: data.pagination,
+        pagination:
+          (data as { pagination?: PaginationMeta })?.pagination ||
+          get().pagination,
       });
     },
 

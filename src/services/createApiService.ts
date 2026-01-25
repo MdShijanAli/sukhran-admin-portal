@@ -26,6 +26,7 @@ export interface ApiService<T = unknown> {
   deleteItem: (id: number | string) => Promise<T>;
   toggleStatus: (id: number | string) => Promise<T>;
   customFetchLists?: (queryString?: string) => Promise<T>;
+  fetchAllUsersCoins?: (queryString?: string) => Promise<T>;
   statistics?: (queryString?: string) => Promise<T>;
   exportData?: (params: {
     queryString?: string;
@@ -35,7 +36,7 @@ export interface ApiService<T = unknown> {
 
 export const createApiService = <T = unknown>(
   apiRoutes: ApiRoutes,
-  store?: StoreActions
+  store?: StoreActions,
 ): ApiService<T> => {
   const fetchLists = async (queryString?: string) => {
     try {
@@ -48,7 +49,7 @@ export const createApiService = <T = unknown>(
         if (store && store.setItems) {
           console.log(
             "Setting items in store with data:---->service",
-            response.data
+            response.data,
           );
           store.setItems(response.data);
         }
@@ -171,7 +172,7 @@ export const createApiService = <T = unknown>(
   const toggleStatus = async (id: number | string) => {
     try {
       const response = await apiClient.patch<T>(
-        `${apiRoutes.getAll}/${id}/toggle-status`
+        `${apiRoutes.getAll}/${id}/toggle-status`,
       );
 
       if (response && response.status === 200) {
@@ -193,7 +194,7 @@ export const createApiService = <T = unknown>(
         throw new Error("statistics route not configured");
       }
       const response = await apiClient.get<T>(
-        apiRoutes.statistics + (queryString ? `?${queryString}` : "")
+        apiRoutes.statistics + (queryString ? `?${queryString}` : ""),
       );
       if (response && response.status === 200) {
         return response.data;
@@ -219,7 +220,7 @@ export const createApiService = <T = unknown>(
         apiRoutes.export + (queryString ? `?${queryString}` : ""),
         {
           responseType: "blob", // Important: tell axios to expect a blob
-        }
+        },
       );
 
       if (response && response.status === 200) {

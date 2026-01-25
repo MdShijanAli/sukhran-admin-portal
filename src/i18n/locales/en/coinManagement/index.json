@@ -38,6 +38,7 @@
     "title": "User Coin Balances",
     "description": "View and manage user reward balances",
     "searchPlaceholder": "Search by name or email...",
+    "noUsersFound": "No users found",
     "columns": {
       "sl": "SL",
       "user": "User",

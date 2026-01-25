@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { SendCoinPayload, TopHolder, User } from "@/lib/types";
+import { CoinUser, SendCoinPayload, User } from "@/lib/types";
 import coinService from "@/services/coinService";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -23,20 +23,20 @@ interface SendCoinModalProps {
   open: boolean;
   onClose: () => void;
   onSuccess?: () => void;
-  selectedUser: TopHolder | null;
+  selectedUser: CoinUser | null;
 }
 
 export default function SendCoinModal({
   open,
   onClose,
   onSuccess,
-  selectedUser,
+  selectedUser
 }: SendCoinModalProps) {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reasonError, setReasonError] = useState<string>("");
   const [formData, setFormData] = useState<SendCoinPayload>({
-    user_id: selectedUser?.user.id || 0,
+    user_id: selectedUser?.user_id || 0,
     amount: 0,
     reason: "",
   });
@@ -87,7 +87,7 @@ export default function SendCoinModal({
       toast.error(
         t(
           error.response.data.error_message ||
-            "coinManagement.messages.coinsSentError",
+          "coinManagement.messages.coinsSentError",
         ),
       );
     } finally {
@@ -100,7 +100,7 @@ export default function SendCoinModal({
       if (selectedUser) {
         // Pre-selected user mode
         setFormData({
-          user_id: selectedUser.user.id,
+          user_id: selectedUser.user_id,
           amount: 0,
           reason: "",
         });
@@ -148,10 +148,10 @@ export default function SendCoinModal({
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-semibold text-base">
-                      {selectedUser.user.name}
+                      {selectedUser.name}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {selectedUser.user.email}
+                      {selectedUser.email}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 bg-background px-3 py-1.5 rounded-md border">
@@ -163,7 +163,7 @@ export default function SendCoinModal({
                         )}
                       </p>
                       <p className=" text-amber-600">
-                        {formatNumberWithCommas(selectedUser.total_coins)}
+                        {formatNumberWithCommas(selectedUser.statistics.net_coins)}
                       </p>
                     </div>
                   </div>

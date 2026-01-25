@@ -1,24 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Column } from "@/components/table/BaseTable";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { CoinTransaction, PaginationMeta } from "@/lib/types";
+import { CoinTransaction } from "@/lib/types";
 import { formatNumberWithCommas } from "@/lib/utils";
 import getSerialNumber from "@/lib/getSerialNumber";
 import { useCoinStore } from "@/stores/coinStore";
@@ -49,9 +32,9 @@ export default function AllTransactions() {
       label: t("coinManagement.transactions.columns.user"),
       render: (transaction) => (
         <div>
-          <p className="font-medium">{transaction.user.name}</p>
+          <p className="font-medium">{transaction?.user?.name}</p>
           <p className="text-xs text-muted-foreground">
-            {transaction.user.email}
+            {transaction?.user?.email}
           </p>
         </div>
       ),

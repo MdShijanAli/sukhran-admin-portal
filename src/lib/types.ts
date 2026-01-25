@@ -400,12 +400,23 @@ export interface ScheduleOptionFormData {
 
 // Coin Management Types
 export interface CoinUser {
-  id: number;
+  user_id: number;
   name: string;
   email: string;
   mobile?: string;
   image?: string | null;
   image_url?: string | null;
+  balance: {
+    total_coins: number;
+    locked_coins: number;
+    available_coins: number;
+  };
+  statistics: {
+    total_earned: number;
+    total_spent: number;
+    net_coins: number;
+  };
+  last_transaction_date: string | null;
 }
 
 export interface CoinTransaction {
