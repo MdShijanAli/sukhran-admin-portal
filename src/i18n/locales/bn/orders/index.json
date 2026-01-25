@@ -20,7 +20,8 @@
     "returned": "ফেরত",
     "paused": "বন্ধ",
     "cancelled_at_delivery": "ডেলিভারিতে বাতিল",
-    "confirmed": "নিশ্চিত"
+    "confirmed": "নিশ্চিত",
+    "payment_status_changed": "পেমেন্ট স্ট্যাটাস পরিবর্তিত"
   },
   "paymentStatus": {
     "pending": "মুলতুবি",

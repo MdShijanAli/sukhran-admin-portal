@@ -20,7 +20,8 @@
     "returned": "Returned",
     "paused": "Paused",
     "cancelled_at_delivery": "Cancelled at Delivery",
-    "confirmed": "Confirmed"
+    "confirmed": "Confirmed",
+    "payment_status_changed": "Payment Status Changed"
   },
   "paymentStatus": {
     "pending": "Pending",

@@ -48,12 +48,12 @@ interface OrderFormData {
   payment_method: "cash" | "online" | "card";
   payment_status: "pending" | "paid" | "failed" | "refunded";
   status:
-    | "pending"
-    | "confirmed"
-    | "processing"
-    | "in-transit"
-    | "delivered"
-    | "cancelled";
+  | "pending"
+  | "confirmed"
+  | "processing"
+  | "in-transit"
+  | "delivered"
+  | "cancelled";
   delivery_agent_id?: string;
   notes?: string;
 }
@@ -479,102 +479,6 @@ export default function FormModal({
     setFormData((prev) => ({ ...prev, delivery_fee: deliveryFee, total }));
   };
 
-  const handleSubmit = async () => {
-    // Validate required fields
-    if (
-      !formData.customer_name ||
-      !formData.customer_phone ||
-      !formData.delivery_address
-    ) {
-      toast.error(t("orders.messages.fillRequiredFields"));
-      return;
-    }
-
-    if (formData.items.length === 0) {
-      toast.error(t("orders.messages.addAtLeastOneItem"));
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      if (isEditing && orderId) {
-        // Check if there are new items to add
-        const newItems = formData.items.filter((item) => item.isEnabled);
-
-        if (newItems.length > 0) {
-          // Add new items one by one
-          for (const item of newItems) {
-            if (!item.product_id) {
-              toast.error(`Please select a product for all items`);
-              setIsSubmitting(false);
-              return;
-            }
-
-            await orderService.addItemToOrder(orderId, {
-              itemType: "product",
-              productId: item.product_id,
-              skuId: item.product_id, // You may need to track SKU separately
-              quantity: item.quantity,
-              reason: "Added via admin panel",
-            });
-          }
-
-          toast.success("New items added successfully");
-
-          // Refresh the order
-          const refreshedOrder = await orderService.fetchDetails(orderId);
-          const responseData = refreshedOrder as unknown as Record<
-            string,
-            unknown
-          >;
-          const orderData =
-            (responseData?.order as Order) ||
-            (refreshedOrder as unknown as Order);
-
-          setFormData((prev) => ({
-            ...prev,
-            items: orderData.items.map((item: any) => ({
-              id: item.id.toString(),
-              product_id: item.product?.id?.toString() || "",
-              product_name: item.product?.name || "Package",
-              quantity: parseInt(item.quantity) || 1,
-              unit_price: item.unitPrice,
-              total_price: item.itemCost,
-              isEnabled: false,
-              orderId: orderData.orderId,
-            })),
-            subtotal: orderData.receipt.subTotal,
-            discount: orderData.receipt.discount,
-            delivery_fee: orderData.receipt.deliveryCharge,
-            total: orderData.receipt.grandTotal,
-          }));
-        }
-
-        // Update other order details if needed
-        await orderService.updateItem(orderId, {
-          status: formData.status,
-          notes: formData.notes,
-        });
-
-        toast.success(t("orders.messages.orderUpdated"));
-      } else {
-        await orderService.storeItem(formData);
-        toast.success(t("orders.messages.orderCreated"));
-      }
-
-      onSuccess?.();
-      onClose();
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error(
-        isEditing
-          ? t("orders.messages.failedToUpdate")
-          : t("orders.messages.failedToCreate"),
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <BaseModal
@@ -584,11 +488,6 @@ export default function FormModal({
         isEditing ? t("orders.form.editOrder") : t("orders.form.createNewOrder")
       }
       showSubmitButton={false}
-      // onSubmit={handleSubmit}
-      // isSubmitting={isSubmitting || isLoading}
-      // submitButtonText={
-      //   isEditing ? t("orders.form.updateOrder") : t("orders.form.createOrder")
-      // }
       size="4xl"
     >
       {isLoading ? (
