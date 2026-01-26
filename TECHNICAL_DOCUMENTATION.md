@@ -42,11 +42,18 @@
 - 🎁 **Package Management** - Custom and pre-built product packages
 - 🛒 **Order Management** - Track and process customer orders
 - 💰 **Transaction & Payment** - Monitor financial transactions
+- 📂 **Category Management** - Hierarchical product categories
+- 🏷️ **Brand Management** - Brand creation and organization
+- 🎨 **Banner Management** - Promotional banners and campaigns
 - 🎫 **Coupon & Promotion** - Discount code management
-- 📊 **Analytics & Reporting** - Business insights and reports
+- 🗺️ **Coverage Area Management** - Delivery zones and pricing
 - 🚚 **Delivery Management** - Shipping and logistics
 - 🪙 **Coin Management** - Loyalty points system
 - 🎗️ **Donation Management** - Charity and donation tracking
+- 🤝 **Referral Management** - Referral program and rewards
+- 📊 **Analytics & Reporting** - Business insights and reports
+- 💬 **Customer Support** - Ticket system and help desk
+- 🔐 **Role & Permission Management** - Access control system
 - 🔔 **Notification System** - Push notifications and alerts
 - 🛠️ **System Settings** - Configure portal behavior
 
@@ -1115,102 +1122,395 @@ const createMutation = useMutation({
 - `packages.update`
 - `packages.delete`
 
-### 10.6 Category & Brand Management
+### 10.6 Category Management
 
-**Location:** `src/pages/categories/`, `src/pages/brands/`
+**Location:** `src/pages/categories/`
 
 **Features:**
 
 - Hierarchical category structure
-- Subcategory management
-- Brand listing and management
-- Category/brand reordering
-- Image uploads
+- Create main categories and subcategories
+- Category reordering via drag-and-drop
+- Category image uploads
+- Multi-language support (English & Arabic names)
+- Category status management (active/inactive)
+- Bulk category operations
+- Search and filter categories
 
 **Permissions:**
 
-- `categories.view`, `categories.create`, `categories.update`, `categories.delete`
-- `brands.view`, `brands.create`, `brands.update`, `brands.delete`
+- `categories.view` - View categories
+- `categories.create` - Create categories
+- `categories.update` - Edit categories
+- `categories.delete` - Delete categories
 
-### 10.7 Coupon Management
+**Key Functionality:**
+
+- Parent-child category relationships
+- Unlimited category depth
+- Product count per category
+- Category-based product filtering
+
+### 10.7 Brand Management
+
+**Location:** `src/pages/brands/`
+
+**Features:**
+
+- Brand listing with search
+- Create and edit brands
+- Brand logo uploads
+- Brand reordering
+- Brand status management
+- Multi-language brand names
+- Products count per brand
+- Brand-based filtering
+
+**Permissions:**
+
+- `brands.view` - View brands
+- `brands.create` - Create brands
+- `brands.update` - Edit brands
+- `brands.delete` - Delete brands
+- `brands.reorder` - Reorder brands
+
+**Key Functionality:**
+
+- Brand logo management
+- SEO-friendly brand slugs
+- Integration with product catalog
+- Brand performance analytics
+
+### 10.8 Banner Management
+
+**Location:** `src/pages/banners/`
+
+**Features:**
+
+- Banner listing and management
+- Create promotional banners
+- Image/video banner support
+- Banner positioning control
+- Click-through URL tracking
+- Schedule banner display
+- Banner reordering
+- Device-specific banners (mobile/desktop)
+- Multi-language banner content
+
+**Permissions:**
+
+- `banners.view` - View banners
+- `banners.create` - Create banners
+- `banners.update` - Edit banners
+- `banners.delete` - Delete banners
+- `banners.reorder` - Reorder banners
+
+**Key Functionality:**
+
+- Banner placement zones (home, category, product pages)
+- Start/end date scheduling
+- Click analytics
+- A/B testing support
+- Responsive image optimization
+
+### 10.9 Coupon Management
 
 **Location:** `src/pages/coupon/`
 
 **Features:**
 
 - Create discount coupons
-- Coupon types (percentage, fixed amount)
-- Usage limits
+- Coupon types (percentage, fixed amount, free shipping)
+- Usage limits (per user, total uses)
 - Expiration dates
-- Minimum order amount
-- User restrictions
+- Minimum order amount requirements
+- User/group restrictions
+- Product/category specific coupons
+- Auto-apply coupons
+- Coupon code generation
 
-**Permissions:** `coupons.*`
+**Permissions:**
 
-### 10.8 Coverage Area Management
+- `coupons.view` - View coupons
+- `coupons.create` - Create coupons
+- `coupons.update` - Edit coupons
+- `coupons.delete` - Delete coupons
+
+**Key Functionality:**
+
+- Bulk coupon generation
+- Coupon usage analytics
+- Stackable coupon rules
+- First-time user discounts
+- Referral-based coupons
+
+### 10.10 Coverage Area Management
 
 **Location:** `src/pages/coverage-area/`
 
 **Features:**
 
-- Define delivery areas
+- Define delivery/service areas
+- Geographic zone mapping
 - Set delivery charges per area
+- Delivery time estimation per zone
 - Toggle area availability
-- Bulk operations
+- Bulk area operations
+- Area-based order restrictions
+- Minimum order amount per area
+- Multi-area support
 
-**Permissions:** `coverage_areas.*`
+**Permissions:**
 
-### 10.9 Coin Management
+- `coverage_areas.view` - View coverage areas
+- `coverage_areas.create` - Create areas
+- `coverage_areas.update` - Edit areas
+- `coverage_areas.delete` - Delete areas
+- `coverage_areas.toggle_status` - Enable/disable areas
+
+**Key Functionality:**
+
+- ZIP/postal code validation
+- Area-based pricing rules
+- Service availability calendar
+- Delivery capacity management
+- Coverage area analytics
+
+### 10.11 Coin Management
 
 **Location:** `src/pages/coin-management/`
 
 **Features:**
 
 - Loyalty coin system
-- Send coins to users
-- View coin transactions
+- Send coins to users (rewards)
+- View coin transactions history
 - Coin usage statistics
+- Coin balance management
+- Coin expiration rules
+- Coin-to-currency conversion rates
+- Coin earning rules configuration
+- Bulk coin distribution
 
-**Permissions:** `coins.*`
+**Permissions:**
 
-### 10.10 Donation Management
+- `coins.view` - View coin data
+- `coins.manage` - Manage coin settings
+- `coins.send` - Send coins to users
+- `coins.view_transactions` - View coin transactions
+
+**Key Functionality:**
+
+- Automated coin rewards (order completion, referrals)
+- Coin redemption in checkout
+- Transaction history tracking
+- Coin balance reports
+- Loyalty tier system integration
+
+### 10.12 Donation Management
 
 **Location:** `src/pages/donations/`
 
 **Features:**
 
-- Track donations
+- Track donations and contributions
 - Donation channels management
-- Donation statistics
+- Multiple charity organization support
+- Donation campaign creation
+- Donation statistics and reporting
 - Export donation reports
+- Donor management
+- Tax receipt generation
+- Recurring donation setup
 
-**Permissions:** `donations.*`
+**Permissions:**
 
-### 10.11 Reports Module
+- `donations.view` - View donations
+- `donations.create` - Create donation campaigns
+- `donations.update` - Edit campaigns
+- `donations.delete` - Delete campaigns
+- `donations.manage_channels` - Manage donation channels
+
+**Key Functionality:**
+
+- Real-time donation tracking
+- Donation goal progress
+- Donor recognition system
+- Integration with payment gateways
+- Monthly/yearly donation summaries
+- Charity partner management
+
+### 10.13 Referral Management
+
+**Location:** `src/pages/referrals/`
+
+**Features:**
+
+- Referral program management
+- Referral code generation
+- Track referral performance
+- Referral rewards configuration
+- Referrer and referee incentives
+- Referral analytics and reports
+- Social media sharing integration
+- Multi-tier referral programs
+- Referral link tracking
+
+**Permissions:**
+
+- `referrals.view` - View referral data
+- `referrals.create` - Create referral programs
+- `referrals.update` - Edit programs
+- `referrals.manage_rewards` - Manage rewards
+
+**Key Functionality:**
+
+- Custom referral codes
+- Automatic reward distribution
+- Referral conversion tracking
+- Top referrers leaderboard
+- Referral campaign performance
+- Social sharing widgets
+
+### 10.14 Reports Module
 
 **Location:** `src/pages/reports/`
 
 **Available Reports:**
 
-- Transaction Report
-- Package Sales Report
-- Package Orders Report
-- Regular Sales Report
-- Regular Orders Report
-- Donation Report
-- Coin Report
-- Referral Report
+- **Transaction Report** - Financial transaction history
+- **Package Sales Report** - Package-specific sales data
+- **Package Orders Report** - Package order analytics
+- **Regular Sales Report** - Non-package product sales
+- **Regular Orders Report** - Standard order analytics
+- **Donation Report** - Charity donation tracking
+- **Coin Report** - Loyalty coin usage and distribution
+- **Referral Report** - Referral program performance
 
 **Features:**
 
-- Date range filtering
-- Export to CSV/Excel
-- Visual charts
+- Date range filtering (daily, weekly, monthly, custom)
+- Export to CSV/Excel/PDF
+- Visual charts and graphs
 - Summary statistics
+- Comparison reports (period-over-period)
+- Downloadable reports
+- Scheduled report generation
+- Email report delivery
+- Real-time data updates
 
-**Permissions:** `reports.view`
+**Permissions:**
 
-### 10.12 Role & Permission Management
+- `reports.view` - View all reports
+- `reports.export` - Export reports
+- `reports.schedule` - Schedule automated reports
+
+**Key Functionality:**
+
+- Revenue analytics
+- Order fulfillment metrics
+- Customer acquisition cost
+- Product performance tracking
+- Geographic sales distribution
+- Payment method breakdown
+- Return/refund analytics
+- Customer lifetime value
+
+### 10.15 Customer Support Management
+
+**Location:** `src/pages/supports/`
+
+**Features:**
+
+- Support ticket system
+- Create and manage tickets
+- Ticket categorization (technical, billing, general)
+- Priority levels (low, medium, high, urgent)
+- Ticket status tracking (open, in-progress, resolved, closed)
+- Internal notes and comments
+- File attachments support
+- Email notifications
+- Support agent assignment
+- Ticket search and filtering
+- Response templates
+
+**Permissions:**
+
+- `support.view` - View support tickets
+- `support.create` - Create tickets
+- `support.update` - Update tickets
+- `support.delete` - Delete tickets
+- `support.assign` - Assign tickets to agents
+
+**Key Functionality:**
+
+- Automatic ticket numbering
+- SLA (Service Level Agreement) tracking
+- Customer communication history
+- Ticket escalation workflow
+- Support metrics dashboard
+- Average response time tracking
+- Customer satisfaction ratings
+
+### 10.16 Delivery Management
+
+**Location:** `src/pages/delivery/`
+
+**Features:**
+
+- Delivery personnel management
+- Driver assignment to orders
+- Delivery route optimization
+- Real-time delivery tracking
+- Delivery schedule management
+- Driver performance metrics
+- Delivery status updates
+- Proof of delivery
+
+**Permissions:**
+
+- `delivery.view` - View delivery information
+- `delivery.manage` - Manage deliveries
+- `delivery.assign_driver` - Assign drivers to orders
+
+**Key Functionality:**
+
+- Driver availability tracking
+- Delivery time slot management
+- GPS tracking integration
+- Delivery completion confirmation
+- Failed delivery handling
+
+### 10.17 Transaction Management
+
+**Location:** `src/pages/transactions/`
+
+**Features:**
+
+- View all financial transactions
+- Transaction history with filters
+- Payment method breakdown
+- Refund processing
+- Transaction status tracking
+- Payment gateway integration logs
+- Failed transaction analysis
+- Revenue reconciliation
+
+**Permissions:**
+
+- `transactions.view` - View transactions
+- `transactions.manage` - Manage transactions
+- `transactions.refund` - Process refunds
+
+**Key Functionality:**
+
+- Multi-currency support
+- Payment gateway reconciliation
+- Automated refund processing
+- Transaction export functionality
+- Financial reporting integration
+
+### 10.18 Role & Permission Management
 
 **Location:** `src/pages/roles/`
 
@@ -1220,10 +1520,28 @@ const createMutation = useMutation({
 - Assign permissions to roles
 - View role details
 - Edit role permissions
+- Role-based access control (RBAC)
+- Permission grouping by modules
+- Role duplication
+- User assignment to roles
 
-**Permissions:** `roles.*`
+**Permissions:**
 
-### 10.13 Notification System
+- `roles.view` - View roles
+- `roles.create` - Create roles
+- `roles.update` - Edit roles
+- `roles.delete` - Delete roles
+- `roles.assign_permissions` - Assign permissions
+
+**Key Functionality:**
+
+- Granular permission control
+- Super admin role with full access
+- Pre-defined role templates
+- Permission inheritance
+- Audit trail for permission changes
+
+### 10.19 Notification System
 
 **Location:** `src/pages/notifications/`
 
@@ -1233,8 +1551,58 @@ const createMutation = useMutation({
 - Notification templates
 - Scheduled notifications
 - Target user segments
+- Email notifications
+- SMS notifications
+- In-app notifications
+- Notification history
+- Delivery status tracking
 
-**Permissions:** `notifications.*`
+**Permissions:**
+
+- `notifications.view` - View notifications
+- `notifications.create` - Create notifications
+- `notifications.send` - Send notifications
+- `notifications.schedule` - Schedule notifications
+
+**Key Functionality:**
+
+- User segmentation for targeted messaging
+- Dynamic content personalization
+- Multi-channel notification delivery
+- A/B testing for notification content
+- Notification analytics and open rates
+- Template library management
+
+### 10.20 Settings & Configuration
+
+**Location:** `src/pages/settings/`
+
+**Features:**
+
+- System-wide settings management
+- Application configuration
+- Email server settings
+- Payment gateway configuration
+- Tax and shipping settings
+- Currency management
+- Language preferences
+- Theme customization
+- Maintenance mode
+- API key management
+
+**Permissions:**
+
+- `settings.view` - View settings
+- `settings.update` - Update settings
+- `settings.manage` - Full settings access
+
+**Key Functionality:**
+
+- Global configuration management
+- Integration settings (payment, shipping, email)
+- Business rules configuration
+- System health monitoring
+- Backup and restore settings
 
 ---
 
@@ -2234,4 +2602,4 @@ For technical support or questions:
 
 **Document Version:** 1.0.0
 **Last Updated:** January 26, 2026
-**Maintained By:** Development Team
+**Maintained By:** Techtrioz Development Team
