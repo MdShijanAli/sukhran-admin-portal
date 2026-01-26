@@ -1,6 +1,5 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import constData from "@/lib/constData";
 
 export type StatusType =
     | "payment"
@@ -224,6 +223,12 @@ const getStatusConfig = (
             icon: "💳",
         },
         "online-payment": {
+            label: "Online Payment",
+            className:
+                "border-transparent bg-green-600 text-white hover:bg-green-700 shadow-sm",
+            icon: "💳",
+        },
+        "online payment": {
             label: "Online Payment",
             className:
                 "border-transparent bg-green-600 text-white hover:bg-green-700 shadow-sm",

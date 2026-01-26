@@ -93,6 +93,7 @@ export interface RecentOrdersData {
     email: string;
   };
   amount: number;
+  customer_payment: number;
   payment_mode: string;
   payment_status: string;
   order_status: string;
