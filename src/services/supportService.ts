@@ -6,26 +6,26 @@ import apiClient from "@/api/apiClient";
 // Create base API service with all CRUD operations
 const apiService = createApiService<SupportTicket>(
   apiRoutes.supports,
-  useSupportStore.getState()
+  useSupportStore.getState(),
 );
 
 interface SupportService extends ApiService<SupportTicket> {
   getStatistics: () => Promise<unknown>;
-  getCustomerList: () => Promise<unknown>;
+  getCustomerList: (query: string) => Promise<unknown>;
   getOrdersList: (query: string) => Promise<unknown>;
   changeStatus: (
     id: number | string,
     status: string,
-    notes?: string
+    notes?: string,
   ) => Promise<unknown>;
   changePriority: (id: number | string, priority: string) => Promise<unknown>;
   resolveTicket: (
     id: number | string,
-    resolutionNote: string
+    resolutionNote: string,
   ) => Promise<unknown>;
   closeTicket: (
     id: number | string,
-    resolutionNote: string
+    resolutionNote: string,
   ) => Promise<unknown>;
   bulkAction: (action: string, ticketIds: number[]) => Promise<unknown>;
 }
@@ -49,10 +49,10 @@ const supportService: SupportService = {
   },
 
   // Get users list for ticket creation
-  getCustomerList: async () => {
+  getCustomerList: async (query: string) => {
     try {
       const response = await apiClient.get(
-        `${apiRoutes.users.getAll}?role_id=1`
+        `${apiRoutes.users.getAll}?role_id=1${query ? query : ""}`,
       );
       return response.data;
     } catch (error) {
@@ -63,9 +63,11 @@ const supportService: SupportService = {
 
   // Get orders list for ticket creation
   getOrdersList: async (query: string) => {
-    const queryString  = query ? `?q=${query}` : "";
+    const queryString = query ? `?q=${query}` : "";
     try {
-      const response = await apiClient.get(`${apiRoutes.supports.orderLists}${queryString}`);
+      const response = await apiClient.get(
+        `${apiRoutes.supports.orderLists}${queryString}`,
+      );
       return response.data;
     } catch (error) {
       console.error("Error fetching orders list:", error);
@@ -82,7 +84,7 @@ const supportService: SupportService = {
       }
       const response = await apiClient.patch(
         apiRoutes.supports.changeStatus(id),
-        payload
+        payload,
       );
       return response.data;
     } catch (error) {
@@ -96,7 +98,7 @@ const supportService: SupportService = {
     try {
       const response = await apiClient.patch(
         apiRoutes.supports.changePriority(id),
-        { priority }
+        { priority },
       );
       return response.data;
     } catch (error) {
@@ -110,7 +112,7 @@ const supportService: SupportService = {
     try {
       const response = await apiClient.post(
         apiRoutes.supports.reslvedTicket(id),
-        { resolution_note: resolutionNote }
+        { resolution_note: resolutionNote },
       );
       return response.data;
     } catch (error) {
@@ -126,7 +128,7 @@ const supportService: SupportService = {
         apiRoutes.supports.closeTicket(id),
         {
           resolution_note: resolutionNote,
-        }
+        },
       );
       return response.data;
     } catch (error) {

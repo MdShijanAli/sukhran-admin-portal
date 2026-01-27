@@ -314,23 +314,25 @@ export function ComboboxSelect<T>({
               }}
             />
             {service && store && (
-              <button
+              <Button
                 type="button"
+                variant="outline"
                 onClick={() => {
                   setSearchQuery("");
                   fetchData();
                 }}
                 disabled={isLoading}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-accent rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="absolute right-2 p-2 top-1/2 -translate-y-1/2 hover:bg-accent rounded-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Refresh data"
               >
                 <RefreshCw
+
                   className={cn(
                     "h-4 w-4 text-muted-foreground",
                     isLoading && "animate-spin",
                   )}
                 />
-              </button>
+              </Button>
             )}
           </div>
           <CommandEmpty>{isLoading ? "Loading..." : emptyText}</CommandEmpty>
