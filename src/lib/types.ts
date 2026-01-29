@@ -517,6 +517,7 @@ export interface PackageOrderBatch {
     email: string;
     mobile?: string;
   };
+  package_name: string;
   schedule_months: string;
   frequency_per_month: string;
   total_orders: string | number;

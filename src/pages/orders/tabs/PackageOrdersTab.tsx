@@ -50,6 +50,15 @@ export default function PackageOrdersTab() {
         className: "text-center w-16",
       },
       {
+        key: "package_name",
+        label: t("orders.packageOrders.packageName"),
+        render: (batch) => (
+          <div>
+            <p className="font-medium">{batch.package_name}</p>
+          </div>
+        ),
+      },
+      {
         key: "batch_id",
         label: t("orders.packageOrders.batchId"),
         render: (batch) => (
