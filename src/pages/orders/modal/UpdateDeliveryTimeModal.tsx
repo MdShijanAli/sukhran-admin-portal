@@ -6,18 +6,19 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import orderService from "@/services/orderService";
+import { Order } from "@/stores/orderStore";
 
 interface UpdateDeliveryTimeModalProps {
   open: boolean;
   onClose: (value: boolean) => void;
-  orderId: number | string | null;
+  order: Order;
   onSuccess?: () => void;
 }
 
 export default function UpdateDeliveryTimeModal({
   open,
   onClose,
-  orderId,
+  order,
   onSuccess,
 }: UpdateDeliveryTimeModalProps) {
   const { t } = useTranslation();
@@ -26,6 +27,13 @@ export default function UpdateDeliveryTimeModal({
   const [estimatedDeliveryTo, setEstimatedDeliveryTo] = useState<string>("");
   const [reason, setReason] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (order) {
+      setEstimatedDeliveryFrom(order.estimatedDelivery.from || "");
+      setEstimatedDeliveryTo(order.estimatedDelivery.to || "");
+    }
+  }, [order])
 
   // Reset form when modal opens/closes
   useEffect(() => {
@@ -37,7 +45,7 @@ export default function UpdateDeliveryTimeModal({
   }, [open]);
 
   const handleSubmit = async () => {
-    if (!orderId) return;
+    if (!order.id) return;
 
     // Validate required fields
     if (!estimatedDeliveryFrom || !estimatedDeliveryTo) {
@@ -58,7 +66,7 @@ export default function UpdateDeliveryTimeModal({
 
     setIsSubmitting(true);
     try {
-      await orderService.updateDeliveryTime(orderId, {
+      await orderService.updateDeliveryTime(order.id, {
         estimatedDeliveryFrom,
         estimatedDeliveryTo,
         reason: reason || undefined,

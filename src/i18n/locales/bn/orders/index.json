@@ -40,6 +40,7 @@
     "sl": "ক্রমিক",
     "orderNumber": "অর্ডার #",
     "orderID": "অর্ডার আইডি",
+    "deliveryDate": "ডেলিভারির তারিখ",
     "customer": "গ্রাহক",
     "items": "আইটেম",
     "total": "মোট",
@@ -47,6 +48,7 @@
     "status": "স্ট্যাটাস",
     "paymentStatus": "পেমেন্ট স্ট্যাটাস",
     "date": "তারিখ",
+    "orderDate": "অর্ডারের তারিখ",
     "actions": "কার্যক্রম",
     "unassigned": "নির্ধারিত নয়"
   },

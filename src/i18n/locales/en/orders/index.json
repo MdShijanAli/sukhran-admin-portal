@@ -40,6 +40,7 @@
     "sl": "Sl.",
     "orderNumber": "Order #",
     "orderID": "Order ID",
+    "deliveryDate": "Delivery Date",
     "customer": "Customer",
     "items": "Items",
     "total": "Total",
@@ -47,6 +48,7 @@
     "status": "Status",
     "paymentStatus": "Payment Status",
     "date": "Date",
+    "orderDate": "Order Date",
     "actions": "Actions",
     "unassigned": "Unassigned"
   },

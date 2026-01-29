@@ -25,7 +25,7 @@ import AddItemModal from "./AddItemModal";
 interface FormOrderItem {
   id: string;
   product_id: string;
-  orderId?: string;
+  orderId?: string | null;
   itemType?: string;
   product_name: string;
   quantity: number;
@@ -35,7 +35,7 @@ interface FormOrderItem {
 }
 
 interface OrderFormData {
-  orderId?: string;
+  orderId?: string | null;
   customer_name: string;
   customer_phone: string;
   customer_email: string;
@@ -61,7 +61,7 @@ interface OrderFormData {
 interface FormModalProps {
   open: boolean;
   onClose: () => void;
-  orderId?: string;
+  orderId?: string | null;
   onSuccess?: () => void;
 }
 

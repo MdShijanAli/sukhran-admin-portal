@@ -271,10 +271,28 @@ function Orders() {
     },
     {
       key: "date",
-      label: t("orders.columns.date"),
+      label: t("orders.columns.orderDate"),
       render: (order) => (
         <div className="w-[100px]">
           <span className="text-sm">{order.created_at}</span>
+        </div>
+      ),
+    },
+    {
+      key: "delivery_date",
+      label: t("orders.columns.deliveryDate"),
+      render: (order) => (
+        <div className="flex flex-col gap-1 min-w-[140px]">
+          <div className="flex items-center gap-1.5">
+            <Clock className="h-3 w-3 text-muted-foreground" />
+            <span className="text-xs font-medium text-muted-foreground">From:</span>
+            <span className="text-xs">{order.estimatedDelivery.fromFormatted}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Clock className="h-3 w-3 text-muted-foreground" />
+            <span className="text-xs font-medium text-muted-foreground">To:</span>
+            <span className="text-xs">{order.estimatedDelivery.toFormatted}</span>
+          </div>
         </div>
       ),
     },
@@ -523,7 +541,7 @@ function Orders() {
       <UpdateDeliveryTimeModal
         open={showUpdateDeliveryTimeModal}
         onClose={setShowUpdateDeliveryTimeModal}
-        orderId={selectedOrder?.orderId || null}
+        order={selectedOrder}
         onSuccess={() => refreshTable?.()}
       />
 
