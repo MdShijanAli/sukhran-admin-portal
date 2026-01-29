@@ -65,6 +65,8 @@
     "actions": "কার্যক্রম",
     "edit": "সম্পাদনা",
     "pauseOrder": "অর্ডার বন্ধ করুন",
+    "resumeOrder": "অর্ডার পুনরায় শুরু করুন",
+    "cancel": "অর্ডার বাতিল করুন",
     "setDeliveryDate": "ডেলিভারির তারিখ নির্ধারণ করুন",
     "modificationHistory": "পরিবর্তন ইতিহাস",
     "markAsPaidMessage": "আপনি কি নিশ্চিত যে আপনি অর্ডার",

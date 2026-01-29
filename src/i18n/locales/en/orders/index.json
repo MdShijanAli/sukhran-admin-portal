@@ -65,6 +65,8 @@
     "markAsPaid": "Mark as Paid",
     "edit": "Edit",
     "pauseOrder": "Pause Order",
+    "resumeOrder": "Resume Order",
+    "cancel": "Cancel Order",
     "setDeliveryDate": "Set Delivery Date",
     "modificationHistory": "Modification History",
     "markAsPaidMessage": "Are you sure you want to mark order as paid?",

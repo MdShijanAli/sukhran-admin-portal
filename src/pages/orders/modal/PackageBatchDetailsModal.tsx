@@ -18,8 +18,7 @@ import { formatNumberWithCommas } from "@/lib/utils";
 import SetDeliveryDateModal from "./SetDeliveryDateModal";
 import ModifyItemsModal from "./ModifyItemsModal";
 import CancelOrderModal from "./CancelOrderModal";
-import ResumeOrderModal from "./ResumeOrderModal";
-import PauseOrderModal from "./PauseOrderModal";
+import PauseResumeOrderModal from "./PauseResumeOrderModal";
 import {
   ActionItem,
   BaseTable,
@@ -169,7 +168,14 @@ export default function PackageBatchDetailsModal({
       label: t("orders.actions.pauseOrder"),
       icon: Pause,
       onClick: handlePause,
-      show: hasPermission(permissions.orders.manage) && order.payment_status !== 'paid',
+      show: hasPermission(permissions.orders.manage) && order.payment_status !== 'paid' && !order.is_paused,
+      separator: true, // Show separator after this item
+    },
+    {
+      label: t("orders.actions.resumeOrder"),
+      icon: Calendar,
+      onClick: handleResume,
+      show: hasPermission(permissions.orders.manage) && order.is_paused,
       separator: true, // Show separator after this item
     },
     {
@@ -375,7 +381,7 @@ export default function PackageBatchDetailsModal({
             currentItems={selectedOrder.items}
             onSuccess={handleSuccess}
           />
-          <PauseOrderModal
+          <PauseResumeOrderModal
             open={showPauseModal}
             onClose={() => {
               setShowPauseModal(false);
@@ -384,8 +390,9 @@ export default function PackageBatchDetailsModal({
             orderId={selectedOrder.id}
             orderNumber={selectedOrder.orderId}
             onSuccess={handleSuccess}
+            type="pause"
           />
-          <ResumeOrderModal
+          <PauseResumeOrderModal
             open={showResumeModal}
             onClose={() => {
               setShowResumeModal(false);
@@ -394,6 +401,7 @@ export default function PackageBatchDetailsModal({
             orderId={selectedOrder.id}
             orderNumber={selectedOrder.orderId}
             onSuccess={handleSuccess}
+            type="resume"
           />
           <CancelOrderModal
             open={showCancelModal}
