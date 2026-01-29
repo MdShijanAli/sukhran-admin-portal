@@ -82,6 +82,8 @@
 
   "sendCoin": {
     "title": "Send Coins to User",
+    "searchUsersPlaceholder": "Search users...",
+    "noUsersFound": "No users found",
     "description": "Award coins to a user for special promotions or rewards",
     "selectedUser": "Recipient User",
     "selectUser": "Select User",

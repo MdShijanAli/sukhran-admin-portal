@@ -169,22 +169,23 @@ export function ComboboxSelect<T>({
 
   const selectedOptions = options.filter((option) => {
     const optionValue = getOptionValue(option);
-    return valueArray.includes(optionValue);
+    // Convert both to string for comparison to handle number vs string mismatches
+    return valueArray.some(v => String(v) === String(optionValue));
   });
 
   const handleSelect = (option: T) => {
     const optionValue = getOptionValue(option);
 
     if (multiple) {
-      const isSelected = valueArray.includes(optionValue);
+      const isSelected = valueArray.some(v => String(v) === String(optionValue));
 
       if (isSelected) {
         // Remove from selection
-        const newValue = valueArray.filter((v) => v !== optionValue);
+        const newValue = valueArray.filter((v) => String(v) !== String(optionValue));
         onValueChange(newValue);
         if (onSelect) {
           const newSelectedOptions = options.filter((opt) =>
-            newValue.includes(getOptionValue(opt)),
+            newValue.some(v => String(v) === String(getOptionValue(opt)))
           );
           onSelect(newSelectedOptions);
         }
@@ -198,7 +199,7 @@ export function ComboboxSelect<T>({
         onValueChange(newValue);
         if (onSelect) {
           const newSelectedOptions = options.filter((opt) =>
-            newValue.includes(getOptionValue(opt)),
+            newValue.some(v => String(v) === String(getOptionValue(opt)))
           );
           onSelect(newSelectedOptions);
         }
@@ -219,11 +220,11 @@ export function ComboboxSelect<T>({
   ) => {
     e.stopPropagation();
     if (multiple) {
-      const newValue = valueArray.filter((v) => v !== optionValue);
+      const newValue = valueArray.filter((v) => String(v) !== String(optionValue));
       onValueChange(newValue);
       if (onSelect) {
         const newSelectedOptions = options.filter((opt) =>
-          newValue.includes(getOptionValue(opt)),
+          newValue.some(v => String(v) === String(getOptionValue(opt)))
         );
         onSelect(newSelectedOptions);
       }
@@ -345,7 +346,7 @@ export function ComboboxSelect<T>({
             )}
             {options.map((option, index) => {
               const optionValue = getOptionValue(option);
-              const isSelected = valueArray.includes(optionValue);
+              const isSelected = valueArray.some(v => String(v) === String(optionValue));
 
               return (
                 <CommandItem

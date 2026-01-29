@@ -9,7 +9,7 @@ const apiService = createApiService<User>(
   useUserStore.getState(),
 );
 
-interface UserService extends ApiService<User> {
+interface UserService extends Omit<ApiService<User>, "statistics"> {
   toggleUserStatus: (id: number | string) => Promise<unknown>;
   getUsersStatistics: () => Promise<unknown>;
   resetUserPassword: (id: number | string) => Promise<unknown>;

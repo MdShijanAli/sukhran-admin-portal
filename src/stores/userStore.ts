@@ -72,7 +72,7 @@ export interface UserStatistics {
   blocked_users: number;
 }
 
-interface UserState {
+export interface UserState {
   users: User[];
   statistics: UserStatistics;
   pagination: PaginationMeta;
@@ -150,7 +150,7 @@ export const useUserStore = createStore<UserState>(
       const user = (data as { data?: Partial<User> })?.data || data;
       set((state) => ({
         users: state.users.map((u) =>
-          u.id === id ? { ...u, ...(user as Partial<User>) } : u
+          u.id === id ? { ...u, ...(user as Partial<User>) } : u,
         ),
         isLoading: false,
         error: null,
@@ -201,5 +201,5 @@ export const useUserStore = createStore<UserState>(
       set({ error, isLoading: false });
     },
   }),
-  "user-storage"
+  "user-storage",
 );
