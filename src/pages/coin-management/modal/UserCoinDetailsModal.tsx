@@ -20,11 +20,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { UserCoinDetails } from "@/lib/types";
+import { CoinTransaction, UserCoinDetails } from "@/lib/types";
 import { Coins, TrendingUp, TrendingDown, Wallet } from "lucide-react";
 import { formatNumberWithCommas } from "@/lib/utils";
 import coinService from "@/services/coinService";
 import defaultUserImage from "@/assets/images/avatar-ractangle.jpg";
+import { BaseTable, Column } from "@/components/table";
 
 interface UserCoinDetailsModalProps {
   open: boolean;
@@ -42,6 +43,7 @@ export default function UserCoinDetailsModal({
   const [error, setError] = useState<string | null>(null);
   const [details, setDetails] = useState<UserCoinDetails | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(20);
 
   const fetchUserDetails = useCallback(
     async (page: number = 1) => {
@@ -50,7 +52,7 @@ export default function UserCoinDetailsModal({
         setError(null);
         const params = new URLSearchParams({
           page: page.toString(),
-          per_page: "20",
+          per_page: perPage.toString(),
         }).toString();
         const response = await coinService.fetchUserCoinDetails(userId, params);
         setDetails(response);
@@ -59,24 +61,96 @@ export default function UserCoinDetailsModal({
         const error = err as { response?: { data?: { message?: string } } };
         setError(
           error.response?.data?.message ||
-            t("coinManagement.userDetails.error"),
+          t("coinManagement.userDetails.error"),
         );
       } finally {
         setLoading(false);
       }
     },
-    [userId, t],
+    [userId, t, perPage],
   );
 
   useEffect(() => {
     if (open && userId) {
       fetchUserDetails();
     }
-  }, [open, userId]);
+  }, [open, userId, perPage]);
 
   const handlePageChange = (page: number) => {
     fetchUserDetails(page);
   };
+
+  const columns: Column<CoinTransaction>[] = [
+    {
+      key: "sl",
+      label: t("coinManagement.transactions.columns.sl"),
+      render: (_, index) => <> {(currentPage - 1) * perPage + index + 1}</>,
+      className: "text-center w-16",
+    },
+    {
+      key: "type",
+      label: t("coinManagement.userDetails.type"),
+      render: (transaction) => (
+        <Badge
+          variant={
+            transaction.type === "earned"
+              ? "default"
+              : "secondary"
+          }
+        >
+          {t(
+            `coinManagement.transactions.types.${transaction.type}`,
+          )}
+        </Badge>
+      ),
+      className: "w-20",
+    },
+    {
+      key: "amount",
+      label: t("coinManagement.userDetails.amount"),
+      render: (transaction) => (
+        <span
+          className={` ${transaction.type === "earned"
+            ? "text-green-600"
+            : "text-red-600"
+            }`}
+        >
+          {transaction.type === "earned" ? "+" : "-"}
+          {formatNumberWithCommas(transaction.amount)}
+        </span>
+      ),
+    },
+    {
+      key: "reason",
+      label: t("coinManagement.userDetails.reason"),
+      className: "text-center",
+    },
+    {
+      key: "description",
+      label: t("coinManagement.userDetails.description"),
+      className: "w-[300px]"
+    },
+    {
+      key: "balanceAfter",
+      label: t("coinManagement.userDetails.balanceAfter"),
+      render: (transaction) => (
+        <span> {formatNumberWithCommas(
+          transaction.balance_after,
+        )}</span>
+      ),
+    },
+    {
+      key: "date",
+      label: t("coinManagement.userDetails.date"),
+      render: (transaction) => (
+        <div className="w-[100px]">
+          {new Date(
+            transaction.created_at,
+          ).toLocaleString()}
+        </div>
+      ),
+    },
+  ];
 
   return (
     <BaseModal
@@ -85,7 +159,7 @@ export default function UserCoinDetailsModal({
       title={t("coinManagement.userDetails.title")}
       showSubmitButton={false}
       closeButtonText={t("coinManagement.userDetails.close")}
-      size="2xl"
+      size="4xl"
     >
       <div className="space-y-3">
         {loading && !details ? (
@@ -245,110 +319,23 @@ export default function UserCoinDetailsModal({
               </CardHeader>
               <CardContent>
                 <div className="rounded-md border">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-16">
-                          {t("coinManagement.transactions.columns.sl")}
-                        </TableHead>
-                        <TableHead>
-                          {t("coinManagement.userDetails.type")}
-                        </TableHead>
-                        <TableHead className="text-right">
-                          {t("coinManagement.userDetails.amount")}
-                        </TableHead>
-                        <TableHead>
-                          {t("coinManagement.userDetails.reason")}
-                        </TableHead>
-                        <TableHead>
-                          {t("coinManagement.userDetails.description")}
-                        </TableHead>
-                        <TableHead className="text-right">
-                          {t("coinManagement.userDetails.balanceAfter")}
-                        </TableHead>
-                        <TableHead>
-                          {t("coinManagement.userDetails.date")}
-                        </TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {loading ? (
-                        Array.from({ length: 5 }).map((_, i) => (
-                          <TableRow key={i}>
-                            <TableCell colSpan={7}>
-                              <Skeleton className="h-4 w-full" />
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      ) : details.transactions.length === 0 ? (
-                        <TableRow>
-                          <TableCell
-                            colSpan={7}
-                            className="text-center py-8 text-muted-foreground"
-                          >
-                            {t("coinManagement.userDetails.noTransactions")}
-                          </TableCell>
-                        </TableRow>
-                      ) : (
-                        details.transactions.map((transaction, index) => (
-                          <TableRow key={transaction.id}>
-                            <TableCell className="text-center">
-                              {(currentPage - 1) * 10 + index + 1}
-                            </TableCell>
-                            <TableCell>
-                              <Badge
-                                variant={
-                                  transaction.type === "earned"
-                                    ? "default"
-                                    : "secondary"
-                                }
-                              >
-                                {t(
-                                  `coinManagement.transactions.types.${transaction.type}`,
-                                )}
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="text-right">
-                              <span
-                                className={` ${
-                                  transaction.type === "earned"
-                                    ? "text-green-600"
-                                    : "text-red-600"
-                                }`}
-                              >
-                                {transaction.type === "earned" ? "+" : "-"}
-                                {formatNumberWithCommas(transaction.amount)}
-                              </span>
-                            </TableCell>
-                            <TableCell className="text-sm">
-                              {transaction.reason || "N/A"}
-                            </TableCell>
-                            <TableCell className="text-sm text-muted-foreground max-w-xs truncate">
-                              {transaction.description}
-                            </TableCell>
-                            <TableCell className="text-right font-medium">
-                              {formatNumberWithCommas(
-                                transaction.balance_after,
-                              )}
-                            </TableCell>
-                            <TableCell className="text-sm">
-                              {new Date(
-                                transaction.created_at,
-                              ).toLocaleString()}
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      )}
-                    </TableBody>
-                  </Table>
+                  <BaseTable
+                    columns={columns}
+                    data={details.transactions}
+                    isLoading={loading}
+                    getRowKey={(item) => item.id.toString()}
+                    emptyMessage={t(
+                      "coinManagement.userDetails.noTransactions",
+                    )}
+                  />
                 </div>
 
                 {/* Pagination */}
                 {details.pagination.last_page > 1 && (
                   <div className="flex items-center justify-between mt-3">
                     <p className="text-sm text-muted-foreground">
-                      Showing {(currentPage - 1) * 10 + 1} to{" "}
-                      {Math.min(currentPage * 10, details.pagination.total)} of{" "}
+                      Showing {(currentPage - 1) * perPage + 1} to{" "}
+                      {Math.min(currentPage * perPage, details.pagination.total)} of{" "}
                       {details.pagination.total} results
                     </p>
                     <div className="flex gap-2">

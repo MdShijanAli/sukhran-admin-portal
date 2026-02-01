@@ -421,16 +421,15 @@ export interface CoinUser {
 
 export interface CoinTransaction {
   id: number;
-  user: CoinUser;
+  user?: CoinUser;
   type: "earned" | "spent";
   amount: number;
   reason: string;
   description: string;
   balance_after: number;
-  reference_id: string | null;
+  reference_id?: string | null;
   created_at: string;
 }
-
 export interface CoinBalance {
   total_coins: number;
   locked_coins: number;
