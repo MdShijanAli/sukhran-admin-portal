@@ -148,9 +148,10 @@ function Orders() {
       label: t("orders.actions.editOrder"),
       icon: Edit,
       onClick: handleEdit,
-      show:
-        hasPermission(permissions.orders.edit) &&
-        (order.status === "pending" || order.status === "approved" && order.paymentStatus !== "paid"),
+      show: false,
+      // show:
+      //   hasPermission(permissions.orders.edit) &&
+      //   (order.status === "pending" || order.status === "approved" && order.paymentStatus !== "paid"),
     },
     {
       label: t("orders.actions.updateStatus"),

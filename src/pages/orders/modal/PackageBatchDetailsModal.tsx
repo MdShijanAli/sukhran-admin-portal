@@ -156,7 +156,8 @@ export default function PackageBatchDetailsModal({
       label: t("orders.actions.edit"),
       icon: Edit,
       onClick: handleModifyItems,
-      show: hasPermission(permissions.orders.manage) && order.payment_status !== 'paid',
+      show: false,
+      // show: hasPermission(permissions.orders.manage) && order.payment_status !== 'paid',
     },
     {
       label: t("orders.actions.setDeliveryDate"),
