@@ -26,12 +26,10 @@ interface Category {
   name: string;
   sub_categories?: SubCategory[];
 }
-
 interface SubCategory {
   id: number | string;
   name: string;
 }
-
 interface ProductFormData {
   categoryId: string;
   name: string;
@@ -42,13 +40,13 @@ interface ProductFormData {
   isFeatured: boolean;
   imgUrl?: File;
   badge?:
-    | "best_selling"
-    | "new_arrival"
-    | "hot_deal"
-    | "organic"
-    | "limited_stock"
-    | "flash_sale"
-    | "halal_certified";
+  | "best_selling"
+  | "new_arrival"
+  | "hot_deal"
+  | "organic"
+  | "limited_stock"
+  | "flash_sale"
+  | "halal_certified";
 }
 
 export default function ProductForm() {
