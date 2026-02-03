@@ -168,7 +168,7 @@ export default function ViewModal({
               <p className="text-sm text-muted-foreground mb-1">
                 {t("coupon.view.discountValue")}
               </p>
-              <p className="font-semibold">
+              <p className="">
                 {coupon?.discount.type === "percentage"
                   ? `${coupon.discount.value}%`
                   : `৳${coupon?.discount.value.toFixed(2)}`}
@@ -179,7 +179,7 @@ export default function ViewModal({
                 <p className="text-sm text-muted-foreground mb-1">
                   {t("coupon.view.maxDiscount")}
                 </p>
-                <p className="font-semibold">
+                <p className="">
                   ৳{coupon.discount.max_amount.toFixed(2)}
                 </p>
               </div>
@@ -199,7 +199,7 @@ export default function ViewModal({
             <p className="text-sm text-muted-foreground mb-1">
               {t("coupon.view.minOrderAmount")}
             </p>
-            <p className="text-xl font-semibold">
+            <p className="text-xl ">
               ৳{coupon?.min_order_amount.toFixed(2)}
             </p>
           </div>

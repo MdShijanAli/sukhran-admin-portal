@@ -503,7 +503,7 @@ export default function FormModal({
         <div className="grid gap-4">
           {/* Customer Information */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold border-b pb-2">
+            <h3 className="text-sm  border-b pb-2">
               {t("orders.form.customerInfo")}
             </h3>
             <div className="grid grid-cols-2 gap-4">
@@ -579,7 +579,7 @@ export default function FormModal({
           {/* Order Items */}
           <div className="space-y-4">
             <div className="flex items-center justify-between border-b pb-2">
-              <h3 className="text-sm font-semibold">
+              <h3 className="text-sm ">
                 {t("orders.form.orderItems")}
               </h3>
               <Button
@@ -698,7 +698,7 @@ export default function FormModal({
 
           {/* Pricing Details */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold border-b pb-2">
+            <h3 className="text-sm  border-b pb-2">
               {t("orders.form.pricingDetails")}
             </h3>
             <div className="grid grid-cols-3 gap-4">
@@ -742,7 +742,7 @@ export default function FormModal({
 
             <div className="bg-primary/5 p-4 rounded-lg">
               <div className="flex justify-between items-center">
-                <span className="text-lg font-semibold">
+                <span className="text-lg ">
                   {t("orders.form.total")}
                 </span>
                 <span className="text-2xl ">

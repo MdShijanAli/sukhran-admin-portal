@@ -133,7 +133,7 @@ export default function ViewModal({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Customer Information */}
             <div className="border rounded-lg p-4 space-y-3">
-              <h4 className="font-semibold text-sm text-primary flex items-center gap-2">
+              <h4 className=" text-sm text-primary flex items-center gap-2">
                 <User className="h-4 w-4" />
                 {t("transactions.view.customerInfo")}
               </h4>
@@ -167,7 +167,7 @@ export default function ViewModal({
 
             {/* Payment Information */}
             <div className="border rounded-lg p-4 space-y-3">
-              <h4 className="font-semibold text-sm text-primary flex items-center gap-2">
+              <h4 className=" text-sm text-primary flex items-center gap-2">
                 <CreditCard className="h-4 w-4" />
                 {t("transactions.view.paymentInfo")}
               </h4>
@@ -246,7 +246,7 @@ export default function ViewModal({
             {/* Gateway Response Details */}
             {transaction.gatewayResponse && (
               <div className="border rounded-lg p-4 space-y-3 md:col-span-2">
-                <h4 className="font-semibold text-sm text-primary flex items-center gap-2">
+                <h4 className=" text-sm text-primary flex items-center gap-2">
                   <CreditCard className="h-4 w-4" />
                   {t("transactions.view.gatewayResponseInfo")}
                 </h4>
@@ -337,7 +337,7 @@ export default function ViewModal({
             {/* Order Information */}
             {transaction.order ? (
               <div className="border rounded-lg p-4 space-y-3">
-                <h4 className="font-semibold text-sm text-primary flex items-center gap-2">
+                <h4 className=" text-sm text-primary flex items-center gap-2">
                   <Package className="h-4 w-4" />
                   {t("transactions.view.orderInfo")}
                 </h4>
@@ -362,7 +362,7 @@ export default function ViewModal({
               </div>
             ) : (
               <div className="border rounded-lg p-4 space-y-3">
-                <h4 className="font-semibold text-sm text-primary flex items-center gap-2">
+                <h4 className=" text-sm text-primary flex items-center gap-2">
                   <Package className="h-4 w-4" />
                   {t("transactions.view.orderInfo")}
                 </h4>
@@ -376,7 +376,7 @@ export default function ViewModal({
 
             {/* Transaction Details */}
             <div className="border rounded-lg p-4 space-y-3">
-              <h4 className="font-semibold text-sm text-primary flex items-center gap-2">
+              <h4 className=" text-sm text-primary flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
                 {t("transactions.view.transactionDetails")}
               </h4>
@@ -420,7 +420,7 @@ export default function ViewModal({
           {/* Refund Information - Only show if transaction is refunded */}
           {transaction.status === "refunded" && (
             <div className="border border-blue-200 bg-blue-50 rounded-lg p-4 space-y-3">
-              <h4 className="font-semibold text-sm text-blue-700 flex items-center gap-2">
+              <h4 className=" text-sm text-blue-700 flex items-center gap-2">
                 <DollarSign className="h-4 w-4" />
                 {t("transactions.view.refundInfo")}
               </h4>
@@ -463,7 +463,7 @@ export default function ViewModal({
           {/* Failure Information - Only show if transaction failed */}
           {transaction.status === "failed" && transaction.failureReason && (
             <div className="border border-red-200 bg-red-50 rounded-lg p-4 space-y-3">
-              <h4 className="font-semibold text-sm text-red-700 flex items-center gap-2">
+              <h4 className=" text-sm text-red-700 flex items-center gap-2">
                 <XCircle className="h-4 w-4" />
                 {t("transactions.view.failureInfo")}
               </h4>

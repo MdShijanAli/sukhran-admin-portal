@@ -68,7 +68,7 @@ const CoinReportTab = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold flex items-center gap-2">
+          <h3 className="text-lg  flex items-center gap-2">
             <Coins className="w-5 h-5 text-amber-600" />
             {t("donations.coinReport.overview.title")}
           </h3>
@@ -179,7 +179,7 @@ const CoinReportTab = () => {
 
       {/* By Channel Section */}
       <Card className="p-4">
-        <h4 className="font-semibold mb-4 flex items-center gap-2">
+        <h4 className=" mb-4 flex items-center gap-2">
           <Target className="w-5 h-5 text-primary" />
           {t("donations.coinReport.byChannel.title")}
         </h4>
@@ -195,7 +195,7 @@ const CoinReportTab = () => {
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex-1">
-                    <h5 className="font-semibold text-lg">{channel.name}</h5>
+                    <h5 className=" text-lg">{channel.name}</h5>
                     {channel.description && (
                       <p className="text-xs text-muted-foreground mt-1">
                         {channel.description}
@@ -274,7 +274,7 @@ const CoinReportTab = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         {/* Recent Coin Donations */}
         <Card className="p-4">
-          <h4 className="font-semibold mb-4 flex items-center gap-2">
+          <h4 className=" mb-4 flex items-center gap-2">
             <Clock className="w-5 h-5 text-blue-600" />
             {t("donations.coinReport.recentDonations.title")}
           </h4>
@@ -313,7 +313,7 @@ const CoinReportTab = () => {
 
         {/* Top Coin Donors */}
         <Card className="p-4">
-          <h4 className="font-semibold mb-4 flex items-center gap-2">
+          <h4 className=" mb-4 flex items-center gap-2">
             <Award className="w-5 h-5 text-amber-600" />
             {t("donations.coinReport.topDonors.title")}
           </h4>
@@ -356,7 +356,7 @@ const CoinReportTab = () => {
               <AlertCircle className="w-6 h-6 text-amber-600" />
             </div>
             <div>
-              <h4 className="font-semibold text-lg">
+              <h4 className=" text-lg">
                 Action Required: Fulfill Pending Coins
               </h4>
               <p className="text-sm text-muted-foreground">

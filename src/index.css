@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 /* Import Brand Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap");
 
 /* Import Karmella Font */
 @font-face {
-  font-family: 'Karmella';
-  src: url('/fonts/Karmella.otf') format('opentype');
+  font-family: "Karmella";
+  src: url("/fonts/Karmella.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -78,7 +78,11 @@ All colors MUST be HSL.
     --light-gray: 0 0% 98%; /* Light Gray #fafafa */
     --medium-gray: 0 0% 88%; /* Medium Gray #e0e0e0 */
 
-    --gradient-primary: linear-gradient(135deg, hsl(0, 0%, 0%), hsl(0, 0%, 20%));
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(0, 0%, 0%),
+      hsl(0, 0%, 20%)
+    );
     --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(0 0% 98%));
     --shadow-elegant: 0 10px 40px -10px hsl(0 0% 0% / 0.15);
     --shadow-card: 0 2px 8px -2px hsl(0 0% 0% / 0.1);
@@ -137,7 +141,11 @@ All colors MUST be HSL.
     --light-gray: 0 0% 15%;
     --medium-gray: 0 0% 20%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(40 85% 65%), hsl(40 85% 55%));
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(40 85% 65%),
+      hsl(40 85% 55%)
+    );
     --gradient-card: linear-gradient(135deg, hsl(0 0% 10%), hsl(0 0% 7%));
     --shadow-elegant: 0 10px 40px -10px hsl(40 85% 65% / 0.3);
     --shadow-card: 0 4px 12px -4px hsl(40 85% 65% / 0.1);
@@ -151,11 +159,16 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground transition-colors duration-300;
-    font-family: 'Inter', 'Helvetica Neue', sans-serif;
+    font-family: "Inter", "Helvetica Neue", sans-serif;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Karmella', serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Karmella", serif;
     font-style: normal;
     font-weight: 500;
     letter-spacing: 0.1rem;
@@ -206,23 +219,23 @@ All colors MUST be HSL.
 
   /* Typography Utilities */
   .font-display {
-    font-family: 'Karmella', serif;
+    font-family: "Karmella", serif;
   }
 
   .font-body {
-    font-family: 'Inter', 'Helvetica Neue', sans-serif;
+    font-family: "Inter", "Helvetica Neue", sans-serif;
   }
 
   /* Hero Text */
   .text-hero {
-    font-family: 'Karmella', serif;
+    font-family: "Karmella", serif;
     @apply text-6xl md:text-8xl font-black;
   }
 
   /* Heading Text */
   .text-heading {
-    font-family: 'Karmella', serif;
-    @apply text-3xl md:text-5xl font-semibold;
+    font-family: "Karmella", serif;
+    @apply text-3xl md:text-5xl;
   }
 
   /* Button Interaction Pattern */

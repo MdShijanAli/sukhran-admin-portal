@@ -314,7 +314,7 @@ export default function CreateSupport() {
                         </div>
                       )}
                       <div>
-                        <p className="font-semibold text-lg">
+                        <p className=" text-lg">
                           {selectedUser.firstName} {selectedUser.lastName}
                         </p>
                         <p className="text-xs text-muted-foreground">
@@ -561,7 +561,7 @@ export default function CreateSupport() {
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <Upload className="w-8 h-8 mb-2 text-muted-foreground" />
                       <p className="mb-1 text-sm text-muted-foreground">
-                        <span className="font-semibold">
+                        <span className="">
                           {t("support.create.clickToUpload")}
                         </span>
                       </p>

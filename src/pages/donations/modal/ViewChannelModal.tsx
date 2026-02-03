@@ -80,7 +80,7 @@ export default function ViewChannelModal({
 
         {/* Financial Overview */}
         <Card className="p-4">
-          <h4 className="font-semibold text-sm text-primary mb-4 flex items-center gap-2">
+          <h4 className=" text-sm text-primary mb-4 flex items-center gap-2">
             <Target className="w-4 h-4" />
             {t("donations.channels.columns.target")} &{" "}
             {t("donations.channels.columns.progress")}
@@ -141,7 +141,7 @@ export default function ViewChannelModal({
 
         {/* Statistics */}
         <Card className="p-4">
-          <h4 className="font-semibold text-sm text-primary mb-3 flex items-center gap-2">
+          <h4 className=" text-sm text-primary mb-3 flex items-center gap-2">
             <TrendingUp className="w-4 h-4" />
             Statistics
           </h4>
@@ -169,7 +169,7 @@ export default function ViewChannelModal({
 
         {/* Timestamps */}
         <Card className="p-4">
-          <h4 className="font-semibold text-sm text-primary mb-3 flex items-center gap-2">
+          <h4 className=" text-sm text-primary mb-3 flex items-center gap-2">
             <Calendar className="w-4 h-4" />
             Timeline
           </h4>

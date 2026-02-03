@@ -50,7 +50,7 @@ export default function ViewNotificationModal({
         <div className="space-y-3">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
-              <h3 className="text-xl font-semibold text-foreground mb-2">
+              <h3 className="text-xl  text-foreground mb-2">
                 {notification.title}
               </h3>
               <p className="text-muted-foreground leading-relaxed">

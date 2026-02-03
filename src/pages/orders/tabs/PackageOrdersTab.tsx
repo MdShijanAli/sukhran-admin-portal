@@ -98,7 +98,7 @@ export default function PackageOrdersTab() {
         label: t("orders.packageOrders.totalOrders"),
         render: (batch) => (
           <div className="w-[90px]">
-            <span className="font-semibold">{batch.total_orders}</span>
+            <span className="">{batch.total_orders}</span>
           </div>
         ),
         className: "text-center",

@@ -338,11 +338,10 @@ function Packages() {
       <div>
         {isLoading ? (
           <div
-            className={`grid grid-cols-2 gap-3 ${
-              isCollapsed
+            className={`grid grid-cols-2 gap-3 ${isCollapsed
                 ? "2xl:grid-cols-6 xl:grid-cols-5 sm:grid-cols-3 lg:grid-cols-4"
                 : "2xl:grid-cols-5 xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3"
-            }`}
+              }`}
           >
             {Array.from({ length: 8 }).map((_, index) => (
               <Card key={index} className="overflow-hidden animate-pulse">
@@ -359,7 +358,7 @@ function Packages() {
           <Card className="p-12">
             <div className="text-center">
               <PackageIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-4 text-lg font-semibold">
+              <h3 className="mt-4 text-lg ">
                 {t("packages.noPackagesFound")}
               </h3>
               <p className="text-sm text-muted-foreground mt-2">
@@ -376,11 +375,10 @@ function Packages() {
           </Card>
         ) : (
           <div
-            className={`grid grid-cols-2 gap-3 ${
-              isCollapsed
+            className={`grid grid-cols-2 gap-3 ${isCollapsed
                 ? "2xl:grid-cols-6 xl:grid-cols-5 sm:grid-cols-3 lg:grid-cols-4"
                 : "2xl:grid-cols-5 xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3"
-            }`}
+              }`}
           >
             {packages.map((pkg) => {
               const pricing = pkg.pricing || {
@@ -448,7 +446,7 @@ function Packages() {
                   <CardContent className="p-3">
                     <div className="space-y-2">
                       {/* Package Name */}
-                      <h3 className="font-semibold text-sm line-clamp-2 min-h-[1rem]">
+                      <h3 className=" text-sm line-clamp-2 min-h-[1rem]">
                         {pkg.name}
                       </h3>
 

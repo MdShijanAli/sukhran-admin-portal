@@ -125,7 +125,7 @@ export default function SendCoinModal({
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-semibold text-base">
+                    <p className=" text-base">
                       {selectedUser.name}
                     </p>
                     <p className="text-sm text-muted-foreground">

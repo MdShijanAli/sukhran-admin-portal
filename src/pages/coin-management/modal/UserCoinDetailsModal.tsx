@@ -271,7 +271,7 @@ export default function UserCoinDetailsModal({
                       <p className="text-sm text-muted-foreground">
                         {t("coinManagement.userDetails.totalEarned")}
                       </p>
-                      <p className="text-lg font-semibold text-green-600">
+                      <p className="text-lg  text-green-600">
                         +
                         {formatNumberWithCommas(
                           details.statistics.total_earned,
@@ -285,7 +285,7 @@ export default function UserCoinDetailsModal({
                       <p className="text-sm text-muted-foreground">
                         {t("coinManagement.userDetails.totalSpent")}
                       </p>
-                      <p className="text-lg font-semibold text-red-600">
+                      <p className="text-lg  text-red-600">
                         -
                         {formatNumberWithCommas(details.statistics.total_spent)}
                       </p>
@@ -297,7 +297,7 @@ export default function UserCoinDetailsModal({
                       <p className="text-sm text-muted-foreground">
                         {t("coinManagement.userDetails.netCoins")}
                       </p>
-                      <p className="text-lg font-semibold text-blue-600">
+                      <p className="text-lg  text-blue-600">
                         {formatNumberWithCommas(details.statistics.net_coins)}
                       </p>
                     </div>

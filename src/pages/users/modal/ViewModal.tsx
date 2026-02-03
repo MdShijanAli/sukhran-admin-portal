@@ -107,7 +107,7 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {/* Personal Information */}
             <div className="border rounded-lg p-4 space-y-3">
-              <h4 className="font-semibold text-sm text-primary mb-3">
+              <h4 className=" text-sm text-primary mb-3">
                 {t("users.view.personalInformation")}
               </h4>
               <div className="space-y-2">
@@ -147,7 +147,7 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
             </div>
             {/* Account Details */}
             <div className="border rounded-lg p-4 space-y-3">
-              <h4 className="font-semibold text-sm text-primary mb-3">
+              <h4 className=" text-sm text-primary mb-3">
                 {t("users.view.accountDetails")}
               </h4>
               <div className="space-y-2">
@@ -188,7 +188,7 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
 
             {/* Security Information */}
             <div className="border rounded-lg p-4 space-y-3">
-              <h4 className="font-semibold text-sm text-primary mb-3">
+              <h4 className=" text-sm text-primary mb-3">
                 {t("users.view.security")}
               </h4>
               <div className="space-y-2">
@@ -227,7 +227,7 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
 
             {/* Timestamps */}
             <div className="border rounded-lg p-4 space-y-3">
-              <h4 className="font-semibold text-sm text-primary mb-3">
+              <h4 className=" text-sm text-primary mb-3">
                 {t("users.view.timeline")}
               </h4>
               <div className="space-y-2">
@@ -262,7 +262,7 @@ export default function ViewModal({ open, onClose, userId }: ViewModalProps) {
           {/* Addresses Section */}
           {user.addresses && user.addresses.length > 0 && (
             <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-sm text-primary mb-3">
+              <h4 className=" text-sm text-primary mb-3">
                 {t("users.view.addresses")} ({user.addresses.length})
               </h4>
               <div className="space-y-2">

@@ -98,7 +98,6 @@ const RoleManagement = () => {
     {
       label: t("roles.actions.viewDetails"),
       icon: Eye,
-      show: role.name !== constData.roles.CUSTOMER,
       onClick: handleViewDetails,
     },
     {
@@ -273,9 +272,8 @@ const RoleManagement = () => {
         open={showDelete}
         onClose={setShowDelete}
         title={t("roles.delete.title")}
-        description={`${t("roles.delete.message")} ${
-          selectedRole?.display_name
-        }? ${t("roles.delete.cannotUndo")}`}
+        description={`${t("roles.delete.message")} ${selectedRole?.display_name
+          }? ${t("roles.delete.cannotUndo")}`}
         onConfirm={handleDeleteRole}
         isDeleting={isDeleting}
       />

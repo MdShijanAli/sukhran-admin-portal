@@ -188,7 +188,7 @@ const Settings = () => {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="min_days" className="text-base font-semibold">
+              <Label htmlFor="min_days" className="text-base ">
                 {t("orders.settings.minDeliveryDays")}
               </Label>
               <Input
@@ -212,7 +212,7 @@ const Settings = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="max_days" className="text-base font-semibold">
+              <Label htmlFor="max_days" className="text-base ">
                 {t("orders.settings.maxDeliveryDays")}
               </Label>
               <Input
@@ -249,7 +249,7 @@ const Settings = () => {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="cutoff_hour" className="text-base font-semibold">
+              <Label htmlFor="cutoff_hour" className="text-base ">
                 {t("orders.settings.cutoffHour")}
               </Label>
               <Input
@@ -277,7 +277,7 @@ const Settings = () => {
             <div className="pt-4 border-t">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <Label className="text-base font-semibold">
+                  <Label className="text-base ">
                     {t("orders.settings.skipFridayDelivery")}
                   </Label>
                   <p className="text-sm text-muted-foreground">
@@ -372,7 +372,7 @@ const Settings = () => {
             <div className="bg-green-50 dark:bg-green-950/20 border-2 border-green-200 dark:border-green-900 p-4 rounded-lg">
               <div className="flex items-start justify-between">
                 <div className="space-y-1">
-                  <p className="font-semibold text-green-900 dark:text-green-100">
+                  <p className=" text-green-900 dark:text-green-100">
                     {t("orders.settings.beforeCutoff")}
                   </p>
                   <p className="text-sm text-green-700 dark:text-green-300">
@@ -402,7 +402,7 @@ const Settings = () => {
             <div className="bg-amber-50 dark:bg-amber-950/20 border-2 border-amber-200 dark:border-amber-900 p-4 rounded-lg">
               <div className="flex items-start justify-between">
                 <div className="space-y-1">
-                  <p className="font-semibold text-amber-900 dark:text-amber-100">
+                  <p className=" text-amber-900 dark:text-amber-100">
                     {t("orders.settings.afterCutoff")}
                   </p>
                   <p className="text-sm text-amber-700 dark:text-amber-300">

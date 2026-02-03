@@ -31,7 +31,7 @@ export default function NoPermission({
             </div>
 
             {/* Title */}
-            <h2 className="text-2xl font-semibold mb-2 text-foreground">
+            <h2 className="text-2xl  mb-2 text-foreground">
               {title || t("noPermission.title", "Access Denied")}
             </h2>
 

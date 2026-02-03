@@ -65,7 +65,7 @@ const StatisticsTab = () => {
     <div className="p-3 space-y-3">
       {/* Overview Section */}
       <div>
-        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <h3 className="text-lg  mb-4 flex items-center gap-2">
           <TrendingUp className="w-5 h-5" />
           {t("donations.statistics.overview")}
         </h3>
@@ -208,7 +208,7 @@ const StatisticsTab = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         {/* Coin Fulfillment */}
         <Card className="p-3">
-          <h4 className="font-semibold mb-4 flex items-center gap-2">
+          <h4 className=" mb-4 flex items-center gap-2">
             <Coins className="w-5 h-5 text-amber-600" />
             {t("donations.statistics.coinFulfillmentStatus")}
           </h4>
@@ -260,7 +260,7 @@ const StatisticsTab = () => {
 
         {/* Time-Based Statistics */}
         <Card className="p-3">
-          <h4 className="font-semibold mb-4 flex items-center gap-2">
+          <h4 className=" mb-4 flex items-center gap-2">
             <Calendar className="w-5 h-5 text-blue-600" />
             {t("donations.statistics.timeBasedDonations")}
           </h4>
@@ -327,7 +327,7 @@ const StatisticsTab = () => {
 
       {/* Payment Method Breakdown */}
       <Card className="p-3">
-        <h4 className="font-semibold mb-4 flex items-center gap-2">
+        <h4 className=" mb-4 flex items-center gap-2">
           <CreditCard className="w-5 h-5" />
           {t("donations.statistics.paymentMethodBreakdown")}
         </h4>
@@ -355,7 +355,7 @@ const StatisticsTab = () => {
 
       {/* Top Channels */}
       <Card className="p-3">
-        <h4 className="font-semibold mb-4 flex items-center gap-2">
+        <h4 className=" mb-4 flex items-center gap-2">
           <Target className="w-5 h-5 text-primary" />
           {t("donations.statistics.topChannels")}
         </h4>
@@ -368,7 +368,7 @@ const StatisticsTab = () => {
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex-1">
-                  <h5 className="font-semibold">{channel.name}</h5>
+                  <h5 className="">{channel.name}</h5>
                   <div className="flex items-center gap-3 mt-1">
                     <Badge variant="secondary">
                       <Users className="w-3 h-3 mr-1" />
@@ -426,7 +426,7 @@ const StatisticsTab = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         {/* Top Donors */}
         <Card className="p-3">
-          <h4 className="font-semibold mb-4 flex items-center gap-2">
+          <h4 className=" mb-4 flex items-center gap-2">
             <Award className="w-5 h-5 text-amber-600" />
             {t("donations.statistics.topDonors")}
           </h4>
@@ -466,7 +466,7 @@ const StatisticsTab = () => {
 
         {/* Recent Donations */}
         <Card className="p-3">
-          <h4 className="font-semibold mb-4 flex items-center gap-2">
+          <h4 className=" mb-4 flex items-center gap-2">
             <Clock className="w-5 h-5 text-blue-600" />
             {t("donations.statistics.recentDonations")}
           </h4>
@@ -507,7 +507,7 @@ const StatisticsTab = () => {
 
       {/* Daily Trend */}
       <Card className="p-3">
-        <h4 className="font-semibold mb-4 flex items-center gap-2">
+        <h4 className=" mb-4 flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-primary" />
           {t("donations.statistics.dailyTrend")}
         </h4>

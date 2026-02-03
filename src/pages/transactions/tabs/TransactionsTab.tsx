@@ -170,7 +170,7 @@ const TransactionsTab = () => {
       label: t("transactions.columns.amount"),
       render: (transaction) => (
         <div className="flex items-center gap-1 w-[100px]">
-          <span className="font-semibold text-primary">
+          <span className=" text-primary">
             {transaction?.currency}{" "}
             {formatNumberWithCommas(transaction?.amount)}
           </span>

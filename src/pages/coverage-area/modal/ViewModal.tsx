@@ -137,7 +137,7 @@ export default function ViewModal({
 
         {/* Location Details */}
         <div className="space-y-4">
-          <h4 className="font-semibold flex items-center gap-2">
+          <h4 className=" flex items-center gap-2">
             <MapPin className="h-4 w-4" />
             {t("coverage_area.view.locationInformation")}
           </h4>
@@ -163,7 +163,7 @@ export default function ViewModal({
         {area?.addresses && area.addresses.length > 0 && (
           <>
             <div>
-              <h4 className="mb-3 font-semibold flex items-center gap-2">
+              <h4 className="mb-3  flex items-center gap-2">
                 <Home className="h-4 w-4" />
                 {t("coverage_area.view.addresses")} ({area.addresses.length})
               </h4>
@@ -176,7 +176,7 @@ export default function ViewModal({
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h5 className="font-semibold">{address.house}</h5>
+                          <h5 className="">{address.house}</h5>
                           {address.is_default && (
                             <Badge variant="default" className="text-xs">
                               {t("coverage_area.view.default")}

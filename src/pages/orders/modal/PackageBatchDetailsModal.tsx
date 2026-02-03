@@ -32,6 +32,7 @@ import { DeleteModal } from "@/components/modals";
 import { toast } from "@/components/ui/sonner";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import ViewModal from "./ViewModal";
 
 interface PackageBatchDetailsModalProps {
   open: boolean;
@@ -55,6 +56,7 @@ export default function PackageBatchDetailsModal({
   const [showPauseModal, setShowPauseModal] = useState(false);
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showMarkAsPaidModal, setShowMarkAsPaidModal] = useState(false);
   const [isPaiding, setIsPaiding] = useState(false);
   const [markAsPaidNote, setMarkAsPaidNote] = useState("");
@@ -86,6 +88,11 @@ export default function PackageBatchDetailsModal({
     setSelectedOrder(order);
     setShowSetDateModal(true);
   };
+
+  const handleView = (order: PackageOrder) => {
+    setSelectedOrder(order);
+    setShowDetailsModal(true);
+  }
 
   const handleModifyItems = (order: PackageOrder) => {
     setSelectedOrder(order);
@@ -152,6 +159,12 @@ export default function PackageBatchDetailsModal({
 
   // Define actions for dropdown menu
   const orderActions = (order: PackageOrder): ActionItem<PackageOrder>[] => [
+    {
+      label: t("orders.actions.viewDetails"),
+      icon: Edit,
+      onClick: handleView,
+      show: true,
+    },
     {
       label: t("orders.actions.edit"),
       icon: Edit,
@@ -413,6 +426,15 @@ export default function PackageBatchDetailsModal({
             orderId={selectedOrder.id}
             orderNumber={selectedOrder.orderId}
             onSuccess={handleSuccess}
+          />
+
+          <ViewModal
+            open={showDetailsModal}
+            onClose={() => {
+              setShowDetailsModal(false);
+              setSelectedOrder(null);
+            }}
+            orderId={selectedOrder.id}
           />
 
           <DeleteModal

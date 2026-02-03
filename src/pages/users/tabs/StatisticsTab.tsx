@@ -84,7 +84,7 @@ const StatisticsTab = () => {
     <div className="p-3 space-y-3">
       {/* Overview Section */}
       <div>
-        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <h3 className="text-lg  mb-4 flex items-center gap-2">
           <TrendingUp className="w-5 h-5" />
           {t("users.statistics.overview")}
         </h3>
@@ -122,9 +122,9 @@ const StatisticsTab = () => {
                 <p className="text-xs text-muted-foreground mt-1">
                   {statistics.total_users > 0
                     ? `${(
-                        (statistics.active_users / statistics.total_users) *
-                        100
-                      ).toFixed(1)}% ${t("users.statistics.ofTotal")}`
+                      (statistics.active_users / statistics.total_users) *
+                      100
+                    ).toFixed(1)}% ${t("users.statistics.ofTotal")}`
                     : "0%"}
                 </p>
               </div>
@@ -147,9 +147,9 @@ const StatisticsTab = () => {
                 <p className="text-xs text-muted-foreground mt-1">
                   {statistics.total_users > 0
                     ? `${(
-                        (statistics.inactive_users / statistics.total_users) *
-                        100
-                      ).toFixed(1)}% ${t("users.statistics.ofTotal")}`
+                      (statistics.inactive_users / statistics.total_users) *
+                      100
+                    ).toFixed(1)}% ${t("users.statistics.ofTotal")}`
                     : "0%"}
                 </p>
               </div>
@@ -184,7 +184,7 @@ const StatisticsTab = () => {
       {/* Verification Status */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         <Card className="p-3">
-          <h4 className="font-semibold mb-4 flex items-center gap-2">
+          <h4 className=" mb-4 flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-green-600" />
             {t("users.statistics.verificationStatus")}
           </h4>
@@ -212,7 +212,7 @@ const StatisticsTab = () => {
                 <span className="text-sm text-muted-foreground">
                   {t("users.statistics.verificationRate")}
                 </span>
-                <span className="text-sm font-semibold text-green-600">
+                <span className="text-sm  text-green-600">
                   {verificationPercentage.toFixed(1)}%
                 </span>
               </div>
@@ -228,7 +228,7 @@ const StatisticsTab = () => {
 
         {/* User Account Status Summary */}
         <Card className="p-3">
-          <h4 className="font-semibold mb-4 flex items-center gap-2">
+          <h4 className=" mb-4 flex items-center gap-2">
             <Award className="w-5 h-5 text-primary" />
             {t("users.statistics.accountStatusSummary")}
           </h4>
@@ -295,7 +295,7 @@ const StatisticsTab = () => {
 
       {/* Users by Role */}
       <Card className="p-3">
-        <h4 className="font-semibold mb-4 flex items-center gap-2">
+        <h4 className=" mb-4 flex items-center gap-2">
           <ShieldAlert className="w-5 h-5 text-primary" />
           {t("users.statistics.usersByRole")}
         </h4>
@@ -318,7 +318,7 @@ const StatisticsTab = () => {
                       <ShieldCheck className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <p className="font-semibold capitalize">
+                      <p className=" capitalize">
                         {roleData.role.name.replace(/_/g, " ")}
                       </p>
                       <p className="text-xs text-muted-foreground">

@@ -49,7 +49,7 @@ export default function QuantityUpdateModal({
         <div className="bg-muted p-4 rounded-lg space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium">Current Quantity:</span>
-            <span className="text-lg font-semibold">{oldQuantity}</span>
+            <span className="text-lg ">{oldQuantity}</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium">New Quantity:</span>

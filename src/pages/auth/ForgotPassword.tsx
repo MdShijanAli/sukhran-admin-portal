@@ -44,7 +44,7 @@ export default function ForgotPassword() {
           : null;
       toast.error(
         apiError?.response?.data?.error_message ||
-          "Failed to send verification code",
+        "Failed to send verification code",
       );
     } finally {
       setLoading(false);
@@ -237,7 +237,7 @@ export default function ForgotPassword() {
                         value={digit}
                         onChange={(e) => handleOtpChange(index, e.target.value)}
                         onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                        className="w-12 h-12 text-center text-lg font-semibold"
+                        className="w-12 h-12 text-center text-lg "
                         required
                       />
                     ))}
@@ -314,20 +314,20 @@ export default function ForgotPassword() {
                         await authService.forgotPasswordOtpSent(mobile);
                       toast.success(
                         response.message ||
-                          "Verification code resent successfully!",
+                        "Verification code resent successfully!",
                       );
                     } catch (error: unknown) {
                       const apiError =
                         error &&
-                        typeof error === "object" &&
-                        "response" in error
+                          typeof error === "object" &&
+                          "response" in error
                           ? (error as {
-                              response?: { data?: { error_message?: string } };
-                            })
+                            response?: { data?: { error_message?: string } };
+                          })
                           : null;
                       toast.error(
                         apiError?.response?.data?.error_message ||
-                          "Failed to resend code",
+                        "Failed to resend code",
                       );
                     } finally {
                       setResending(false);
