@@ -93,6 +93,7 @@ interface OrderService extends ApiService<Order> {
     id: number | string,
     data: unknown,
   ) => Promise<unknown>;
+  fetchPackageSingleOrderDetails: (orderId: string) => Promise<unknown>;
 }
 
 const orderService: OrderService = {
@@ -106,6 +107,18 @@ const orderService: OrderService = {
       return response.data;
     } catch (error) {
       console.error("Error fetching orders statistics:", error);
+      throw error;
+    }
+  },
+
+  fetchPackageSingleOrderDetails: async (orderId: string) => {
+    try {
+      const response = await apiClient.get(
+        apiRoutes.orders.packageOrderById(orderId),
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching package single order details:", error);
       throw error;
     }
   },

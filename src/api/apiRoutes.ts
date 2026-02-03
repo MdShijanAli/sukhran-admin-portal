@@ -124,6 +124,8 @@ export const apiRoutes = {
   orders: {
     getAll: createApiUrl("admin/orders"),
     getById: (id: number | string) => createApiUrl(`admin/orders/${id}`),
+    packageOrderById: (orderId: string) =>
+      createApiUrl(`admin/orders/package-orders/${orderId}`),
     update: (id: number | string) => createApiUrl(`admin/orders/${id}`),
     delete: (id: number | string) => createApiUrl(`admin/orders/${id}`),
     create: createApiUrl("admin/orders"),

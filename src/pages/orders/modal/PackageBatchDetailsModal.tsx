@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { PackageBatchDetails, PackageOrder } from "@/lib/types";
-import { Calendar, Pause, Edit, Trash2, CheckCircle } from "lucide-react";
+import { Calendar, Pause, Edit, Trash2, CheckCircle, Eye } from "lucide-react";
 import orderService from "@/services/orderService";
 import { formatNumberWithCommas } from "@/lib/utils";
 import SetDeliveryDateModal from "./SetDeliveryDateModal";
@@ -33,6 +33,7 @@ import { toast } from "@/components/ui/sonner";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import ViewModal from "./ViewModal";
+import ViewPackageSingleOrderModal from "./ViewPackageSingleOrderdetails";
 
 interface PackageBatchDetailsModalProps {
   open: boolean;
@@ -161,7 +162,7 @@ export default function PackageBatchDetailsModal({
   const orderActions = (order: PackageOrder): ActionItem<PackageOrder>[] => [
     {
       label: t("orders.actions.viewDetails"),
-      icon: Edit,
+      icon: Eye,
       onClick: handleView,
       show: true,
     },
@@ -428,13 +429,13 @@ export default function PackageBatchDetailsModal({
             onSuccess={handleSuccess}
           />
 
-          <ViewModal
+          <ViewPackageSingleOrderModal
             open={showDetailsModal}
             onClose={() => {
               setShowDetailsModal(false);
               setSelectedOrder(null);
             }}
-            orderId={selectedOrder.id}
+            orderId={selectedOrder.orderId}
           />
 
           <DeleteModal
