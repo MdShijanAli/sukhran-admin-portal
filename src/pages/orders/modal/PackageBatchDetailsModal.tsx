@@ -29,11 +29,11 @@ import usePermissions from "@/hooks/use-permissions";
 import permissions from "@/lib/permissions";
 import StatusView from "@/components/custom/StatusView";
 import { DeleteModal } from "@/components/modals";
-import { toast } from "@/components/ui/sonner";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import ViewModal from "./ViewModal";
 import ViewPackageSingleOrderModal from "./ViewPackageSingleOrderdetails";
+import { toast } from "sonner";
 
 interface PackageBatchDetailsModalProps {
   open: boolean;
