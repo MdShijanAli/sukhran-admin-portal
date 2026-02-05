@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -383,16 +383,16 @@ export default function PackageForm() {
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex-1">
-              <h1 className="text-3xl  ">
+              <CardTitle>
                 {isEditMode
                   ? t("packages.form.editPackage")
                   : t("packages.form.createNewPackage")}
-              </h1>
-              <p className="text-muted-foreground mt-1">
+              </CardTitle>
+              <CardDescription className="mt-1">
                 {isEditMode
                   ? t("packages.form.updatePackageDetails")
                   : t("packages.form.fillPackageDetails")}
-              </p>
+              </CardDescription>
             </div>
             <div className="flex gap-2">
               <Button

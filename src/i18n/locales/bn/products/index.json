@@ -21,6 +21,8 @@
   "form": {
     "productInfo": "পণ্যের তথ্য",
     "productDetails": "পণ্যের বিবরণ লিখুন",
+    "updateProductDetails": "পণ্যের বিবরণ আপডেট করুন",
+    "fillProductDetails": "পণ্যের বিবরণ পূরণ করুন",
     "createProduct": "পণ্য তৈরি করুন",
     "editProduct": "পণ্য সম্পাদনা করুন",
     "updateProduct": "পণ্য আপডেট করুন",

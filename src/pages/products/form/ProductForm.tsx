@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Loader2, Plus, Trash2, Undo2, X, Copy } from "lucide-react";
+import { Loader2, Plus, Trash2, X, Copy, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import productService from "@/services/productService";
 import categoryService from "@/services/categoryService";
@@ -469,18 +469,49 @@ export default function ProductForm() {
           </CardContent>
         </Card>
       ) : (
-        <form onSubmit={handleSubmit} className="mb-5">
+        <form onSubmit={handleSubmit} className="mb-5" id="product-form">
           <Card>
             <CardHeader>
-              <p className="text-sm flex justify-between items-center">
-                {isEditMode
-                  ? t("products.form.editProduct")
-                  : t("products.form.productInfo")}
-                <Button onClick={() => navigate("/products")}>
-                  <Undo2 />
-                  {t("products.backToProducts")}
+              <div className="flex items-center gap-4 mb-6">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => navigate("/products")}
+                >
+                  <ArrowLeft className="h-5 w-5" />
                 </Button>
-              </p>
+                <div className="flex-1">
+                  <CardTitle>
+                    {isEditMode
+                      ? t("products.form.editProduct")
+                      : t("products.form.productInfo")}
+                  </CardTitle>
+                  <CardDescription>
+                    {isEditMode
+                      ? t("products.form.updateProductDetails")
+                      : t("products.form.fillProductDetails")}
+                  </CardDescription>
+                </div>
+                {/* Action Buttons */}
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => navigate("/products")}
+                    disabled={isSubmitting}
+                  >
+                    {t("cancel")}
+                  </Button>
+                  <Button type="submit" form="product-form" disabled={isSubmitting}>
+                    {isSubmitting
+                      ? t("loading")
+                      : isEditMode
+                        ? t("products.form.updateProduct")
+                        : t("products.form.createProduct")}
+                  </Button>
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
@@ -995,25 +1026,6 @@ export default function ProductForm() {
               ))}
             </CardContent>
           </Card>
-
-          {/* Action Buttons */}
-          <div className="flex justify-end gap-2 my-5">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => navigate("/products")}
-              disabled={isSubmitting}
-            >
-              {t("cancel")}
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting
-                ? t("loading")
-                : isEditMode
-                  ? t("products.form.updateProduct")
-                  : t("products.form.createProduct")}
-            </Button>
-          </div>
         </form>
       )}
     </div>

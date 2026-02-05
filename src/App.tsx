@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Toaster, toast } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
@@ -9,6 +9,7 @@ import AppRoutes from "@/routes/index.tsx";
 import "@/i18n/config";
 import { loadLanguageResources } from "@/i18n/config";
 import authService from "./services/authService";
+import { toast } from "sonner";
 
 const queryClient = new QueryClient();
 
@@ -58,9 +59,9 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster position="bottom-right" richColors />
         <BrowserRouter>
           <AppRoutes />
+          <Toaster position="bottom-right" richColors />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
