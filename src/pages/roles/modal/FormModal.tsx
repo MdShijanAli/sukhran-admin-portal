@@ -342,7 +342,7 @@ export default function FormModal({
                 <p className="text-sm text-muted-foreground text-center py-8">
                   {searchQuery
                     ? t("roles.form.noMatchingPermissions") ||
-                      "No matching permissions found"
+                    "No matching permissions found"
                     : t("roles.form.noPermissionsAvailable")}
                 </p>
               )}
@@ -370,7 +370,7 @@ export default function FormModal({
                         </div>
                         <AccordionTrigger className="flex-1 px-0 py-3 hover:bg-muted/50 hover:no-underline">
                           <div className="flex items-center justify-between w-full pr-4">
-                            <span className="font-medium capitalize">
+                            <span className=" capitalize">
                               {module.module}
                             </span>
                             <Badge variant="outline" className="text-xs">
@@ -398,7 +398,7 @@ export default function FormModal({
                               <div className="flex-1">
                                 <Label
                                   htmlFor={`permission-${permission.id}`}
-                                  className="font-medium cursor-pointer text-sm"
+                                  className=" cursor-pointer text-sm"
                                 >
                                   {permission.display_name}
                                 </Label>
