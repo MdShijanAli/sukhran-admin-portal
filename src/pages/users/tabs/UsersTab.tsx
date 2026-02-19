@@ -289,7 +289,7 @@ const UsersTab = () => {
             </div>
           ) : (
             <div className="flex items-center justify-end gap-2">
-              {user?.role?.name !== constData.roles.ADMIN ? (
+              {user?.role?.name !== constData.roles.SUPER_ADMIN ? (
                 <>
                   {hasPermission(permissions.users.delete) && (
                     <Switch
