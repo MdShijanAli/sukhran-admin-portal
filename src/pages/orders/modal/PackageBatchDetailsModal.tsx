@@ -194,10 +194,10 @@ export default function PackageBatchDetailsModal({
       separator: true, // Show separator after this item
     },
     {
-      label: t("orders.actions.deleteOrder"),
+      label: t("orders.actions.cancelOrder"),
       icon: Trash2,
       onClick: handleCancel,
-      show: hasPermission(permissions.orders.delete) && order.payment_status !== 'paid',
+      show: hasPermission(permissions.orders.delete) && order.payment_status !== 'cancelled',
       variant: "destructive",
       separator: true,
     },
