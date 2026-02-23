@@ -57,10 +57,10 @@ export default function ResolveTicketModal({
       <div className="space-y-4">
         <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
           <p className="text-sm text-blue-900 dark:text-blue-100">
-            <span className="font-semibold">Ticket:</span> {ticket.ticketNumber}
+            <span className="">Ticket:</span> {ticket.ticketNumber}
           </p>
           <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-            <span className="font-semibold">Subject:</span> {ticket.subject}
+            <span className="">Subject:</span> {ticket.subject}
           </p>
         </div>
 

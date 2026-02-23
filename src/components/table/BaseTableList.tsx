@@ -66,6 +66,7 @@ export interface StoreWithData<T> {
   referrals?: T[];
   banners?: T[];
   brands?: T[];
+  coinUsers?: T[];
   isLoading?: boolean;
   error?: string | null;
   pagination?: Pagination;
@@ -173,6 +174,7 @@ export function BaseTableList<T>({
 
   // Get data from store
   const data = (store.items ||
+    store.coinUsers ||
     store.categories ||
     store.orders ||
     store.products ||
@@ -242,12 +244,16 @@ export function BaseTableList<T>({
     },
     [
       serializedQueryParams,
+      filterValues,
       searchQuery,
       showPagination,
       currentPage,
       perPage,
       dateRange,
       filterValues,
+      filters,
+      localFilters,
+      queryParams,
     ],
   );
 
@@ -258,6 +264,7 @@ export function BaseTableList<T>({
       // Get fresh data from store at call time to avoid stale closures
       console.log("Store at fetch time:", store);
       const currentData = (store.items ||
+        store.coinUsers ||
         store.categories ||
         store.orders ||
         store.products ||
@@ -332,6 +339,7 @@ export function BaseTableList<T>({
       hasInitialFetch,
       isFirstRender,
       buildQueryString,
+      queryParams
     ],
   );
 

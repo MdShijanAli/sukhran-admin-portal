@@ -365,11 +365,10 @@ const Products = () => {
       <div>
         {isLoading ? (
           <div
-            className={`grid grid-cols-2 gap-3 ${
-              isCollapsed
+            className={`grid grid-cols-2 gap-3 ${isCollapsed
                 ? "2xl:grid-cols-6 xl:grid-cols-5 sm:grid-cols-3 lg:grid-cols-4"
                 : "2xl:grid-cols-5 xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3"
-            }`}
+              }`}
           >
             {Array.from({ length: 12 }).map((_, index) => (
               <Card key={index} className="overflow-hidden animate-pulse">
@@ -387,7 +386,7 @@ const Products = () => {
           <Card className="p-12">
             <div className="text-center">
               <Package className="mx-auto h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-4 text-lg font-semibold">
+              <h3 className="mt-4 text-lg ">
                 {t("products.noProductsFound")}
               </h3>
               <p className="text-muted-foreground mt-2">
@@ -404,11 +403,10 @@ const Products = () => {
           </Card>
         ) : (
           <div
-            className={`grid grid-cols-2 gap-3 ${
-              isCollapsed
+            className={`grid grid-cols-2 gap-3 ${isCollapsed
                 ? "2xl:grid-cols-6 xl:grid-cols-5 sm:grid-cols-3 lg:grid-cols-4"
                 : "2xl:grid-cols-5 xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3"
-            }`}
+              }`}
           >
             {products.map((product) => {
               const firstSku = product.skus?.[0];
@@ -476,7 +474,7 @@ const Products = () => {
                     {/* Product Info */}
                     <div className="p-2.5 space-y-2">
                       {/* Product Name */}
-                      <h3 className="font-semibold text-sm line-clamp-2 min-h-[2rem]">
+                      <h3 className=" text-sm line-clamp-2 min-h-[2rem]">
                         {product.name}
                       </h3>
 
@@ -520,7 +518,7 @@ const Products = () => {
                             </p>
                             {(displaySku as any).pricing?.originalPrice &&
                               (displaySku as any).pricing.originalPrice !==
-                                (displaySku as any).pricing.currentPrice && (
+                              (displaySku as any).pricing.currentPrice && (
                                 <p className="text-[10px] text-muted-foreground line-through">
                                   ৳
                                   {formatNumberWithCommas(

@@ -145,7 +145,7 @@ export default function ViewModal({
 
         {/* Discount Information */}
         <div className="space-y-4">
-          <h4 className="font-semibold flex items-center gap-2">
+          <h4 className="flex items-center gap-2">
             {coupon?.discount.type === "percentage" ? (
               <Percent className="h-4 w-4" />
             ) : (
@@ -158,7 +158,7 @@ export default function ViewModal({
               <p className="text-sm text-muted-foreground mb-1">
                 {t("coupon.view.discountType")}
               </p>
-              <p className="font-semibold capitalize">
+              <p className="capitalize">
                 {coupon?.discount.type === "percentage"
                   ? t("coupon.form.percentage")
                   : t("coupon.form.fixed")}
@@ -168,7 +168,7 @@ export default function ViewModal({
               <p className="text-sm text-muted-foreground mb-1">
                 {t("coupon.view.discountValue")}
               </p>
-              <p className="font-semibold">
+              <p className="">
                 {coupon?.discount.type === "percentage"
                   ? `${coupon.discount.value}%`
                   : `৳${coupon?.discount.value.toFixed(2)}`}
@@ -179,7 +179,7 @@ export default function ViewModal({
                 <p className="text-sm text-muted-foreground mb-1">
                   {t("coupon.view.maxDiscount")}
                 </p>
-                <p className="font-semibold">
+                <p className="">
                   ৳{coupon.discount.max_amount.toFixed(2)}
                 </p>
               </div>
@@ -191,7 +191,7 @@ export default function ViewModal({
 
         {/* Order Requirements */}
         <div className="space-y-4">
-          <h4 className="font-semibold flex items-center gap-2">
+          <h4 className="flex items-center gap-2">
             <ShoppingCart className="h-4 w-4" />
             {t("coupon.view.orderRequirements")}
           </h4>
@@ -199,7 +199,7 @@ export default function ViewModal({
             <p className="text-sm text-muted-foreground mb-1">
               {t("coupon.view.minOrderAmount")}
             </p>
-            <p className="text-xl font-semibold">
+            <p className="text-xl ">
               ৳{coupon?.min_order_amount.toFixed(2)}
             </p>
           </div>
@@ -209,7 +209,7 @@ export default function ViewModal({
 
         {/* Validity Period */}
         <div className="space-y-4">
-          <h4 className="font-semibold flex items-center gap-2">
+          <h4 className="flex items-center gap-2">
             <Calendar className="h-4 w-4" />
             {t("coupon.view.validityPeriod")}
           </h4>
@@ -233,7 +233,7 @@ export default function ViewModal({
 
         {/* Usage Statistics */}
         <div className="space-y-4">
-          <h4 className="font-semibold flex items-center gap-2">
+          <h4 className="flex items-center gap-2">
             <Users className="h-4 w-4" />
             {t("coupon.view.usageStatistics")}
           </h4>
@@ -280,7 +280,7 @@ export default function ViewModal({
 
         {/* Discount Given */}
         <div className="space-y-4">
-          <h4 className="font-semibold flex items-center gap-2">
+          <h4 className="flex items-center gap-2">
             <TrendingUp className="h-4 w-4" />
             {t("coupon.view.totalDiscountGiven")}
           </h4>

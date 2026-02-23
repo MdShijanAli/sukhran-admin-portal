@@ -20,7 +20,8 @@
     "returned": "ফেরত",
     "paused": "বন্ধ",
     "cancelled_at_delivery": "ডেলিভারিতে বাতিল",
-    "confirmed": "নিশ্চিত"
+    "confirmed": "নিশ্চিত",
+    "payment_status_changed": "পেমেন্ট স্ট্যাটাস পরিবর্তিত"
   },
   "paymentStatus": {
     "pending": "মুলতুবি",
@@ -39,6 +40,7 @@
     "sl": "ক্রমিক",
     "orderNumber": "অর্ডার #",
     "orderID": "অর্ডার আইডি",
+    "deliveryDate": "ডেলিভারির তারিখ",
     "customer": "গ্রাহক",
     "items": "আইটেম",
     "total": "মোট",
@@ -46,6 +48,7 @@
     "status": "স্ট্যাটাস",
     "paymentStatus": "পেমেন্ট স্ট্যাটাস",
     "date": "তারিখ",
+    "orderDate": "অর্ডারের তারিখ",
     "actions": "কার্যক্রম",
     "unassigned": "নির্ধারিত নয়"
   },
@@ -64,6 +67,8 @@
     "actions": "কার্যক্রম",
     "edit": "সম্পাদনা",
     "pauseOrder": "অর্ডার বন্ধ করুন",
+    "resumeOrder": "অর্ডার পুনরায় শুরু করুন",
+    "cancel": "অর্ডার বাতিল করুন",
     "setDeliveryDate": "ডেলিভারির তারিখ নির্ধারণ করুন",
     "modificationHistory": "পরিবর্তন ইতিহাস",
     "markAsPaidMessage": "আপনি কি নিশ্চিত যে আপনি অর্ডার",
@@ -122,7 +127,7 @@
     "title": "ডেলিভারি সময় আপডেট করুন",
     "deliveryFrom": "আনুমানিক ডেলিভারি শুরু",
     "deliveryTo": "আনুমানিক ডেলিভারি শেষ",
-    "reason": "কারণ (ঐচ্ছিক)",
+    "reason": "কারণ",
     "reasonPlaceholder": "এই ডেলিভারি সময় পরিবর্তনের জন্য একটি কারণ যোগ করুন (যেমন: আবহাওয়ার কারণে সরবরাহ চেইন বিলম্ব)"
   },
   "view": {
@@ -142,7 +147,10 @@
   },
   "messages": {
     "fillRequiredFields": "অনুগ্রহ করে সমস্ত আবশ্যক ফিল্ড পূরণ করুন",
+    "reasonRequired": "কারণ আবশ্যক",
     "itemDeleted": "আইটেম সফলভাবে মুছে ফেলা হয়েছে",
+    "notesRequired": "অনুগ্রহ করে নোট প্রদান করুন",
+    "orderMarkedAsPaid": "অর্ডার সফলভাবে পরিশোধিত হিসাবে চিহ্নিত হয়েছে",
     "failedToDeleteItem": "অর্ডার আইটেম মুছে ফেলতে ব্যর্থ",
     "addAtLeastOneItem": "অনুগ্রহ করে অর্ডারে কমপক্ষে একটি আইটেম যোগ করুন",
     "orderCreated": "অর্ডার সফলভাবে তৈরি হয়েছে",
@@ -242,6 +250,7 @@
   },
   "packageOrders": {
     "title": "প্যাকেজ অর্ডার",
+    "packageName": "প্যাকেজের নাম",
     "quantity": "পরিমাণ",
     "subtitle": "সাবস্ক্রিপশন প্যাকেজ অর্ডার পরিচালনা করুন",
     "batchId": "ব্যাচ আইডি",

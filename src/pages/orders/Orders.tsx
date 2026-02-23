@@ -148,9 +148,10 @@ function Orders() {
       label: t("orders.actions.editOrder"),
       icon: Edit,
       onClick: handleEdit,
-      show:
-        hasPermission(permissions.orders.edit) &&
-        (order.status === "pending" || order.status === "approved"),
+      show: false,
+      // show:
+      //   hasPermission(permissions.orders.edit) &&
+      //   (order.status === "pending" || order.status === "approved" && order.paymentStatus !== "paid"),
     },
     {
       label: t("orders.actions.updateStatus"),
@@ -165,7 +166,7 @@ function Orders() {
       show:
         hasPermission(permissions.orders.edit) &&
         order.status !== "delivered" &&
-        order.status !== "cancelled",
+        order.status !== "cancelled" && order.paymentStatus !== "paid",
       separator: true, // Show separator after this item
     },
     {
@@ -189,7 +190,6 @@ function Orders() {
       icon: CheckCircle,
       onClick: handleMarkAsPaidOrder,
       show:
-        !import.meta.env.PROD &&
         hasPermission(permissions.orders.edit) &&
         order.paymentMode === "cod" &&
         order.paymentStatus !== "paid",
@@ -272,10 +272,28 @@ function Orders() {
     },
     {
       key: "date",
-      label: t("orders.columns.date"),
+      label: t("orders.columns.orderDate"),
       render: (order) => (
         <div className="w-[100px]">
           <span className="text-sm">{order.created_at}</span>
+        </div>
+      ),
+    },
+    {
+      key: "delivery_date",
+      label: t("orders.columns.deliveryDate"),
+      render: (order) => (
+        <div className="flex flex-col gap-1 min-w-[140px]">
+          <div className="flex items-center gap-1.5">
+            <Clock className="h-3 w-3 text-muted-foreground" />
+            <span className="text-xs font-medium text-muted-foreground">From:</span>
+            <span className="text-xs">{order.estimatedDelivery.fromFormatted}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Clock className="h-3 w-3 text-muted-foreground" />
+            <span className="text-xs font-medium text-muted-foreground">To:</span>
+            <span className="text-xs">{order.estimatedDelivery.toFormatted}</span>
+          </div>
         </div>
       ),
     },
@@ -473,9 +491,8 @@ function Orders() {
         open={showDelete}
         onClose={setShowDelete}
         title={t("orders.delete.title")}
-        description={`${t("orders.delete.message")} ${
-          selectedOrder?.orderId
-        }? ${t("orders.delete.cannotUndo")}`}
+        description={`${t("orders.delete.message")} ${selectedOrder?.orderId
+          }? ${t("orders.delete.cannotUndo")}`}
         onConfirm={handleDeleteOrder}
         isDeleting={isDeleting}
       />
@@ -488,9 +505,8 @@ function Orders() {
           setMarkAsPaidNote("");
         }}
         title={t("orders.actions.markAsPaid")}
-        description={`${t("orders.actions.markAsPaidMessage")} ${
-          selectedOrder?.orderId
-        }? ${t("orders.delete.cannotUndo")}`}
+        description={`${t("orders.actions.markAsPaidMessage")} ${selectedOrder?.orderId
+          }? ${t("orders.delete.cannotUndo")}`}
         onConfirm={() => handleMarkAsPaid(selectedOrder!)}
         submitButtonText={t("orders.actions.receivePayment")}
         submitButtonVariant="default"
@@ -526,7 +542,7 @@ function Orders() {
       <UpdateDeliveryTimeModal
         open={showUpdateDeliveryTimeModal}
         onClose={setShowUpdateDeliveryTimeModal}
-        orderId={selectedOrder?.orderId || null}
+        order={selectedOrder}
         onSuccess={() => refreshTable?.()}
       />
 

@@ -125,7 +125,7 @@ export default function ViewDonationModal({
 
           {/* Donor Information */}
           <Card className="p-4">
-            <h4 className="font-semibold text-sm text-primary mb-3 flex items-center gap-2">
+            <h4 className=" text-sm text-primary mb-3 flex items-center gap-2">
               <User className="w-4 h-4" />
               {t("donations.donations.view.donorInfo")}
             </h4>
@@ -150,7 +150,7 @@ export default function ViewDonationModal({
                     <User className="w-6 h-6 text-primary" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-semibold text-lg">
+                    <p className=" text-lg">
                       {donation.donor.name}
                     </p>
                     <p className="text-xs text-muted-foreground">Donor</p>
@@ -182,12 +182,12 @@ export default function ViewDonationModal({
 
           {/* Channel Information */}
           <Card className="p-4">
-            <h4 className="font-semibold text-sm text-primary mb-3 flex items-center gap-2">
+            <h4 className=" text-sm text-primary mb-3 flex items-center gap-2">
               <MapPin className="w-4 h-4" />
               {t("donations.donations.view.channelInfo")}
             </h4>
             <div className="p-3 border rounded-lg bg-muted/30">
-              <p className="font-semibold text-lg mb-1">
+              <p className=" text-lg mb-1">
                 {donation.channel.name}
               </p>
               {donation.channel.description && (
@@ -201,7 +201,7 @@ export default function ViewDonationModal({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* Payment Information */}
             <Card className="p-4">
-              <h4 className="font-semibold text-sm text-primary mb-3 flex items-center gap-2">
+              <h4 className=" text-sm text-primary mb-3 flex items-center gap-2">
                 <CreditCard className="w-4 h-4" />
                 {t("donations.donations.view.paymentInfo")}
               </h4>
@@ -234,7 +234,7 @@ export default function ViewDonationModal({
             {/* Order Information */}
             {donation.order && (
               <Card className="p-4">
-                <h4 className="font-semibold text-sm text-primary mb-3 flex items-center gap-2">
+                <h4 className=" text-sm text-primary mb-3 flex items-center gap-2">
                   <ShoppingBag className="w-4 h-4" />
                   Order Information
                 </h4>
@@ -272,7 +272,7 @@ export default function ViewDonationModal({
 
           {/* Additional Information */}
           <Card className="p-4">
-            <h4 className="font-semibold text-sm text-primary mb-3 flex items-center gap-2">
+            <h4 className=" text-sm text-primary mb-3 flex items-center gap-2">
               <Calendar className="w-4 h-4" />
               {t("donations.donations.view.additionalInfo")}
             </h4>
@@ -281,7 +281,7 @@ export default function ViewDonationModal({
                 <div className="p-3 border rounded-lg bg-amber-50 dark:bg-amber-950">
                   <div className="flex items-start gap-2 mb-2">
                     <MessageSquare className="w-4 h-4 text-amber-600 mt-0.5" />
-                    <p className="text-xs font-semibold text-amber-600">
+                    <p className="text-xs  text-amber-600">
                       {t("donations.donations.view.donorMessage")}
                     </p>
                   </div>

@@ -210,7 +210,7 @@ const ReportStatistics = ({ data }: ReportStatisticsProps) => {
       <div className="flex items-center justify-center p-12">
         <div className="text-center">
           <BarChart3 className="mx-auto h-12 w-12 text-muted-foreground" />
-          <h3 className="mt-4 text-lg font-semibold">
+          <h3 className="mt-4 text-lg ">
             {t("reports.statistics.noStatistics")}
           </h3>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -251,7 +251,7 @@ const ReportStatistics = ({ data }: ReportStatisticsProps) => {
 
     return (
       <div key={title} className="space-y-3">
-        <h3 className="text-lg font-semibold">{title}</h3>
+        <h3 className="text-lg ">{title}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {fields.map(([key, value]) => renderStatCard(key, value))}
         </div>

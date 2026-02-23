@@ -196,7 +196,7 @@ export default function RefundModal({
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
             {t("transactions.refund.alertMessage")}{" "}
-            <span className="font-semibold">
+            <span className="">
               {transactionAmount.toLocaleString()} BDT
             </span>
           </AlertDescription>
@@ -224,7 +224,7 @@ export default function RefundModal({
           </div>
           <p className="text-xs text-muted-foreground">
             {t("transactions.refund.maxAmount")}:{" "}
-            <span className="font-semibold">
+            <span className="">
               {transactionAmount.toLocaleString()} BDT
             </span>
           </p>
@@ -376,7 +376,7 @@ export default function RefundModal({
 
         {/* Summary */}
         <div className="bg-primary/5 rounded-lg p-4 space-y-2">
-          <h4 className="font-semibold text-sm">
+          <h4 className=" text-sm">
             {t("transactions.refund.summary")}
           </h4>
           <div className="space-y-1">

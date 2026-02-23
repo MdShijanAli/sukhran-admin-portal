@@ -185,7 +185,7 @@ export default function ChannelFormModal({
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <Upload className="w-10 h-10 mb-3 text-gray-400" />
                   <p className="mb-2 text-sm text-gray-500">
-                    <span className="font-semibold">
+                    <span className="">
                       {t("donations.channels.form.selectImage")}
                     </span>
                   </p>

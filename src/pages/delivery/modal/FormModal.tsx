@@ -155,7 +155,7 @@ export default function FormModal({
       <div className="grid gap-4">
         {/* Order Information */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold border-b pb-2">
+          <h3 className="text-sm  border-b pb-2">
             {t("delivery.form.orderInfo")}
           </h3>
           <div className="grid grid-cols-2 gap-4">
@@ -191,7 +191,7 @@ export default function FormModal({
 
         {/* Customer Information */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold border-b pb-2">
+          <h3 className="text-sm  border-b pb-2">
             {t("delivery.form.customerInfo")}
           </h3>
           <div className="grid grid-cols-2 gap-4">
@@ -244,7 +244,7 @@ export default function FormModal({
 
         {/* Driver Information */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold border-b pb-2">
+          <h3 className="text-sm  border-b pb-2">
             {t("delivery.form.driverInfo")}
           </h3>
           <div className="grid grid-cols-3 gap-4">

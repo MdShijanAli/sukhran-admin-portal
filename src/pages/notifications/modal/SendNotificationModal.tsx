@@ -319,6 +319,7 @@ export default function SendNotificationModal({
               store={packageStore}
               storeDataKey="packages"
               enableApiSearch={true}
+              additionalParams={{ packageType: "admin" }}
               value={formData.package_id}
               onValueChange={(value) =>
                 setFormData((prev) => ({

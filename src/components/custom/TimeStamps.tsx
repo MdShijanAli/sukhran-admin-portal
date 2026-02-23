@@ -19,7 +19,7 @@ const TimeStaps: React.FC<TimeStapsProps> = ({ item, className }) => {
             <Calendar className="h-4 w-4" />
             <span className="text-xs font-medium">{t("created")}</span>
           </div>
-          <p className="text-sm font-semibold">
+          <p className="text-sm ">
             {new Date(item?.created_at).toLocaleDateString("en-US", {
               year: "numeric",
               month: "short",
@@ -40,7 +40,7 @@ const TimeStaps: React.FC<TimeStapsProps> = ({ item, className }) => {
             <Calendar className="h-4 w-4" />
             <span className="text-xs font-medium">{t("lastUpdated")}</span>
           </div>
-          <p className="text-sm font-semibold">
+          <p className="text-sm ">
             {new Date(item?.updated_at).toLocaleDateString("en-US", {
               year: "numeric",
               month: "short",

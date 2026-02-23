@@ -338,7 +338,7 @@ export default function SubscriptionTab() {
             <Label className="font-medium">
               {t("settings.subscription.cancellation.noticeDays")}
             </Label>
-            <span className="font-semibold">
+            <span className="">
               {cancellationDays}{" "}
               {t("settings.subscription.durationOptions.days", {
                 defaultValue: "days",

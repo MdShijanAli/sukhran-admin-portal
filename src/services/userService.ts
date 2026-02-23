@@ -6,16 +6,19 @@ import apiClient from "@/api/apiClient";
 // Create base API service with all CRUD operations
 const apiService = createApiService<User>(
   apiRoutes.users,
-  useUserStore.getState()
+  useUserStore.getState(),
 );
 
-interface UserService extends ApiService<User> {
+interface UserService extends Omit<ApiService<User>, "statistics"> {
   toggleUserStatus: (id: number | string) => Promise<unknown>;
   getUsersStatistics: () => Promise<unknown>;
   resetUserPassword: (id: number | string) => Promise<unknown>;
   restoreUser: (id: number | string) => Promise<unknown>;
   statistics: () => Promise<unknown>;
-  forceDeleteUser: (id: number | string) => Promise<unknown>;
+  forceDeleteUser: (
+    id: number | string,
+    body: { confirmation: string; reason: string },
+  ) => Promise<unknown>;
 }
 
 const userService: UserService = {
@@ -26,7 +29,7 @@ const userService: UserService = {
   toggleUserStatus: async (id: number | string): Promise<User> => {
     try {
       const response = await apiClient.patch(
-        apiRoutes.users.toggleUserStatus(id)
+        apiRoutes.users.toggleUserStatus(id),
       );
       console.log("Toggle active status response:", response.data);
       if (response && response.status === 200) {
@@ -52,7 +55,7 @@ const userService: UserService = {
   resetUserPassword: async (id: number | string) => {
     try {
       const response = await apiClient.post(
-        apiRoutes.users.resetUserPassword(id)
+        apiRoutes.users.resetUserPassword(id),
       );
       return response.data;
     } catch (error) {
@@ -73,12 +76,12 @@ const userService: UserService = {
 
   forceDeleteUser: async (
     id: number | string,
-    body?: { confirmation: string; reason: string }
+    body?: { confirmation: string; reason: string },
   ) => {
     try {
       const response = await apiClient.delete(
         apiRoutes.users.forceDeleteUser(id),
-        { data: body }
+        { data: body },
       );
       return response.data;
     } catch (error) {

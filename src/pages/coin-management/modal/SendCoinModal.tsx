@@ -4,60 +4,38 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { SendCoinPayload, TopHolder, User } from "@/lib/types";
+import { CoinUser, SendCoinPayload } from "@/lib/types";
 import coinService from "@/services/coinService";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
-import { Coins } from "lucide-react";
+import { Coins, User2 } from "lucide-react";
 import { formatNumberWithCommas } from "@/lib/utils";
 import userService from "@/services/userService";
+import { ComboboxSelect } from "@/components/custom/ComboboxSelect";
+import { useUserStore, User } from "@/stores/userStore";
 
 interface SendCoinModalProps {
   open: boolean;
   onClose: () => void;
   onSuccess?: () => void;
-  selectedUser: TopHolder | null;
+  selectedUser: CoinUser | null;
 }
 
 export default function SendCoinModal({
   open,
   onClose,
   onSuccess,
-  selectedUser,
+  selectedUser
 }: SendCoinModalProps) {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [reasonError, setReasonError] = useState<string>("");
   const [formData, setFormData] = useState<SendCoinPayload>({
-    user_id: selectedUser?.user.id || 0,
+    user_id: selectedUser?.user_id || 0,
     amount: 0,
     reason: "",
   });
-
-  const [customerLists, setCustomerLists] = useState<User[]>([]);
-
-  useEffect(() => {
-    const queryString = new URLSearchParams({
-      role_id: "1",
-    }).toString();
-    const fetchCustomers = async () => {
-      try {
-        const response = await userService.fetchLists(queryString);
-        console.log("Customer Lists:", response.data);
-        setCustomerLists(response.data);
-      } catch (error) {
-        console.error("Error fetching customer lists:", error);
-      }
-    };
-    fetchCustomers();
-  }, []);
+  const userstore = useUserStore()
 
   const handleSubmit = async () => {
     // Validate required fields
@@ -87,7 +65,7 @@ export default function SendCoinModal({
       toast.error(
         t(
           error.response.data.error_message ||
-            "coinManagement.messages.coinsSentError",
+          "coinManagement.messages.coinsSentError",
         ),
       );
     } finally {
@@ -100,7 +78,7 @@ export default function SendCoinModal({
       if (selectedUser) {
         // Pre-selected user mode
         setFormData({
-          user_id: selectedUser.user.id,
+          user_id: selectedUser.user_id,
           amount: 0,
           reason: "",
         });
@@ -147,11 +125,11 @@ export default function SendCoinModal({
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-semibold text-base">
-                      {selectedUser.user.name}
+                    <p className=" text-base">
+                      {selectedUser.name}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {selectedUser.user.email}
+                      {selectedUser.email}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 bg-background px-3 py-1.5 rounded-md border">
@@ -163,7 +141,7 @@ export default function SendCoinModal({
                         )}
                       </p>
                       <p className=" text-amber-600">
-                        {formatNumberWithCommas(selectedUser.total_coins)}
+                        {formatNumberWithCommas(selectedUser.statistics.net_coins)}
                       </p>
                     </div>
                   </div>
@@ -177,30 +155,37 @@ export default function SendCoinModal({
             <Label htmlFor="user_id">
               {t("coinManagement.sendCoin.selectUser")} *
             </Label>
-            <Select
+            <ComboboxSelect<User>
+              service={userService}
+              store={userstore}
+              additionalParams={{ role_id: "1" }}
+              storeDataKey="users"
+              enableApiSearch={true}
               value={formData.user_id ? formData.user_id.toString() : ""}
-              onValueChange={(value) =>
-                setFormData({ ...formData, user_id: Number(value) })
+              onValueChange={(value) => setFormData({ ...formData, user_id: Number(value) })}
+              placeholder={t("coinManagement.sendCoin.selectUserPlaceholder")}
+              searchPlaceholder={t(
+                "coinManagement.sendCoin.searchUsersPlaceholder",
+              )}
+              emptyText={t("coinManagement.sendCoin.noUsersFound")}
+              getOptionValue={(user) => user.id}
+              getOptionLabel={(user) =>
+                `${user.firstName} ${user.lastName}`
               }
-            >
-              <SelectTrigger>
-                <SelectValue
-                  placeholder={t(
-                    "coinManagement.sendCoin.selectUserPlaceholder",
-                  )}
-                />
-              </SelectTrigger>
-              <SelectContent>
-                {customerLists.map((customer) => (
-                  <SelectItem
-                    key={customer?.id}
-                    value={customer?.id.toString()}
-                  >
-                    {customer?.firstName} {customer?.lastName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              renderOption={(user) => (
+                <div className="flex flex-col">
+                  <span className="font-medium">
+                    {user.firstName} {user.lastName}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {user.mobile}
+                  </span>
+                </div>
+              )}
+              icon={
+                <User2 className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              }
+            />
           </div>
         )}
 

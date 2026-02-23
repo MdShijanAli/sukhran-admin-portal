@@ -62,7 +62,7 @@ export default function PackageDetails() {
       <Card className="p-12">
         <div className="text-center">
           <PackageIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-          <h3 className="mt-4 text-lg font-semibold">
+          <h3 className="mt-4 text-lg ">
             {t("packages.packageNotFound")}
           </h3>
           <p className="text-sm text-muted-foreground mt-2">
@@ -179,7 +179,7 @@ export default function PackageDetails() {
                   <p className="text-xs text-muted-foreground">
                     {t("packages.view.type")}
                   </p>
-                  <p className="text-lg font-semibold capitalize">
+                  <p className="text-lg  capitalize">
                     {t(`packages.type.${packageData.packageType}`)}
                   </p>
                 </div>
@@ -187,7 +187,7 @@ export default function PackageDetails() {
                   <p className="text-xs text-muted-foreground">
                     {t("packages.view.displayOrder")}
                   </p>
-                  <p className="text-lg font-semibold">
+                  <p className="text-lg ">
                     {packageData.displayOrder}
                   </p>
                 </div>
@@ -195,7 +195,7 @@ export default function PackageDetails() {
                   <p className="text-xs text-muted-foreground">
                     {t("packages.view.items")}
                   </p>
-                  <p className="text-lg font-semibold">
+                  <p className="text-lg ">
                     {formatNumberWithCommas(totalItems, { minDigit: 0 })}
                   </p>
                 </div>
@@ -203,7 +203,7 @@ export default function PackageDetails() {
                   <p className="text-xs text-muted-foreground">
                     {t("packages.view.discount")}
                   </p>
-                  <p className="text-lg font-semibold text-green-600">
+                  <p className="text-lg  text-green-600">
                     {discountPercent}%
                   </p>
                 </div>
@@ -241,7 +241,7 @@ export default function PackageDetails() {
 
                       {/* Item Details */}
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-base">
+                        <h4 className=" text-base">
                           {item.product.name}
                         </h4>
                         <p className="text-sm text-muted-foreground mt-1">

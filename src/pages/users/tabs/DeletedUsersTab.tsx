@@ -245,9 +245,8 @@ const DeletedUsersTab = () => {
           }
         }}
         title={t("users.delete.title")}
-        description={`${t("permanentDelete")} ${selectedUser?.firstName} ${
-          selectedUser?.lastName
-        }? ${t("deleteAftermath")}`}
+        description={`${t("permanentDelete")} ${selectedUser?.firstName} ${selectedUser?.lastName
+          }? ${t("deleteAftermath")}`}
         onConfirm={handleDeleteUser}
         isDeleting={isDeleting}
       >

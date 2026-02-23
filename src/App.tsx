@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner, toast } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
@@ -10,6 +9,7 @@ import AppRoutes from "@/routes/index.tsx";
 import "@/i18n/config";
 import { loadLanguageResources } from "@/i18n/config";
 import authService from "./services/authService";
+import { toast } from "sonner";
 
 const queryClient = new QueryClient();
 
@@ -44,7 +44,7 @@ const App = () => {
           if (response.status !== 200) {
             toast.error(
               response?.response?.data?.message ||
-                "Failed to fetch user profile"
+              "Failed to fetch user profile"
             );
           }
         } catch (error) {
@@ -59,10 +59,9 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
         <BrowserRouter>
           <AppRoutes />
+          <Toaster position="bottom-right" richColors />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

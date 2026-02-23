@@ -5,6 +5,7 @@ interface AuthState {
   user: User | null;
   permissions?: string[];
   isAuthenticated: boolean;
+  isSuperAdmin?: boolean;
   access_token?: string;
   refresh_token?: string;
   setState: (state: Partial<AuthState>) => void;
@@ -22,11 +23,12 @@ export const useAuthStore = createStore<AuthState>(
       set({
         ...state,
         permissions: state.user?.permissions ?? [],
+        isSuperAdmin: state.user?.role?.name === "super_admin" || false,
       });
     },
   }),
   "auth-storage",
-  true
+  true,
 );
 
 // Computed selector for isAdmin

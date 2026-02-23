@@ -1,17 +1,15 @@
 import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { PackageOrder, PackageOrderBatch } from "@/lib/types";
+import { PackageOrderBatch } from "@/lib/types";
 import { usePackageOrderStore } from "@/stores/packageOrderStore";
 import orderService from "@/services/orderService";
 import { BaseTableList } from "@/components/table/BaseTableList";
 import { Column } from "@/components/table/BaseTable";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Edit, Eye, Trash2 } from "lucide-react";
+import { Eye } from "lucide-react";
 import PackageBatchDetailsModal from "../modal/PackageBatchDetailsModal";
 import { ActionItem, DropdownMenuActions } from "@/components/table";
 import usePermissions from "@/hooks/use-permissions";
-import permissions from "@/lib/permissions";
-import UpdateDeliveryTimeModal from "../modal/UpdateDeliveryTimeModal";
 import getSerialNumber from "@/lib/getSerialNumber";
 
 export default function PackageOrdersTab() {
@@ -21,7 +19,6 @@ export default function PackageOrdersTab() {
     null
   );
   const [showDetails, setShowDetails] = useState(false);
-  const { hasPermission } = usePermissions();
   const [refreshTable, setRefreshTable] = useState<(() => void) | null>(null);
 
   const handleViewDetails = (batch: PackageOrderBatch) => {
@@ -37,12 +34,12 @@ export default function PackageOrdersTab() {
   const orderActions = (
     order: PackageOrderBatch
   ): ActionItem<PackageOrderBatch>[] => [
-    {
-      label: t("orders.actions.viewDetails"),
-      icon: Eye,
-      onClick: handleViewDetails,
-    },
-  ];
+      {
+        label: t("orders.actions.viewDetails"),
+        icon: Eye,
+        onClick: handleViewDetails,
+      },
+    ];
 
   const columns: Column<PackageOrderBatch>[] = useMemo(
     () => [
@@ -51,6 +48,15 @@ export default function PackageOrdersTab() {
         label: t("orders.columns.sl"),
         render: (_, index) => getSerialNumber(store, index),
         className: "text-center w-16",
+      },
+      {
+        key: "package_name",
+        label: t("orders.packageOrders.packageName"),
+        render: (batch) => (
+          <div>
+            <p className="font-medium">{batch.package_name}</p>
+          </div>
+        ),
       },
       {
         key: "batch_id",
@@ -92,7 +98,7 @@ export default function PackageOrdersTab() {
         label: t("orders.packageOrders.totalOrders"),
         render: (batch) => (
           <div className="w-[90px]">
-            <span className="font-semibold">{batch.total_orders}</span>
+            <span className="">{batch.total_orders}</span>
           </div>
         ),
         className: "text-center",

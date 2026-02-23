@@ -145,7 +145,7 @@ export function RichTextEditor({
           "h-[600px] max-h-[600px] overflow-y-auto p-4 focus:outline-none ",
           "prose prose-sm max-w-none dark:prose-invert",
           "[&_h1]:text-2xl [&_h1]: [&_h1]:mb-2",
-          "[&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mb-2",
+          "[&_h2]:text-xl [&_h2]: [&_h2]:mb-2",
           "[&_h3]:text-lg [&_h3]:font-medium [&_h3]:mb-2",
           "[&_ul]:list-disc [&_ul]:pl-6",
           "[&_ol]:list-decimal [&_ol]:pl-6",

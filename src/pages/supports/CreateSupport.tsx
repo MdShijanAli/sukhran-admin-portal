@@ -36,6 +36,7 @@ import supportService from "@/services/supportService";
 import userService from "@/services/userService";
 import { ComboboxSelect } from "@/components/custom/ComboboxSelect";
 import ViewOrderDetailsModal from "../orders/modal/ViewModal";
+import { useUserStore } from "@/stores/userStore";
 
 interface User {
   id: number;
@@ -75,6 +76,7 @@ export default function CreateSupport() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const userstore = useUserStore()
 
   // Form state
   const [userId, setUserId] = useState("");
@@ -87,41 +89,18 @@ export default function CreateSupport() {
   const [priority, setPriority] = useState("");
   const [attachments, setAttachments] = useState<File[]>([]);
 
-  // Data lists
-  const [users, setUsers] = useState<User[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
-  const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const [isLoadingOrders, setIsLoadingOrders] = useState(false);
 
   // Selected details
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [selectedOrderDetails, setSelectedOrderDetails] =
-    useState<OrderDetails | null>(null);
   const [isLoadingUserDetails, setIsLoadingUserDetails] = useState(false);
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   useEffect(() => {
     if (selectedUser) {
       fetchOrders(selectedUser);
     }
   }, [selectedUser]);
-
-  const fetchUsers = async () => {
-    setIsLoadingUsers(true);
-    try {
-      const response = await supportService.getCustomerList();
-      const data = response as any;
-      setUsers(data?.data || []);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      toast.error(t("support.create.failedToLoadUsers"));
-    } finally {
-      setIsLoadingUsers(false);
-    }
-  };
 
   const fetchOrders = async (newUser: User) => {
     if (!newUser) {
@@ -284,8 +263,12 @@ export default function CreateSupport() {
                     {t("support.create.selectCustomer")} *
                   </Label>
                   <div className="mt-2">
-                    <ComboboxSelect
-                      options={users}
+                    <ComboboxSelect<User>
+                      service={userService}
+                      store={userstore}
+                      additionalParams={{ role_id: "1" }}
+                      storeDataKey="users"
+                      enableApiSearch={true}
                       value={userId}
                       onValueChange={(value) => setUserId(value.toString())}
                       onSelect={handleUserSelect}
@@ -294,7 +277,6 @@ export default function CreateSupport() {
                         "support.create.searchCustomerPlaceholder",
                       )}
                       emptyText={t("support.create.noCustomerFound")}
-                      isLoading={isLoadingUsers}
                       getOptionValue={(user) => user.id}
                       getOptionLabel={(user) =>
                         `${user.firstName} ${user.lastName}`
@@ -332,7 +314,7 @@ export default function CreateSupport() {
                         </div>
                       )}
                       <div>
-                        <p className="font-semibold text-lg">
+                        <p className=" text-lg">
                           {selectedUser.firstName} {selectedUser.lastName}
                         </p>
                         <p className="text-xs text-muted-foreground">
@@ -579,7 +561,7 @@ export default function CreateSupport() {
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <Upload className="w-8 h-8 mb-2 text-muted-foreground" />
                       <p className="mb-1 text-sm text-muted-foreground">
-                        <span className="font-semibold">
+                        <span className="">
                           {t("support.create.clickToUpload")}
                         </span>
                       </p>

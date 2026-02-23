@@ -38,6 +38,7 @@
     "title": "User Coin Balances",
     "description": "View and manage user reward balances",
     "searchPlaceholder": "Search by name or email...",
+    "noUsersFound": "No users found",
     "columns": {
       "sl": "SL",
       "user": "User",
@@ -59,6 +60,7 @@
     "title": "All Coin Transactions",
     "description": "View all coin transactions across users",
     "searchPlaceholder": "Search by user or description...",
+    "noTransactionsFound": "No transactions found",
     "columns": {
       "sl": "SL",
       "id": "ID",
@@ -80,6 +82,8 @@
 
   "sendCoin": {
     "title": "Send Coins to User",
+    "searchUsersPlaceholder": "Search users...",
+    "noUsersFound": "No users found",
     "description": "Award coins to a user for special promotions or rewards",
     "selectedUser": "Recipient User",
     "selectUser": "Select User",

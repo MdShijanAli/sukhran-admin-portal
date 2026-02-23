@@ -21,7 +21,7 @@ export default function SetDeliveryDateModal({
 }: SetDeliveryDateModalProps) {
   const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [deliveryDate, setDeliveryDate] = useState("");
+  const [deliveryDate, setDeliveryDate] = useState(new Date().toISOString().split("T")[0]);
 
   const handleSubmit = async () => {
     if (!deliveryDate) {
@@ -41,7 +41,7 @@ export default function SetDeliveryDateModal({
       console.error("Error setting delivery date:", error);
       toast.error(
         error.response.data.error_message ||
-          t("orders.packageOrders.messages.failedToSetDate")
+        t("orders.packageOrders.messages.failedToSetDate")
       );
     } finally {
       setIsSubmitting(false);

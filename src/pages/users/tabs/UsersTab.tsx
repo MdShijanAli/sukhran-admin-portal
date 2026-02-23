@@ -6,6 +6,7 @@ import {
   Plus,
   Users as UsersIcon,
   FolderSync,
+  Trash2Icon,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -31,6 +32,7 @@ import usePermissions from "@/hooks/use-permissions";
 import getSerialNumber from "@/lib/getSerialNumber";
 import ViewModal from "../modal/ViewModal";
 import FormModal from "../modal/FormModal";
+import { useAuthStore, useIsAdmin } from "@/stores/authStore";
 
 const UsersTab = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -44,11 +46,15 @@ const UsersTab = () => {
   const [togglingUserId, setTogglingUserId] = useState<number | string | null>(
     null
   );
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState("");
+  const [deleteReason, setDeleteReason] = useState("");
 
   const store = useUserStore();
   const roleStore = useRoleStore();
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
+
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -145,6 +151,43 @@ const UsersTab = () => {
     }
   };
 
+  const handleForceDelete = (user: User) => {
+    setSelectedUser(user);
+    setShowDeleteModal(true);
+  };
+
+  const handleForceDeleteUser = async () => {
+    if (!selectedUser) return;
+
+    if (deleteConfirmation !== "PERMANENTLY_DELETE") {
+      toast.error(t("users.delete.confirmationRequired"));
+      return;
+    }
+
+    if (!deleteReason.trim()) {
+      toast.error(t("users.delete.reasonRequired"));
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      await userService.forceDeleteUser(selectedUser.id, {
+        confirmation: deleteConfirmation,
+        reason: deleteReason,
+      });
+      toast.success("User deleted successfully");
+      refreshTable?.();
+      setDeleteConfirmation("");
+      setDeleteReason("");
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("Failed to delete user");
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteModal(false);
+    }
+  };
+
   // Define actions for dropdown menu
   const userActions = (user: User): ActionItem<User>[] => [
     {
@@ -175,6 +218,13 @@ const UsersTab = () => {
       onClick: handleRestore,
       show: user.isDeleted && hasPermission(permissions.users.restore),
       variant: "default",
+    },
+    {
+      label: t("forceDelete"),
+      icon: Trash2Icon,
+      onClick: handleForceDelete,
+      show: hasPermission(permissions.users.forceDelete) && user.isDeleted,
+      variant: "destructive",
     },
   ];
 
@@ -239,7 +289,7 @@ const UsersTab = () => {
             </div>
           ) : (
             <div className="flex items-center justify-end gap-2">
-              {user?.role?.name !== constData.roles.ADMIN ? (
+              {user?.role?.name !== constData.roles.SUPER_ADMIN ? (
                 <>
                   {hasPermission(permissions.users.delete) && (
                     <Switch
@@ -295,19 +345,19 @@ const UsersTab = () => {
     },
     ...(hasPermission(permissions.roles.view)
       ? [
-          {
-            label: t("users.filter.user_role"),
-            value: "role_id",
-            options: [
-              { label: t("users.filter.allRoles"), value: "all" },
-              ...roleStore.roles.map((role) => ({
-                label: role?.display_name,
-                value: role.id,
-              })),
-            ],
-            placeholder: t("users.filter.selectUserRole"),
-          },
-        ]
+        {
+          label: t("users.filter.user_role"),
+          value: "role_id",
+          options: [
+            { label: t("users.filter.allRoles"), value: "all" },
+            ...roleStore.roles.map((role) => ({
+              label: role?.display_name,
+              value: role.id,
+            })),
+          ],
+          placeholder: t("users.filter.selectUserRole"),
+        },
+      ]
       : []),
   ];
 
@@ -356,9 +406,8 @@ const UsersTab = () => {
         open={showDelete}
         onClose={setShowDelete}
         title={t("users.delete.title")}
-        description={`${t("deleteConfirm")} ${selectedUser?.firstName} ${
-          selectedUser?.lastName
-        }? ${t("deleteAftermath")}`}
+        description={`${t("deleteConfirm")} ${selectedUser?.firstName} ${selectedUser?.lastName
+          }? ${t("deleteAftermath")}`}
         onConfirm={handleDeleteUser}
         isDeleting={isDeleting}
       />
@@ -371,6 +420,59 @@ const UsersTab = () => {
         onConfirm={handleRestoreUser}
         isProcessing={isRestoring}
       />
+
+      <DeleteModal
+        open={showDeleteModal}
+        onClose={(open) => {
+          setShowDeleteModal(open);
+          if (!open) {
+            setDeleteConfirmation("");
+            setDeleteReason("");
+          }
+        }}
+        title={t("users.delete.title")}
+        description={`${t("permanentDelete")} ${selectedUser?.firstName} ${selectedUser?.lastName
+          }? ${t("deleteAftermath")}`}
+        onConfirm={handleForceDeleteUser}
+        isDeleting={isDeleting}
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="text-sm font-medium">
+              {t("users.delete.typeToConfirm")}{" "}
+              <span className=" text-destructive">
+                {t("users.delete.confirmationText")}
+              </span>{" "}
+              {t("users.delete.toConfirm")}
+            </label>
+            <input
+              type="text"
+              value={deleteConfirmation}
+              onChange={(e) => setDeleteConfirmation(e.target.value)}
+              className="mt-1.5 w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+              placeholder={t("users.delete.confirmationText")}
+            />
+            {deleteConfirmation &&
+              deleteConfirmation !== "PERMANENTLY_DELETE" && (
+                <p className="text-sm text-destructive mt-1">
+                  {t("users.delete.confirmationRequired")}
+                </p>
+              )}
+          </div>
+          <div>
+            <label className="text-sm font-medium">
+              {t("users.delete.reasonLabel")}{" "}
+              <span className="text-destructive">*</span>
+            </label>
+            <textarea
+              value={deleteReason}
+              onChange={(e) => setDeleteReason(e.target.value)}
+              className="mt-1.5 w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring min-h-[80px]"
+              placeholder={t("users.delete.reasonPlaceholder")}
+            />
+          </div>
+        </div>
+      </DeleteModal>
     </div>
   );
 };

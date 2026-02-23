@@ -158,11 +158,10 @@ export default function Profile() {
           <CardContent className="flex flex-col items-center space-y-4">
             <div className="relative my-3">
               <Avatar
-                className={`h-32 w-32 ${
-                  uploadingLogo
+                className={`h-32 w-32 ${uploadingLogo
                     ? "animate-spin border-4 border-primary border-t-transparent rounded-full"
                     : ""
-                }`}
+                  }`}
               >
                 <AvatarFallback className="text-4xl bg-gradient-primary">
                   {imagePreview ? (
@@ -185,7 +184,7 @@ export default function Profile() {
               )}
             </div>
             <div className="text-center">
-              <h3 className="text-xl font-semibold">{user.firstName}</h3>
+              <h3 className="text-xl ">{user.firstName}</h3>
               <p className="text-sm text-muted-foreground capitalize">
                 {user.role.name}
               </p>

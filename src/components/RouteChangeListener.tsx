@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import LoadingBar from "./LoadingBar";
+import { usePageTitle } from "@/hooks/use-page-title";
 
 export default function RouteChangeListener() {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
+
+  // Update page title on route change
+  usePageTitle();
 
   useEffect(() => {
     setIsLoading(true);
