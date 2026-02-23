@@ -1,5 +1,6 @@
-name: React CI + Deploy to cPanel
+name: React CI + Deploy to admin.shukra.store
 
+# Trigger pipeline on push to prod branch
 on:
   push:
     branches:
@@ -10,28 +11,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout repository code
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 2️⃣ Setup Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
+      # 3️⃣ Install dependencies
       - name: Install dependencies
         run: npm install
 
+      # 4️⃣ Build React project
       - name: Build Project
-        run: npm run build
+        run: npm run build # your React build folder should be 'dist/' or 'build/'
 
-      - name: Deploy to admin.shukran.store
+      # 5️⃣ Deploy via SFTP to admin.shukra.store
+      - name: Deploy to admin.shukra.store via SFTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
+          server: ${{ secrets.FTP_SERVER }} # your server IP
+          username: ${{ secrets.FTP_USERNAME }} # admin@shukran.store
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftp
-          port: 21
-          local-dir: dist/
-          server-dir: ./
-          dangerous-clean-slate: true
+          protocol: sftp # <-- important for shared hosting
+          port: 22 # default SFTP port
+          local-dir: dist/ # your React build folder
+          server-dir: ./ # relative to FTP root
+          dangerous-clean-slate: true # wipes old files before upload
