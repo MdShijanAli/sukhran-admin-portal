@@ -31,5 +31,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: dist/
-          server-dir: /admin.shukran.store/
+          server-dir: admin.shukran.store/
           dangerous-clean-slate: true
