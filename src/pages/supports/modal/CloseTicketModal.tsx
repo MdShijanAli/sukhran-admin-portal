@@ -59,10 +59,10 @@ export default function CloseTicketModal({
       <div className="space-y-4">
         <div className="p-3 bg-orange-50 dark:bg-orange-950 rounded-lg border border-orange-200 dark:border-orange-800">
           <p className="text-sm text-orange-900 dark:text-orange-100">
-            <span className="font-semibold">Ticket:</span> {ticket.ticketNumber}
+            <span className="">Ticket:</span> {ticket.ticketNumber}
           </p>
           <p className="text-sm text-orange-700 dark:text-orange-300 mt-1">
-            <span className="font-semibold">Subject:</span> {ticket.subject}
+            <span className="">Subject:</span> {ticket.subject}
           </p>
         </div>
 

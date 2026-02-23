@@ -129,7 +129,7 @@ const ProductViewDetails = () => {
         <CardContent className="flex items-center justify-center py-16">
           <div className="text-center">
             <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold">
+            <h3 className="text-lg ">
               {t("products.productNotFound")}
             </h3>
             <p className="text-muted-foreground mt-2">
@@ -389,7 +389,7 @@ const ProductViewDetails = () => {
                       <div className="flex-1 space-y-3">
                         <div className="flex items-start justify-between">
                           <div>
-                            <h4 className="font-semibold text-base">
+                            <h4 className=" text-base">
                               {sku.name}
                             </h4>
                             <p className="text-sm text-muted-foreground">
@@ -418,18 +418,18 @@ const ProductViewDetails = () => {
                           </div>
                           {sku.pricing.originalPrice !==
                             sku.pricing.currentPrice && (
-                            <div>
-                              <p className="text-xs text-muted-foreground">
-                                {t("products.form.originalPrice")}
-                              </p>
-                              <p className="text-lg line-through text-muted-foreground">
-                                ৳
-                                {formatNumberWithCommas(
-                                  sku.pricing.originalPrice,
-                                )}
-                              </p>
-                            </div>
-                          )}
+                              <div>
+                                <p className="text-xs text-muted-foreground">
+                                  {t("products.form.originalPrice")}
+                                </p>
+                                <p className="text-lg line-through text-muted-foreground">
+                                  ৳
+                                  {formatNumberWithCommas(
+                                    sku.pricing.originalPrice,
+                                  )}
+                                </p>
+                              </div>
+                            )}
                           {sku.pricing.discountPercent > 0 && (
                             <Badge variant="destructive" className="ml-auto">
                               {sku.pricing.discountPercent}%{" "}

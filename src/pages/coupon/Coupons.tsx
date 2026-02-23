@@ -180,7 +180,7 @@ const Coupons = () => {
       render: (coupon) => (
         <div className="flex items-center gap-2 w-[150px]">
           <Ticket className="h-4 w-4 text-primary" />
-          <span className="font-mono font-semibold">{coupon.code}</span>
+          <span className="font-mono ">{coupon.code}</span>
           <Button
             variant="ghost"
             size="icon"
@@ -203,7 +203,7 @@ const Coupons = () => {
       label: t("coupon.columns.discount"),
       render: (coupon) => (
         <div className="flex items-center gap-2 w-[100px]">
-          <span className="font-semibold text-primary">
+          <span className=" text-primary">
             {coupon.discount.formatted}
           </span>
         </div>

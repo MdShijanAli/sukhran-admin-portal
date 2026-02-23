@@ -105,7 +105,7 @@ const SettingsTab = ({ onSuccess }: SettingsTabProps) => {
     <div className="p-3 space-y-4">
       <Card className="p-6">
         <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-2">
+          <h3 className="text-lg  mb-2">
             {t("referrals.settings.title")}
           </h3>
           <p className="text-sm text-muted-foreground">
@@ -238,7 +238,7 @@ const SettingsTab = ({ onSuccess }: SettingsTabProps) => {
             <Info className="w-5 h-5 text-white" />
           </div>
           <div className="flex-1">
-            <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-3">
+            <h4 className=" text-blue-900 dark:text-blue-100 mb-3">
               {t("referrals.settings.info.title")}
             </h4>
             <ol className="space-y-2 text-sm text-blue-800 dark:text-blue-200">

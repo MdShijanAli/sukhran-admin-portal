@@ -2,7 +2,7 @@ export interface Role {
   id: string;
   display_name: string;
   description?: string;
-  name: "admin" | "cxo" | "operator" | "customer";
+  name: "admin" | "cxo" | "operator" | "customer" | "super_admin";
 }
 
 export interface User {
@@ -400,26 +400,36 @@ export interface ScheduleOptionFormData {
 
 // Coin Management Types
 export interface CoinUser {
-  id: number;
+  user_id: number;
   name: string;
   email: string;
   mobile?: string;
   image?: string | null;
   image_url?: string | null;
+  balance: {
+    total_coins: number;
+    locked_coins: number;
+    available_coins: number;
+  };
+  statistics: {
+    total_earned: number;
+    total_spent: number;
+    net_coins: number;
+  };
+  last_transaction_date: string | null;
 }
 
 export interface CoinTransaction {
   id: number;
-  user: CoinUser;
+  user?: CoinUser;
   type: "earned" | "spent";
   amount: number;
   reason: string;
   description: string;
   balance_after: number;
-  reference_id: string | null;
+  reference_id?: string | null;
   created_at: string;
 }
-
 export interface CoinBalance {
   total_coins: number;
   locked_coins: number;
@@ -506,6 +516,7 @@ export interface PackageOrderBatch {
     email: string;
     mobile?: string;
   };
+  package_name: string;
   schedule_months: string;
   frequency_per_month: string;
   total_orders: string | number;

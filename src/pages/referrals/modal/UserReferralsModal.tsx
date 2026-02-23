@@ -105,7 +105,7 @@ export default function UserReferralsModal({
                 </div>
                 <div className="flex items-center gap-2">
                   <FileText className="w-4 h-4 text-primary" />
-                  <span className="font-mono font-semibold text-primary">
+                  <span className="font-mono  text-primary">
                     {t("referrals.userReferrals.referralCode")}:{" "}
                     {userReferrals.statistics.referral_code}
                   </span>
@@ -116,7 +116,7 @@ export default function UserReferralsModal({
 
           {/* Statistics */}
           <Card className="p-4">
-            <h4 className="font-semibold text-sm text-primary mb-3 flex items-center gap-2">
+            <h4 className=" text-sm text-primary mb-3 flex items-center gap-2">
               <Award className="w-4 h-4" />
               {t("referrals.userReferrals.statistics.totalReferred")}
             </h4>
@@ -198,7 +198,7 @@ export default function UserReferralsModal({
 
           {/* Referrals List */}
           <Card className="p-4">
-            <h4 className="font-semibold text-sm text-primary mb-3 flex items-center gap-2">
+            <h4 className=" text-sm text-primary mb-3 flex items-center gap-2">
               <Users className="w-4 h-4" />
               {t("referrals.userReferrals.referralsList")}
             </h4>
@@ -215,7 +215,7 @@ export default function UserReferralsModal({
                           <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-sm">
+                          <p className=" text-sm">
                             {referral.referred_user.name}
                           </p>
                           <div className="flex items-center gap-2 mt-1">
@@ -224,7 +224,7 @@ export default function UserReferralsModal({
                               Registered:{" "}
                               {formatDate(
                                 referral.referred_user.registered_at ||
-                                  referral.created_at,
+                                referral.created_at,
                               )}
                             </span>
                           </div>

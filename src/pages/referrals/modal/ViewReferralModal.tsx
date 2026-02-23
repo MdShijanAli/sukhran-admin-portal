@@ -113,7 +113,7 @@ export default function ViewReferralModal({
 
           {/* Referrer Information */}
           <Card className="p-4">
-            <h4 className="font-semibold text-sm text-primary mb-3 flex items-center gap-2">
+            <h4 className=" text-sm text-primary mb-3 flex items-center gap-2">
               <User className="w-4 h-4" />
               {t("referrals.referrals.view.referrerInfo")}
             </h4>
@@ -123,7 +123,7 @@ export default function ViewReferralModal({
                   <User className="w-6 h-6 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-semibold">{referral.referrer.name}</p>
+                  <p className="">{referral.referrer.name}</p>
                   <div className="space-y-1 mt-2">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <Mail className="w-3 h-3" />
@@ -136,7 +136,7 @@ export default function ViewReferralModal({
                     {referral.referrer.referral_code && (
                       <div className="flex items-center gap-2 text-xs">
                         <FileText className="w-3 h-3" />
-                        <span className="font-mono font-semibold text-primary">
+                        <span className="font-mono  text-primary">
                           {t("referrals.referrals.view.referralCode")}:{" "}
                           {referral.referrer.referral_code}
                         </span>
@@ -150,7 +150,7 @@ export default function ViewReferralModal({
 
           {/* Referred User Information */}
           <Card className="p-4">
-            <h4 className="font-semibold text-sm text-primary mb-3 flex items-center gap-2">
+            <h4 className=" text-sm text-primary mb-3 flex items-center gap-2">
               <User className="w-4 h-4" />
               {t("referrals.referrals.view.referredUserInfo")}
             </h4>
@@ -160,7 +160,7 @@ export default function ViewReferralModal({
                   <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-semibold">{referral.referred_user.name}</p>
+                  <p className="">{referral.referred_user.name}</p>
                   <div className="space-y-1 mt-2">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <Mail className="w-3 h-3" />
@@ -189,7 +189,7 @@ export default function ViewReferralModal({
             {/* First Order Information */}
             {referral.first_order && (
               <Card className="p-4">
-                <h4 className="font-semibold text-sm text-primary mb-3 flex items-center gap-2">
+                <h4 className=" text-sm text-primary mb-3 flex items-center gap-2">
                   <ShoppingCart className="w-4 h-4" />
                   {t("referrals.referrals.view.orderInfo")}
                 </h4>
@@ -198,7 +198,7 @@ export default function ViewReferralModal({
                     <span className="text-xs text-muted-foreground">
                       {t("referrals.referrals.view.orderId")}
                     </span>
-                    <span className="font-mono text-sm font-semibold">
+                    <span className="font-mono text-sm ">
                       {referral.first_order.orderId}
                     </span>
                   </div>
@@ -243,7 +243,7 @@ export default function ViewReferralModal({
             {/* Coin Transaction Information */}
             {referral.coin_transaction && (
               <Card className="p-4">
-                <h4 className="font-semibold text-sm text-primary mb-3 flex items-center gap-2">
+                <h4 className=" text-sm text-primary mb-3 flex items-center gap-2">
                   <CreditCard className="w-4 h-4" />
                   {t("referrals.referrals.view.transactionInfo")}
                 </h4>
@@ -252,7 +252,7 @@ export default function ViewReferralModal({
                     <span className="text-xs text-muted-foreground">
                       {t("referrals.referrals.view.transactionId")}
                     </span>
-                    <span className="font-mono text-sm font-semibold">
+                    <span className="font-mono text-sm ">
                       #{referral.coin_transaction.id}
                     </span>
                   </div>
@@ -287,7 +287,7 @@ export default function ViewReferralModal({
 
           {/* Additional Information */}
           <Card className="p-4">
-            <h4 className="font-semibold text-sm text-primary mb-3 flex items-center gap-2">
+            <h4 className=" text-sm text-primary mb-3 flex items-center gap-2">
               <FileText className="w-4 h-4" />
               {t("referrals.referrals.view.timeline")}
             </h4>

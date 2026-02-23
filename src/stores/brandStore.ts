@@ -89,7 +89,7 @@ export const useBrandStore = createStore<BrandState>(
       const brand = (data as { data?: Partial<Brand> })?.data || data;
       set((state) => ({
         brands: state.brands.map((item) =>
-          item.id === id ? { ...item, ...(brand as Partial<Brand>) } : item
+          item.id === id ? { ...item, ...(brand as Partial<Brand>) } : item,
         ),
         isLoading: false,
         error: null,
@@ -116,5 +116,5 @@ export const useBrandStore = createStore<BrandState>(
       set({ error, isLoading: false });
     },
   }),
-  "brand-storage"
+  "brand-storage",
 );

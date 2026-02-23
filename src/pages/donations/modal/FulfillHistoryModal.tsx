@@ -173,7 +173,7 @@ const FulfillHistoryModal = ({
 
           {/* Fulfillment History Records */}
           <div>
-            <h4 className="font-semibold text-sm text-primary mb-3 flex items-center gap-2">
+            <h4 className=" text-sm text-primary mb-3 flex items-center gap-2">
               <TrendingUp className="w-4 h-4" />
               {t("donations.fulfillHistory.records")}
             </h4>
@@ -217,7 +217,7 @@ const FulfillHistoryModal = ({
 
                       {/* Fulfilled By */}
                       <div className="bg-muted/30 rounded-lg p-3">
-                        <p className="text-xs font-semibold text-muted-foreground mb-2 flex items-center gap-1">
+                        <p className="text-xs  text-muted-foreground mb-2 flex items-center gap-1">
                           <User className="w-3 h-3" />
                           {t("donations.fulfillHistory.fulfilledBy")}
                         </p>
@@ -226,7 +226,7 @@ const FulfillHistoryModal = ({
                             <User className="w-5 h-5 text-primary" />
                           </div>
                           <div className="flex-1">
-                            <p className="font-semibold">
+                            <p className="">
                               {record.fulfilled_by.name}
                             </p>
                             <div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -240,7 +240,7 @@ const FulfillHistoryModal = ({
                       {/* Notes */}
                       {record.notes && (
                         <div className="bg-blue-50 dark:bg-blue-950 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
-                          <p className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-1 flex items-center gap-1">
+                          <p className="text-xs  text-blue-700 dark:text-blue-300 mb-1 flex items-center gap-1">
                             <FileText className="w-3 h-3" />
                             {t("donations.fulfillHistory.notes")}
                           </p>

@@ -8,7 +8,7 @@ import { RotateCcw, BarChart3, Users, History } from "lucide-react";
 import { useCoinStore } from "@/stores/coinStore";
 import coinService from "@/services/coinService";
 import CoinStatistics from "./tabs/CoinStatistics";
-import UserBalances from "./tabs/Transactions";
+import UserBalances from "./tabs/UserBalances";
 import AllTransactions from "./tabs/AllTransactions";
 import { withPermission } from "@/hoc/withPermission";
 import permissions from "@/lib/permissions";
@@ -18,9 +18,7 @@ function CoinManagement() {
   const { t } = useTranslation();
   const store = useCoinStore();
   const { hasPermission } = usePermissions();
-  const { statistics, transactions, pagination, isLoading } = store;
-
-  const [currentPage, setCurrentPage] = useState(1);
+  const { statistics, isLoading } = store;
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const fetchAllData = useCallback(async () => {
@@ -28,7 +26,6 @@ function CoinManagement() {
       store.setLoading(true);
       await Promise.all([
         coinService.fetchStatistics(),
-        coinService.fetchTransactions(`page=${currentPage}`),
       ]);
     } catch (error) {
       console.error("Failed to fetch coin management data:", error);
@@ -36,7 +33,7 @@ function CoinManagement() {
     } finally {
       store.setLoading(false);
     }
-  }, [currentPage, t]);
+  }, [t]);
 
   useEffect(() => {
     fetchAllData();
@@ -47,10 +44,6 @@ function CoinManagement() {
     await fetchAllData();
     setIsRefreshing(false);
     toast.success(t("refreshSuccess"));
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
   };
 
   return (
@@ -103,21 +96,12 @@ function CoinManagement() {
 
         {/* User Balances Tab */}
         <TabsContent value="userBalances">
-          <UserBalances
-            topHolders={statistics?.top_holders || []}
-            isLoading={isLoading}
-            onRefresh={fetchAllData}
-          />
+          <UserBalances />
         </TabsContent>
 
         {/* All Transactions Tab */}
         <TabsContent value="allTransactions">
-          <AllTransactions
-            transactions={transactions}
-            isLoading={isLoading}
-            pagination={pagination}
-            onPageChange={handlePageChange}
-          />
+          <AllTransactions />
         </TabsContent>
       </Tabs>
     </div>

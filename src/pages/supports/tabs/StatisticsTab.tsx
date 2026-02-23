@@ -62,7 +62,7 @@ export default function StatisticsTab() {
     <div className="p-4 space-y-4">
       {/* Today's Statistics */}
       <div>
-        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <h3 className="text-lg  mb-4 flex items-center gap-2">
           <Calendar className="w-5 h-5" />
           {t("support.statistics.today")}
         </h3>
@@ -119,7 +119,7 @@ export default function StatisticsTab() {
 
       {/* Current Status */}
       <div>
-        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <h3 className="text-lg  mb-4 flex items-center gap-2">
           <Target className="w-5 h-5" />
           {t("support.statistics.currentStatus")}
         </h3>
@@ -206,7 +206,7 @@ export default function StatisticsTab() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* By Category */}
         <Card className="p-4">
-          <h4 className="font-semibold mb-4">
+          <h4 className=" mb-4">
             {t("support.statistics.byCategory")}
           </h4>
           <div className="grid grid-cols-2 gap-3">
@@ -226,7 +226,7 @@ export default function StatisticsTab() {
 
         {/* By Priority */}
         <Card className="p-4">
-          <h4 className="font-semibold mb-4">
+          <h4 className=" mb-4">
             {t("support.statistics.byPriority")}
           </h4>
           <div className="space-y-3">
@@ -244,9 +244,8 @@ export default function StatisticsTab() {
                 >
                   <div className="flex items-center gap-2">
                     <div
-                      className={`w-3 h-3 rounded-full ${
-                        colors[priority] || "bg-gray-500"
-                      }`}
+                      className={`w-3 h-3 rounded-full ${colors[priority] || "bg-gray-500"
+                        }`}
                     />
                     <span className="text-sm font-medium capitalize">
                       {t(`support.tickets.priority.${priority}`)}
@@ -262,7 +261,7 @@ export default function StatisticsTab() {
 
       {/* Recent Tickets */}
       <Card className="p-4">
-        <h4 className="font-semibold mb-4 flex items-center gap-2">
+        <h4 className=" mb-4 flex items-center gap-2">
           <Clock className="w-5 h-5" />
           {t("support.statistics.recentTickets")}
         </h4>
@@ -319,7 +318,7 @@ export default function StatisticsTab() {
 
       {/* Metrics */}
       <Card className="p-4">
-        <h4 className="font-semibold mb-4">
+        <h4 className=" mb-4">
           {t("support.statistics.metrics")}
         </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

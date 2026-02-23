@@ -27,6 +27,8 @@
   "form": {
     "productInfo": "Product Information",
     "productDetails": "Enter product details",
+    "updateProductDetails": "Update product details",
+    "fillProductDetails": "Fill product details",
     "createProduct": "Create Product",
     "editProduct": "Edit Product",
     "updateProduct": "Update Product",

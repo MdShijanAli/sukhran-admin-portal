@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Badge } from "@/components/ui/badge";
+import StatusView from "@/components/custom/StatusView";
 import {
   Eye,
   Edit,
@@ -204,12 +204,14 @@ export default function DeliveryPage() {
           delivery.status === "in-transit"
             ? "inTransit"
             : delivery.status === "picked-up"
-            ? "pickedUp"
-            : delivery.status;
+              ? "pickedUp"
+              : delivery.status;
         return (
-          <Badge className={getStatusColor(delivery.status)}>
-            {t(`delivery.status.${statusKey}`)}
-          </Badge>
+          <StatusView
+            status={delivery.status}
+            type="delivery"
+            label={t(`delivery.status.${statusKey}`)}
+          />
         );
       },
       className: "text-center",
@@ -314,9 +316,8 @@ export default function DeliveryPage() {
         open={showDelete}
         onClose={setShowDelete}
         title={t("delivery.delete.title")}
-        description={`${t("delivery.delete.message")} ${
-          selectedDelivery?.delivery_number
-        }? ${t("delivery.delete.cannotUndo")}`}
+        description={`${t("delivery.delete.message")} ${selectedDelivery?.delivery_number
+          }? ${t("delivery.delete.cannotUndo")}`}
         onConfirm={handleDeleteDelivery}
         isDeleting={isDeleting}
       />

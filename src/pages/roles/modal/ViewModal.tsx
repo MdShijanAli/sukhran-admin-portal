@@ -61,7 +61,7 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
                 <Shield className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold">{role.display_name}</h3>
+                <h3 className="text-lg ">{role.display_name}</h3>
                 <p className="text-sm text-muted-foreground">{role.name}</p>
               </div>
             </div>
@@ -110,7 +110,7 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
                   {t("roles.view.created")}
                 </span>
               </div>
-              <p className="text-sm font-semibold">
+              <p className="text-sm ">
                 {new Date(role.created_at).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
@@ -124,7 +124,7 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
           {role.permissions && role.permissions.length > 0 && (
             <div className="border rounded-lg overflow-hidden">
               <div className="flex items-center justify-between px-4 py-3 bg-muted/50 border-b">
-                <h4 className="font-semibold text-sm">
+                <h4 className=" text-sm">
                   {t("roles.view.assignedPermissions")}
                 </h4>
                 <Badge variant="secondary">
@@ -151,7 +151,7 @@ export default function ViewModal({ open, onClose, roleId }: ViewModalProps) {
                         ([module, permissions]) => (
                           <div key={module}>
                             <div className="flex items-center gap-2 mb-2 px-2 py-1.5 bg-muted/50 rounded">
-                              <h5 className="text-xs font-semibold text-primary uppercase">
+                              <h5 className="text-xs  text-primary uppercase">
                                 {module}
                               </h5>
                               <Badge variant="outline" className="text-xs h-5">

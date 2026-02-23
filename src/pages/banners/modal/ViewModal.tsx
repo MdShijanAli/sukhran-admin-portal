@@ -100,7 +100,7 @@ export default function ViewModal({
         {banner?.image_url && (
           <>
             <div className="space-y-3">
-              <h4 className="font-semibold flex items-center gap-2">
+              <h4 className=" flex items-center gap-2">
                 <ImageIcon className="h-4 w-4" />
                 {t("banners.form.image")}
               </h4>
@@ -118,7 +118,7 @@ export default function ViewModal({
 
         {/* Link Information */}
         <div className="space-y-4">
-          <h4 className="font-semibold flex items-center gap-2">
+          <h4 className=" flex items-center gap-2">
             <LinkIcon className="h-4 w-4" />
             {t("banners.view.linkInformation")}
           </h4>
@@ -196,7 +196,7 @@ export default function ViewModal({
                             <div className="flex-1 min-w-0">
                               <div className="flex items-start justify-between gap-2">
                                 <div className="flex-1">
-                                  <p className="font-semibold text-base mb-1">
+                                  <p className=" text-base mb-1">
                                     {pkg.name}
                                   </p>
                                   <p className="text-xs text-muted-foreground mb-2">
@@ -209,10 +209,10 @@ export default function ViewModal({
                                       </span>
                                       {pkg.pricing?.totalItemsPrice !==
                                         pkg.pricing?.currentPrice && (
-                                        <span className="text-xs text-muted-foreground line-through ml-2">
-                                          ৳{pkg.pricing?.totalItemsPrice}
-                                        </span>
-                                      )}
+                                          <span className="text-xs text-muted-foreground line-through ml-2">
+                                            ৳{pkg.pricing?.totalItemsPrice}
+                                          </span>
+                                        )}
                                     </div>
                                     {pkg.pricing?.savings > 0 && (
                                       <Badge
@@ -281,7 +281,7 @@ export default function ViewModal({
                                       >
                                         Qty: {item.quantity}
                                       </Badge>
-                                      <span className="text-xs font-semibold">
+                                      <span className="text-xs ">
                                         ৳{item.subtotal}
                                       </span>
                                     </div>
@@ -334,7 +334,7 @@ export default function ViewModal({
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-sm truncate">
+                          <p className=" text-sm truncate">
                             {product.name}
                           </p>
                           <p className="text-xs text-muted-foreground mb-1">
@@ -347,7 +347,7 @@ export default function ViewModal({
                               </Badge>
                             )}
                             {product.pricing?.currentPrice && (
-                              <span className="text-xs font-semibold text-primary">
+                              <span className="text-xs  text-primary">
                                 ৳{product.pricing.currentPrice}
                               </span>
                             )}

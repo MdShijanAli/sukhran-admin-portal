@@ -3,11 +3,12 @@ import {
   CoinStatisticsResponse,
   UserCoinDetails,
   PaginationMeta,
+  CoinUser,
 } from "@/lib/types";
 import { createStore } from "./createStore";
 
 interface CoinState {
-  transactions: CoinTransaction[];
+  items: CoinTransaction[];
   statistics: CoinStatisticsResponse | null;
   userCoinDetails: UserCoinDetails | null;
   pagination: PaginationMeta;
@@ -15,7 +16,7 @@ interface CoinState {
   error: string | null;
 
   // Actions
-  setTransactions: (transactions: CoinTransaction[]) => void;
+  setItems: (transactions: CoinTransaction[] | unknown) => void;
   setStatistics: (statistics: CoinStatisticsResponse) => void;
   setUserCoinDetails: (details: UserCoinDetails) => void;
   setPagination: (pagination: PaginationMeta) => void;
@@ -26,7 +27,7 @@ interface CoinState {
 
 export const useCoinStore = createStore<CoinState>(
   (set, get) => ({
-    transactions: [],
+    items: [],
     statistics: null,
     userCoinDetails: null,
     pagination: {
@@ -49,19 +50,31 @@ export const useCoinStore = createStore<CoinState>(
       });
     },
 
-    setTransactions: (transactions) => set({ transactions }),
+    setItems: (data: unknown) => {
+      console.log("Setting transactions in store:", data);
+      const transactions = Array.isArray(data)
+        ? data
+        : (data as { data?: CoinTransaction[] })?.data || [];
+      console.log("Parsed transactions:", transactions);
+      set({
+        items: transactions,
+        isLoading: false,
+        error: null,
+        pagination:
+          (data as { pagination?: PaginationMeta })?.pagination ||
+          get().pagination,
+      });
+    },
 
-    setStatistics: (statistics) => set({ statistics }),
+    setStatistics: (statistics: CoinStatisticsResponse) => set({ statistics }),
 
-    setUserCoinDetails: (details) => set({ userCoinDetails: details }),
+    setUserCoinDetails: (details: UserCoinDetails) =>
+      set({ userCoinDetails: details }),
+    setLoading: (isLoading: boolean) => set({ isLoading }),
 
-    setLoading: (isLoading) => set({ isLoading }),
-
-    setError: (error) => set({ error }),
+    setError: (error: string | null) => set({ error }),
 
     clearError: () => set({ error: null }),
   }),
-  {
-    name: "coin-store",
-  }
+  "coin-store",
 );

@@ -12,14 +12,13 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { PackageBatchDetails, PackageOrder } from "@/lib/types";
-import { Calendar, Pause, Edit, Trash2 } from "lucide-react";
+import { Calendar, Pause, Edit, Trash2, CheckCircle, Eye } from "lucide-react";
 import orderService from "@/services/orderService";
 import { formatNumberWithCommas } from "@/lib/utils";
 import SetDeliveryDateModal from "./SetDeliveryDateModal";
 import ModifyItemsModal from "./ModifyItemsModal";
 import CancelOrderModal from "./CancelOrderModal";
-import ResumeOrderModal from "./ResumeOrderModal";
-import PauseOrderModal from "./PauseOrderModal";
+import PauseResumeOrderModal from "./PauseResumeOrderModal";
 import {
   ActionItem,
   BaseTable,
@@ -28,6 +27,13 @@ import {
 } from "@/components/table";
 import usePermissions from "@/hooks/use-permissions";
 import permissions from "@/lib/permissions";
+import StatusView from "@/components/custom/StatusView";
+import { DeleteModal } from "@/components/modals";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import ViewModal from "./ViewModal";
+import ViewPackageSingleOrderModal from "./ViewPackageSingleOrderdetails";
+import { toast } from "sonner";
 
 interface PackageBatchDetailsModalProps {
   open: boolean;
@@ -51,6 +57,10 @@ export default function PackageBatchDetailsModal({
   const [showPauseModal, setShowPauseModal] = useState(false);
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showMarkAsPaidModal, setShowMarkAsPaidModal] = useState(false);
+  const [isPaiding, setIsPaiding] = useState(false);
+  const [markAsPaidNote, setMarkAsPaidNote] = useState("");
 
   const fetchDetails = async () => {
     if (!batchId) return;
@@ -79,6 +89,11 @@ export default function PackageBatchDetailsModal({
     setSelectedOrder(order);
     setShowSetDateModal(true);
   };
+
+  const handleView = (order: PackageOrder) => {
+    setSelectedOrder(order);
+    setShowDetailsModal(true);
+  }
 
   const handleModifyItems = (order: PackageOrder) => {
     setSelectedOrder(order);
@@ -111,34 +126,88 @@ export default function PackageBatchDetailsModal({
     onClose();
   };
 
+  const handleMarkAsPaid = async (order: PackageOrder) => {
+    setSelectedOrder(order);
+    setShowMarkAsPaidModal(true);
+  };
+
+  const handlePackegeOrderMarkAsPaid = async (order: PackageOrder) => {
+    if (!markAsPaidNote.trim()) {
+      toast.error(t("orders.messages.notesRequired"));
+      return;
+    }
+
+    try {
+      setIsPaiding(true);
+      await orderService.markPackageOrderAsPaid(order.id, {
+        payment_status: "paid",
+        notes: markAsPaidNote,
+      });
+      toast.success(t("orders.messages.markedAsPaid"));
+
+      setMarkAsPaidNote("");
+      fetchDetails(); // Refresh data
+      setShowMarkAsPaidModal(false);
+    }
+    catch (err) {
+      console.error("Failed to mark as paid:", err);
+      toast.error(err.response.data.error_message || t("orders.messages.failedToMarkAsPaid"));
+    }
+    finally {
+      setIsPaiding(false);
+    }
+  }
+
   // Define actions for dropdown menu
   const orderActions = (order: PackageOrder): ActionItem<PackageOrder>[] => [
+    {
+      label: t("orders.actions.viewDetails"),
+      icon: Eye,
+      onClick: handleView,
+      show: true,
+    },
     {
       label: t("orders.actions.edit"),
       icon: Edit,
       onClick: handleModifyItems,
-      show: hasPermission(permissions.orders.manage),
+      show: false,
+      // show: hasPermission(permissions.orders.manage) && order.payment_status !== 'paid',
     },
     {
       label: t("orders.actions.setDeliveryDate"),
       icon: Calendar,
       onClick: handleSetDeliveryDate,
-      show: hasPermission(permissions.orders.manage),
+      show: hasPermission(permissions.orders.manage) && order.payment_status !== 'paid',
     },
     {
       label: t("orders.actions.pauseOrder"),
       icon: Pause,
       onClick: handlePause,
-      show: hasPermission(permissions.orders.manage),
+      show: hasPermission(permissions.orders.manage) && order.payment_status !== 'paid' && !order.is_paused,
       separator: true, // Show separator after this item
     },
     {
-      label: t("orders.actions.deleteOrder"),
+      label: t("orders.actions.resumeOrder"),
+      icon: Calendar,
+      onClick: handleResume,
+      show: hasPermission(permissions.orders.manage) && order.is_paused,
+      separator: true, // Show separator after this item
+    },
+    {
+      label: t("orders.actions.cancelOrder"),
       icon: Trash2,
       onClick: handleCancel,
-      show: hasPermission(permissions.orders.delete),
+      show: hasPermission(permissions.orders.delete) && order.payment_status !== 'cancelled',
       variant: "destructive",
+      separator: true,
     },
+    {
+      label: t("orders.actions.markAsPaid"),
+      icon: CheckCircle,
+      onClick: handleMarkAsPaid,
+      show:
+        hasPermission(permissions.orders.manage) && order.payment_status === 'pending' && order.delivery_date !== null,
+    }
   ];
 
   const columns: Column<PackageOrder>[] = [
@@ -161,13 +230,28 @@ export default function PackageBatchDetailsModal({
       className: "text-center",
     },
     {
-      key: "delivery_month",
+      key: "status",
       label: t("orders.columns.status"),
       render: (order) => (
         <div className="flex gap-1 flex-wrap">
-          <Badge variant={order.status as any}>
-            {t(`orders.status.${order.status}`)}
-          </Badge>
+          <StatusView
+            status={order.status}
+            type="order"
+            label={t(`orders.status.${order.status}`)}
+          />
+        </div>
+      ),
+    },
+    {
+      key: "payment_status",
+      label: t("orders.columns.paymentStatus"),
+      render: (order) => (
+        <div className="flex gap-1 flex-wrap justify-center">
+          <StatusView
+            status={order.payment_status}
+            type="payment"
+            label={t(`orders.paymentStatus.${order.payment_status}`)}
+          />
         </div>
       ),
     },
@@ -278,131 +362,6 @@ export default function PackageBatchDetailsModal({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {/* <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>
-                        {t("orders.packageOrders.deliveryNumber")}
-                      </TableHead>
-                      <TableHead>{t("orders.columns.orderNumber")}</TableHead>
-                      <TableHead>
-                        {t("orders.packageOrders.deliveryMonth")}
-                      </TableHead>
-                      <TableHead>{t("orders.columns.status")}</TableHead>
-                      <TableHead>
-                        {t("orders.packageOrders.itemsCount")}
-                      </TableHead>
-                      <TableHead>
-                        {t("orders.packageOrders.quantity")}
-                      </TableHead>
-                      <TableHead>{t("orders.columns.total")}</TableHead>
-                      <TableHead>
-                        {t("orders.packageOrders.deliveryDate")}
-                      </TableHead>
-                      <TableHead className="text-right">
-                        {t("orders.columns.actions")}
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {details.orders.map((order) => (
-                      <TableRow key={order.id}>
-                        <TableCell className="font-medium">
-                          #{order.sequence}
-                        </TableCell>
-                        <TableCell className="font-mono text-sm">
-                          {order.orderId}
-                        </TableCell>
-                        <TableCell>{order.delivery_month}</TableCell>
-                        <TableCell>
-                          <div className="flex gap-1 flex-wrap">
-                            <Badge variant={order.status as any}>
-                              {t(`orders.status.${order.status}`)}
-                            </Badge>
-                          </div>
-                        </TableCell>
-                        <TableCell>{order.items_count}</TableCell>
-                        <TableCell>{order.total_items_quantity}</TableCell>
-                        <TableCell>
-                          ৳{formatNumberWithCommas(order.amounts.grandTotal)}
-                        </TableCell>
-                        <TableCell>
-                          {order.delivery_date ? (
-                            new Date(order.delivery_date).toLocaleDateString()
-                          ) : (
-                            <span className="text-muted-foreground">
-                              {t("orders.packageOrders.notSet")}
-                            </span>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex gap-1 justify-end flex-wrap">
-                            {!order.is_locked &&
-                              order.status !== "delivered" &&
-                              order.status !== "cancelled" && (
-                                <>
-                                  <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    onClick={() => handleSetDeliveryDate(order)}
-                                    title={t(
-                                      "orders.packageOrders.setDeliveryDate"
-                                    )}
-                                  >
-                                    <Calendar className="h-3 w-3" />
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    onClick={() => handleModifyItems(order)}
-                                    title={t(
-                                      "orders.packageOrders.modifyItems"
-                                    )}
-                                  >
-                                    <Edit className="h-3 w-3" />
-                                  </Button>
-                                  {order.is_paused ? (
-                                    <Button
-                                      size="sm"
-                                      variant="ghost"
-                                      onClick={() => handleResume(order)}
-                                      title={t(
-                                        "orders.packageOrders.resumeOrder"
-                                      )}
-                                    >
-                                      <Play className="h-3 w-3" />
-                                    </Button>
-                                  ) : (
-                                    <Button
-                                      size="sm"
-                                      variant="ghost"
-                                      onClick={() => handlePause(order)}
-                                      title={t(
-                                        "orders.packageOrders.pauseOrder"
-                                      )}
-                                    >
-                                      <Pause className="h-3 w-3" />
-                                    </Button>
-                                  )}
-                                  <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    className="text-destructive"
-                                    onClick={() => handleCancel(order)}
-                                    title={t(
-                                      "orders.packageOrders.cancelOrder"
-                                    )}
-                                  >
-                                    <X className="h-3 w-3" />
-                                  </Button>
-                                </>
-                              )}
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table> */}
                 <BaseTable
                   columns={columns}
                   data={details.orders || []}
@@ -437,7 +396,7 @@ export default function PackageBatchDetailsModal({
             currentItems={selectedOrder.items}
             onSuccess={handleSuccess}
           />
-          <PauseOrderModal
+          <PauseResumeOrderModal
             open={showPauseModal}
             onClose={() => {
               setShowPauseModal(false);
@@ -446,8 +405,9 @@ export default function PackageBatchDetailsModal({
             orderId={selectedOrder.id}
             orderNumber={selectedOrder.orderId}
             onSuccess={handleSuccess}
+            type="pause"
           />
-          <ResumeOrderModal
+          <PauseResumeOrderModal
             open={showResumeModal}
             onClose={() => {
               setShowResumeModal(false);
@@ -456,6 +416,7 @@ export default function PackageBatchDetailsModal({
             orderId={selectedOrder.id}
             orderNumber={selectedOrder.orderId}
             onSuccess={handleSuccess}
+            type="resume"
           />
           <CancelOrderModal
             open={showCancelModal}
@@ -467,6 +428,48 @@ export default function PackageBatchDetailsModal({
             orderNumber={selectedOrder.orderId}
             onSuccess={handleSuccess}
           />
+
+          <ViewPackageSingleOrderModal
+            open={showDetailsModal}
+            onClose={() => {
+              setShowDetailsModal(false);
+              setSelectedOrder(null);
+            }}
+            orderId={selectedOrder.orderId}
+          />
+
+          <DeleteModal
+            open={showMarkAsPaidModal}
+            onClose={() => {
+              setShowMarkAsPaidModal(false);
+              setMarkAsPaidNote("");
+            }}
+            title={t("orders.actions.markAsPaid")}
+            description={`${t("orders.actions.markAsPaidMessage")} ${selectedOrder?.orderId
+              }? ${t("orders.delete.cannotUndo")}`}
+            onConfirm={() => handlePackegeOrderMarkAsPaid(selectedOrder!)}
+            submitButtonText={t("orders.actions.receivePayment")}
+            submitButtonVariant="default"
+            isDeleting={isPaiding}
+          >
+            <div className="space-y-2 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
+              <Label htmlFor="markAsPaidNote" className="text-sm font-medium">
+                {t("orders.form.notes")} <span className="text-destructive">*</span>
+              </Label>
+              <Textarea
+                id="markAsPaidNote"
+                value={markAsPaidNote}
+                onChange={(e) => setMarkAsPaidNote(e.target.value)}
+                placeholder={t("orders.form.notesPlaceholder")}
+                rows={3}
+                className="bg-white dark:bg-background"
+                required
+              />
+              <p className="text-xs text-muted-foreground">
+                {t("orders.form.notesHelperText")}
+              </p>
+            </div>
+          </DeleteModal>
         </>
       )}
     </>

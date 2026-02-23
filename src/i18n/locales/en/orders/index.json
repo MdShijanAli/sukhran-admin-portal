@@ -20,7 +20,8 @@
     "returned": "Returned",
     "paused": "Paused",
     "cancelled_at_delivery": "Cancelled at Delivery",
-    "confirmed": "Confirmed"
+    "confirmed": "Confirmed",
+    "payment_status_changed": "Payment Status Changed"
   },
   "paymentStatus": {
     "pending": "Pending",
@@ -39,6 +40,7 @@
     "sl": "Sl.",
     "orderNumber": "Order #",
     "orderID": "Order ID",
+    "deliveryDate": "Delivery Date",
     "customer": "Customer",
     "items": "Items",
     "total": "Total",
@@ -46,6 +48,7 @@
     "status": "Status",
     "paymentStatus": "Payment Status",
     "date": "Date",
+    "orderDate": "Order Date",
     "actions": "Actions",
     "unassigned": "Unassigned"
   },
@@ -64,6 +67,8 @@
     "markAsPaid": "Mark as Paid",
     "edit": "Edit",
     "pauseOrder": "Pause Order",
+    "resumeOrder": "Resume Order",
+    "cancel": "Cancel Order",
     "setDeliveryDate": "Set Delivery Date",
     "modificationHistory": "Modification History",
     "markAsPaidMessage": "Are you sure you want to mark order as paid?",
@@ -122,7 +127,7 @@
     "title": "Update Delivery Time",
     "deliveryFrom": "Estimated Delivery From",
     "deliveryTo": "Estimated Delivery To",
-    "reason": "Reason (Optional)",
+    "reason": "Reason",
     "reasonPlaceholder": "Add a reason for this delivery time change (e.g., Supply chain delay due to weather conditions)"
   },
   "view": {
@@ -142,9 +147,12 @@
   },
   "messages": {
     "fillRequiredFields": "Please fill in all required fields",
+    "reasonRequired": "Reason is required",
     "itemDeleted": "Item deleted successfully",
     "addAtLeastOneItem": "Please add at least one item to the order",
     "orderCreated": "Order created successfully",
+    "notesRequired": "Please provide notes for marking as paid",
+    "orderMarkedAsPaid": "Order marked as paid successfully",
     "orderUpdated": "Order updated successfully",
     "orderDeleted": "Order deleted successfully",
     "orderCancelled": "Order cancelled successfully",
@@ -244,6 +252,7 @@
   },
   "packageOrders": {
     "title": "Package Orders",
+    "packageName": "Package Name",
     "quantity": "Quantity",
     "subtitle": "Manage subscription package orders",
     "batchId": "Batch ID",

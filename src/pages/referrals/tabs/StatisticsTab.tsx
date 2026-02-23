@@ -74,7 +74,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
     <div className="p-3 space-y-3">
       {/* Header with Refresh */}
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold flex items-center gap-2">
+        <h3 className="text-lg  flex items-center gap-2">
           <TrendingUp className="w-5 h-5" />
           {t("referrals.statistics.overview")}
         </h3>
@@ -166,7 +166,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
 
       {/* Coins Distribution */}
       <Card className="p-4">
-        <h4 className="font-semibold mb-4 flex items-center gap-2">
+        <h4 className=" mb-4 flex items-center gap-2">
           <Coins className="w-5 h-5 text-amber-600" />
           {t("referrals.statistics.coinsDistribution")}
         </h4>
@@ -226,14 +226,14 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
 
       {/* Time-Based Metrics */}
       <Card className="p-4">
-        <h4 className="font-semibold mb-4 flex items-center gap-2">
+        <h4 className=" mb-4 flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-blue-600" />
           {t("referrals.statistics.timeBasedMetrics")}
         </h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {/* Today */}
           <div className="p-4 bg-muted/30 rounded-lg">
-            <h5 className="font-semibold text-sm mb-3 flex items-center gap-2">
+            <h5 className=" text-sm mb-3 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-blue-500"></div>
               {t("referrals.statistics.today")}
             </h5>
@@ -257,7 +257,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
 
           {/* This Week */}
           <div className="p-4 bg-muted/30 rounded-lg">
-            <h5 className="font-semibold text-sm mb-3 flex items-center gap-2">
+            <h5 className=" text-sm mb-3 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-green-500"></div>
               {t("referrals.statistics.thisWeek")}
             </h5>
@@ -281,7 +281,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
 
           {/* This Month */}
           <div className="p-4 bg-muted/30 rounded-lg">
-            <h5 className="font-semibold text-sm mb-3 flex items-center gap-2">
+            <h5 className=" text-sm mb-3 flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-purple-500"></div>
               {t("referrals.statistics.thisMonth")}
             </h5>
@@ -309,7 +309,7 @@ const StatisticsTab = ({ onSetRefresh }: StatisticsTabProps) => {
 
       {/* Program Settings */}
       <Card className="p-4">
-        <h4 className="font-semibold mb-4 flex items-center gap-2">
+        <h4 className=" mb-4 flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-primary" />
           {t("referrals.statistics.programSettings")}
         </h4>

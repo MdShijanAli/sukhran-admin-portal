@@ -170,7 +170,7 @@ export default function ViewModal({
         {category?.description && (
           <>
             <div>
-              <h4 className="mb-2 font-semibold">
+              <h4 className="mb-2 ">
                 {t("categories.view.description")}
               </h4>
               <p className="text-muted-foreground">{category.description}</p>
@@ -215,7 +215,7 @@ export default function ViewModal({
         {category?.sub_categories && category.sub_categories.length > 0 && (
           <>
             <div>
-              <h4 className="mb-3 font-semibold flex items-center gap-2">
+              <h4 className="mb-3  flex items-center gap-2">
                 <Layers className="h-4 w-4" />
                 {t("categories.view.subCategories")} (
                 {category.sub_categories.length})
@@ -242,7 +242,7 @@ export default function ViewModal({
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex-1">
-                            <h5 className="font-semibold">{subCat.name}</h5>
+                            <h5 className="">{subCat.name}</h5>
                             <p className="text-xs text-muted-foreground">
                               {subCat.slug}
                             </p>

@@ -89,7 +89,7 @@ export default function TrackingModal({
                 <Truck className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold">
+                <h3 className="text-lg ">
                   {delivery.delivery_number}
                 </h3>
                 <p className="text-sm text-muted-foreground">
@@ -99,10 +99,9 @@ export default function TrackingModal({
             </div>
             <Badge className={getStatusColor(delivery.status)}>
               {t(
-                `delivery.status.${
-                  delivery.status === "in-transit"
-                    ? "inTransit"
-                    : delivery.status === "picked-up"
+                `delivery.status.${delivery.status === "in-transit"
+                  ? "inTransit"
+                  : delivery.status === "picked-up"
                     ? "pickedUp"
                     : delivery.status
                 }`
@@ -115,7 +114,7 @@ export default function TrackingModal({
             <div className="border rounded-lg overflow-hidden">
               <div className="flex items-center gap-2 px-4 py-3 bg-muted/50 border-b">
                 <User className="h-4 w-4" />
-                <h4 className="font-semibold text-sm">
+                <h4 className=" text-sm">
                   {t("delivery.view.customerInfo")}
                 </h4>
               </div>
@@ -140,7 +139,7 @@ export default function TrackingModal({
               <div className="border rounded-lg overflow-hidden">
                 <div className="flex items-center gap-2 px-4 py-3 bg-muted/50 border-b">
                   <Truck className="h-4 w-4" />
-                  <h4 className="font-semibold text-sm">
+                  <h4 className=" text-sm">
                     {t("delivery.view.driverInfo")}
                   </h4>
                 </div>
@@ -168,7 +167,7 @@ export default function TrackingModal({
           <div className="border rounded-lg overflow-hidden">
             <div className="flex items-center gap-2 px-4 py-3 bg-muted/50 border-b">
               <MapPin className="h-4 w-4" />
-              <h4 className="font-semibold text-sm">
+              <h4 className=" text-sm">
                 {t("delivery.form.deliveryAddress")}
               </h4>
             </div>
@@ -211,65 +210,60 @@ export default function TrackingModal({
 
           {/* Tracking Timeline */}
           <div className="border rounded-lg p-4">
-            <p className="text-sm font-semibold mb-4">
+            <p className="text-sm  mb-4">
               {t("delivery.view.trackingTimeline")}
             </p>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <div
-                  className={`h-2 w-2 rounded-full ${
-                    delivery.status === "pending" ||
-                    delivery.status === "assigned" ||
-                    delivery.status === "picked-up" ||
-                    delivery.status === "in-transit" ||
-                    delivery.status === "delivered"
+                  className={`h-2 w-2 rounded-full ${delivery.status === "pending" ||
+                      delivery.status === "assigned" ||
+                      delivery.status === "picked-up" ||
+                      delivery.status === "in-transit" ||
+                      delivery.status === "delivered"
                       ? "bg-primary"
                       : "bg-muted"
-                  }`}
+                    }`}
                 />
                 <p className="text-sm">{t("delivery.view.orderPlaced")}</p>
               </div>
               <div className="flex items-center gap-3">
                 <div
-                  className={`h-2 w-2 rounded-full ${
-                    delivery.status === "assigned" ||
-                    delivery.status === "picked-up" ||
-                    delivery.status === "in-transit" ||
-                    delivery.status === "delivered"
+                  className={`h-2 w-2 rounded-full ${delivery.status === "assigned" ||
+                      delivery.status === "picked-up" ||
+                      delivery.status === "in-transit" ||
+                      delivery.status === "delivered"
                       ? "bg-primary"
                       : "bg-muted"
-                  }`}
+                    }`}
                 />
                 <p className="text-sm">{t("delivery.view.driverAssigned")}</p>
               </div>
               <div className="flex items-center gap-3">
                 <div
-                  className={`h-2 w-2 rounded-full ${
-                    delivery.status === "picked-up" ||
-                    delivery.status === "in-transit" ||
-                    delivery.status === "delivered"
+                  className={`h-2 w-2 rounded-full ${delivery.status === "picked-up" ||
+                      delivery.status === "in-transit" ||
+                      delivery.status === "delivered"
                       ? "bg-primary"
                       : "bg-muted"
-                  }`}
+                    }`}
                 />
                 <p className="text-sm">{t("delivery.view.pickedUp")}</p>
               </div>
               <div className="flex items-center gap-3">
                 <div
-                  className={`h-2 w-2 rounded-full ${
-                    delivery.status === "in-transit" ||
-                    delivery.status === "delivered"
+                  className={`h-2 w-2 rounded-full ${delivery.status === "in-transit" ||
+                      delivery.status === "delivered"
                       ? "bg-primary"
                       : "bg-muted"
-                  }`}
+                    }`}
                 />
                 <p className="text-sm">{t("delivery.view.outForDelivery")}</p>
               </div>
               <div className="flex items-center gap-3">
                 <div
-                  className={`h-2 w-2 rounded-full ${
-                    delivery.status === "delivered" ? "bg-primary" : "bg-muted"
-                  }`}
+                  className={`h-2 w-2 rounded-full ${delivery.status === "delivered" ? "bg-primary" : "bg-muted"
+                    }`}
                 />
                 <p className="text-sm">{t("delivery.view.delivered")}</p>
               </div>

@@ -1,8 +1,8 @@
 import { BaseTable, Column } from "@/components/table";
 import { RecentTransactionsData } from "./Dashboard";
 import { useMemo } from "react";
+import StatusView from "@/components/custom/StatusView";
 import { Badge } from "@/components/ui/badge";
-import { StatusVariant } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
 export default function RecentTransactions({
@@ -34,19 +34,20 @@ export default function RecentTransactions({
         key: "payment_method",
         label: t("dashboard.recentTransactions.paymentMethod"),
         render: (item) => (
-          <Badge className={StatusVariant(item.payment_method)}>
-            {item.payment_method.charAt(0).toUpperCase() +
-              item.payment_method.slice(1)}
-          </Badge>
+          <StatusView
+            status={item.payment_method}
+            type="payment_method"
+          />
         ),
       },
       {
         key: "status",
         label: t("dashboard.recentTransactions.status"),
         render: (item) => (
-          <Badge className={StatusVariant(item.status)}>
-            {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-          </Badge>
+          <StatusView
+            status={item.status}
+            type="transaction"
+          />
         ),
       },
       {

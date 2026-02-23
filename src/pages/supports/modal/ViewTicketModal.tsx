@@ -192,7 +192,7 @@ export default function ViewTicketModal({
                 <div className="p-2 rounded-lg bg-blue-500/10">
                   <User className="w-5 h-5 text-blue-600" />
                 </div>
-                <h4 className="font-semibold text-lg">
+                <h4 className=" text-lg">
                   {t("support.view.customerInfo")}
                 </h4>
               </div>
@@ -202,7 +202,7 @@ export default function ViewTicketModal({
                     {customer.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1">
-                    <p className="font-semibold text-base">{customer.name}</p>
+                    <p className=" text-base">{customer.name}</p>
                     <p className="text-xs text-muted-foreground">
                       {t("support.view.customer")}
                     </p>
@@ -239,7 +239,7 @@ export default function ViewTicketModal({
                 <div className="p-2 rounded-lg bg-purple-500/10">
                   <MessageSquare className="w-5 h-5 text-purple-600" />
                 </div>
-                <h4 className="font-semibold text-lg">
+                <h4 className=" text-lg">
                   {t("support.view.ticketDetails")}
                 </h4>
               </div>
@@ -311,7 +311,7 @@ export default function ViewTicketModal({
                 <p className="text-sm font-medium text-muted-foreground mb-2">
                   {t("support.view.subject")}
                 </p>
-                <p className="text-base font-semibold">{ticket.subject}</p>
+                <p className="text-base ">{ticket.subject}</p>
               </div>
               <Separator />
               <div>
@@ -333,7 +333,7 @@ export default function ViewTicketModal({
                   <CheckCircle2 className="w-5 h-5 text-green-600" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-green-900 dark:text-green-100 mb-2">
+                  <p className="text-sm  text-green-900 dark:text-green-100 mb-2">
                     {t("support.view.resolutionNote")}
                   </p>
                   <p className="text-sm text-green-800 dark:text-green-200 leading-relaxed">
@@ -357,7 +357,7 @@ export default function ViewTicketModal({
                 <div className="p-2 rounded-lg bg-amber-500/10">
                   <ShoppingBag className="w-5 h-5 text-amber-600" />
                 </div>
-                <h4 className="font-semibold text-lg">
+                <h4 className=" text-lg">
                   {t("support.view.orderInfo")}
                 </h4>
               </div>
@@ -379,7 +379,7 @@ export default function ViewTicketModal({
                 <div className="p-2 rounded-lg bg-indigo-500/10">
                   <FileText className="w-5 h-5 text-indigo-600" />
                 </div>
-                <h4 className="font-semibold text-lg">
+                <h4 className=" text-lg">
                   {t("support.view.attachments")}
                 </h4>
               </div>
@@ -414,7 +414,7 @@ export default function ViewTicketModal({
                 <div className="p-2 rounded-lg bg-slate-500/10">
                   <Clock className="w-5 h-5 text-slate-600" />
                 </div>
-                <h4 className="font-semibold text-lg">
+                <h4 className=" text-lg">
                   {t("support.view.timeline")}
                 </h4>
               </div>
@@ -428,7 +428,7 @@ export default function ViewTicketModal({
                     <div className="flex-1 pb-4">
                       <div className="p-4 border rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
                         <div className="flex items-start justify-between gap-3 mb-2">
-                          <p className="font-semibold text-sm">{item.action}</p>
+                          <p className=" text-sm">{item.action}</p>
                           <p className="text-xs text-muted-foreground whitespace-nowrap">
                             {formatDate(item.created_at)}
                           </p>

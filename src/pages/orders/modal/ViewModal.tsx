@@ -87,7 +87,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                 <Package className="h-4 w-4 text-primary" />
               </div>
               <div>
-                <p className="text-sm font-semibold">{order.orderId}</p>
+                <p className="text-sm ">{order.orderId}</p>
                 <p className="text-xs text-muted-foreground">
                   {formatDate(order.created_at)}
                 </p>
@@ -281,7 +281,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                         <Label className="text-[10px] text-muted-foreground uppercase block">
                           {t("orders.view.total")}
                         </Label>
-                        <p className="font-semibold text-sm mt-0.5">
+                        <p className=" text-sm mt-0.5">
                           ৳{formatNumberWithCommas(item.itemCost)}
                         </p>
                       </div>
@@ -366,7 +366,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                   {order.receipt.deliveryCharge > 0 ? (
                     <>৳{formatNumberWithCommas(order.receipt.deliveryCharge)}</>
                   ) : (
-                    <span className="text-green-600 font-semibold">FREE</span>
+                    <span className="text-green-600 ">FREE</span>
                   )}
                 </span>
               </div>
@@ -408,7 +408,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                   <span className="font-medium text-green-700 dark:text-green-300">
                     Total Savings 🎉
                   </span>
-                  <span className="font-semibold text-green-700 dark:text-green-300">
+                  <span className=" text-green-700 dark:text-green-300">
                     ৳{formatNumberWithCommas(order.receipt.totalSavings)}
                   </span>
                 </div>
@@ -416,7 +416,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
 
               {/* Grand Total */}
               <div className="flex justify-between pt-1">
-                <span className="text-sm font-semibold">
+                <span className="text-sm ">
                   {t("orders.form.total")}
                 </span>
                 <span className="text-base  text-primary">
@@ -431,7 +431,7 @@ export default function ViewModal({ open, onClose, orderId }: ViewModalProps) {
                     <span className="text-amber-500">🪙</span>
                     Coins Earned
                   </span>
-                  <span className="text-sm font-semibold text-amber-600">
+                  <span className="text-sm  text-amber-600">
                     +{order.receipt.coinsEarned} coins
                   </span>
                 </div>
