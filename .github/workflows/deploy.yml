@@ -30,14 +30,14 @@ jobs:
         run: npm run build # your React build folder should be 'dist/' or 'build/'
 
       # 5️⃣ Deploy via SFTP to admin.shukra.store
-      - name: Deploy to admin.shukra.store via SFTP
+      - name: Deploy to admin.shukra.store via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ${{ secrets.FTP_SERVER }} # your server IP
-          username: ${{ secrets.FTP_USERNAME }} # admin@shukran.store
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: sftp # <-- important for shared hosting
-          port: 22 # default SFTP port
-          local-dir: dist/ # your React build folder
-          server-dir: ./ # relative to FTP root
-          dangerous-clean-slate: true # wipes old files before upload
+          protocol: ftps # secure FTP
+          port: 21 # ya 990 depends on hosting
+          local-dir: dist/
+          server-dir: ./ # relative to admin.shukra.store root
+          dangerous-clean-slate: true
