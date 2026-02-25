@@ -97,6 +97,7 @@
     },
     "status": {
       "pending": "মুলতুবি",
+      "refunded": "ফেরত দেওয়া হয়েছে",
       "paid": "পরিশোধিত",
       "failed": "ব্যর্থ"
     },
@@ -250,32 +251,6 @@
     "coins": "কয়েন",
     "unfulfilled": "অপূরণ",
     "noDataAvailable": "কোন পরিসংখ্যান ডেটা উপলব্ধ নেই"
-  },
-  "coinReport": {
-    "title": "কয়েন দান রিপোর্ট",
-    "refreshData": "ডেটা রিফ্রেশ করুন",
-    "overview": "সারসংক্ষেপ",
-    "totalCoins": "মোট কয়েন",
-    "fulfilled": "পূরণ হয়েছে",
-    "companyOwes": "কোম্পানি দেনা",
-    "unfulfilled": "অপূর্ণ",
-    "averageDonation": "গড় দান",
-    "byChannel": "চ্যানেল অনুসারে",
-    "channelBreakdown": "চ্যানেল বিস্তারিত",
-    "recentDonations": "সাম্প্রতিক কয়েন দান",
-    "topDonors": "শীর্ষ কয়েন দাতা",
-    "donorName": "দাতার নাম",
-    "channel": "চ্যানেল",
-    "coinsAmount": "কয়েনের পরিমাণ",
-    "value": "মূল্য",
-    "date": "তারিখ",
-    "totalDonated": "মোট দান",
-    "donationCount": "দানের সংখ্যা",
-    "actionRequired": "পদক্ষেপ প্রয়োজন",
-    "actionRequiredMessage": "অপূর্ণ কয়েন দান রয়েছে মোট",
-    "noDonations": "কোন কয়েন দান পাওয়া যায়নি",
-    "noTopDonors": "শীর্ষ দাতার তথ্য উপলব্ধ নেই",
-    "noChannelData": "চ্যানেল ডেটা উপলব্ধ নেই"
   },
   "fulfillHistory": {
     "title": "পূরণের ইতিহাস",

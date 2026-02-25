@@ -98,7 +98,8 @@
     "status": {
       "pending": "Pending",
       "paid": "Paid",
-      "failed": "Failed"
+      "failed": "Failed",
+      "refunded": "Refunded"
     },
     "view": {
       "title": "Donation Details",

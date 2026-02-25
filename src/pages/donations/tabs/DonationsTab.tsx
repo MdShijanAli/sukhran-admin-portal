@@ -22,12 +22,13 @@ export default function DonationsTab({ onViewDetails }: DonationsTabProps) {
 
   const getStatusBadge = useMemo(
     () => (status: string) => {
-      const variants: Record<string, "default" | "secondary" | "destructive"> =
-        {
-          paid: "default",
-          pending: "secondary",
-          failed: "destructive",
-        };
+      const variants: Record<string, "default" | "secondary" | "destructive" | "refunded"> =
+      {
+        paid: "default",
+        pending: "secondary",
+        failed: "destructive",
+        refunded: "refunded",
+      };
       return (
         <Badge variant={variants[status] || "secondary"}>
           {t(`donations.donations.status.${status}`)}
