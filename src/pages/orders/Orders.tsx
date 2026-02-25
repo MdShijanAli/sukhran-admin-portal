@@ -176,7 +176,7 @@ function Orders() {
       show: true,
     },
     {
-      label: t("orders.actions.deleteOrder"),
+      label: t("orders.actions.cancelOrder"),
       icon: Trash2,
       onClick: handleDelete,
       variant: "destructive",
