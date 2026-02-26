@@ -206,7 +206,7 @@ export default function PackageBatchDetailsModal({
       icon: CheckCircle,
       onClick: handleMarkAsPaid,
       show:
-        hasPermission(permissions.orders.manage) && order.payment_status === 'pending' && order.delivery_date !== null,
+        hasPermission(permissions.orders.manage) && order.payment_status === 'pending' && order.delivery_date !== null && order.status !== "paused",
     }
   ];
 
