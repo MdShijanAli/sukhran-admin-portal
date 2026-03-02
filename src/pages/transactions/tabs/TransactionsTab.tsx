@@ -12,12 +12,10 @@ import { Badge } from "@/components/ui/badge";
 import {
   Eye,
   DollarSign,
-  TrendingUp,
   CreditCard,
   CheckCircle2,
   XCircle,
   Clock,
-  Download,
 } from "lucide-react";
 import { BaseTableList } from "@/components/table";
 import permissions from "@/lib/permissions";
@@ -284,7 +282,7 @@ const TransactionsTab = () => {
       <ViewModal
         open={showDetails}
         onClose={() => setShowDetails(false)}
-        transactionId={selectedTransaction?.id || null}
+        transactionId={selectedTransaction?.paymentGateway === 'cod' ? `cod_${selectedTransaction?.id}` : selectedTransaction?.id}
       />
 
       <RefundModal
