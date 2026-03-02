@@ -256,6 +256,17 @@ const Coupons = () => {
       className: "min-w-[120px]",
     },
     {
+      key: "pending_count",
+      label: t("coupon.columns.pendingCount"),
+      render: (coupon) => (
+        <div className="w-[70px] text-center">
+          <span className="text-sm ">
+            {coupon.usage.pending_count}
+          </span>
+        </div>
+      ),
+    },
+    {
       key: "status",
       label: t("coupon.columns.status"),
       render: (coupon) => (

@@ -274,6 +274,30 @@ export default function ViewModal({
               </p>
             </div>
           </div>
+
+          {/* Usage Breakdown */}
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="rounded-lg border bg-card p-4">
+              <p className="text-sm text-muted-foreground mb-1">
+                Confirmed Usage
+              </p>
+              <p className="text-2xl ">{coupon?.usage.confirmed_count}</p>
+            </div>
+            <div className="rounded-lg border bg-card p-4">
+              <p className="text-sm text-muted-foreground mb-1">
+                Pending Usage
+              </p>
+              <p className="text-2xl ">{coupon?.usage.pending_count}</p>
+            </div>
+            <div className="rounded-lg border bg-card p-4">
+              <p className="text-sm text-muted-foreground mb-1">
+                Pending Discount
+              </p>
+              <p className="text-2xl text-primary">
+                ৳{coupon?.usage.pending_discount?.toFixed(2)}
+              </p>
+            </div>
+          </div>
         </div>
 
         <Separator />

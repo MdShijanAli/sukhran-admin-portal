@@ -267,6 +267,9 @@ export interface Coupon {
     count: string;
     remaining: number;
     total_discount_given: number;
+    pending_count: string;
+    confirmed_count: string;
+    pending_discount: number;
   };
   isActive: boolean;
   created_by: string;

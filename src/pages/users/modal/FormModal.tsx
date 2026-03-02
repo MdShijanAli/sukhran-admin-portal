@@ -276,7 +276,6 @@ export default function FormModal({
                 setFormData({ ...formData, email: e.target.value })
               }
               placeholder={t("users.form.enterEmail")}
-              disabled={isEditing}
             />
           </div>
           <div className="space-y-2">
