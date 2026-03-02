@@ -154,7 +154,7 @@ const StatisticsTab = () => {
       </div>
 
       {/* Secondary Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
         <Card className="p-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center">
@@ -198,6 +198,21 @@ const StatisticsTab = () => {
               </p>
               <p className="text-xl  text-red-600">
                 {formatCurrency(statistics.overview.failedDonations)}
+              </p>
+            </div>
+          </div>
+        </Card>
+        <Card className="p-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+              <Users className="w-5 h-5 text-blue-600" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">
+                {t("donations.statistics.totalDonationCount")}
+              </p>
+              <p className="text-xl  text-blue-600">
+                {statistics.overview.totalDonationCount}
               </p>
             </div>
           </div>

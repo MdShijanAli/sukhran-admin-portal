@@ -223,6 +223,7 @@
     "pendingDonations": "Pending",
     "averageDonation": "Average Donation",
     "failedDonations": "Failed Donations",
+    "totalDonationCount": "Total Donation Count",
     "today": "Today",
     "thisWeek": "This Week",
     "thisMonth": "This Month",
