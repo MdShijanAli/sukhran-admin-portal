@@ -250,6 +250,8 @@
   },
   "packageOrders": {
     "title": "প্যাকেজ অর্ডার",
+    "preferredDeliveryTime": "প্রিয় ডেলিভারি সময়",
+    "notSet": "নির্ধারিত নয়",
     "packageName": "প্যাকেজের নাম",
     "quantity": "পরিমাণ",
     "subtitle": "সাবস্ক্রিপশন প্যাকেজ অর্ডার পরিচালনা করুন",
@@ -269,7 +271,6 @@
     "deliveryMonth": "মাস",
     "itemsCount": "আইটেম",
     "deliveryDate": "ডেলিভারির তারিখ",
-    "notSet": "নির্ধারিত নয়",
     "locked": "লক করা",
     "paused": "বন্ধ",
     "setDeliveryDate": "ডেলিভারির তারিখ নির্ধারণ করুন",

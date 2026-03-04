@@ -252,6 +252,7 @@
   },
   "packageOrders": {
     "title": "Package Orders",
+    "preferredDeliveryTime": "Preferred Delivery Time",
     "packageName": "Package Name",
     "quantity": "Quantity",
     "subtitle": "Manage subscription package orders",

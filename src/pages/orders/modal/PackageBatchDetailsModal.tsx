@@ -85,6 +85,8 @@ export default function PackageBatchDetailsModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, batchId]);
 
+  const preferDeliveryTime = details?.orders?.[0]?.preferred_delivery_time;
+
   const handleSetDeliveryDate = (order: PackageOrder) => {
     setSelectedOrder(order);
     setShowSetDateModal(true);
@@ -348,6 +350,10 @@ export default function PackageBatchDetailsModal({
                     <p className="text-sm">
                       {t("orders.packageOrders.totalOrders")}:{" "}
                       {details.total_orders}
+                    </p>
+                    <p className="text-sm">
+                      {t("orders.packageOrders.preferredDeliveryTime")}:{" "}
+                      <span className="font-semibold">{preferDeliveryTime?.split("_").join(" ").toLocaleUpperCase() || t("orders.packageOrders.notSet")}</span>
                     </p>
                   </div>
                 </div>
