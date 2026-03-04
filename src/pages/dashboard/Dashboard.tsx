@@ -16,6 +16,8 @@ import RecentTransactions from "./RecentTransactions";
 import { useSidebarStore } from "@/stores/sidebarStore";
 import { formatDate } from "@/lib/utils";
 import { CardDescription, CardTitle } from "@/components/ui/card";
+import { withPermission } from "@/hoc/withPermission";
+import permissions from "@/lib/permissions";
 
 interface CoreMetrics {
   orders: {
@@ -170,7 +172,7 @@ interface DashboardData {
   };
 }
 
-export default function Dashboard() {
+function Dashboard() {
   const { t } = useTranslation();
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(
     null,
@@ -547,3 +549,5 @@ export default function Dashboard() {
     </div>
   );
 }
+
+export default withPermission(Dashboard, permissions.dashboard.view);

@@ -23,7 +23,6 @@ import DeleteModal from "@/components/modals/DeleteModal";
 import { Package } from "@/lib/types";
 import { useSidebarStore } from "@/stores/sidebarStore";
 import { Pagination } from "@/components/table/Pagination";
-import ShareButton from "@/components/custom/ShareButton";
 import { formatNumberWithCommas } from "@/lib/utils";
 import permissions from "@/lib/permissions";
 import { withPermission } from "@/hoc/withPermission";
@@ -339,8 +338,8 @@ function Packages() {
         {isLoading ? (
           <div
             className={`grid grid-cols-2 gap-3 ${isCollapsed
-                ? "2xl:grid-cols-6 xl:grid-cols-5 sm:grid-cols-3 lg:grid-cols-4"
-                : "2xl:grid-cols-5 xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3"
+              ? "2xl:grid-cols-6 xl:grid-cols-5 sm:grid-cols-3 lg:grid-cols-4"
+              : "2xl:grid-cols-5 xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3"
               }`}
           >
             {Array.from({ length: 8 }).map((_, index) => (
@@ -376,8 +375,8 @@ function Packages() {
         ) : (
           <div
             className={`grid grid-cols-2 gap-3 ${isCollapsed
-                ? "2xl:grid-cols-6 xl:grid-cols-5 sm:grid-cols-3 lg:grid-cols-4"
-                : "2xl:grid-cols-5 xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3"
+              ? "2xl:grid-cols-6 xl:grid-cols-5 sm:grid-cols-3 lg:grid-cols-4"
+              : "2xl:grid-cols-5 xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3"
               }`}
           >
             {packages.map((pkg) => {

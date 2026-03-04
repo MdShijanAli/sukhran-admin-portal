@@ -9,6 +9,7 @@ import { BaseTable, Column } from "./BaseTable";
 import { DateRange } from "react-day-picker";
 import { ApiService } from "@/services/createApiService";
 import { toast } from "@/hooks/use-toast";
+import { formatLocalDate } from "@/lib/utils";
 import { BaseDatePicker } from "../custom/BaseDatePicker";
 import { useNavigate } from "react-router-dom";
 import { ButtonGroup } from "../ui/button-group";
@@ -91,11 +92,11 @@ const generateColumns = <T extends Record<string, unknown>>(
         } else if (typeof value === "number") {
           // Check if it looks like a price
           if (
-            key.toLowerCase().includes("price") ||
-            key.toLowerCase().includes("amount") ||
-            key.toLowerCase().includes("total") ||
-            key.toLowerCase().includes("charge") ||
-            key.toLowerCase().includes("vat")
+            (key.toLowerCase().includes("price") ||
+              key.toLowerCase().includes("amount") ||
+              key.toLowerCase().includes("total") ||
+              key.toLowerCase().includes("charge") ||
+              key.toLowerCase().includes("vat")) && key !== 'total_quantity'
           ) {
             displayValue = `৳${value.toFixed(2)}`;
           } else {
@@ -173,10 +174,10 @@ export function ReportTableList({
     }
 
     if (dateRange?.from) {
-      params.append("from_date", dateRange.from.toISOString().split("T")[0]);
+      params.append("from_date", formatLocalDate(dateRange.from));
     }
     if (dateRange?.to) {
-      params.append("to_date", dateRange.to.toISOString().split("T")[0]);
+      params.append("to_date", formatLocalDate(dateRange.to));
     }
 
     // Add filter params
@@ -472,9 +473,8 @@ export function ReportTableList({
                     return `row-${item.id}`;
                   }
                   // Use index with proper handling
-                  return `row-${
-                    index ?? Math.random().toString(36).substr(2, 9)
-                  }`;
+                  return `row-${index ?? Math.random().toString(36).substr(2, 9)
+                    }`;
                 }}
               />
             </div>
