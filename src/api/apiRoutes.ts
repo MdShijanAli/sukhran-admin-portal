@@ -347,4 +347,14 @@ export const apiRoutes = {
     referrals: createApiUrl("admin/referrals/report-data"),
     exportReferrals: createApiUrl("admin/referrals/export"),
   },
+
+  deeplink: {
+    home: createApiUrl("admin/share/home"),
+    product: (productId: number | string) =>
+      createApiUrl(`admin/share/product/${productId}`),
+    package: (packageId: number | string) =>
+      createApiUrl(`admin/share/package/${packageId}`),
+    category: (categoryId: number | string) =>
+      createApiUrl(`admin/share/category/${categoryId}`),
+  },
 };

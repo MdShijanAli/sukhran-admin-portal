@@ -21,6 +21,7 @@ import banners from "./banners/index.json";
 import brands from "./brands/index.json";
 import reports from "./reports/index.json";
 import dashboard from "./dashboard/index.json";
+import deeplink from "./deeplink/index.json";
 
 /**
  * follow the file structure.
@@ -31,6 +32,7 @@ import dashboard from "./dashboard/index.json";
 const combined = {
   ...common,
   users,
+  deeplink,
   products,
   categories,
   packages,

@@ -10,6 +10,8 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { TableSkeleton } from "./TableSkeleton";
 
+const EMPTY_SELECTION: (string | number)[] = [];
+
 export interface Column<T> {
   key: string;
   label: string;
@@ -41,16 +43,23 @@ export function BaseTable<T>({
   rowClassName,
   enableCheckbox = false,
   checkboxCondition,
-  selectedRows = [],
+  selectedRows,
   onSelectionChange,
 }: BaseTableProps<T>) {
+  const selectedRowsValue = selectedRows ?? EMPTY_SELECTION;
+
   const [internalSelected, setInternalSelected] =
-    useState<(string | number)[]>(selectedRows);
+    useState<(string | number)[]>(selectedRowsValue);
 
   // Sync with parent's selectedRows prop
   useEffect(() => {
-    setInternalSelected(selectedRows);
-  }, [selectedRows]);
+    if (
+      internalSelected.length !== selectedRowsValue.length ||
+      internalSelected.some((value, index) => value !== selectedRowsValue[index])
+    ) {
+      setInternalSelected(selectedRowsValue);
+    }
+  }, [selectedRowsValue, internalSelected]);
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -184,8 +193,8 @@ export function BaseTable<T>({
                       {column.render
                         ? column.render(item, index)
                         : String(
-                            (item as Record<string, unknown>)[column.key] ?? ""
-                          )}
+                          (item as Record<string, unknown>)[column.key] ?? ""
+                        )}
                     </TableCell>
                   ))}
                 </TableRow>

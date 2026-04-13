@@ -21,6 +21,7 @@ import banners from "./banners/index.json";
 import brands from "./brands/index.json";
 import reports from "./reports/index.json";
 import dashboard from "./dashboard/index.json";
+import deeplink from "./deeplink/index.json";
 
 /**
  * follow the file structure.
@@ -43,6 +44,7 @@ const combined = {
   settings,
   coupon,
   transactions,
+  deeplink,
   coinManagement,
   donations,
   referrals,

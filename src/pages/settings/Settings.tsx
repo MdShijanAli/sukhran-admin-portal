@@ -1,14 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Building2, Bell, Settings2, Truck, Shield, Image } from "lucide-react";
+import { Building2, Link2, Truck, Shield } from "lucide-react";
 import BusinessTab from "./tabs/BusinessTab";
-import NotificationsTab from "./tabs/NotificationsTab";
 import SystemTab from "./tabs/SystemTab";
 import PaymentTab from "./tabs/PaymentTab";
 import ShippingTab from "./tabs/ShippingTab";
 import EmailTab from "./tabs/EmailTab";
-import SubscriptionTab from "./tabs/SubscriptionTab";
 import LegalTab from "./tabs/LegalTab";
+import DeeplinkTab from "./tabs/DeeplinkTab";
 import permissions from "@/lib/permissions";
 import { withPermission } from "@/hoc/withPermission";
 import usePermissions from "@/hooks/use-permissions";
@@ -46,24 +45,34 @@ function Settings() {
       permission: permissions.settings.view,
     },
     {
+      id: "deeplink",
+      label: t("deeplink.tab"),
+      icon: Link2,
+      permission: permissions.settings.view,
+    },
+    {
       id: "legal",
       label: t("settings.terms_condition.tab"),
       icon: Shield,
       permission: permissions.legal_documents.view,
     },
-    // {
   ];
 
+  const visibleTabs = tabLists.filter((tab) => hasPermission(tab.permission));
+  const defaultTab = visibleTabs[0]?.id ?? "business";
+
   return (
-    <div className="">
+    <div className="space-y-4">
       <div>
-        <h1 className="text-3xl  ">{t("settings.title")}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">
+          {t("settings.title")}
+        </h1>
         <p className="text-muted-foreground mt-1">
           {t("settings.description")}
         </p>
       </div>
 
-      <Tabs defaultValue="business" className="mt-3">
+      <Tabs defaultValue={defaultTab} className="mt-3">
         <TabsList className="flex flex-wrap gap-2 justify-start">
           {tabLists.map(
             (tab) =>
@@ -104,6 +113,10 @@ function Settings() {
 
         <TabsContent value="shipping" className="space-y-3">
           <ShippingTab />
+        </TabsContent>
+
+        <TabsContent value="deeplink" className="space-y-3">
+          <DeeplinkTab />
         </TabsContent>
 
         <TabsContent value="email" className="space-y-3">

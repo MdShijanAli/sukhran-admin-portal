@@ -1,0 +1,64 @@
+{
+  "tab": "DeepLink",
+  "badge": "Share URL Generator",
+  "title": "Deep Link Generator",
+  "description": "Create shareable links for your home page, products, packages, and categories.",
+  "sources": {
+    "home": "Home",
+    "product": "Product",
+    "package": "Package",
+    "category": "Category"
+  },
+  "selectors": {
+    "product": "Select a product",
+    "package": "Select a package",
+    "category": "Select a category"
+  },
+  "placeholders": {
+    "product": "Search and select a product",
+    "package": "Search and select a package",
+    "category": "Search and select a category"
+  },
+  "search": {
+    "product": "Search products...",
+    "package": "Search packages...",
+    "category": "Search categories..."
+  },
+  "empty": {
+    "product": "No products found.",
+    "package": "No packages found.",
+    "category": "No categories found."
+  },
+  "hints": {
+    "home": "Generate the homepage share URL without selecting an item.",
+    "product": "Choose a product, then generate the share link for that product.",
+    "package": "Choose a package, then generate the share link for that package.",
+    "category": "Choose a category, then generate the share link for that category."
+  },
+  "packagePrice": "Fixed price: ৳{{price}}",
+  "categoryProducts": "{{count}} products",
+  "actions": {
+    "generate": "Generate Link",
+    "generating": "Generating...",
+    "copy": "Copy Link",
+    "open": "Open Link"
+  },
+  "messages": {
+    "selectionRequired": "Please select an item first.",
+    "generated": "Share link generated successfully.",
+    "generateFailed": "Failed to generate share link.",
+    "copied": "Share link copied to clipboard.",
+    "copyFailed": "Unable to copy the share link."
+  },
+  "result": {
+    "title": "Generated Link",
+    "description": "Review the generated share URL and metadata before using it.",
+    "generated": "Generated",
+    "shareUrl": "Share URL",
+    "metaTitle": "Meta Title",
+    "metaDescription": "Meta Description",
+    "emptyTitle": "Generate a link to preview the result",
+    "emptyDescription": "Select a source on the left, generate the share URL, and the returned metadata will appear here.",
+    "noDescription": "No description provided."
+  }
+}
