@@ -310,7 +310,7 @@ function DeeplinkTab() {
                                             <span className="font-medium">{option.name}</span>
                                             <span className="text-xs text-muted-foreground">
                                                 {t("deeplink.packagePrice", {
-                                                    price: option.fixedPrice,
+                                                    price: option?.pricing?.currentPrice,
                                                 })}
                                             </span>
                                         </div>
